@@ -265,7 +265,7 @@ const SidebarMenu = ({
                 {
                   label === 'Messages' ? (
                     <Badge
-                      badgeContent={1}
+                      badgeContent={2}
                       color="error"
                       className={classes.badge}
                       classes={{

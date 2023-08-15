@@ -13,8 +13,9 @@ const styles = (theme) => ({
     [theme.breakpoints.down('sm')]: {
       fontSize: 20,
       lineHeight: '30px',
-      marginTop: 20,
-      marginBottom: 10,
+      marginTop: 16,
+      marginBottom: 24,
+      margin: '16px 8px'
     }
   },
  

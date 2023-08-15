@@ -53,10 +53,12 @@ const theme = createTheme({
           fontWeight: 500,
           fontSize: 16,
           lineHeight: '24px',
+          padding: '8px 16px',
           '@media (max-width:425px)': {
             fontWeight: 500,
             fontSize: 14,
             lineHeight: '20px',
+            padding: '10px 16px',
           }
         },
         textPrimary: {

@@ -28,7 +28,6 @@ const styles = (theme) => ({
   wrapper: {
     maxWidth: 845,
     paddingLeft: 60,
-    paddingRight: 60,
     [theme.breakpoints.down('sm')]: {
       padding: '16px 16px',
       marginBottom: 60,
@@ -50,7 +49,8 @@ const styles = (theme) => ({
     marginTop: 50,
     color: 'rgba(29, 29, 29, 1)',
     [theme.breakpoints.down('sm')]: {
-      marginTop: 30,
+      marginTop: 24,
+      marginBottom: 8
     }
   },
   lazyLoad: {

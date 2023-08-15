@@ -16,9 +16,10 @@ const styles = (theme) => ({
     marginBottom: 10,
     maxWidth: 843,
     [theme.breakpoints.down('sm')]: {
-      marginLeft: -16,
-      marginRight: -16,
+      marginLeft: -8,
+      marginRight: -8,
       padding: 16,
+      marginBottom: 8,
     }
   },
   cardTitle: {

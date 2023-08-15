@@ -286,7 +286,10 @@ const styles = (theme) => ({
   tabsWrapper: {
     marginBottom: 32,
     borderBottom: '1px solid rgb(34 89 228 / 10%)',
-    maxWidth: 843
+    maxWidth: 843,
+    [theme.breakpoints.down('md')]: {
+      padding: '0px 8px'
+    },
   },
   tabSelected: {
     backgroundColor: 'rgba(34, 89, 228, 0.05)',
@@ -341,6 +344,13 @@ const styles = (theme) => ({
       '& > button:last-child': {
         marginBottom: 8,
       }
+    }
+  },
+  cutTextByDots: {
+    '& input': {
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis',
     }
   }
 });
