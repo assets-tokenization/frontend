@@ -1,0 +1,82 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@emotion/react": "11.11.1",
+    "@emotion/styled": "11.11.0",
+    "@mui/icons-material": "5.10.14",
+    "@mui/lab": "5.0.0-alpha.108",
+    "@mui/material": "5.10.14",
+    "@mui/styles": "5.10.14",
+    "@rematch/core": "2.2.0",
+    "@sentry/browser": "5.15.4",
+    "classnames": "2.2.6",
+    "connected-react-router": "6.9.3",
+    "file-saver": "2.0.2",
+    "history": "4.10.1",
+    "leaflet": "^1.9.4",
+    "mobile-detect": "1.4.5",
+    "moment": "2.29.4",
+    "password-generator": "2.2.3",
+    "promise-timeout": "1.3.0",
+    "qrcode.react": "3.1.0",
+    "react": "17.0.0",
+    "react-circular-progressbar": "2.1.0",
+    "react-dom": "17.0.0",
+    "react-dropzone": "14.2.3",
+    "react-leaflet": "4.2.1",
+    "react-leaflet-fullscreen": "4.1.0",
+    "react-number-format": "5.2.2",
+    "react-redux": "7.1.0",
+    "react-render-html": "0.6.0",
+    "react-router": "5.1.2",
+    "react-router-dom": "5.1.2",
+    "react-router-redux": "4.0.8",
+    "react-scripts": "3.4.1",
+    "react-slick": "0.29.0",
+    "react-translate": "7.0.1",
+    "react-window": "^1.8.9",
+    "react-window-infinite-loader": "1.0.9",
+    "redux-logger": "3.0.6",
+    "sanitize-html": "1.24.0",
+    "slick-carousel": "1.8.1",
+    "use-file-picker": "1.7.0",
+    "uuid-random": "1.3.2",
+    "web-vitals": "2.1.4",
+    "webpack": "4.42.0",
+    "worker-loader": "2.0.0",
+    "ws-heartbeat": "1.2.0"
+  },
+  "overrides": {
+    "react": "17.0.0",
+    "react-dom": "17.0.0",
+    "ansi-html": "^0.0.9",
+    "glob-parent": "^6.0.2",
+    "shell-quote": "1.7.4",
+    "immer": "^9.0.12",
+    "nth-check": "2.1.1",
+    "node-forge": "^1.3.1",
+    "minimatch": "3.0.5",
+    "loader-utils": "2.0.4",
+    "serialize-javascript": "6.0.0",
+    "object-path": "0.11.8"
+  },
+  "scripts": {
+    "start": "sh -ac '. ./.env; react-scripts start'",
+    "build": "sh -ac '. ./.env; react-scripts build'",
+    "test": "sh -ac '. ./.env; react-scripts test'",
+    "eject": "sh -ac '. ./.env; react-scripts eject'"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ]
+}

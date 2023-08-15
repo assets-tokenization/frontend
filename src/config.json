@@ -1,0 +1,16 @@
+{
+  "application": {
+    "environment": "development"
+  },
+  "backendUrl": "https://cabinet-api-bpmn-diia-stg.kitsoft.kiev.ua",
+  "authLink": "https://cabinet-api-bpmn-diia-stg.kitsoft.kiev.ua/redirect/auth",
+  "idAuthLink": "https://id-bpmn-diia-stg.kitsoft.kiev.ua/authorise",
+  "eds": {
+    "useTestACSK": true,
+    "useEncodeCert": true,
+    "allowStamps": false,
+    "showServerList": true,
+    "serverListUrl": "https://id-bpmn-diia-stg.kitsoft.kiev.ua/authorise/eds/serverList",
+    "signDataUrl": "https://id-bpmn-diia-stg.kitsoft.kiev.ua/proxy/authorise/eds/eds_sign"
+  }
+}

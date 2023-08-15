@@ -1,0 +1,28 @@
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  background-color: rgba(244, 243, 246, 1);
+}
+
+body *{
+  font-family: 'Inter', sans-serif;
+  box-sizing: border-box;
+}
+
+.eds-form-dropzone span {
+  color: rgba(34, 89, 228, 1);
+}
+
+.slick-initialized .slick-slide {
+  position: relative;
+}
+
+.slick-arrow.slick-disabled {
+  display: none;
+}
+
+.secondary-slider .slick-slide.slick-active.slick-current {
+  opacity: 0.5;
+}
