@@ -422,7 +422,10 @@ const useStyles = makeStyles(styles);
 const OBJECT_DATA = {
   title: 'Івано-Франківська обл., м. Івано-Франківськ, вул. Вʼячеслава Чорновола, 15',
   tokenized: true,
-  description: '',
+  description: `Продається готовий до проживання будинок в центральній частині міста. Відкривається чудова панорама на усе місто. Планування - двосотроннє.
+  Здійснено заміну усіх панорамних вікон на покращений енергозберігаючий варіант з трикамерним профілем. Встановлено теплу підлогу у ванній, кухні та коридорі.Ремонт в ідеальному стані. Виконано у стриманих кольорах, стіни пофарбовано німецькою фарбою, яка легко миється не втрачаючи кольору.
+  В будинку просторий гардероб, який легко вміщає особисті речі сімї з 4-х осіб. Велика, простора ванна, у якій залишається пральна машина та додатковий санвузол.В помешканні також залишаються усі меблі, а це: - диван, телевізор, робочий стіл під ноутбук у спальні- два ліжка, два столи та стінка у дитячій- меблі та техніка на кухні (холодильник, духова шафа, газова поверхня, посудомийна машина, стіл)- додаткова робоча зона у кухні (стіл для ноутбука)- прихожа
+  Поруч школи, садочки, кінотеатри та уся необхідна інфраструктура.`,
   photos: [],
   number: '1209141981209',
   address: 'Івано-Франківська обл., м. Івано-Франківськ, вул. Вʼячеслава Чорновола, 15',
@@ -637,33 +640,37 @@ const ObjectScreen = ({
           }
         </Slider>
 
-        <Slider
-          dots={false}
-          infinite={false}
-          speed={500}
-          slidesToShow={isSM ? 5 : 8}
-          swipeToSlide={true}
-          focusOnSelect={true}
-          ref={secondarySlider}
-          asNavFor={mainSlider?.current}
-          className="secondary-slider"
-        >
-          {
-            files.map((file, index) => (
-              <div key={index}>
-                <div
-                  className={classNames({
-                    [classes.sliderImage]: true,
-                    [classes.sliderImagePreview]: true
-                  })}
-                  style={{
-                    backgroundImage: `url(${file.content})`
-                  }}
-                />
-              </div>
-            ))
-          }
-        </Slider>
+        {
+          files.length > 1 ? (
+            <Slider
+              dots={false}
+              infinite={false}
+              speed={500}
+              slidesToShow={isSM ? 5 : 8}
+              swipeToSlide={true}
+              focusOnSelect={true}
+              ref={secondarySlider}
+              asNavFor={mainSlider?.current}
+              className="secondary-slider"
+            >
+              {
+                files.map((file, index) => (
+                  <div key={index}>
+                    <div
+                      className={classNames({
+                        [classes.sliderImage]: true,
+                        [classes.sliderImagePreview]: true
+                      })}
+                      style={{
+                        backgroundImage: `url(${file.content})`
+                      }}
+                    />
+                  </div>
+                ))
+              }
+            </Slider>
+          ) : null
+        }
 
         <Dialog
           fullScreen
@@ -739,48 +746,52 @@ const ObjectScreen = ({
           ) : <div className={classes.emptyFiles} />
         }
 
-        <Typography className={classes.blockTitle}>
-          {t('Description')}
-        </Typography>
-
         {
           readOnly ? (
-            <Card>
+            <>
               {
-                isSM ? (
+                OBJECT_DATA.description ? (
                   <>
-                    <Typography
-                      className={classNames({
-                        [classes.readOnlyDescription]: true,
-                        [classes.smDescriptionWrapper]: true,
-                        [classes.smDescriptionWrapperOpen]: showMore
-                      })}
-                    >
-                      Продається готовий до проживання будинок в центральній частині міста. Відкривається чудова панорама на усе місто. Планування - двосотроннє.
-                      Здійснено заміну усіх панорамних вікон на покращений енергозберігаючий варіант з трикамерним профілем. Встановлено теплу підлогу у ванній, кухні та коридорі.Ремонт в ідеальному стані. Виконано у стриманих кольорах, стіни пофарбовано німецькою фарбою, яка легко миється не втрачаючи кольору.
-                      В будинку просторий гардероб, який легко вміщає особисті речі сімї з 4-х осіб. Велика, простора ванна, у якій залишається пральна машина та додатковий санвузол.В помешканні також залишаються усі меблі, а це: - диван, телевізор, робочий стіл під ноутбук у спальні- два ліжка, два столи та стінка у дитячій- меблі та техніка на кухні (холодильник, духова шафа, газова поверхня, посудомийна машина, стіл)- додаткова робоча зона у кухні (стіл для ноутбука)- прихожа
-                      Поруч школи, садочки, кінотеатри та уся необхідна інфраструктура.
+                    <Typography className={classes.blockTitle}>
+                      {t('Description')}
                     </Typography>
-                    <Button
-                      variant="outlined"
-                      onClick={() => setShowMore(!showMore)}
-                      className={classes.showMoreButton}
-                    >
-                      {showMore ? t('Hide') : t('ShowMore')}
-                    </Button>
+                    <Card>
+                      {
+                        isSM ? (
+                          <>
+                            <Typography
+                              className={classNames({
+                                [classes.readOnlyDescription]: true,
+                                [classes.smDescriptionWrapper]: true,
+                                [classes.smDescriptionWrapperOpen]: showMore
+                              })}
+                            >
+                              {OBJECT_DATA.description}
+                            </Typography>
+                            <Button
+                              variant="outlined"
+                              onClick={() => setShowMore(!showMore)}
+                              className={classes.showMoreButton}
+                            >
+                              {showMore ? t('Hide') : t('ShowMore')}
+                            </Button>
+                          </>
+                        ) : (
+                          <Typography className={classes.readOnlyDescription}>
+                            {OBJECT_DATA.description}
+                          </Typography>
+                        )
+                      }
+                    </Card>
                   </>
-                ) : (
-                  <Typography className={classes.readOnlyDescription}>
-                    Продається готовий до проживання будинок в центральній частині міста. Відкривається чудова панорама на усе місто. Планування - двосотроннє.
-                    Здійснено заміну усіх панорамних вікон на покращений енергозберігаючий варіант з трикамерним профілем. Встановлено теплу підлогу у ванній, кухні та коридорі.Ремонт в ідеальному стані. Виконано у стриманих кольорах, стіни пофарбовано німецькою фарбою, яка легко миється не втрачаючи кольору.
-                    В будинку просторий гардероб, який легко вміщає особисті речі сімї з 4-х осіб. Велика, простора ванна, у якій залишається пральна машина та додатковий санвузол.В помешканні також залишаються усі меблі, а це: - диван, телевізор, робочий стіл під ноутбук у спальні- два ліжка, два столи та стінка у дитячій- меблі та техніка на кухні (холодильник, духова шафа, газова поверхня, посудомийна машина, стіл)- додаткова робоча зона у кухні (стіл для ноутбука)- прихожа
-                    Поруч школи, садочки, кінотеатри та уся необхідна інфраструктура.
-                  </Typography>
-                )
+                ) : null
               }
-            </Card>
+            </>
           ) : (
             <>
+              <Typography className={classes.blockTitle}>
+                {t('Description')}
+              </Typography>
               {
                 openTextEditor || description ? (
                   <Typography className={classes.textFieldLabel}>
