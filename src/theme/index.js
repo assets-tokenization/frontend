@@ -121,6 +121,21 @@ const theme = createTheme({
           }
         }
       }
+    },
+    MuiList: {
+      styleOverrides: {
+        root: {
+          padding: 0,
+        }
+      }
+    },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: {
+          fontSize: 14,
+          fontFamily: 'Inter, sans-serif'
+        }
+      }
     }
   }
 });
