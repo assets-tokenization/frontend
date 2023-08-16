@@ -94,6 +94,9 @@ const styles = (theme) => ({
       padding: 10,
       marginBottom: 30
     }
+  },
+  link: {
+    color: '#0041E7'
   }
 });
 
@@ -193,6 +196,7 @@ const WalletChooser = ({
               href='https://support.metamask.io/hc/en-us/articles/360015489531-Getting-started-with-MetaMask'
               target='_blank'
               rel="noopener noreferrer"
+              className={classes.link}
             >
               {t('WalletRegTitleDescriptionLink')}
             </a>

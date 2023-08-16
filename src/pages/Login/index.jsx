@@ -177,10 +177,12 @@ const styles = (theme) => ({
   authForm: {
     display: 'flex',
     alignSelf: 'center',
+    minWidth: 796,
     [theme.breakpoints.down('sm')]: {
       padding: 0,
       display: 'block',
-      alignSelf: 'unset'
+      alignSelf: 'unset',
+      minWidth: 'unset'
     }
   },
   authCard: {
