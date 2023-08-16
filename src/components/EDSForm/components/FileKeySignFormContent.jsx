@@ -23,8 +23,7 @@ import FileInputField from "components/CustomInput/FileInputField";
 import edsService from "services/eds";
 import config from "config";
 import ProxySettings from "components/EDSForm/ProxySettings";
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-
+import { ReactComponent as ArrowForwardIcon } from 'assets/images/arrowForwardWhite.svg';
 const { useProxySettings } = (config && config.eds) || {};
 const md = new MobileDetect(window.navigator.userAgent);
 const isIOS = md.is("iPhone") || md.os() === "iPadOS";

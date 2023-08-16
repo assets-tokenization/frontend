@@ -2,7 +2,8 @@ import * as React from 'react';
 import { useTranslate } from 'react-translate';
 import makeStyles from '@mui/styles/makeStyles';
 import { Button, Typography } from '@mui/material';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { ReactComponent as ArrowForwardIcon } from 'assets/images/arrowForwardWhite.svg';
+
 import CheckIcon from 'assets/images/Check_icon.svg';
 
 const styles = (theme) => ({

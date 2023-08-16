@@ -10,9 +10,9 @@ import PageTitle from "components/PageTitle";
 import ListCard from "components/ListCard";
 import Card from "components/Card";
 import Stepper from "components/Stepper";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import LockIcon from '@mui/icons-material/Lock';
 import SuccessRegistration from "components/SuccessRegistration";
+import { ReactComponent as ArrowForwardIcon } from 'assets/images/arrowForwardWhite.svg';
+import { ReactComponent as LockIcon } from 'assets/images/lock_icon.svg';
 
 const data = [
   {
@@ -24,6 +24,16 @@ const data = [
     totalArea: '6 сот',
     livingArea: '140 м2',
     price: '2 000 345,00 грн.'
+  },
+  {
+    title:
+      "Івано-Франківська обл., м. Івано-Франківськ, вул. Вʼячеслава Чорновола, 15",
+    number: "1209141912313213",
+    tokenized: true,
+    type: 'Будинок',
+    totalArea: '6 сот',
+    livingArea: '140 м2',
+    price: '5 000 345 грн.'
   },
 ];
 
@@ -124,7 +134,6 @@ const PurchasesStep = ({
                             [classes.disabledTextField]: true,
                           })}
                         />
-
                         <LockIcon
                           className={classes.lockIcon}
                         />
@@ -196,7 +205,7 @@ const PurchasesStep = ({
                           }}
                         >
                           {t("ToPayment")}
-                          <ArrowForwardIcon />
+                          <ArrowForwardIcon className={classes.actionIcon} />
                         </Button>
                       </div>
                     </>

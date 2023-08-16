@@ -45,11 +45,11 @@ const styles = (theme) => ({
     borderLeft: '2px solid rgba(34, 89, 228, 0.2)',
     position: 'relative',
     left: -1,
-    paddingLeft: 26
+    paddingLeft: 20
   },
   stepContentLast: {
     borderLeft: 'none',
-    paddingLeft: 28
+    paddingLeft: 22
   },
   iconContainer: {
     minWidth: 32

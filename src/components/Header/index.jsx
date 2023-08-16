@@ -68,10 +68,17 @@ const styles = (theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#fff',
-    zIndex: 1,
+    zIndex: 9999,
     '& button': {
       boxShadow: '1px 6px 33px 0px rgba(34,89,228,0.54)',
       backgroundColor: '#fff'
+    }
+  },
+  link: {
+    textDecoration: 'none',
+    color: 'inherit',
+    [theme.breakpoints.down('sm')]: {
+      display: 'flex',
     }
   }
 });
@@ -134,14 +141,16 @@ const Header = ({
     <div className={classes.header}>
       {
         hideLogo ? <div /> : (
-          <Typography className={classes.headline}>
-            <img
-              src={headline_logo}
-              alt="headline_logo"
-              className={classes.logo}
-            />
-            {title || t('Title')}
-        </Typography>
+          <a href='/' className={classes.link}>
+            <Typography className={classes.headline}>
+              <img
+                src={headline_logo}
+                alt="headline_logo"
+                className={classes.logo}
+              />
+              {title || t('Title')}
+            </Typography>
+          </a>
         )
       }
 

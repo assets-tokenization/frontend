@@ -3,7 +3,7 @@ import { useTranslate } from 'react-translate';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import { Typography, Button } from '@mui/material';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { ReactComponent as ArrowForwardIcon } from 'assets/images/arrowForwardBlue.svg';
 import StatusLabel from "components/StatusLabel";
 
 const styles = (theme) => ({
@@ -265,7 +265,9 @@ const ListCard = ({
         </Typography>
       </div>
 
-      <div className={classes.divider} />
+      {
+        !isSM || !finished ? <div className={classes.divider} /> : null
+      }
 
       <div className={classes.actions}>
         {
@@ -281,31 +283,37 @@ const ListCard = ({
         }
 
         {
-          tokenized && !hideSecondaryAction ? (
-            <div className={classes.tokenizedActions}>
-              <Button
-                color={!secondaryActionText ? 'error' : 'primary'}
-                className={classes.deTokenButton}
-              >
-                {secondaryActionText || t('DeToken')}
-              </Button>
-              <Button
-                variant="contained"
-                className={classes.toTokenButton}
-                onClick={mainAction}
-              >
-                {mainActionText || t('ToP2P')}
-              </Button>
-            </div>
-          ) : (
-            <Button
-              variant="contained"
-              className={classes.toTokenButton}
-              onClick={() => handleTokenize(number)}
-            >
-              {mainActionText || t('ToToken')}
-            </Button>
-          )
+          !finished ? (
+            <>
+              {
+                tokenized && !hideSecondaryAction ? (
+                  <div className={classes.tokenizedActions}>
+                    <Button
+                      color={!secondaryActionText ? 'error' : 'primary'}
+                      className={classes.deTokenButton}
+                    >
+                      {secondaryActionText || t('DeToken')}
+                    </Button>
+                    <Button
+                      variant="contained"
+                      className={classes.toTokenButton}
+                      onClick={mainAction}
+                    >
+                      {mainActionText || t('ToP2P')}
+                    </Button>
+                  </div>
+                ) : (
+                  <Button
+                    variant="contained"
+                    className={classes.toTokenButton}
+                    onClick={() => handleTokenize(number)}
+                  >
+                    {mainActionText || t('ToToken')}
+                  </Button>
+                )
+              }
+            </>
+          ) : null
         }
       </div>
     </div>

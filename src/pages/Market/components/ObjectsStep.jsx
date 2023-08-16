@@ -14,6 +14,15 @@ const data = [
     type: 'Будинок',
     totalArea: '6 сот',
     livingArea: '140 м2',
+  },
+  {
+    title:
+      "Івано-Франківська обл., м. Івано-Франківськ, вул. Симона Петлюри, 666",
+    number: "3209121419812",
+    tokenized: true,
+    type: 'Будинок',
+    totalArea: '66 сот',
+    livingArea: '40 м2',
     finished: true,
   },
 ];
@@ -63,23 +72,29 @@ const ObjectsStep = ({
               }}
             />
           </Tabs>
+
+
           {data.length ? (
             <>
-              {data.map((item, index) => (
-                <ListCard
-                  item={item}
-                  key={index}
-                  finished={item?.finished}
-                  openDetails={toDetailsObject}
-                  mainAction={(number) => {
-                    setCreatingOffer(number);
-                    setPage("Selling");
-                  }}
-                  secondaryActionText={t("MoveToMyObjects")}
-                  mainActionText={t("CreateOrder")}
-                  detailsLink={`/market/${item.number}`}
-                />
-              ))}
+              {
+                data
+                .filter((item) => tab === 0 ? !item?.finished : item?.finished)
+                .map((item, index) => (
+                  <ListCard
+                    item={item}
+                    key={index}
+                    finished={item?.finished}
+                    openDetails={toDetailsObject}
+                    mainAction={(number) => {
+                      setCreatingOffer(number);
+                      setPage("Selling");
+                    }}
+                    secondaryActionText={t("MoveToMyObjects")}
+                    mainActionText={t("CreateOrder")}
+                    detailsLink={`/market/${item.number}`}
+                  />
+                ))
+              }
             </>
           ) : (
             <>

@@ -25,7 +25,8 @@ const useStyles = makeStyles(styles);
 
 const Card = ({
   children,
-  fullWidth
+  fullWidth,
+  className
 }) => {
   const classes = useStyles();
 
@@ -33,8 +34,8 @@ const Card = ({
     <>
       <div className={classNames({
         [classes.card]: true,
-        [classes.fullWidth]: fullWidth
-      })}>
+        [classes.fullWidth]: fullWidth,
+      }, className)}>
         {children}
       </div>
     </>

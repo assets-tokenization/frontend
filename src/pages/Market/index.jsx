@@ -18,6 +18,7 @@ const styles = (theme) => ({
   wrapper: {
     paddingLeft: 60,
     paddingRight: 60,
+    marginBottom: 60,
     [theme.breakpoints.down('sm')]: {
       padding: '16px 8px',
       marginBottom: 60,
@@ -352,7 +353,13 @@ const styles = (theme) => ({
       whiteSpace: 'nowrap',
       textOverflow: 'ellipsis',
     }
-  }
+  },
+  messagesCard: {
+    marginBottom: 16
+  },
+  actionIcon: {
+    marginLeft: 10
+  },
 });
 
 const useStyles = makeStyles(styles);
@@ -445,6 +452,8 @@ const MarketScreen = ({
     setPurchase(null);
     setActiveSellingStep(0);
     setActiveBuyStep(0);
+
+    window.scrollTo(0, 0);
   };
 
   return (

@@ -28,6 +28,7 @@ const styles = (theme) => ({
   wrapper: {
     maxWidth: 845,
     paddingLeft: 60,
+    marginBottom: 60,
     [theme.breakpoints.down('sm')]: {
       padding: '16px 16px',
       marginBottom: 60,

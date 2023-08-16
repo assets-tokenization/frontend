@@ -60,7 +60,7 @@ const styles = (theme) => ({
       position: 'fixed',
       bottom: 0,
       background: '#fff',
-      zIndex: 1,
+      zIndex: 9999,
       display: 'flex',
       flexDirection: 'row'
     }
@@ -103,7 +103,8 @@ const styles = (theme) => ({
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
-      padding: 0
+      padding: 0,
+      borderRadius: 0
     }
   },
   active: {

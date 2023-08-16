@@ -2,8 +2,8 @@ import * as React from 'react';
 import { useTranslate } from 'react-translate';
 import makeStyles from '@mui/styles/makeStyles';
 import { Typography, Button, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { ReactComponent as ArrowForwardIcon } from 'assets/images/arrowForwardWhite.svg';
+import ArrowBackIcon from 'assets/images/arrowBackBlueIcon.svg';
 import classNames from 'classnames';
 import MetaMaskIcon from 'assets/images/logos_metamask-icon.svg';
 import WalletConnectIcon from 'assets/images/simple-icons_walletconnect.svg';
@@ -208,7 +208,11 @@ const WalletChooser = ({
           onClick={() => setActiveStep(0)}
           className={classes.backButton}
         >
-          <ArrowBackIcon className={classes.actionIconBack} />
+          <img
+            className={classes.actionIconBack}
+            src={ArrowBackIcon}
+            alt='arrow forward icon'
+          />
           {t("Back")}
         </Button>
 

@@ -27,7 +27,11 @@ const theme = createTheme({
           minWidth: 32
         },
         label: {
-          fontFamily: 'Inter, sans-serif'
+          fontFamily: 'Inter, sans-serif',
+          '&.Mui-active': {
+            position: 'relative',
+            left: -7
+          }
         }
       }
     },

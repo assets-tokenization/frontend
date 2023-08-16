@@ -40,7 +40,10 @@ const MessagesStep = ({
             <>
               {
                 MESSAGES.map((message, index) => (
-                  <Card key={message.title + index}>
+                  <Card
+                    key={message.title + index}
+                    className={classes.messagesCard}
+                  >
                     <Typography className={classes.messagesDate}>
                       {message?.date}
                     </Typography>

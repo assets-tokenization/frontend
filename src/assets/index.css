@@ -4,10 +4,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
   background-color: rgba(244, 243, 246, 1);
-  padding-bottom: 50px;
 }
 
-body *{
+body * {
   font-family: 'Inter', sans-serif;
   box-sizing: border-box;
 }

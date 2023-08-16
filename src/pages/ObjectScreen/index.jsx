@@ -3,14 +3,14 @@ import { useTranslate } from 'react-translate';
 import classNames from "classnames";
 import Slider from 'react-slick';
 import { useFilePicker } from 'use-file-picker';
-import { MapContainer, TileLayer } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker } from 'react-leaflet';
+import L from 'leaflet';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { FullscreenControl } from "react-leaflet-fullscreen";
 import makeStyles from '@mui/styles/makeStyles'
 import { Typography, Button, TextField, IconButton } from "@mui/material";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
-import LockIcon from '@mui/icons-material/Lock';
 import Dialog from '@mui/material/Dialog';
 import Slide from '@mui/material/Slide';
 import Header from "components/Header";
@@ -23,6 +23,8 @@ import FullscreenIcon from 'assets/images/fullscreen_icon.svg';
 import CloseIcon from 'assets/images/closeIcon.svg';
 import arrowRight from 'assets/images/arrowRight.svg';
 import arrowLeft from 'assets/images/arrowLeft.svg';
+import LockIcon from 'assets/images/lock_icon.svg';
+import LocationOnIcon from 'assets/images/pin.svg';
 import "leaflet/dist/leaflet.css";
 import "react-leaflet-fullscreen/styles.css";
 import "slick-carousel/slick/slick.css";
@@ -30,6 +32,13 @@ import "slick-carousel/slick/slick-theme.css";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
+});
+  
+const markerIcon = new L.Icon({
+  iconUrl: LocationOnIcon,
+  iconRetinaUrl: LocationOnIcon,
+  popupAnchor:  [-0, -0],
+  iconSize: [32,45],     
 });
 
 const styles = (theme) => ({
@@ -569,7 +578,7 @@ const ObjectScreen = ({
       </div>
     );
   }, [classes]);
-  
+
   return (
     <>
       {
@@ -743,7 +752,7 @@ const ObjectScreen = ({
                 )
               }
             </>
-          ) : <div className={classes.emptyFiles} />
+          ) : null
         }
 
         {
@@ -845,8 +854,10 @@ const ObjectScreen = ({
                               })}
                               placeholder={t('DescriptionPlaceHolder')}
                             />
-                            <LockIcon
+                            <img
                               className={classes.lockIcon}
+                              src={LockIcon}
+                              alt='arrow lock icon'
                             />
                           </div>
 
@@ -1007,15 +1018,19 @@ const ObjectScreen = ({
         <Typography className={classes.blockTitle}>
           {t('MapPoint')}
         </Typography>
-
         <div className={classes.mapContainer}>
           <MapContainer
             center={OBJECT_DATA.location}
             zoom={13}
             style={{ height: '100%', width: '100%' }}
-            >
+            attributionControl={false}
+          >
             <TileLayer
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <Marker
+              position={OBJECT_DATA.location}
+              icon={markerIcon}
             />
             <FullscreenControl />
           </MapContainer>
