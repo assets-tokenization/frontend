@@ -240,6 +240,8 @@ const styles = (theme) => ({
   addYetPhotoButton: {
     marginTop: 24,
     marginBottom: 64,
+    position: 'relative',
+    left: -18,
     [theme.breakpoints.down('sm')]: {
       marginBottom: 40
     }
@@ -372,6 +374,7 @@ const styles = (theme) => ({
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     height: 400,
+    borderRadius: 4,
     [theme.breakpoints.down('sm')]: {
       height: 180
     }
@@ -423,6 +426,22 @@ const styles = (theme) => ({
     width: '100%',
     marginTop: 16,
     marginBottom: 20
+  },
+  currentPageStatus: {
+    position: 'absolute',
+    bottom: 16,
+    left: 16,
+    color: '#000',
+    fontSize: 14,
+    fontStyle: 'normal',
+    fontWeight: 500,
+    lineHeight: '20px',
+    display: 'flex',
+    padding: '2px 8px',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 2,
+    background: '#FFF'
   }
 });
 
@@ -632,6 +651,12 @@ const ObjectScreen = ({
                     backgroundImage: `url(${file.content})`
                   }}
                 />
+                <div className={classes.currentPageStatus}>
+                  {t('photo', {
+                    index: index + 1,
+                    total: files.length
+                  })}
+                </div>
                 <IconButton
                   onClick={() => {
                     handleClickOpenSlider(index);
