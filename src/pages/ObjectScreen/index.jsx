@@ -681,6 +681,7 @@ const ObjectScreen = ({
               infinite={false}
               speed={500}
               slidesToShow={isSM ? 5 : 8}
+              arrows={false}
               swipeToSlide={true}
               focusOnSelect={true}
               ref={secondarySlider}
