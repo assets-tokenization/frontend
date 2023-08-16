@@ -323,8 +323,7 @@ const styles = (theme) => ({
   },
   lockIcon: {
     position: 'absolute',
-    top: '50%',
-    marginTop: -20,
+    top: 20,
     right: -22,
     width: 16,
     height: 16,
