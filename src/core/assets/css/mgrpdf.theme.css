@@ -1,0 +1,10 @@
+.mgrpdf__wrapper {
+    background: #aaa;
+    padding: 5px 0 0;
+}
+
+@media screen and (max-width: 755px) {
+    .mgrpdf__wrapper {
+        padding: 0;
+    }
+}
