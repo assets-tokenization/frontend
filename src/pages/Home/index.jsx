@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch } from 'react-redux';
+// import { useDispatch } from 'react-redux';
 import { useTranslate } from 'react-translate';
 import makeStyles from '@mui/styles/makeStyles';
 import { Typography } from "@mui/material";
@@ -12,7 +12,7 @@ import ListCard from "components/ListCard";
 import Tokenize from "components/Tokenize";
 import LazyLoad from "assets/images/lazy_load.png";
 import Preloader from "components/Preloader";
-import { getRealEstate } from "actions";
+// import { getRealEstate } from "actions";
 
 const styles = (theme) => ({
   warningBlock: {
@@ -103,15 +103,19 @@ const TEST_DATA = [
     livingArea: '140 м2'
   }
 ];
+
 const HomeScreen = ({
   history
 }) => {
-  const [data, setData] = React.useState(TEST_DATA);
-  const [loading, setLoading] = React.useState(false);
+  // const [data, setData] = React.useState(TEST_DATA);
+  // const [loading, setLoading] = React.useState(false);
+  const [data] = React.useState(TEST_DATA);
+  const [loading] = React.useState(false);
+
   const [tokenize, setTokenize] = React.useState(false);
   const t = useTranslate('HomeScreen');
   const classes = useStyles();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const tokenizeProcess = (id) => setTokenize(id);
 
