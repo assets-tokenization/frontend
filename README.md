@@ -18,6 +18,6 @@ npm run start
 
 ## For auth
 
-[key](public/key/test_key_111.dat)
+[test electronic digital signature](public/key/test_key_111.dat)
 
 password: 111
