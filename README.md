@@ -18,4 +18,6 @@ npm run start
 
 ## For authorisation
 
-[test file link](public/robots.txt)
+[key](public/key/test_key_111.dat)
+
+password: 111
