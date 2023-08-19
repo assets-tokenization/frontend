@@ -16,3 +16,6 @@ npm install
 npm run start
 ```
 
+## For authorisation
+
+[test file link](public/robots.txt)
