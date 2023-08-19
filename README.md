@@ -16,7 +16,7 @@ npm install
 npm run start
 ```
 
-## For authorisation
+## For auth
 
 [key](public/key/test_key_111.dat)
 
