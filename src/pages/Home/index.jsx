@@ -1,4 +1,5 @@
 import React from "react";
+import { useDispatch } from 'react-redux';
 import { useTranslate } from 'react-translate';
 import makeStyles from '@mui/styles/makeStyles';
 import { Typography } from "@mui/material";
@@ -11,6 +12,7 @@ import ListCard from "components/ListCard";
 import Tokenize from "components/Tokenize";
 import LazyLoad from "assets/images/lazy_load.png";
 import Preloader from "components/Preloader";
+import { getRealEstate } from "actions";
 
 const styles = (theme) => ({
   warningBlock: {
@@ -101,22 +103,36 @@ const TEST_DATA = [
     livingArea: '140 м2'
   }
 ];
-
 const HomeScreen = ({
   history
 }) => {
-  const [data] = React.useState(TEST_DATA);
+  const [data, setData] = React.useState(TEST_DATA);
   const [loading, setLoading] = React.useState(false);
   const [tokenize, setTokenize] = React.useState(false);
   const t = useTranslate('HomeScreen');
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const tokenizeProcess = (id) => setTokenize(id);
 
-  React.useEffect(() => {
-    setLoading(true);
-    setTimeout(() => setLoading(false), 2000);
-  }, []);
+  // React.useEffect(() => {
+  //   const fetchData = async () => {
+  //     setLoading(true);
+
+  //     const result = await getRealEstate()(dispatch);
+
+  //     if (result instanceof Error) {
+  //       setLoading(false);
+  //       return;
+  //     } 
+      
+  //     setData(result);
+
+  //     setLoading(false);
+  //   };
+
+  //   fetchData();
+  // }, [dispatch]);
 
   const isSM = useMediaQuery(theme => theme.breakpoints.down('sm'));
 

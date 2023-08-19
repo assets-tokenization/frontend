@@ -1,3 +1,0 @@
-[submodule "src/core"]
-	path = src/core
-	url = git@gitlab.com:KitSoft/bpmn/bpmn-front-core.git

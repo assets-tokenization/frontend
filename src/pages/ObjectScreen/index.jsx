@@ -504,8 +504,7 @@ const ObjectScreen = ({
     readAs: 'DataURL',
     limitFilesConfig: { max: 1 },
     maxFileSize: 50,
-    onFilesSuccessfulySelected: ({ plainFiles, filesContent }) => {
-      console.log({ plainFiles, filesContent });
+    onFilesSuccessfulySelected: ({ filesContent }) => {
       setFiles([...files, ...filesContent]);
     }
   });
