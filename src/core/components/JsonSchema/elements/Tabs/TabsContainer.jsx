@@ -20,14 +20,7 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const TabsContainer = ({
-  children,
-  position,
-  orientation,
-  columnProperties = [],
-  isMobile
-}) => {
-
+const TabsContainer = ({ children, position, orientation, columnProperties = [], isMobile }) => {
   const classes = useStyles();
 
   if (!orientation && !position) {
@@ -38,7 +31,7 @@ const TabsContainer = ({
     <Grid
       className={classNames({
         [classes.tabsContainer]: true,
-        [classes.mobileContainer]: isMobile,
+        [classes.mobileContainer]: isMobile
       })}
       container={true}
       spacing={4}
@@ -48,11 +41,11 @@ const TabsContainer = ({
           item={true}
           xs={12}
           style={{
-            order: position === 'left' ? index + 1 : children.length - index,
+            order: position === 'left' ? index + 1 : children.length - index
           }}
           className={classNames({
             [classes[`tabCol${index === 0 ? 'Left' : 'Right'}`]]: true,
-            [classes.mobileGrid]: isMobile,
+            [classes.mobileGrid]: isMobile
           })}
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...(columnProperties[index] || {})}
@@ -62,6 +55,6 @@ const TabsContainer = ({
       ))}
     </Grid>
   );
-}
+};
 
 export default TabsContainer;

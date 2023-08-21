@@ -13,12 +13,12 @@ import StringElement from 'components/JsonSchema/elements/StringElement';
 
 const styles = (theme) => ({
   contentWrapper: {
-    maxWidth: 827,
+    maxWidth: 827
   },
   selectedName: {
     fontSize: '28px',
     lineHeight: '32px',
-    marginLeft: 20,
+    marginLeft: 20
   },
   selectedNameWrapper: {
     marginBottom: 20,
@@ -27,17 +27,17 @@ const styles = (theme) => ({
     alignItems: 'center',
     justifyContent: 'flex-start',
     [theme.breakpoints.down('md')]: {
-      marginTop: 0,
-    },
+      marginTop: 0
+    }
   },
   root: {
     margin: 0,
-    marginBottom: 20,
+    marginBottom: 20
   },
   rootTab: {
     margin: 0,
     padding: 0,
-    marginRight: 20,
+    marginRight: 20
   },
   actionsWrapper: {
     borderTop: '2px solid #000',
@@ -48,28 +48,28 @@ const styles = (theme) => ({
     alignItems: 'center',
     [theme.breakpoints.down('md')]: {
       display: 'block',
-      textAlign: 'center',
-    },
+      textAlign: 'center'
+    }
   },
   perPageWrapper: {
     display: 'flex',
     [theme.breakpoints.down('md')]: {
-      justifyContent: 'center',
-    },
+      justifyContent: 'center'
+    }
   },
   perPageitem: {
     color: '#000',
     fontSize: 13,
     lineHeight: '16px',
     height: 32,
-    marginRight: 10,
+    marginRight: 10
   },
   perPageitemActive: {
-    border: '2px solid #000',
+    border: '2px solid #000'
   },
   paginationState: {
     fontSize: 13,
-    lineHeight: '16px',
+    lineHeight: '16px'
   },
   paginationItems: {
     fontSize: 13,
@@ -77,99 +77,99 @@ const styles = (theme) => ({
     marginRight: 27,
     cursor: 'pointer',
     '&:last-child': {
-      marginRight: 0,
+      marginRight: 0
     },
     '& > svg': {
       width: 15,
       marginLeft: 5,
-      marginRight: 5,
+      marginRight: 5
     },
     [theme.breakpoints.down('md')]: {
       marginRight: 0,
       marginBottom: 10,
       marginTop: 10,
       width: '100%',
-      justifyContent: 'center',
-    },
+      justifyContent: 'center'
+    }
   },
   hideOnXs: {
     [theme.breakpoints.down('md')]: {
-      display: 'none',
-    },
+      display: 'none'
+    }
   },
   disabled: {
     opacity: 0.5,
     cursor: 'initial',
-    pointerEvents: 'none',
+    pointerEvents: 'none'
   },
   rotateItem: {
-    transform: 'rotate(180deg)',
+    transform: 'rotate(180deg)'
   },
   initialCursor: {
-    cursor: 'initial',
+    cursor: 'initial'
   },
   borderBottom: {
     display: 'inline-block',
     minWidth: 25,
     textAlign: 'center',
     marginRight: 5,
-    borderBottom: '2px solid #000',
+    borderBottom: '2px solid #000'
   },
   lastPageValueWrapper: {
-    paddingLeft: 5,
+    paddingLeft: 5
   },
   exportToExelIcon: {
     transform: 'rotate(90deg)',
-    color: '#000',
+    color: '#000'
   },
   createButton: {
-    marginLeft: 50,
+    marginLeft: 50
   },
   toolbar: {
     borderBottom: 'none',
     padding: 0,
-    marginBottom: 30,
+    marginBottom: 30
   },
   createNewRecordButton: {
     marginLeft: 40,
-    marginRight: 0,
+    marginRight: 0
   },
   exportToExelWrapper: {
     color: '#000',
-    marginLeft: 20,
+    marginLeft: 20
   },
   progressBar: {
-    marginTop: 15,
+    marginTop: 15
   },
   tableCell: {
     paddingLeft: 0,
     '&:first-child': {
-      paddingLeft: 0,
-    },
+      paddingLeft: 0
+    }
   },
   tableHeaderRow: {
     '& > th': {
-      paddingLeft: 0,
+      paddingLeft: 0
     },
     '& > th:first-child': {
-      paddingLeft: 0,
-    },
+      paddingLeft: 0
+    }
   },
   searchIcon: {
-    marginBottom: 5,
+    marginBottom: 5
   },
   searchInput: {
     '& label': {
-      transform: 'translate(30px, 21px) scale(1)',
-    },
+      transform: 'translate(30px, 21px) scale(1)'
+    }
   },
   pageInput: {
     marginRight: 5,
     '& input': {
       textAlign: 'center',
-      paddingTop: 0,
-    },
-  },
+      paddingTop: 0
+    }
+  }
 });
 
 const Pagination = ({
@@ -179,7 +179,7 @@ const Pagination = ({
   loading,
   setLimit,
   handleChangePagination,
-  offset,
+  offset
 }) => {
   const t = useTranslate('RegistryPage');
 
@@ -199,7 +199,7 @@ const Pagination = ({
               key={_.uniqueId()}
               className={classNames({
                 [classes.perPageitem]: true,
-                [classes.perPageitemActive]: limit === item,
+                [classes.perPageitemActive]: limit === item
               })}
               onClick={() => setLimit(item)}
               size="large"
@@ -213,7 +213,7 @@ const Pagination = ({
           <div
             className={classNames({
               [classes.paginationItems]: true,
-              [classes.disabled]: isFirstPage,
+              [classes.disabled]: isFirstPage
             })}
             onClick={() => handleChangePagination(0)}
           >
@@ -224,7 +224,7 @@ const Pagination = ({
           <div
             className={classNames({
               [classes.paginationItems]: true,
-              [classes.disabled]: isFirstPage,
+              [classes.disabled]: isFirstPage
             })}
             onClick={() => handleChangePagination(page - 1)}
           >
@@ -232,12 +232,7 @@ const Pagination = ({
             <span className={classes.hideOnXs}>{t('Backward')}</span>
           </div>
 
-          <div
-            className={classNames(
-              classes.paginationItems,
-              classes.initialCursor
-            )}
-          >
+          <div className={classNames(classes.paginationItems, classes.initialCursor)}>
             <StringElement
               width={30}
               value={page + 1}
@@ -250,17 +245,13 @@ const Pagination = ({
                 handleChangePagination(input === 0 ? 0 : input - 1);
               }}
             />
-            {t('From')}
-            {' '}
-            <span className={classes.lastPageValueWrapper}>
-              {lastPageValue}
-            </span>
+            {t('From')} <span className={classes.lastPageValueWrapper}>{lastPageValue}</span>
           </div>
 
           <div
             className={classNames({
               [classes.paginationItems]: true,
-              [classes.disabled]: isLastPage,
+              [classes.disabled]: isLastPage
             })}
             onClick={() => handleChangePagination(page + 1)}
           >
@@ -271,7 +262,7 @@ const Pagination = ({
           <div
             className={classNames({
               [classes.paginationItems]: true,
-              [classes.disabled]: isLastPage,
+              [classes.disabled]: isLastPage
             })}
             onClick={() => handleChangePagination(lastPageValue - 1)}
           >

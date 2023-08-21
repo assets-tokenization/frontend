@@ -17,7 +17,7 @@ import {
   Button,
   IconButton,
   CircularProgress,
-  Typography,
+  Typography
 } from '@mui/material';
 import withStyles from '@mui/styles/withStyles';
 import CodeEditDialog from 'components/CodeEditDialog';
@@ -33,11 +33,11 @@ const styles = {
     position: 'absolute',
     right: 50,
     top: 4,
-    padding: 4,
+    padding: 4
   },
   disabled: {
     color: '#E2E2E2!important',
-    opacity: 0.3,
+    opacity: 0.3
   },
   modelabel: {
     fontWeight: 500,
@@ -46,7 +46,7 @@ const styles = {
     letterSpacing: '-0.09em',
     color: 'rgba(255, 255, 255, 0.7)',
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   actionWrapper: {
     display: 'flex',
@@ -57,8 +57,8 @@ const styles = {
     position: 'relative',
     left: -8,
     '&:hover': {
-      backgroundColor: '#2e2e2e',
-    },
+      backgroundColor: '#2e2e2e'
+    }
   },
   actionLabel: {
     fontWeight: 500,
@@ -66,35 +66,35 @@ const styles = {
     color: '#FFFFFF',
     fontSize: 16,
     textTransform: 'initial',
-    textAlign: 'left',
+    textAlign: 'left'
   },
   chevronIcon: {
-    fill: 'rgba(255, 255, 255, 0.7)',
+    fill: 'rgba(255, 255, 255, 0.7)'
   },
   iconWrapper: {
     display: 'flex',
     alignItems: 'center',
     '& img': {
       height: 27,
-      width: 27,
-    },
+      width: 27
+    }
   },
   iconWrapperError: {
     border: '2px solid #f44336',
     borderRadius: '50%',
-    padding: 3,
+    padding: 3
   },
   darkThemeHover: {
     '& svg': {
-      fill: 'rgba(255, 255, 255, 0.7)',
+      fill: 'rgba(255, 255, 255, 0.7)'
     },
     '&:hover': {
-      backgroundColor: 'rgb(46 46 46)',
-    },
+      backgroundColor: 'rgb(46 46 46)'
+    }
   },
   actionButton: {
-    marginTop: 10,
-  },
+    marginTop: 10
+  }
 };
 
 class CodeEditor extends React.Component {
@@ -104,7 +104,7 @@ class CodeEditor extends React.Component {
       open: false,
       validateErrors: [],
       showErrorDialog: false,
-      alertOpen: false,
+      alertOpen: false
     };
   }
 
@@ -130,9 +130,7 @@ class CodeEditor extends React.Component {
 
     this.setState({
       open: true,
-      value: asJsonObject
-        ? JSON.stringify(value || defaultValue, null, 4)
-        : value || '',
+      value: asJsonObject ? JSON.stringify(value || defaultValue, null, 4) : value || ''
     });
   };
 
@@ -144,7 +142,7 @@ class CodeEditor extends React.Component {
 
     if (validate && validateErrors.length) {
       this.setState({
-        showErrorDialog: true,
+        showErrorDialog: true
       });
       return;
     }
@@ -152,7 +150,7 @@ class CodeEditor extends React.Component {
     this.setState(
       {
         open: false,
-        alertOpen: false,
+        alertOpen: false
       },
       () => {
         try {
@@ -181,7 +179,7 @@ class CodeEditor extends React.Component {
     if (!entity) return;
 
     const {
-      documentTemplateEntity: { jsonSchema },
+      documentTemplateEntity: { jsonSchema }
     } = entity;
 
     return jsonSchema;
@@ -202,9 +200,7 @@ class CodeEditor extends React.Component {
 
   onValidate = (validateErrors) =>
     this.setState({
-      validateErrors: validateErrors.filter(
-        ({ type }) => !['warning', 'info'].includes(type)
-      ),
+      validateErrors: validateErrors.filter(({ type }) => !['warning', 'info'].includes(type))
     });
 
   handleChange = (value) => this.setState({ value });
@@ -236,9 +232,7 @@ class CodeEditor extends React.Component {
 
     return (
       <IconButton
-        disabled={
-          busy || this.isPristine() || (validate && validateErrors.length)
-        }
+        disabled={busy || this.isPristine() || (validate && validateErrors.length)}
         onClick={this.handleSaveAction}
         className={classes.saveButton}
         classes={{ disabled: classes.disabled }}
@@ -254,10 +248,7 @@ class CodeEditor extends React.Component {
     const { alertOpen } = this.state;
 
     return (
-      <Dialog
-        open={alertOpen}
-        onClose={() => this.setState({ alertOpen: false })}
-      >
+      <Dialog open={alertOpen} onClose={() => this.setState({ alertOpen: false })}>
         <DialogTitle>{t('CodeEditorAlertTitle')}</DialogTitle>
         <DialogContent>
           <DialogContentText>{t('CodeEditorAlertText')}</DialogContentText>
@@ -298,27 +289,16 @@ class CodeEditor extends React.Component {
         {darkTheme ? (
           <>
             {description ? (
-              <Button
-                className={classes.actionWrapper}
-                onClick={this.handleOpen}
-              >
-                <Typography className={classes.actionLabel}>
-                  {this.evaluateTitle()}
-                </Typography>
-                <span className={classes.modelabel}>
-                  {this.renderModelabel(mode)}
-                </span>
+              <Button className={classes.actionWrapper} onClick={this.handleOpen}>
+                <Typography className={classes.actionLabel}>{this.evaluateTitle()}</Typography>
+                <span className={classes.modelabel}>{this.renderModelabel(mode)}</span>
               </Button>
             ) : (
-              <IconButton
-                onClick={this.handleOpen}
-                className={classes.darkThemeHover}
-                size="large"
-              >
+              <IconButton onClick={this.handleOpen} className={classes.darkThemeHover} size="large">
                 <span
                   className={classNames({
                     [classes.iconWrapper]: true,
-                    [classes.iconWrapperError]: error,
+                    [classes.iconWrapperError]: error
                   })}
                 >
                   {this.renderModelabel(mode)}
@@ -327,11 +307,7 @@ class CodeEditor extends React.Component {
             )}
           </>
         ) : (
-          <Button
-            variant="outlined"
-            onClick={this.handleOpen}
-            className={classes.actionButton}
-          >
+          <Button variant="outlined" onClick={this.handleOpen} className={classes.actionButton}>
             {t('EditMode', { mode })}
           </Button>
         )}
@@ -408,18 +384,13 @@ class CodeEditor extends React.Component {
           defaultHtmlValue={defaultHtmlValue}
         />
 
-        <Dialog
-          open={showErrorDialog}
-          onClose={() => this.setState({ showErrorDialog: false })}
-        >
+        <Dialog open={showErrorDialog} onClose={() => this.setState({ showErrorDialog: false })}>
           <DialogTitle>{t('ValidationErrors')}</DialogTitle>
           <DialogContent>
             <List dense={true}>
               {validateErrors.map((err, index) => (
                 <ListItem key={index}>
-                  <ListItemText
-                    primary={`${err.row}:${err.column} ${err.text}`}
-                  />
+                  <ListItemText primary={`${err.row}:${err.column} ${err.text}`} />
                 </ListItem>
               ))}
             </List>
@@ -467,8 +438,8 @@ const mapStateToProps = ({ tasks }) => ({ tasks });
 
 const mapDispatchToProps = (dispatch) => ({
   actions: {
-    addError: bindActionCreators(addError, dispatch),
-  },
+    addError: bindActionCreators(addError, dispatch)
+  }
 });
 
 const styled = withStyles(styles)(CodeEditor);

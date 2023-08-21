@@ -59,19 +59,19 @@ export default ({
       width: 130,
       render: (_, row) => {
         const { size, fileSize } = row;
-  
+
         const value = size || fileSize;
-  
+
         if (!value) {
           return '';
         }
-  
+
         const bytesString = `(${value} ${t('bytes')})`;
-  
+
         if (value && value < 1024 * 1024) {
           return `${(value / 1024).toFixed(2)} KB ${admin ? bytesString : ''}`;
         }
-        
+
         return `${(value / 1024 / 1024).toFixed(2)} MB ${admin ? bytesString : ''}`;
       }
     });
@@ -118,10 +118,7 @@ export default ({
           )}
           {item.signature ? <SignatureDetails item={item} /> : null}
           {item instanceof File ? null : (
-            <DeleteFile
-              item={item}
-              handleDeleteFile={actions?.handleDeleteFile}
-            />
+            <DeleteFile item={item} handleDeleteFile={actions?.handleDeleteFile} />
           )}
         </div>
       </>
@@ -131,7 +128,7 @@ export default ({
   return {
     actions,
     components: {
-      DataTableCard,
+      DataTableCard
     },
     controls: {
       pagination: false,
@@ -140,11 +137,11 @@ export default ({
       header: true,
       refresh: false,
       switchView: true,
-      customizateColumns: false,
+      customizateColumns: false
     },
     checkable: true,
     cellStyle: {
-      verticalAlign: 'middle',
+      verticalAlign: 'middle'
     },
     columns
   };

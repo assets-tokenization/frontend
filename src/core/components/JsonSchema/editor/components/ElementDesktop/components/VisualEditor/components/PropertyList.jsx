@@ -14,7 +14,7 @@ const styles = {
     cursor: 'pointer',
     padding: 5,
     paddingLeft: 15
-  },
+  }
 };
 
 const PropertyList = ({ t, classes, path, value }) => {

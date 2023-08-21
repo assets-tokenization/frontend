@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import makeStyles from '@mui/styles/makeStyles';
 import { Typography } from '@mui/material';
 
@@ -17,22 +17,15 @@ const styles = (theme) => ({
       marginBottom: 24,
       margin: '16px 8px'
     }
-  },
- 
+  }
 });
 
 const useStyles = makeStyles(styles);
 
-const PageTitle = ({
-  children,
-}) => {
+const PageTitle = ({ children }) => {
   const classes = useStyles();
 
-  return (
-    <Typography className={classes.headline}>
-      {children}
-    </Typography>
-  );
-}
+  return <Typography className={classes.headline}>{children}</Typography>;
+};
 
 export default PageTitle;

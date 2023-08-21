@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import makeStyles from '@mui/styles/makeStyles';
-import CurrencyTextField from '@lupus-ai/mui-currency-textfield'
+import CurrencyTextField from '@lupus-ai/mui-currency-textfield';
 import formElement from 'components/JsonSchema/components/formElement';
 import stringToNumber from 'helpers/stringToNumber';
 import ElementContainer from 'components/JsonSchema/components/ElementContainer';
@@ -48,7 +48,7 @@ const CurrencyInput = ({
     const propValue = value ? stringToNumber(value) : value;
 
     const isValueNumber = type === 'number' ? propValue || propValue === 0 : propValue;
-  
+
     if (isValueNumber && propValue !== Number(inputValue)) {
       setInputValue(propValue);
     }
@@ -82,7 +82,7 @@ const CurrencyInput = ({
         modifyValueOnWheel={false}
         onChange={(e, newValue) => {
           const {
-            target: { value: formatted },
+            target: { value: formatted }
           } = e;
           setInputValue(newValue);
           if (formattedValue && type === 'string') {

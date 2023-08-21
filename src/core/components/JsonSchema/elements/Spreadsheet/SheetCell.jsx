@@ -7,7 +7,7 @@ import SchemaPreview from 'components/JsonSchema/SchemaPreview';
 import EJVError from 'components/JsonSchema/components/EJVError';
 import getMessages from 'components/JsonSchema/helpers/getMessages';
 import FormControlMessage, {
-  MESSAGE_TYPES,
+  MESSAGE_TYPES
 } from 'components/JsonSchema/components/FormControlMessage';
 
 const styles = {
@@ -15,7 +15,7 @@ const styles = {
     display: 'flex',
     alignItems: 'baseline',
     maxHeight: 160,
-    overflow: 'auto',
+    overflow: 'auto'
   },
   cell: {
     position: 'relative',
@@ -26,7 +26,7 @@ const styles = {
     '&.read-only': {
       whiteSpace: 'initial !important',
       paddingRight: 5,
-      paddingLeft: 5,
+      paddingLeft: 5
     },
     '& .value-viewer': {
       padding: '0 4px',
@@ -40,18 +40,18 @@ const styles = {
       flex: 1,
       '&::after': {
         content: '',
-        display: 'block',
-      },
+        display: 'block'
+      }
     },
     '& .copier': {
-      display: 'none',
+      display: 'none'
     },
     '&.selected .copier': {
-      display: 'block',
-    },
+      display: 'block'
+    }
   },
   error: {
-    background: '#fdb59c !important',
+    background: '#fdb59c !important'
   },
   copier: {
     position: 'absolute',
@@ -60,12 +60,12 @@ const styles = {
     height: 6,
     background: '#000000',
     right: 0,
-    bottom: 0,
+    bottom: 0
   },
   cellContainer: {
     maxHeight: 100,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden'
+  }
 };
 
 const CustomTooltip = withStyles({
@@ -74,8 +74,8 @@ const CustomTooltip = withStyles({
     backgroundColor: '#f1b992',
     opacity: 0.7,
     fontWeight: 'bold',
-    fontSize: 12,
-  },
+    fontSize: 12
+  }
 })(Tooltip);
 
 const SheetCell = (props) => {
@@ -96,7 +96,7 @@ const SheetCell = (props) => {
     onDoubleClick,
     onMouseDown,
     onMouseOver,
-    dataListRef,
+    dataListRef
   } = props;
 
   const cellRef = React.useRef();
@@ -107,15 +107,12 @@ const SheetCell = (props) => {
   const lastHeader = headers.length ? headers[headers.length - 1] : [];
   const headerProps = lastHeader[col] || {};
 
-  const error = errors.find(
-    ({ path: errorPath }) => errorPath === [path, row, propName].join('.')
-  );
+  const error = errors.find(({ path: errorPath }) => errorPath === [path, row, propName].join('.'));
 
-  const [message] = getMessages(
-    schema,
-    [].concat(stepName, path, row, propName),
-    { ...props, value }
-  );
+  const [message] = getMessages(schema, [].concat(stepName, path, row, propName), {
+    ...props,
+    value
+  });
 
   const selected = dataListRef?.current?.querySelector('td.selected');
 
@@ -132,20 +129,20 @@ const SheetCell = (props) => {
       onMouseOver={onMouseOver}
       className={classNames(className, {
         [classes.cell]: true,
-        [classes.error]: !!error,
+        [classes.error]: !!error
       })}
       style={{
         verticalAlign: 'middle',
         textAlign: headerProps.align || 'center',
         wordBreak: 'break-word',
         color: '#000',
-        outline: selected ? 'none' : 'revert',
+        outline: selected ? 'none' : 'revert'
       }}
     >
       <div
         className={classes.root}
         style={{
-          background: message ? `${MESSAGE_TYPES[message.type].color}25` : null,
+          background: message ? `${MESSAGE_TYPES[message.type].color}25` : null
         }}
       >
         <SchemaPreview

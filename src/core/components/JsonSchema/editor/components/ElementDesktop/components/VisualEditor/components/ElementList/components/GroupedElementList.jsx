@@ -2,8 +2,8 @@ import React from 'react';
 import { translate } from 'react-translate';
 import classNames from 'classnames';
 import sortArray from 'sort-array';
-import update from 'immutability-helper'
-import PropTypes from 'prop-types'
+import update from 'immutability-helper';
+import PropTypes from 'prop-types';
 import { DragPreviewImage, useDrag, useDrop } from 'react-dnd';
 import { Tooltip, IconButton, Typography, Button } from '@mui/material';
 import withStyles from '@mui/styles/withStyles';
@@ -44,7 +44,7 @@ const styles = {
     cursor: 'pointer',
     paddingBottom: 17,
     paddingTop: 17,
-    width: '100%',
+    width: '100%'
   },
   iconButton: {
     padding: 8
@@ -72,7 +72,7 @@ const styles = {
     }
   },
   label: {
-    justifyContent: 'flex-start',
+    justifyContent: 'flex-start'
   },
   editIcon: {
     position: 'absolute',
@@ -117,8 +117,8 @@ const GroupContainer = ({
     accept: ['group'],
     collect(monitor) {
       return {
-        handlerId: monitor.getHandlerId(),
-      }
+        handlerId: monitor.getHandlerId()
+      };
     },
     hover(item, monitor) {
       if (!button.current) {
@@ -134,8 +134,7 @@ const GroupContainer = ({
 
       const hoverBoundingRect = button.current?.getBoundingClientRect();
 
-      const hoverMiddleY =
-        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
 
       const clientOffset = monitor.getClientOffset();
 
@@ -152,16 +151,16 @@ const GroupContainer = ({
       moveGroup(dragIndex, hoverIndex);
 
       item.index = hoverIndex;
-    },
-  })
+    }
+  });
 
   const [{ isDragging }, drag, preview] = useDrag({
     item: {
       type: 'group'
     },
     collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
+      isDragging: monitor.isDragging()
+    })
   });
 
   drag(drop(button));
@@ -170,64 +169,56 @@ const GroupContainer = ({
 
   return (
     <>
-      {
-        group ? (
-          <>
-            <DragPreviewImage connect={preview} src={previewImage} />
-            <div ref={button}>
-              <Button
-                ref={drag}
-                data-handler-id={handlerId}
-                fullWidth={true}
-                style={{ opacity }}
-                classes={classes}
-                onClick={() => handleOpenGroup(group)}
-              >
-                {group}
-                {
-                  !visualEditor ? (
-                    <>
-                      {
-                        readOnly ? (
-                          <VisibilityIcon
-                            className={classNames({
-                              [classes.editIcon]: true,
-                            })}
-                          />
-                        ) : (
-                          <img
-                            src={EditIcon}
-                            alt="edit icon"
-                            className={classNames({
-                              [classes.editIcon]: true,
-                            })}
-                          />
-                        )
-                      }
-                    </>
-                  ) : null
-                }
-              </Button>
-            </div>
-          </>
-        ) : null
-      }
+      {group ? (
+        <>
+          <DragPreviewImage connect={preview} src={previewImage} />
+          <div ref={button}>
+            <Button
+              ref={drag}
+              data-handler-id={handlerId}
+              fullWidth={true}
+              style={{ opacity }}
+              classes={classes}
+              onClick={() => handleOpenGroup(group)}
+            >
+              {group}
+              {!visualEditor ? (
+                <>
+                  {readOnly ? (
+                    <VisibilityIcon
+                      className={classNames({
+                        [classes.editIcon]: true
+                      })}
+                    />
+                  ) : (
+                    <img
+                      src={EditIcon}
+                      alt="edit icon"
+                      className={classNames({
+                        [classes.editIcon]: true
+                      })}
+                    />
+                  )}
+                </>
+              ) : null}
+            </Button>
+          </div>
+        </>
+      ) : null}
 
-      {
-        filteredSnippets.map((element, index) => (
-          <DraggableElement
-            index={index}
-            moveSnippet={moveSnippet}
-            search={search}
-            readOnly={readOnly}
-            element={element}
-            key={element.name}
-            setActiveSnippet={setActiveSnippet}
-            setCreateSnippet={handleOpenCreateSnippet}
-            visualEditor={visualEditor}
-          />
-        ))
-      }
+      {filteredSnippets.map((element, index) => (
+        <DraggableElement
+          index={index}
+          moveSnippet={moveSnippet}
+          search={search}
+          readOnly={readOnly}
+          element={element}
+          key={element.name}
+          setActiveSnippet={setActiveSnippet}
+          setCreateSnippet={handleOpenCreateSnippet}
+          visualEditor={visualEditor}
+        />
+      ))}
     </>
   );
 };
@@ -245,9 +236,13 @@ const GroupedElementList = ({
   readOnly,
   visualEditor
 }) => {
-  const [openAddition, setOpenAddition] = React.useState(storage.getItem('openAddition') === 'true');
+  const [openAddition, setOpenAddition] = React.useState(
+    storage.getItem('openAddition') === 'true'
+  );
   const [openControl, setOpenControl] = React.useState(storage.getItem('openControl') === 'true');
-  const [openContainer, setOpenContainer] = React.useState(storage.getItem('openContainer') === 'true');
+  const [openContainer, setOpenContainer] = React.useState(
+    storage.getItem('openContainer') === 'true'
+  );
   const [sort, setSort] = React.useState(() => {
     try {
       const savedSort = storage.getItem('sortSnippets');
@@ -309,88 +304,86 @@ const GroupedElementList = ({
     return acc;
   }, {});
 
-  const sortedGroups = Object.keys(snippetGroups)
-    .map((group) => {
-      return {
-        ...groups.find((item) => item.name === group),
-        elements: snippetGroups[group],
-        sortIndex: (sortGroups || []).findIndex((element) => element === group) || 0
-      };
-    });
-  
+  const sortedGroups = Object.keys(snippetGroups).map((group) => {
+    return {
+      ...groups.find((item) => item.name === group),
+      elements: snippetGroups[group],
+      sortIndex: (sortGroups || []).findIndex((element) => element === group) || 0
+    };
+  });
+
   sortArray(sortedGroups, {
     by: 'sortIndex',
     order: 'asc'
   });
-  
+
   const renderGroupedSnippets = (name) => (
     <>
-      {
-        sortedGroups.map(({ name: group, elements }, index) => {
-          const filteredSnippets = elements
-            .map((item) => ({
-              ...item,
-              sortIndex: (sort[group] || [])?.findIndex((element) => (element || {}).id === item.id) || 0
-            }))
-            .filter((snippet) => snippet?.type === name)
-            .filter((element) => {
-              const nameMatch = (element?.name).toLowerCase().includes(search.toLowerCase());
-              const codeMatch = (JSON.stringify(element)).toLowerCase().includes(search.toLowerCase());
-              return nameMatch || codeMatch;
-            });
-
-          if (!(filteredSnippets || []).length) {
-            return null;
-          }
-
-          const moveSnippet = (dragIndex, hoverIndex) => {
-            const result = update(filteredSnippets, {
-              $splice: [
-                [dragIndex, 1],
-                [hoverIndex, 0, filteredSnippets[dragIndex]],
-              ],
-            });
-
-            handleSortSnippets(group, result);
-          };
-
-          const moveGroup = (dragIndex, hoverIndex) => {
-            const group = Object.keys(snippetGroups);
-
-            const result = update(group, {
-              $splice: [
-                [dragIndex, 1],
-                [hoverIndex, 0, group[dragIndex]],
-              ],
-            });
-
-            handleSortGroups(result);
-          };
-
-          sortArray(filteredSnippets, {
-            by: 'sortIndex',
-            order: 'asc'
+      {sortedGroups.map(({ name: group, elements }, index) => {
+        const filteredSnippets = elements
+          .map((item) => ({
+            ...item,
+            sortIndex:
+              (sort[group] || [])?.findIndex((element) => (element || {}).id === item.id) || 0
+          }))
+          .filter((snippet) => snippet?.type === name)
+          .filter((element) => {
+            const nameMatch = (element?.name).toLowerCase().includes(search.toLowerCase());
+            const codeMatch = JSON.stringify(element).toLowerCase().includes(search.toLowerCase());
+            return nameMatch || codeMatch;
           });
 
-          return (
-            <GroupContainer
-              index={index}
-              key={index}
-              classes={classes}
-              handleOpenGroup={handleOpenGroup}
-              group={group}
-              readOnly={readOnly}
-              filteredSnippets={filteredSnippets}
-              moveSnippet={moveSnippet}
-              moveGroup={moveGroup}
-              search={search}
-              setActiveSnippet={setActiveSnippet}
-              handleOpenCreateSnippet={handleOpenCreateSnippet}
-              visualEditor={visualEditor}
-            />
-          );
-        })
-      }
+        if (!(filteredSnippets || []).length) {
+          return null;
+        }
+
+        const moveSnippet = (dragIndex, hoverIndex) => {
+          const result = update(filteredSnippets, {
+            $splice: [
+              [dragIndex, 1],
+              [hoverIndex, 0, filteredSnippets[dragIndex]]
+            ]
+          });
+
+          handleSortSnippets(group, result);
+        };
+
+        const moveGroup = (dragIndex, hoverIndex) => {
+          const group = Object.keys(snippetGroups);
+
+          const result = update(group, {
+            $splice: [
+              [dragIndex, 1],
+              [hoverIndex, 0, group[dragIndex]]
+            ]
+          });
+
+          handleSortGroups(result);
+        };
+
+        sortArray(filteredSnippets, {
+          by: 'sortIndex',
+          order: 'asc'
+        });
+
+        return (
+          <GroupContainer
+            index={index}
+            key={index}
+            classes={classes}
+            handleOpenGroup={handleOpenGroup}
+            group={group}
+            readOnly={readOnly}
+            filteredSnippets={filteredSnippets}
+            moveSnippet={moveSnippet}
+            moveGroup={moveGroup}
+            search={search}
+            setActiveSnippet={setActiveSnippet}
+            handleOpenCreateSnippet={handleOpenCreateSnippet}
+            visualEditor={visualEditor}
+          />
+        );
+      })}
     </>
   );
 
@@ -407,27 +400,19 @@ const GroupedElementList = ({
           {t('AdditionsFunctions')}
         </Typography>
 
-        {
-          readOnly ? null : (
-            <Tooltip title={t('AddSnippet')}>
-              <IconButton
-                onClick={() => handleOpenCreateSnippet(true, 'function')}
-                classes={{ root: classes.iconButton }}
-              >
-                <AddIcon className={classes.icon} />
-              </IconButton>
-            </Tooltip>
-          )
-        }
+        {readOnly ? null : (
+          <Tooltip title={t('AddSnippet')}>
+            <IconButton
+              onClick={() => handleOpenCreateSnippet(true, 'function')}
+              classes={{ root: classes.iconButton }}
+            >
+              <AddIcon className={classes.icon} />
+            </IconButton>
+          </Tooltip>
+        )}
       </div>
 
-      {
-        openAddition || (search || '').length ? (
-          <>
-            {renderGroupedSnippets('function')}
-          </>
-        ) : null
-      }
+      {openAddition || (search || '').length ? <>{renderGroupedSnippets('function')}</> : null}
 
       <div className={classes.actionsWrapper}>
         <Typography
@@ -440,27 +425,19 @@ const GroupedElementList = ({
           {t('Controls')}
         </Typography>
 
-        {
-          readOnly ? null : (
-            <Tooltip title={t('AddSnippet')}>
-              <IconButton
-                onClick={() => handleOpenCreateSnippet(true, 'control')}
-                classes={{ root: classes.iconButton }}
-              >
-                <AddIcon className={classes.icon} />
-              </IconButton>
-            </Tooltip>
-          )
-        }
+        {readOnly ? null : (
+          <Tooltip title={t('AddSnippet')}>
+            <IconButton
+              onClick={() => handleOpenCreateSnippet(true, 'control')}
+              classes={{ root: classes.iconButton }}
+            >
+              <AddIcon className={classes.icon} />
+            </IconButton>
+          </Tooltip>
+        )}
       </div>
 
-      {
-        openControl || (search || '').length ? (
-          <>
-            {renderGroupedSnippets('control')}
-          </>
-        ) : null
-      }
+      {openControl || (search || '').length ? <>{renderGroupedSnippets('control')}</> : null}
 
       <div className={classes.actionsWrapper}>
         <Typography
@@ -473,27 +450,19 @@ const GroupedElementList = ({
           {t('Containers')}
         </Typography>
 
-        {
-          readOnly ? null : (
-            <Tooltip title={t('AddSnippet')}>
-              <IconButton
-                onClick={() => handleOpenCreateSnippet(true, 'container')}
-                classes={{ root: classes.iconButton }}
-              >
-                <AddIcon className={classes.icon} />
-              </IconButton>
-            </Tooltip>
-          )
-        }
+        {readOnly ? null : (
+          <Tooltip title={t('AddSnippet')}>
+            <IconButton
+              onClick={() => handleOpenCreateSnippet(true, 'container')}
+              classes={{ root: classes.iconButton }}
+            >
+              <AddIcon className={classes.icon} />
+            </IconButton>
+          </Tooltip>
+        )}
       </div>
 
-      {
-        openContainer || (search || '').length ? (
-          <>
-            {renderGroupedSnippets('container')}
-          </>
-        ) : null
-      }
+      {openContainer || (search || '').length ? <>{renderGroupedSnippets('container')}</> : null}
 
       <div className={classes.divider} />
     </>

@@ -5,7 +5,7 @@ import { makeStyles } from '@mui/styles';
 import TreeViewList from 'components/TreeView/TreeViewList';
 
 const withStyles = makeStyles({
-  root: {},
+  root: {}
 });
 
 const TreeView = ({ value, ...rest }) => {

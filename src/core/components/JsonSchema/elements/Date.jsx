@@ -11,203 +11,203 @@ import ElementContainer from '../components/ElementContainer';
 import ModernCalendar from '../../CustomInput/ModernCalendar';
 
 class DateElement extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            value: this.props.value,
-        };
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: this.props.value
+    };
+  }
+
+  handleChange = (value) => {
+    const { onChange } = this.props;
+    onChange && onChange(value || undefined);
+    this.setState({ value });
+  };
+
+  evalDate = (dateFunc) => {
+    if (!dateFunc) return null;
+
+    const {
+      rootDocument: { data },
+      stepName,
+      documents
+    } = this.props;
+
+    const dateVal = evaluate(dateFunc, moment, data[stepName], data, documents?.rootDocument?.data);
+
+    if (dateVal instanceof Error) return null;
+
+    return dateVal;
+  };
+
+  setDateLimits = () => {
+    const {
+      minDate: minDateOrigin,
+      maxDate: maxDateOrigin,
+      allowedDays: allowedDaysOrigin,
+      disabledDays: disabledDaysOrigin
+    } = this.props;
+
+    return {
+      minDate: this.evalDate(minDateOrigin),
+      maxDate: this.evalDate(maxDateOrigin),
+      allowedDays: this.evalDate(allowedDaysOrigin),
+      disabledDays: this.evalDate(disabledDaysOrigin)
+    };
+  };
+
+  componentWillReceiveProps = (nextProps) => {
+    const { value } = nextProps;
+    if (value !== this.state.value) {
+      this.setState({ value });
     }
+  };
 
-    handleChange = (value) => {
-        const { onChange } = this.props;
-        onChange && onChange(value || undefined);
-        this.setState({ value });
-    };
+  render = () => {
+    const {
+      classes,
+      sample,
+      error,
+      description,
+      readOnly,
+      InputProps,
+      required,
+      placeholder,
+      path,
+      width,
+      maxWidth,
+      hidden,
+      noMargin,
+      dateFormat,
+      modernCalendar,
+      calendarPopperPosition,
+      externalReaderMessage,
+      stepName,
+      triggerExternalPath,
+      notRequiredLabel,
+      darkTheme
+    } = this.props;
+    const { value } = this.state;
 
-    evalDate = (dateFunc) => {
-        if (!dateFunc) return null;
+    const { minDate, maxDate, allowedDays, disabledDays } = this.setDateLimits();
 
-        const { rootDocument: { data }, stepName, documents } = this.props;
+    const Component = readOnly ? TextFieldDummy : CustomDatePicker;
 
-        const dateVal = evaluate(dateFunc, moment, data[stepName], data, documents?.rootDocument?.data);
+    if (hidden) return null;
 
-        if (dateVal instanceof Error) return null;
-
-        return dateVal;
-    };
-
-    setDateLimits = () => {
-        const {
-            minDate: minDateOrigin,
-            maxDate: maxDateOrigin,
-            allowedDays: allowedDaysOrigin,
-            disabledDays: disabledDaysOrigin,
-        } = this.props;
-
-        return {
-            minDate: this.evalDate(minDateOrigin),
-            maxDate: this.evalDate(maxDateOrigin),
-            allowedDays: this.evalDate(allowedDaysOrigin),
-            disabledDays: this.evalDate(disabledDaysOrigin)
-        };
-    };
-
-    componentWillReceiveProps = (nextProps) => {
-        const { value } = nextProps;
-        if (value !== this.state.value) {
-            this.setState({ value });
-        }
-    };
-
-    render = () => {
-        const {
-            classes,
-            sample,
-            error,
-            description,
-            readOnly,
-            InputProps,
-            required,
-            placeholder,
-            path,
-            width,
-            maxWidth,
-            hidden,
-            noMargin,
-            dateFormat,
-            modernCalendar,
-            calendarPopperPosition,
-            externalReaderMessage,
-            stepName,
-            triggerExternalPath,
-            notRequiredLabel,
-            darkTheme
-        } = this.props;
-        const { value } = this.state;
-
-        const {
-            minDate, maxDate, allowedDays, disabledDays
-        } = this.setDateLimits();
-
-        const Component = readOnly ? TextFieldDummy : CustomDatePicker;
-
-        if (hidden) return null;
-
-        return (
-            <ElementContainer
-                error={error}
-                className={classes.formControl}
-                sample={sample}
-                bottomSample={true}
-                width={width}
-                maxWidth={maxWidth}
-                noMargin={noMargin}
+    return (
+      <ElementContainer
+        error={error}
+        className={classes.formControl}
+        sample={sample}
+        bottomSample={true}
+        width={width}
+        maxWidth={maxWidth}
+        noMargin={noMargin}
+        notRequiredLabel={notRequiredLabel}
+      >
+        {modernCalendar ? (
+          <ModernCalendar
+            value={value}
+            minDate={minDate}
+            maxDate={maxDate}
+            onChange={this.handleChange}
+            dateFormat={dateFormat}
+            description={description}
+            allowedDays={allowedDays}
+            disabledDays={disabledDays}
+            calendarPopperPosition={calendarPopperPosition}
+            triggerExternalPath={triggerExternalPath}
+            stepName={stepName}
+            path={path}
+            width={width}
+            externalReaderMessage={externalReaderMessage}
+            darkTheme={darkTheme}
+          />
+        ) : (
+          <Component
+            incomingFormat={dateFormat}
+            placeholder={placeholder}
+            label={
+              <FieldLabel
+                description={description}
+                required={required}
                 notRequiredLabel={notRequiredLabel}
-            >
-                {
-                    modernCalendar ? (
-                        <ModernCalendar
-                            value={value}
-                            minDate={minDate}
-                            maxDate={maxDate}
-                            onChange={this.handleChange}    
-                            dateFormat={dateFormat}
-                            description={description}
-                            allowedDays={allowedDays}
-                            disabledDays={disabledDays}
-                            calendarPopperPosition={calendarPopperPosition}
-                            triggerExternalPath={triggerExternalPath}
-                            stepName={stepName}
-                            path={path}
-                            width={width}
-                            externalReaderMessage={externalReaderMessage}
-                            darkTheme={darkTheme}
-                        />
-                    ) : (
-                        <Component
-                            incomingFormat={dateFormat}
-                            placeholder={placeholder}
-                            label={(
-                                <FieldLabel
-                                    description={description}
-                                    required={required}
-                                    notRequiredLabel={notRequiredLabel}
-                                />
-                            )}
-                            value={value}
-                            date={value}
-                            onChange={this.handleChange}
-                            error={!!error}
-                            InputProps={InputProps}
-                            id={path.join('-')}
-                            minDate={minDate}
-                            maxDate={maxDate}
-                            darkTheme={darkTheme}
-                        />
-                    )
-                }
-            </ElementContainer>
-        );
-    };
+              />
+            }
+            value={value}
+            date={value}
+            onChange={this.handleChange}
+            error={!!error}
+            InputProps={InputProps}
+            id={path.join('-')}
+            minDate={minDate}
+            maxDate={maxDate}
+            darkTheme={darkTheme}
+          />
+        )}
+      </ElementContainer>
+    );
+  };
 }
 
 DateElement.propTypes = {
-    onChange: PropTypes.func,
-    children: PropTypes.node,
-    enum: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
-    type: PropTypes.string,
-    placeholder: PropTypes.string,
-    select: PropTypes.bool,
-    sample: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-    error: PropTypes.object,
-    formControlProps: PropTypes.object,
-    description: PropTypes.string,
-    classes: PropTypes.object.isRequired,
-    path: PropTypes.array,
-    readOnly: PropTypes.bool,
-    InputProps: PropTypes.object,
-    SelectProps: PropTypes.object,
-    mask: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(RegExp)]),
-    required: PropTypes.bool,
-    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    minDate: PropTypes.string,
-    maxDate: PropTypes.string,
-    dateFormat: PropTypes.string,
-    modernCalendar: PropTypes.bool,
-    allowedDays: PropTypes.string,
-    disabledDays: PropTypes.string,
-    calendarPopperPosition: PropTypes.string,
-    notRequiredLabel: PropTypes.string,
-    darkTheme: PropTypes.bool
+  onChange: PropTypes.func,
+  children: PropTypes.node,
+  enum: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+  type: PropTypes.string,
+  placeholder: PropTypes.string,
+  select: PropTypes.bool,
+  sample: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+  error: PropTypes.object,
+  formControlProps: PropTypes.object,
+  description: PropTypes.string,
+  classes: PropTypes.object.isRequired,
+  path: PropTypes.array,
+  readOnly: PropTypes.bool,
+  InputProps: PropTypes.object,
+  SelectProps: PropTypes.object,
+  mask: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(RegExp)]),
+  required: PropTypes.bool,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  minDate: PropTypes.string,
+  maxDate: PropTypes.string,
+  dateFormat: PropTypes.string,
+  modernCalendar: PropTypes.bool,
+  allowedDays: PropTypes.string,
+  disabledDays: PropTypes.string,
+  calendarPopperPosition: PropTypes.string,
+  notRequiredLabel: PropTypes.string,
+  darkTheme: PropTypes.bool
 };
 
 DateElement.defaultProps = {
-    children: '',
-    enum: null,
-    type: 'string',
-    placeholder: '',
-    select: false,
-    onChange: undefined,
-    sample: '',
-    formControlProps: {},
-    error: null,
-    description: '',
-    readOnly: false,
-    InputProps: {},
-    SelectProps: {},
-    mask: '',
-    required: false,
-    path: [],
-    value: '',
-    minDate: null,
-    maxDate: null,
-    dateFormat: 'DD.MM.YYYY',
-    modernCalendar: false,
-    allowedDays: false,
-    disabledDays: false,
-    calendarPopperPosition: 'auto',
-    notRequiredLabel: false,
-    darkTheme: false
+  children: '',
+  enum: null,
+  type: 'string',
+  placeholder: '',
+  select: false,
+  onChange: undefined,
+  sample: '',
+  formControlProps: {},
+  error: null,
+  description: '',
+  readOnly: false,
+  InputProps: {},
+  SelectProps: {},
+  mask: '',
+  required: false,
+  path: [],
+  value: '',
+  minDate: null,
+  maxDate: null,
+  dateFormat: 'DD.MM.YYYY',
+  modernCalendar: false,
+  allowedDays: false,
+  disabledDays: false,
+  calendarPopperPosition: 'auto',
+  notRequiredLabel: false,
+  darkTheme: false
 };
 
 const styled = withStyles({})(DateElement);

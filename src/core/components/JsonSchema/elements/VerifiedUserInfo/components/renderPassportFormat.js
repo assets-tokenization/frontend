@@ -32,7 +32,8 @@ const RenderPassportFormat = ({
         documentType: changedValue?.data
       });
     } else if (typeof changedValue === 'object') {
-      const type = typeof changedValue?.active === 'string' ? changedValue?.active : value[name]?.type;
+      const type =
+        typeof changedValue?.active === 'string' ? changedValue?.active : value[name]?.type;
       handleUpdateField(name, {
         type
       });
@@ -44,9 +45,9 @@ const RenderPassportFormat = ({
 
         dates[dateName][fieldName] = changedValue;
 
-        const updatedDate = `${dates[dateName]?.day || ''}.${
-          dates[dateName]?.month || ''
-        }.${dates[dateName]?.year || ''}`;
+        const updatedDate = `${dates[dateName]?.day || ''}.${dates[dateName]?.month || ''}.${
+          dates[dateName]?.year || ''
+        }`;
 
         handleUpdateField([name, dateName], updatedDate);
       } else {
@@ -60,12 +61,10 @@ const RenderPassportFormat = ({
       {fields?.includes(name) ? (
         <>
           <div
-            className={
-              classNames({
-                [classes.infoBlockHeadline]: true,
-                [classes.infoBlockHeadlinePassport]: true
-              })
-            }
+            className={classNames({
+              [classes.infoBlockHeadline]: true,
+              [classes.infoBlockHeadlinePassport]: true
+            })}
           >
             {t('passportData')}
           </div>
@@ -99,7 +98,7 @@ const RenderPassportFormat = ({
                               width: 65,
                               mask: '**',
                               formatChars: {
-                                '*': '[АаБбВвГгҐґДдЕеЄєЖжЗзИиІіЇїЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщЬьЮюЯя]',
+                                '*': '[АаБбВвГгҐґДдЕеЄєЖжЗзИиІіЇїЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщЬьЮюЯя]'
                               },
                               changeCase: 'toUpperCase'
                             },
@@ -170,7 +169,7 @@ const RenderPassportFormat = ({
                           control: 'text.block',
                           htmlBlock: `<p style='font-size: 12px; line-height: 16px; color: #000; opacity: 0.5; margin-top: 0; margin-bottom: -5px;'>${t(
                             'IssuedDate'
-                          )}</p>`,
+                          )}</p>`
                         },
                         issuedAt: {
                           control: 'form.group',
@@ -206,7 +205,7 @@ const RenderPassportFormat = ({
                           control: 'text.block',
                           htmlBlock: `<p style='font-size: 12px; line-height: 16px; color: #000; opacity: 0.5; margin-top: 0; margin-bottom: -5px;'>${t(
                             'PassportExpired'
-                          )}</p>`,
+                          )}</p>`
                         },
                         expireDate: {
                           description: '',
@@ -267,8 +266,7 @@ const RenderPassportFormat = ({
                           description: t('Serie'),
                           notRequiredLabel: '',
                           width: 65,
-                          checkHidden:
-                            `(value, step, data) => { if (!!(data?.${name}?.documentType?.code === '2' || data?.${name}?.documentType?.code  === '4') && data?.${name}?.type === 'foreignersDocument') return false; return true; }`,
+                          checkHidden: `(value, step, data) => { if (!!(data?.${name}?.documentType?.code === '2' || data?.${name}?.documentType?.code  === '4') && data?.${name}?.type === 'foreignersDocument') return false; return true; }`,
                           maxLength: 2,
                           changeCase: 'toUpperCase',
                           mask: '**',
@@ -316,23 +314,21 @@ const RenderPassportFormat = ({
                               width: 70,
                               pattern: '([1-2]\\d{3})',
                               mask: '9999'
-                            },
-                          },
+                            }
+                          }
                         },
                         expireDateHeader: {
                           control: 'text.block',
                           htmlBlock: `<p style='font-size: 12px; line-height: 16px; color: #000; opacity: 0.5; margin-top: 0; margin-bottom: -5px;'>${t(
                             'RCardExpired'
                           )}</p>`,
-                          checkHidden:
-                            `(value, step, data) => {if (data?.${name}?.documentType?.code !== '4') return false; return true;}`,
+                          checkHidden: `(value, step, data) => {if (data?.${name}?.documentType?.code !== '4') return false; return true;}`
                         },
                         expireDate: {
                           control: 'form.group',
                           blockDisplay: false,
                           outlined: false,
-                          checkHidden:
-                            `(value, step, data) => { if (data?.${name}?.documentType?.code !== '4') return false; return true;}`,
+                          checkHidden: `(value, step, data) => { if (data?.${name}?.documentType?.code !== '4') return false; return true;}`,
                           properties: {
                             day: {
                               type: 'string',
@@ -356,8 +352,8 @@ const RenderPassportFormat = ({
                               width: 70,
                               pattern: '([1-2]\\d{3})',
                               mask: '9999'
-                            },
-                          },
+                            }
+                          }
                         },
                         issuedBy: {
                           type: 'string',

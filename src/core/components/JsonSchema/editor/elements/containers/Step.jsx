@@ -5,9 +5,9 @@ export const type = 'Step';
 export const group = 'Containers';
 
 export default {
-    ...ObjectElement,
-    type,
-    group,
-    snippet: 'Step',
-    Icon: ListAltIcon
+  ...ObjectElement,
+  type,
+  group,
+  snippet: 'Step',
+  Icon: ListAltIcon
 };

@@ -11,13 +11,13 @@ const styles = (theme) => ({
     [theme.breakpoints.down('md')]: {
       paddingTop: 20,
       paddingLeft: 16,
-      paddingRight: 17,
+      paddingRight: 17
     },
     '& h2': {
       [theme.breakpoints.down('md')]: {
-        fontSize: 17,
-      },
-    },
+        fontSize: 17
+      }
+    }
   },
   paperWidthSm: {
     [theme.breakpoints.down('md')]: {
@@ -26,8 +26,8 @@ const styles = (theme) => ({
       width: '95%',
       maxWidth: 'unset',
       minWidth: 'unset',
-      paddingTop: 35,
-    },
+      paddingTop: 35
+    }
   },
   paperScrollBody: {
     [theme.breakpoints.down('md')]: {
@@ -35,15 +35,15 @@ const styles = (theme) => ({
       paddingLeft: 0,
       paddingRight: 0,
       paddingBottom: 0,
-      paddingTop: 0,
-    },
+      paddingTop: 0
+    }
   },
   root: {
     [theme.breakpoints.down('md')]: {
       paddingLeft: 16,
-      paddingRight: 16,
-    },
-  },
+      paddingRight: 16
+    }
+  }
 });
 
 const SigningDialog = ({
@@ -76,15 +76,13 @@ const SigningDialog = ({
     scroll="body"
     classes={{
       paperWidthSm: classes.paperWidthSm,
-      paperScrollBody: classes.paperScrollBody,
+      paperScrollBody: classes.paperScrollBody
     }}
   >
-    <DialogTitle className={classes.title}>
-      {title || t('SigningDialogTitle')}
-    </DialogTitle>
+    <DialogTitle className={classes.title}>{title || t('SigningDialogTitle')}</DialogTitle>
     <DialogContent
       classes={{
-        root: classes.root,
+        root: classes.root
       }}
     >
       <EDSForm

@@ -13,21 +13,21 @@ import { allCountries } from './dataCountriesFilter';
 const styles = {
   hideAction: {
     '& .MuiInputAdornment-root': {
-      display: 'none',
+      display: 'none'
     },
     '& button': {
-      display: 'none',
-    },
+      display: 'none'
+    }
   },
   dropdownClass: {
     '& .MuiList-root.MuiMenu-list': {
       maxHeight: 200,
-      overflowY: 'auto',
+      overflowY: 'auto'
     },
     '& .dial-code': {
-      paddingLeft: 6,
-    },
-  },
+      paddingLeft: 6
+    }
+  }
 };
 
 const Phone = (props) => {
@@ -73,10 +73,7 @@ const Phone = (props) => {
     if (excludedCountries.length === 0) {
       return selectedCountries;
     }
-    return filter(
-      selectedCountries,
-      (selCountry) => !includes(excludedCountries, selCountry.iso2)
-    );
+    return filter(selectedCountries, (selCountry) => !includes(excludedCountries, selCountry.iso2));
   };
 
   const guessSelectedCountry = (inputNumber, onlyCountries) => {
@@ -102,146 +99,132 @@ const Phone = (props) => {
     return bestGuess;
   };
 
-  const formatNumber = React.useCallback((text, patternArg) => {
-    let pattern;
+  const formatNumber = React.useCallback(
+    (text, patternArg) => {
+      let pattern;
 
-    if (disableCountryCode && patternArg) {
-      pattern = patternArg.split(' ');
-      pattern.shift();
-      pattern = pattern.join(' ');
-    } else {
-      pattern = patternArg;
-    }
-
-    if (!text || text.length === 0) {
-      return disableCountryCode ? '' : '+';
-    }
-
-    if ((text && text.length < 2) || !pattern || !autoFormat) {
-      return disableCountryCode ? text : `+${text}`;
-    }
-
-    const formattedObject = reduce(
-      pattern,
-      (acc, character) => {
-        if (acc.remainingText.length === 0) {
-          return acc;
-        }
-
-        if (character !== '.') {
-          return {
-            formattedText: acc.formattedText + character,
-            remainingText: acc.remainingText,
-          };
-        }
-
-        return {
-          formattedText: acc.formattedText + head(acc.remainingText),
-          remainingText: tail(acc.remainingText),
-        };
-      },
-      {
-        formattedText: '',
-        remainingText: text.split(''),
+      if (disableCountryCode && patternArg) {
+        pattern = patternArg.split(' ');
+        pattern.shift();
+        pattern = pattern.join(' ');
+      } else {
+        pattern = patternArg;
       }
-    );
 
-    let formattedNumber;
-    if (enableLongNumbers) {
-      formattedNumber =
-        formattedObject.formattedText + formattedObject.remainingText.join('');
-    } else {
-      formattedNumber = formattedObject.formattedText;
-    }
+      if (!text || text.length === 0) {
+        return disableCountryCode ? '' : '+';
+      }
 
-    if (formattedNumber.includes('(') && !formattedNumber.includes(')')) {
-      formattedNumber += ')';
-    }
+      if ((text && text.length < 2) || !pattern || !autoFormat) {
+        return disableCountryCode ? text : `+${text}`;
+      }
 
-    return formattedNumber;
-  }, [autoFormat, enableLongNumbers, disableCountryCode]);
+      const formattedObject = reduce(
+        pattern,
+        (acc, character) => {
+          if (acc.remainingText.length === 0) {
+            return acc;
+          }
 
-  const setFormat = React.useCallback((value, onlyCountries, defaultCountry, onPaste = false) => {
-    const inputNumber = value.replace(/\D/g, '');
-    let newSelectedCountry;
-    let formattedNumber = disableCountryCode ? '' : '+';
+          if (character !== '.') {
+            return {
+              formattedText: acc.formattedText + character,
+              remainingText: acc.remainingText
+            };
+          }
 
-    if (!inputNumber) return false;
-
-    newSelectedCountry = guessSelectedCountry(
-      inputNumber.substring(0, 6),
-      onlyCountries,
-      defaultCountry
-    );
-
-    if (!newSelectedCountry?.dialCode) {
-      newSelectedCountry = onlyCountries.find(
-        ({ iso2 }) => iso2 === defaultCountry
+          return {
+            formattedText: acc.formattedText + head(acc.remainingText),
+            remainingText: tail(acc.remainingText)
+          };
+        },
+        {
+          formattedText: '',
+          remainingText: text.split('')
+        }
       );
-    }
 
-    const { dialCode, length: isoNumberLength } = newSelectedCountry;
+      let formattedNumber;
+      if (enableLongNumbers) {
+        formattedNumber = formattedObject.formattedText + formattedObject.remainingText.join('');
+      } else {
+        formattedNumber = formattedObject.formattedText;
+      }
 
-    if (inputNumber.includes(dialCode)) {
-      formattedNumber = formatNumber(
-        `${inputNumber}`,
-        newSelectedCountry.format
+      if (formattedNumber.includes('(') && !formattedNumber.includes(')')) {
+        formattedNumber += ')';
+      }
+
+      return formattedNumber;
+    },
+    [autoFormat, enableLongNumbers, disableCountryCode]
+  );
+
+  const setFormat = React.useCallback(
+    (value, onlyCountries, defaultCountry, onPaste = false) => {
+      const inputNumber = value.replace(/\D/g, '');
+      let newSelectedCountry;
+      let formattedNumber = disableCountryCode ? '' : '+';
+
+      if (!inputNumber) return false;
+
+      newSelectedCountry = guessSelectedCountry(
+        inputNumber.substring(0, 6),
+        onlyCountries,
+        defaultCountry
       );
-    } else {
-      const diff = isoNumberLength - inputNumber.length;
 
-      if (diff === 0) {
-        formattedNumber = formatNumber(
-          inputNumber,
-          newSelectedCountry.format
-        );
-      } else if (diff > 0) {
-        if (diff <= dialCode.length) {
-          if (onPaste) {
-            const valueToSlice = dialCode.length - diff;
-            const removeDialCodeFromNum = inputNumber.slice(valueToSlice);
-            formattedNumber = formatNumber(
-              `${dialCode}${removeDialCodeFromNum}`,
-              newSelectedCountry.format
-            );
+      if (!newSelectedCountry?.dialCode) {
+        newSelectedCountry = onlyCountries.find(({ iso2 }) => iso2 === defaultCountry);
+      }
+
+      const { dialCode, length: isoNumberLength } = newSelectedCountry;
+
+      if (inputNumber.includes(dialCode)) {
+        formattedNumber = formatNumber(`${inputNumber}`, newSelectedCountry.format);
+      } else {
+        const diff = isoNumberLength - inputNumber.length;
+
+        if (diff === 0) {
+          formattedNumber = formatNumber(inputNumber, newSelectedCountry.format);
+        } else if (diff > 0) {
+          if (diff <= dialCode.length) {
+            if (onPaste) {
+              const valueToSlice = dialCode.length - diff;
+              const removeDialCodeFromNum = inputNumber.slice(valueToSlice);
+              formattedNumber = formatNumber(
+                `${dialCode}${removeDialCodeFromNum}`,
+                newSelectedCountry.format
+              );
+            } else {
+              formattedNumber = formatNumber(`${inputNumber}`, newSelectedCountry.format);
+            }
           } else {
-            formattedNumber = formatNumber(
-              `${inputNumber}`,
-              newSelectedCountry.format
-            );
+            formattedNumber = formatNumber(`${dialCode}${inputNumber}`, newSelectedCountry.format);
           }
         } else {
+          const val = Math.abs(diff);
           formattedNumber = formatNumber(
-            `${dialCode}${inputNumber}`,
+            `${dialCode}${inputNumber.slice(val)}`,
             newSelectedCountry.format
           );
         }
-      } else {
-        const val = Math.abs(diff);
-        formattedNumber = formatNumber(
-          `${dialCode}${inputNumber.slice(val)}`,
-          newSelectedCountry.format
-        );
       }
-    }
 
-    newSelectedCountry.formattedNumber = formattedNumber;
+      newSelectedCountry.formattedNumber = formattedNumber;
 
-    return newSelectedCountry;
-  }, [disableCountryCode, formatNumber]);
+      return newSelectedCountry;
+    },
+    [disableCountryCode, formatNumber]
+  );
 
   const onPasteChange = (e) => {
     const text = e.clipboardData.getData('Text');
     const {
-      target: { selectionStart: caretPosition, value },
+      target: { selectionStart: caretPosition, value }
     } = e;
 
-    const { iso2, formattedNumber } = setFormat(
-      text,
-      filteredCountries,
-      currentCountry,
-      true
-    );
+    const { iso2, formattedNumber } = setFormat(text, filteredCountries, currentCountry, true);
 
     try {
       if (caretPosition < value.length) {
@@ -256,7 +239,7 @@ const Phone = (props) => {
         setFormattedNumber(formattedNumber);
         setCurrentCountry(iso2);
         setErrorOtherCountry(false);
-        
+
         onChange && onChange(`${stringPhoneToNumber(formattedNumber)}`);
       }
     } catch (err) {
@@ -283,8 +266,7 @@ const Phone = (props) => {
   const onBlur = () => {
     const valueIsCode = (filteredCountries || []).some((country) => {
       const { dialCode, iso2 } = country || {};
-      const valueInCode =
-        value === dialCode && iso2 === defaultCountryProp;
+      const valueInCode = value === dialCode && iso2 === defaultCountryProp;
 
       return valueInCode;
     });
@@ -304,23 +286,15 @@ const Phone = (props) => {
         excludeCountriesProp
       );
 
-      const phoneValue =
-        value !== parentValue[controlName] ? parentValue[controlName] : value;
+      const phoneValue = value !== parentValue[controlName] ? parentValue[controlName] : value;
 
       if (phoneValue && Number(phoneValue.replace(/\D/g, ''))) {
-        const phoneProp = setFormat(
-          phoneValue,
-          filteredCountries,
-          defaultCountryProp
-        );
+        const phoneProp = setFormat(phoneValue, filteredCountries, defaultCountryProp);
         formattedNumber = phoneProp.formattedNumber;
         iso2 = phoneProp.iso2;
       } else {
         for (let i = 0; i < filteredCountries.length; i++) {
-          if (
-            filteredCountries[i].iso2 === defaultCountryProp &&
-            filteredCountries[i].format
-          ) {
+          if (filteredCountries[i].iso2 === defaultCountryProp && filteredCountries[i].format) {
             formattedNumber = `${filteredCountries[i].format.slice(0, 1)}${
               filteredCountries[i].dialCode
             }`;
@@ -331,7 +305,7 @@ const Phone = (props) => {
       setFormattedNumber(formattedNumber);
       setFilteredCountries(filteredCountries);
       setCurrentCountry(iso2 || defaultCountryProp);
-  };
+    };
     init();
   }, [
     controlName,
@@ -361,23 +335,19 @@ const Phone = (props) => {
         defaultCountry={currentCountry}
         countryCodeEditable={false}
         disableAreaCodes={disableAreaCodes}
-        inputProps={
-          {
-            'aria-label': t('PhoneNumberTitle'),
-            value: formattedNumber,
-            onPaste: onPasteChange,
-          }
-        }
+        inputProps={{
+          'aria-label': t('PhoneNumberTitle'),
+          value: formattedNumber,
+          onPaste: onPasteChange
+        }}
         dropdownClass={classes.dropdownClass}
         onBlur={onBlur}
       />
-      {
-        errorOtherCountry ? (
-          <FormHelperText error={errorOtherCountry}>
-            <EJVError error={{ message: t('OtherCountryCode') }} />
-          </FormHelperText>
-        ) : null
-      }
+      {errorOtherCountry ? (
+        <FormHelperText error={errorOtherCountry}>
+          <EJVError error={{ message: t('OtherCountryCode') }} />
+        </FormHelperText>
+      ) : null}
     </ElementContainer>
   );
 };
@@ -395,7 +365,7 @@ Phone.propTypes = {
   error: PropTypes.bool,
   bottomSample: PropTypes.bool,
   width: PropTypes.string,
-  noMargin: PropTypes.bool,
+  noMargin: PropTypes.bool
 };
 
 Phone.defaultProps = {

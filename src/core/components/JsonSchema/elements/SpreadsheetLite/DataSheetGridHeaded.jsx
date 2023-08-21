@@ -9,27 +9,25 @@ import useTooltip from './helpers/useTooltip';
 
 const styles = {
   errorCell: {
-    backgroundColor: '#E27D7D',
+    backgroundColor: '#E27D7D'
   },
   errorRow: {
-    backgroundColor: '#F5E1E1',
+    backgroundColor: '#F5E1E1'
   }
 };
 
 const useStyles = makeStyles(styles);
 
-const DataSheetGridHeaded = ({
-  headers,
-  errors,
-  ...props
-}) => {
+const DataSheetGridHeaded = ({ headers, errors, ...props }) => {
   const className = useHeaders(headers);
   const tooltipProps = useTooltip(className);
   const classes = useStyles();
 
   return (
     <>
-      <Tooltip {...tooltipProps} placement="top" arrow><span /></Tooltip>
+      <Tooltip {...tooltipProps} placement="top" arrow>
+        <span />
+      </Tooltip>
       <DynamicDataSheetGrid
         {...props}
         className={className}
@@ -53,6 +51,6 @@ const DataSheetGridHeaded = ({
       />
     </>
   );
-}
+};
 
 export default DataSheetGridHeaded;

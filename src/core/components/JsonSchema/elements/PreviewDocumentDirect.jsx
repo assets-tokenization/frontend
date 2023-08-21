@@ -17,7 +17,7 @@ const PreviewDocumentDirect = ({
   fileStorage,
   actions,
   addFetchError,
-  defaultView,
+  defaultView
 }) => {
   const [busy, setBusy] = React.useState(false);
   const [files, setFiles] = React.useState();
@@ -45,17 +45,7 @@ const PreviewDocumentDirect = ({
     if (!files && !error && !busy) {
       updateData();
     }
-  }, [
-    files,
-    error,
-    busy,
-    stepName,
-    path,
-    fetchData,
-    onChange,
-    rootDocument.id,
-    addFetchError,
-  ]);
+  }, [files, error, busy, stepName, path, fetchData, onChange, rootDocument.id, addFetchError]);
 
   return hidden ? null : (
     <FileDataTable
@@ -64,7 +54,7 @@ const PreviewDocumentDirect = ({
       fileStorage={fileStorage}
       showCreatedDate={true}
       actions={{
-        handleDownloadFile: actions.handleDownloadFile,
+        handleDownloadFile: actions.handleDownloadFile
       }}
     />
   );
@@ -77,7 +67,7 @@ const mapDispatch = (dispatch) => ({
       `documents/${documentId}/workflow_files_direct?path=${path}`,
       'WORKFLOW_FILES_DIRECT',
       dispatch
-    ),
+    )
 });
 
 const connected = connect(null, mapDispatch)(PreviewDocumentDirect);

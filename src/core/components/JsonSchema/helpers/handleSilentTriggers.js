@@ -3,14 +3,7 @@
 import objectPath from 'object-path';
 import evaluate from 'helpers/evaluate';
 
-export default async ({
-  origin = {},
-  triggers = [],
-  stepData,
-  userInfo,
-  actions,
-  activityLog
-}) => {
+export default async ({ origin = {}, triggers = [], stepData, userInfo, actions, activityLog }) => {
   for (let i = 0; i < triggers.length; i++) {
     const { calculate, target } = triggers[i];
 
@@ -57,7 +50,7 @@ export default async ({
               type: 'silent trigger error',
               targetPath,
               calculate,
-              message: e.message,
+              message: e.message
             })
             .filter(Boolean);
         }

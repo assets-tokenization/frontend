@@ -10,7 +10,7 @@ const RadioButtons = ({
   onChange,
   readOnly,
   list,
-  getSample,
+  getSample
 }) => (
   <RadioGroup row={rowDirection}>
     {(list || []).map((key, index) => {
@@ -21,14 +21,14 @@ const RadioButtons = ({
           <FormControlLabel
             key={index}
             label={getLabel(key)}
-            control={(
+            control={
               <Radio
                 id={path.concat(index).join('-')}
                 checked={value.id === key.id}
                 onChange={onChange(key)}
                 disabled={readOnly}
               />
-            )}
+            }
           />
           {getSample(key)}
         </>
@@ -45,7 +45,7 @@ RadioButtons.propTypes = {
   path: PropTypes.array,
   rowDirection: PropTypes.bool,
   readOnly: PropTypes.bool,
-  getSample: PropTypes.func,
+  getSample: PropTypes.func
 };
 
 RadioButtons.defaultProps = {
@@ -53,7 +53,7 @@ RadioButtons.defaultProps = {
   path: [],
   rowDirection: false,
   readOnly: false,
-  getSample: () => {},
+  getSample: () => {}
 };
 
 export default RadioButtons;

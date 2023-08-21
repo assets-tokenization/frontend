@@ -25,15 +25,7 @@ const styles = () => ({
   }
 });
 
-const KeyboardDatePicker = ({
-  t,
-  classes,
-  dateFormat,
-  name,
-  label,
-  onChange,
-  value
-}) => {
+const KeyboardDatePicker = ({ t, classes, dateFormat, name, label, onChange, value }) => {
   const [date, setDate] = useState(value);
   const [open, setOpen] = React.useState(false);
 
@@ -51,23 +43,19 @@ const KeyboardDatePicker = ({
       {...params}
       variant="standard"
       onClick={() => setOpen(true)}
-      inputProps={
-          {
-          ...params.inputProps,
-          placeholder: ''
-        }
-      }
-      {...date
+      inputProps={{
+        ...params.inputProps,
+        placeholder: ''
+      }}
+      {...(date
         ? {
             InputProps: {
               endAdornment: (
                 <IconButton
-                  onClick={
-                    () => {
-                      setDate(null);
-                      handleChange(null);
-                    }
-                  }
+                  onClick={() => {
+                    setDate(null);
+                    handleChange(null);
+                  }}
                   size="large"
                 >
                   <ClearIcon />
@@ -75,15 +63,12 @@ const KeyboardDatePicker = ({
               )
             }
           }
-        : {}
-      }
+        : {})}
     />
   );
 
   return (
-    <div
-      className={classes.relative}
-    >
+    <div className={classes.relative}>
       <DatePicker
         open={open}
         className={classes.inputWrap}
@@ -92,22 +77,16 @@ const KeyboardDatePicker = ({
         format={dateFormat}
         value={date}
         name={name}
-        inputProps={
-          {
-            tabIndex: '0',
-            role: 'button'
-          }
-        }
-        leftArrowButtonProps={
-          {
-            'aria-label': t('BtnPrevMonth')
-          }
-        }
-        rightArrowButtonProps={
-          {
-            'aria-label': t('BtnNextMonth')
-          }
-        }
+        inputProps={{
+          tabIndex: '0',
+          role: 'button'
+        }}
+        leftArrowButtonProps={{
+          'aria-label': t('BtnPrevMonth')
+        }}
+        rightArrowButtonProps={{
+          'aria-label': t('BtnNextMonth')
+        }}
         renderInput={renderInput}
         onClose={() => setOpen(false)}
       />
@@ -122,10 +101,7 @@ KeyboardDatePicker.propTypes = {
   dateFormat: PropTypes.string,
   name: PropTypes.string,
   label: PropTypes.string,
-  value: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([null])
-  ])
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])])
 };
 
 KeyboardDatePicker.defaultProps = {

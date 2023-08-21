@@ -25,7 +25,7 @@ const styles = (theme) => ({
     [theme.breakpoints.down('sm')]: {
       fontSize: 16,
       fontWeight: 600,
-      lineHeight: '24px',
+      lineHeight: '24px'
     }
   },
   description: {
@@ -52,39 +52,28 @@ const styles = (theme) => ({
     [theme.breakpoints.down('sm')]: {
       marginBottom: 20,
       width: 56,
-      height: 56,
+      height: 56
     }
   },
   actionButton: {
-    marginBottom: 30,
+    marginBottom: 30
   }
 });
 
 const useStyles = makeStyles(styles);
 
-const SuccessRegistration = ({
-  redirectToHomeScreen,
-  title,
-  description,
-  actionText
-}) => {
+const SuccessRegistration = ({ redirectToHomeScreen, title, description, actionText }) => {
   const t = useTranslate('LoginScreen');
   const classes = useStyles();
 
   return (
     <div className={classes.wrapper}>
-      <img
-        src={CheckIcon}
-        alt="headline_logo"
-        className={classes.logo}
-      />
+      <img src={CheckIcon} alt="headline_logo" className={classes.logo} />
 
-      <Typography className={classes.title}>
-        {title || t("SuccessTitle")}
-      </Typography>
+      <Typography className={classes.title}>{title || t('SuccessTitle')}</Typography>
 
       <Typography className={classes.description}>
-        {description || t("SuccessDescription")}
+        {description || t('SuccessDescription')}
       </Typography>
 
       <Button
@@ -96,13 +85,13 @@ const SuccessRegistration = ({
       >
         {actionText || (
           <>
-            {t("GoToRegister")}
+            {t('GoToRegister')}
             <ArrowForwardIcon className={classes.actionIcon} />
           </>
         )}
       </Button>
     </div>
   );
-}
+};
 
 export default SuccessRegistration;

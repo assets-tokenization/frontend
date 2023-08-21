@@ -9,9 +9,9 @@ import ElementContainer from '../components/ElementContainer';
 const styles = (theme) => ({
   iconSvgFillDark: {
     '& svg': {
-      fill: theme?.palette?.primary?.main,
-    },
-  },
+      fill: theme?.palette?.primary?.main
+    }
+  }
 });
 
 class BooleanElement extends React.Component {
@@ -21,16 +21,7 @@ class BooleanElement extends React.Component {
   };
 
   renderElement() {
-    const {
-      t,
-      value,
-      required,
-      description,
-      readOnly,
-      path,
-      classes,
-      darkTheme,
-    } = this.props;
+    const { t, value, required, description, readOnly, path, classes, darkTheme } = this.props;
 
     return required ? (
       <FormGroup row={true}>
@@ -65,8 +56,8 @@ class BooleanElement extends React.Component {
             onChange={({ target: { checked } }) => this.handleChange(checked)()}
             classes={{
               checked: classNames({
-                [classes.iconSvgFillDark]: darkTheme,
-              }),
+                [classes.iconSvgFillDark]: darkTheme
+              })
             }}
           />
         }
@@ -76,8 +67,7 @@ class BooleanElement extends React.Component {
   }
 
   render() {
-    const { sample, description, required, error, hidden, noMargin } =
-      this.props;
+    const { sample, description, required, error, hidden, noMargin } = this.props;
 
     if (hidden) return null;
 
@@ -97,12 +87,12 @@ class BooleanElement extends React.Component {
 
 BooleanElement.propTypes = {
   path: PropTypes.array,
-  darkTheme: PropTypes.bool,
+  darkTheme: PropTypes.bool
 };
 
 BooleanElement.defaultProps = {
   path: [],
-  darkTheme: false,
+  darkTheme: false
 };
 const styled = withStyles(styles)(BooleanElement);
 

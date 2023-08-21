@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import { useTranslate } from 'react-translate';
 import makeStyles from '@mui/styles/makeStyles';
 import { Typography } from '@mui/material';
@@ -70,7 +70,7 @@ const styles = (theme) => ({
     minWidth: 'unset',
     marginRight: 16,
     [theme.breakpoints.down('sm')]: {
-      marginRight: 0,
+      marginRight: 0
     }
   },
   itemText: {
@@ -88,7 +88,7 @@ const styles = (theme) => ({
     borderRadius: 40,
     padding: '8px 12px 8px 16px',
     '& > div img:last-child': {
-       display: 'none'
+      display: 'none'
     },
     '&:hover': {
       '& > div img:first-child': {
@@ -117,7 +117,7 @@ const styles = (theme) => ({
       display: 'block'
     },
     [theme.breakpoints.down('sm')]: {
-      backgroundColor: '#fff!important',
+      backgroundColor: '#fff!important'
     }
   },
   badge: {
@@ -140,7 +140,7 @@ const styles = (theme) => ({
     padding: '6px 12px',
     [theme.breakpoints.down('sm')]: {
       padding: 0,
-      width: 64,
+      width: 64
     }
   },
   list: {
@@ -169,33 +169,29 @@ const styles = (theme) => ({
 const MENU_ITEMS = [
   {
     label: 'Objects',
-    icon: <img src={HomeIcon} alt="home icon"/>,
-    iconActive: <img src={HomeIcon_b} alt="home icon"/>,
+    icon: <img src={HomeIcon} alt="home icon" />,
+    iconActive: <img src={HomeIcon_b} alt="home icon" />
   },
   {
     label: 'Selling',
-    icon: <img src={SellingIcon} alt="Selling icon"/>,
-    iconActive: <img src={SellingIcon_b} alt="Selling icon"/>,
+    icon: <img src={SellingIcon} alt="Selling icon" />,
+    iconActive: <img src={SellingIcon_b} alt="Selling icon" />
   },
   {
     label: 'Purchases',
-    icon: <img src={PurchasesIcon} alt="Purchases icon"/>,
-    iconActive: <img src={PurchasesIcon_b} alt="Purchases icon"/>,
+    icon: <img src={PurchasesIcon} alt="Purchases icon" />,
+    iconActive: <img src={PurchasesIcon_b} alt="Purchases icon" />
   },
   {
     label: 'Messages',
-    icon: <img src={MessagesIcon} alt="Messages icon"/>,
-    iconActive: <img src={MessagesIcon_b} alt="Messages icon"/>,
+    icon: <img src={MessagesIcon} alt="Messages icon" />,
+    iconActive: <img src={MessagesIcon_b} alt="Messages icon" />
   }
 ];
 
 const useStyles = makeStyles(styles);
 
-const SidebarMenu = ({
-  onChange,
-  page,
-  history
-}) => {
+const SidebarMenu = ({ onChange, page, history, messages }) => {
   const t = useTranslate('SidebarMenu');
   const classes = useStyles();
 
@@ -203,16 +199,12 @@ const SidebarMenu = ({
     onChange(value);
   };
 
-  const isSM = useMediaQuery(theme => theme.breakpoints.down('sm'));
+  const isSM = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
   return (
     <div className={classes.sidebar}>
       <Typography className={classes.headline}>
-        <img
-          src={headline_logo}
-          alt="headline_logo"
-          className={classes.logo}
-        />
+        <img src={headline_logo} alt="headline_logo" className={classes.logo} />
         {t('Title')}
       </Typography>
 
@@ -221,17 +213,13 @@ const SidebarMenu = ({
           root: classes.list
         }}
       >
-        {MENU_ITEMS.map(({
-          label,
-          icon,
-          iconActive
-        }) => {
+        {MENU_ITEMS.map(({ label, icon, iconActive }) => {
           return (
             <ListItem
               key={label}
               classes={{
                 root: classNames({
-                  [classes.listItem]: true,
+                  [classes.listItem]: true
                 })
               }}
             >
@@ -263,66 +251,61 @@ const SidebarMenu = ({
                     primary: classes.itemText
                   }}
                 />
-                {
-                  label === 'Messages' ? (
-                    <Badge
-                      badgeContent={2}
-                      color="error"
-                      className={classes.badge}
-                      classes={{
-                        badge: classes.badgeInner
-                      }}
-                    />
-                  ) : null
-                }
+                {label === 'Messages' ? (
+                  <Badge
+                    badgeContent={messages.length}
+                    color="error"
+                    className={classes.badge}
+                    classes={{
+                      badge: classes.badgeInner
+                    }}
+                  />
+                ) : null}
               </ListItemButton>
             </ListItem>
           );
         })}
 
-        {
-          isSM ? (
-            <ListItem
+        {isSM ? (
+          <ListItem
+            classes={{
+              root: classNames({
+                [classes.listItem]: true
+              })
+            }}
+          >
+            <ListItemButton
+              role={undefined}
+              onClick={() => {
+                history.push('/');
+              }}
+              dense
               classes={{
                 root: classNames({
-                  [classes.listItem]: true,
+                  [classes.itemButton]: true
                 })
               }}
             >
-              <ListItemButton
-                role={undefined}
-                onClick={() => {
-                  history.push('/');
-                }}
-                dense
+              <ListItemIcon
                 classes={{
-                  root: classNames({
-                    [classes.itemButton]: true,
-                  })
+                  root: classes.icon
                 }}
               >
-                <ListItemIcon
-                  classes={{
-                    root: classes.icon
-                  }}
-                >
-                  <HomeWorkOutlinedIcon />
-                </ListItemIcon>
-                <ListItemText
-                  id={'label'}
-                  primary={t('ToHome')}
-                  classes={{
-                    primary: classes.itemText
-                  }}
-                />
-              </ListItemButton>
-            </ListItem>
-          ) : null
-        }
-
+                <HomeWorkOutlinedIcon />
+              </ListItemIcon>
+              <ListItemText
+                id={'label'}
+                primary={t('ToHome')}
+                classes={{
+                  primary: classes.itemText
+                }}
+              />
+            </ListItemButton>
+          </ListItem>
+        ) : null}
       </List>
     </div>
   );
-}
+};
 
 export default SidebarMenu;

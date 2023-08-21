@@ -19,7 +19,6 @@ const getHeaders = () => {
 };
 
 export const getHeadersResponse = (dispatch, headers) => {
-
   clearTimeout(timeout);
 
   if (headers) {

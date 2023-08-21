@@ -8,14 +8,14 @@ import classNames from 'classnames';
 const styles = {
   icon: {
     fontSize: 82,
-    color: 'red',
+    color: 'red'
   },
   title: {
-    textAlign: 'center',
+    textAlign: 'center'
   },
   text: {
-    color: '#fff',
-  },
+    color: '#fff'
+  }
 };
 
 const ErrorScreen = ({ t, classes, error, darkTheme }) => {
@@ -26,16 +26,12 @@ const ErrorScreen = ({ t, classes, error, darkTheme }) => {
       <DialogTitle className={classes.title}>
         <ErrorIcon className={classes.icon} />
       </DialogTitle>
-      <DialogTitle className={classes.title}>
-        {t('ErrorMessageHeader')}
-      </DialogTitle>
+      <DialogTitle className={classes.title}>{t('ErrorMessageHeader')}</DialogTitle>
       <DialogContent className={classes.title}>
         <DialogContentText
-          className={
-            classNames({
-              [classes.text]: darkTheme
-            })
-          }
+          className={classNames({
+            [classes.text]: darkTheme
+          })}
         >
           {error.message}
         </DialogContentText>

@@ -4,98 +4,94 @@ import { translate } from 'react-translate';
 import DataTable from 'components/DataTable';
 
 const DataTableStated = ({
-    data,
-    isIncreasing,
-    reserIsIncreasing,
-    controls,
-    actions,
-    ...dataTableProps
+  data,
+  isIncreasing,
+  reserIsIncreasing,
+  controls,
+  actions,
+  ...dataTableProps
 }) => {
-    const [page, setPage] = React.useState(1);
-    const [search, setSearch] = React.useState('');
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [page, setPage] = React.useState(1);
+  const [search, setSearch] = React.useState('');
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
-    const getFilteredData = () => {
-        const filtereList =
-            (data || [])
-            .filter(Boolean)
-            .filter((item) => {
-                const fields = Object.values(item);
-                const compare = (val) => (val + '').toUpperCase().indexOf((search || '').toUpperCase()) !== -1;
-                const exists = fields.find(compare);
-                return exists;
-            });
-        
-        return filtereList;
-    };
+  const getFilteredData = () => {
+    const filtereList = (data || []).filter(Boolean).filter((item) => {
+      const fields = Object.values(item);
+      const compare = (val) =>
+        (val + '').toUpperCase().indexOf((search || '').toUpperCase()) !== -1;
+      const exists = fields.find(compare);
+      return exists;
+    });
 
-    const onChangePage = page => {
-        setPage(page + 1);
-        reserIsIncreasing && reserIsIncreasing();
-    };
+    return filtereList;
+  };
 
-    const getData = () => {
-        const firstIndex = (page - 1) * rowsPerPage;
-        const lastIndex = page * rowsPerPage;
+  const onChangePage = (page) => {
+    setPage(page + 1);
+    reserIsIncreasing && reserIsIncreasing();
+  };
 
-        const list = getFilteredData();
+  const getData = () => {
+    const firstIndex = (page - 1) * rowsPerPage;
+    const lastIndex = page * rowsPerPage;
 
-        isIncreasing && page !== 1 && setPage(1);
+    const list = getFilteredData();
 
-        if (list && (list || []).length <= firstIndex) {
-            const start = firstIndex - rowsPerPage;
-            return list.slice(start < 0 ? 0 : start, lastIndex - rowsPerPage);
-        }
+    isIncreasing && page !== 1 && setPage(1);
 
-        return list && list.slice(firstIndex, lastIndex);
-    };
+    if (list && (list || []).length <= firstIndex) {
+      const start = firstIndex - rowsPerPage;
+      return list.slice(start < 0 ? 0 : start, lastIndex - rowsPerPage);
+    }
 
-    const list = getData();
+    return list && list.slice(firstIndex, lastIndex);
+  };
 
-    const count = data ? (list.length < rowsPerPage ? list : data).length : 0;
+  const list = getData();
 
-    return (
-        <DataTable
-            {...dataTableProps}
-            actions={
-                {
-                    ...actions,
-                    onChangePage,
-                    onSearchChange: setSearch,
-                    onChangeRowsPerPage: setRowsPerPage
-                }
-            }
-            data={list}
-            page={page}
-            search={search}
-            count={count}
-            rowsPerPage={rowsPerPage}
-            controls={controls}
-        />
-    );
+  const count = data ? (list.length < rowsPerPage ? list : data).length : 0;
+
+  return (
+    <DataTable
+      {...dataTableProps}
+      actions={{
+        ...actions,
+        onChangePage,
+        onSearchChange: setSearch,
+        onChangeRowsPerPage: setRowsPerPage
+      }}
+      data={list}
+      page={page}
+      search={search}
+      count={count}
+      rowsPerPage={rowsPerPage}
+      controls={controls}
+    />
+  );
 };
 
 DataTableStated.propTypes = {
-    controls: PropTypes.object,
-    actions: PropTypes.object,
-    data: PropTypes.array,
-    reserIsIncreasing: PropTypes.func,
-    isIncreasing: PropTypes.bool
+  controls: PropTypes.object,
+  actions: PropTypes.object,
+  data: PropTypes.array,
+  reserIsIncreasing: PropTypes.func,
+  isIncreasing: PropTypes.bool
 };
 
 DataTableStated.defaultProps = {
-    actions: {},
-    data: [],
-    reserIsIncreasing: null,
-    isIncreasing: false,
-    controls: {
-        pagination: false,
-        toolbar: true,
-        search: true,
-        header: true,
-        refresh: true,
-        switchView: true
-    }
+  actions: {},
+  data: [],
+  reserIsIncreasing: null,
+  isIncreasing: false,
+  controls: {
+    pagination: false,
+    toolbar: true,
+    search: true,
+    header: true,
+    refresh: true,
+    switchView: true
+  }
 };
 
 export default translate('DataTableStated')(DataTableStated);

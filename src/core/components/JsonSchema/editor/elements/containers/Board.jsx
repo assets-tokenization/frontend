@@ -6,20 +6,20 @@ export const type = 'Board';
 export const group = 'Containers';
 
 export default {
-    type,
-    group,
-    hide: true,
-    snippet: 'Board',
-    Icon: DashboardIcon,
-    accept: stepType,
-    isContainer: true,
-    defaultData: {
-        title: '',
-        pdfRequired: true,
-        forceRedirect: true,
-        signRequired: true,
-        isP7sSign: true,
-        properties: {},
-        stepOrders: '() = [];'
-    }
+  type,
+  group,
+  hide: true,
+  snippet: 'Board',
+  Icon: DashboardIcon,
+  accept: stepType,
+  isContainer: true,
+  defaultData: {
+    title: '',
+    pdfRequired: true,
+    forceRedirect: true,
+    signRequired: true,
+    isP7sSign: true,
+    properties: {},
+    stepOrders: '() = [];'
+  }
 };

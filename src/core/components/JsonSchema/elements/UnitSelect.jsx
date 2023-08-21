@@ -7,54 +7,59 @@ import withStyles from '@mui/styles/withStyles';
 import Select from 'components/Select';
 import ElementContainer from 'components/JsonSchema/components/ElementContainer';
 
-const styles = {
-
-};
+const styles = {};
 
 class UnitSelect extends React.Component {
-    getOptions = () => {
-        const { units } = this.props;
-        return (units || []).map(({ id, name }) => ({ value: id, label: name }));
-    };
+  getOptions = () => {
+    const { units } = this.props;
+    return (units || []).map(({ id, name }) => ({ value: id, label: name }));
+  };
 
-    handleChange = (value) => {
-        const { onChange } = this.props;
-        onChange && onChange(value);
-    };
+  handleChange = (value) => {
+    const { onChange } = this.props;
+    onChange && onChange(value);
+  };
 
-    render() {
-        const { error, path, value, multiply, autoFocus, description, sample, required, hidden, noMargin } = this.props;
+  render() {
+    const {
+      error,
+      path,
+      value,
+      multiply,
+      autoFocus,
+      description,
+      sample,
+      required,
+      hidden,
+      noMargin
+    } = this.props;
 
-        if (hidden) return null;
+    if (hidden) return null;
 
-        return (
-            <ElementContainer
-                sample={sample}
-                description={description}
-                required={required}
-                error={error}
-                noMargin={noMargin}
-            >
-                <Select
-                    multiple={multiply}
-                    autoFocus={autoFocus}
-                    value={value}
-                    id={path.join('-')}
-                    onChange={this.handleChange}
-                    options={this.getOptions()}
-                />
-            </ElementContainer>
-        );
-    }
+    return (
+      <ElementContainer
+        sample={sample}
+        description={description}
+        required={required}
+        error={error}
+        noMargin={noMargin}
+      >
+        <Select
+          multiple={multiply}
+          autoFocus={autoFocus}
+          value={value}
+          id={path.join('-')}
+          onChange={this.handleChange}
+          options={this.getOptions()}
+        />
+      </ElementContainer>
+    );
+  }
 }
 
-UnitSelect.propTypes = {
+UnitSelect.propTypes = {};
 
-};
-
-UnitSelect.defaultProps = {
-
-};
+UnitSelect.defaultProps = {};
 
 const mapStateToProps = ({ auth: { units } }) => ({ units });
 

@@ -13,21 +13,21 @@ const withStyles = makeStyles({
   root: {
     display: 'flex',
     flexDirection: 'column',
-    borderRight: '#757575 1px solid',
+    borderRight: '#757575 1px solid'
   },
   divider: {
     margin: '0 4px',
-    backgroundColor: '#757575',
+    backgroundColor: '#757575'
   },
   opened: {
-    minWidth: 345,
+    minWidth: 345
   },
   search: {
     paddingLeft: 12,
     paddingRight: 12,
     marginBottom: 25,
     marginTop: 10
-  },
+  }
 });
 
 const ElementList = ({ controlsLibrary }) => {
@@ -44,45 +44,35 @@ const ElementList = ({ controlsLibrary }) => {
         [classes.opened]: open
       })}
     >
-      <CollapseButton
-        open={open}
-        title={t('CollapseElements')}
-        onClick={() => setOpen(!open)}
-      />
-      
-      {
-        open ? (
-          <div className={classes.search}>
-            <StringElement
-              description={t('SearchControls')}
-              value={search}
-              fullWidth={true}
-              darkTheme={true}
-              required={true}
-              variant={'outlined'}
-              onChange={setSearch}
-              inputProps={{ maxLength: 255 }}
-              noMargin={true}
-            />
-          </div>
-        ) : null
-      }
+      <CollapseButton open={open} title={t('CollapseElements')} onClick={() => setOpen(!open)} />
 
-      {
-        open ? (
-          <Scrollbar
-            options={{ disableHorizontalScrolling: true }}
-          >
-            <GroupedElementList
-              groups={groups}
-              snippets={snippets}
-              search={search}
-              visualEditor={true}
-              readOnly={true}
-            />
-          </Scrollbar>
-        ) : null 
-      }
+      {open ? (
+        <div className={classes.search}>
+          <StringElement
+            description={t('SearchControls')}
+            value={search}
+            fullWidth={true}
+            darkTheme={true}
+            required={true}
+            variant={'outlined'}
+            onChange={setSearch}
+            inputProps={{ maxLength: 255 }}
+            noMargin={true}
+          />
+        </div>
+      ) : null}
+
+      {open ? (
+        <Scrollbar options={{ disableHorizontalScrolling: true }}>
+          <GroupedElementList
+            groups={groups}
+            snippets={snippets}
+            search={search}
+            visualEditor={true}
+            readOnly={true}
+          />
+        </Scrollbar>
+      ) : null}
     </div>
   );
 };

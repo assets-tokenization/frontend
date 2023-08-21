@@ -8,11 +8,11 @@ const Masked = ({ ref, maxLength, ...props }) => (
 );
 
 Masked.propTypes = {
-  ref: PropTypes.node,
+  ref: PropTypes.node
 };
 
 Masked.defaultProps = {
-  ref: undefined,
+  ref: undefined
 };
 
 export default Masked;

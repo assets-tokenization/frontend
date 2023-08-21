@@ -3,10 +3,10 @@ import useIdGovUaWidgetForm from './useIdGovUaWidgetForm';
 
 const IdGovUaWidgetForm = ({ onSelectKey }) => {
   const { containerId } = useIdGovUaWidgetForm({
-    onSelectKey,
+    onSelectKey
   });
 
   return <div id={containerId} />;
-}
+};
 
 export default IdGovUaWidgetForm;

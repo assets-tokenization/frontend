@@ -1,7 +1,14 @@
 import * as React from 'react';
 import { useTranslate } from 'react-translate';
 import makeStyles from '@mui/styles/makeStyles';
-import { Typography, Button, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
+import {
+  Typography,
+  Button,
+  FormControl,
+  FormControlLabel,
+  Radio,
+  RadioGroup
+} from '@mui/material';
 import { ReactComponent as ArrowForwardIcon } from 'assets/images/arrowForwardWhite.svg';
 import ArrowBackIcon from 'assets/images/arrowBackBlueIcon.svg';
 import classNames from 'classnames';
@@ -33,13 +40,13 @@ const styles = (theme) => ({
     }
   },
   actionIcon: {
-    marginLeft: 10,
+    marginLeft: 10
   },
   actionIconBack: {
-    marginRight: 10,
+    marginRight: 10
   },
   backButton: {
-    marginRight: 20,
+    marginRight: 20
   },
   formControlLabelRoot: {
     marginBottom: 10,
@@ -52,7 +59,7 @@ const styles = (theme) => ({
     paddingLeft: 20,
     [theme.breakpoints.down('sm')]: {
       minWidth: 'unset',
-      marginRight: 0,
+      marginRight: 0
     }
   },
   formControlLabelRootDisabled: {
@@ -67,20 +74,20 @@ const styles = (theme) => ({
     marginRight: 30,
     [theme.breakpoints.down('sm')]: {
       width: '100%',
-      marginRight: 0,
+      marginRight: 0
     }
   },
   radioGroup: {
     marginBottom: 30,
     [theme.breakpoints.down('sm')]: {
-      marginBottom: 16,
+      marginBottom: 16
     }
   },
   formControlLabel: {
     display: 'flex',
     justifyContent: 'space-between',
     width: '100%',
-    paddingRight: 20,
+    paddingRight: 20
   },
   actions: {
     [theme.breakpoints.down('sm')]: {
@@ -119,9 +126,7 @@ const WALLETS = [
 
 const DEFAULT_WALLET = WALLETS[0].name;
 
-const WalletChooser = ({
-  setActiveStep
-}) => {
+const WalletChooser = ({ setActiveStep }) => {
   const [value, setValue] = React.useState(DEFAULT_WALLET);
 
   const handleChange = (event) => {
@@ -136,11 +141,9 @@ const WalletChooser = ({
       <div className={classes.wrapper}>
         <div>
           <FormControl
-            classes={
-              {
-                root: classes.formControlRoot
-              }
-            }
+            classes={{
+              root: classes.formControlRoot
+            }}
           >
             <RadioGroup
               name="wallets"
@@ -148,37 +151,28 @@ const WalletChooser = ({
               onChange={handleChange}
               className={classes.radioGroup}
             >
-              {WALLETS.map(({
-                name,
-                icon
-              }) => {
+              {WALLETS.map(({ name, icon }) => {
                 const disabled = name !== DEFAULT_WALLET;
 
                 return (
                   <FormControlLabel
-                    classes={
-                      {
-                        root: classNames({
-                          [classes.formControlLabelRoot]: true,
-                          [classes.formControlLabelRootDisabled]: disabled
-                        }),
-                        label: classes.formControlLabel
-                      }
-                    }
+                    classes={{
+                      root: classNames({
+                        [classes.formControlLabelRoot]: true,
+                        [classes.formControlLabelRootDisabled]: disabled
+                      }),
+                      label: classes.formControlLabel
+                    }}
                     disabled={disabled}
                     value={name}
                     control={<Radio />}
-                    label={(
+                    label={
                       <>
                         <span>{name}</span>
 
-                        <img
-                          src={icon}
-                          alt="headline_logo"
-                          className={classes.logo}
-                        />
+                        <img src={icon} alt="headline_logo" className={classes.logo} />
                       </>
-                    )}
+                    }
                   />
                 );
               })}
@@ -186,15 +180,13 @@ const WalletChooser = ({
           </FormControl>
         </div>
         <div className={classes.mobileBottomBlock}>
-          <Typography className={classes.descriptionTitle}>
-            {t('WalletRegTitle')}
-          </Typography>
+          <Typography className={classes.descriptionTitle}>{t('WalletRegTitle')}</Typography>
 
           <Typography className={classes.descriptionText}>
             {t('WalletRegTitleDescription')}
             <a
-              href='https://support.metamask.io/hc/en-us/articles/360015489531-Getting-started-with-MetaMask'
-              target='_blank'
+              href="https://support.metamask.io/hc/en-us/articles/360015489531-Getting-started-with-MetaMask"
+              target="_blank"
               rel="noopener noreferrer"
               className={classes.link}
             >
@@ -212,26 +204,17 @@ const WalletChooser = ({
           onClick={() => setActiveStep(0)}
           className={classes.backButton}
         >
-          <img
-            className={classes.actionIconBack}
-            src={ArrowBackIcon}
-            alt='arrow forward icon'
-          />
-          {t("Back")}
+          <img className={classes.actionIconBack} src={ArrowBackIcon} alt="arrow forward icon" />
+          {t('Back')}
         </Button>
 
-        <Button
-          size="large"
-          color="primary"
-          variant="contained"
-          onClick={() => setActiveStep(2)}
-        >
-          {t("Continue")}
+        <Button size="large" color="primary" variant="contained" onClick={() => setActiveStep(2)}>
+          {t('Continue')}
           <ArrowForwardIcon className={classes.actionIcon} />
         </Button>
       </div>
     </>
   );
-}
+};
 
 export default WalletChooser;

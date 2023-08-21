@@ -28,18 +28,14 @@ const useStyles = makeStyles({
     marginRight: 20
   },
   searchInput: {
-    marginBottom: 10,
+    marginBottom: 10
   },
   chosenIcon: {
     marginLeft: 10
   }
 });
 
-const IconListDialog = ({
-  t,
-  chosenIcon: chosenIconOrigin,
-  handleChoose
-}) => {
+const IconListDialog = ({ t, chosenIcon: chosenIconOrigin, handleChoose }) => {
   const [chosenIcon, setChosenIcon] = useState(chosenIconOrigin || null);
   const [open, setOpen] = useState(false);
   const [searchInput, setSearchInput] = useState('');
@@ -76,18 +72,14 @@ const IconListDialog = ({
         >
           {t('ChooseIcon')}
         </Button>
-        {
-          chosenIcon ? (
-            <>
-              <IconComponent />
-              <Typography className={classes.chosenIcon}>{chosenIcon}</Typography>
-            </>
-          ) : (
-            <Typography>
-              {t('ChooseIconDescription')}
-            </Typography>
-          )
-        }
+        {chosenIcon ? (
+          <>
+            <IconComponent />
+            <Typography className={classes.chosenIcon}>{chosenIcon}</Typography>
+          </>
+        ) : (
+          <Typography>{t('ChooseIconDescription')}</Typography>
+        )}
       </div>
 
       <Dialog open={open} onClose={handleClose}>
@@ -125,6 +117,6 @@ const IconListDialog = ({
       </Dialog>
     </>
   );
-}
+};
 
 export default IconListDialog;

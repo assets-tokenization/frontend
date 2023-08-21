@@ -18,30 +18,30 @@ const styles = (theme) => ({
     alignItems: 'start'
   },
   success: {
-    backgroundColor: green[600],
+    backgroundColor: green[600]
   },
   error: {
     backgroundColor: theme.palette.error.dark,
     color: '#fff'
   },
   info: {
-    backgroundColor: theme.palette.primary.dark,
+    backgroundColor: theme.palette.primary.dark
   },
   warning: {
-    backgroundColor: amber[700],
+    backgroundColor: amber[700]
   },
   permanentWarning: {
-    backgroundColor: amber[700],
+    backgroundColor: amber[700]
   },
   icon: {
-    fontSize: 20,
+    fontSize: 20
   },
   iconVariant: {
     opacity: 0.9,
-    marginRight: 8,
+    marginRight: 8
   },
   message: {
-    width: 'calc(100% - 36px)',
+    width: 'calc(100% - 36px)'
   },
   details: {
     overflow: 'auto',
@@ -51,8 +51,8 @@ const styles = (theme) => ({
     marginTop: 8
   },
   action: {
-    paddingLeft: 0,
-  },
+    paddingLeft: 0
+  }
 });
 
 const ErrorSnackbar = ({
@@ -61,16 +61,8 @@ const ErrorSnackbar = ({
   className,
   closeDelayLong,
   closeDelay,
-  error: {
-    message,
-    content,
-    variant,
-    details,
-    autoClose = true,
-    data = {},
-    onCloseCallBack,
-  },
-  onClose,
+  error: { message, content, variant, details, autoClose = true, data = {}, onCloseCallBack },
+  onClose
 }) => {
   const text = content || (isCyrillic(message) ? message : t(message, data));
   const longMessage = (text || '').length > 100;
@@ -98,14 +90,10 @@ const ErrorSnackbar = ({
 
   return (
     <SnackbarContent
-      className={classNames(
-        classes.root,
-        classes[variant || 'error'],
-        className
-      )}
+      className={classNames(classes.root, classes[variant || 'error'], className)}
       classes={{ message: classes.message, action: classes.action }}
       aria-describedby="client-snackbar"
-      message={(
+      message={
         <>
           {details ? (
             <span id="client-snackbar" className={classes.message}>
@@ -120,7 +108,7 @@ const ErrorSnackbar = ({
             </span>
           )}
         </>
-      )}
+      }
       action={[
         <IconButton
           key="close"
@@ -130,7 +118,7 @@ const ErrorSnackbar = ({
           onClick={handleClose}
         >
           <CloseIcon className={classes.icon} />
-        </IconButton>,
+        </IconButton>
       ]}
     />
   );
@@ -143,12 +131,12 @@ ErrorSnackbar.propTypes = {
   t: PropTypes.func.isRequired,
   className: PropTypes.object,
   closeDelay: PropTypes.number,
-  closeDelayLong: PropTypes.number,
+  closeDelayLong: PropTypes.number
 };
 ErrorSnackbar.defaultProps = {
   className: {},
   closeDelay: 4000,
-  closeDelayLong: 6000,
+  closeDelayLong: 6000
 };
 
 const styled = withStyles(styles)(ErrorSnackbar);

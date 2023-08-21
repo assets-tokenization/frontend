@@ -25,21 +25,21 @@ const styles = {
     display: 'flex',
     height: '100%',
     color: '#e2e2e2',
-    background: '#232323',
+    background: '#232323'
   },
   saveButton: {
     color: '#E2E2E2',
     position: 'absolute',
     right: 50,
-    top: 4,
+    top: 4
   },
   disabled: {
     color: '#E2E2E2!important',
-    opacity: 0.3,
+    opacity: 0.3
   },
   progress: {
-    color: '#E2E2E2',
-  },
+    color: '#E2E2E2'
+  }
 };
 
 const initialState = (rootValue) => ({
@@ -47,17 +47,13 @@ const initialState = (rootValue) => ({
   newValue: rootValue,
   editPath: [],
   errors: [],
-  selection: [],
+  selection: []
 });
 
 const intervalTimeout = 60000;
 let interval = null;
 
-const insertCode = ({
-  schema,
-  path,
-  element
-}) => {
+const insertCode = ({ schema, path, element }) => {
   const isFunction = element.type === 'function';
 
   const getCode = () => {
@@ -66,24 +62,17 @@ const insertCode = ({
       return parsedCode;
     }
     return JSON.parse(parsedCode);
-  }
+  };
   const code = getCode();
 
   if (!code) return schema;
 
-  objectPath.set(
-    schema,
-    path,
-    code
-  );
+  objectPath.set(schema, path, code);
 
   return schema;
 };
 
-const insertTriggers = ({
-  schema,
-  element
-}) => {
+const insertTriggers = ({ schema, element }) => {
   const json = JSON.parse(JSON.parse(element.data).json);
 
   if (!json) return schema;
@@ -95,10 +84,7 @@ const insertTriggers = ({
   return schema;
 };
 
-const insertAddition = ({
-  schema,
-  element
-}) => {
+const insertAddition = ({ schema, element }) => {
   const innerJson = JSON.parse(JSON.parse(element.data).innerJson);
 
   if (!innerJson) return schema;
@@ -113,12 +99,12 @@ const insertAddition = ({
       } else if (typeof prevValue === 'object') {
         objectPath.set(schema, key, {
           ...prevValue,
-          ...newValue,
+          ...newValue
         });
       }
     }
   });
-  
+
   return schema;
 };
 
@@ -131,7 +117,7 @@ const JsonSchemaProvider = ({
   onValidate,
   busy,
   setBusy,
-  handleSave,
+  handleSave
 }) => {
   const state = useRS(initialState(value));
   const t = useTranslate('Errors');
@@ -143,14 +129,11 @@ const JsonSchemaProvider = ({
       const startTime = moment(parsed.iat * 1000);
 
       const currentTime = moment().minutes() + moment().hours() * 60;
-      const expireTime =
-        startTime.minutes() + startTime.hours() * 60 + sessionLifeTime;
+      const expireTime = startTime.minutes() + startTime.hours() * 60 + sessionLifeTime;
       const diff = expireTime - currentTime;
 
       if (diff < 5) {
-        actions.addMessage(
-          new Message(`${t('TokenExpiring', { diff })}`, 'warning')
-        );
+        actions.addMessage(new Message(`${t('TokenExpiring', { diff })}`, 'warning'));
       }
     }, intervalTimeout);
 
@@ -161,13 +144,13 @@ const JsonSchemaProvider = ({
     JSON.stringify(state.newValue) === JSON.stringify(state.rootValue) ||
     state.errors.length ||
     busy;
-  
+
   const getParsedSchema = (schema) => {
     try {
       return JSON.parse(schema);
     } catch (e) {
       return {};
-    } 
+    }
   };
 
   const providerData = {
@@ -204,8 +187,8 @@ const JsonSchemaProvider = ({
           onValidate([
             {
               error: 'unSavedError',
-              saveCallback: providerData.handleSave,
-            },
+              saveCallback: providerData.handleSave
+            }
           ]);
       } else {
         onValidate && onValidate(errors);
@@ -231,10 +214,12 @@ const JsonSchemaProvider = ({
       console.log('moveElementTo', source, target);
     },
     createElementAt: ({ defaultData, snippet }, targetPath, elementId) => {
-      const component = JSON.parse(JSON.stringify({
-        ...defaultData,
-        snippet
-      }));
+      const component = JSON.parse(
+        JSON.stringify({
+          ...defaultData,
+          snippet
+        })
+      );
 
       const propertyPath = targetPath.length
         ? 'properties.' + targetPath.join('.properties.') + '.properties'
@@ -265,10 +250,7 @@ const JsonSchemaProvider = ({
     deleteElementAt: (targetPath) => {
       const parsedValue = getParsedSchema(state.newValue);
 
-      objectPath.del(
-        parsedValue,
-        'properties.' + targetPath.join('.properties.')
-      );
+      objectPath.del(parsedValue, 'properties.' + targetPath.join('.properties.'));
 
       state.newValue = JSON.stringify(parsedValue, null, 4);
 
@@ -286,7 +268,7 @@ const JsonSchemaProvider = ({
       const parsedValue = getParsedSchema(state.newValue);
 
       objectPath.set(parsedValue, path, newValue);
-    },
+    }
   };
 
   return (
@@ -314,15 +296,13 @@ const JsonSchemaProvider = ({
 };
 
 const withEditor = (EditorComponent) => (props) => (
-  <Consumer>
-    {(context) => <EditorComponent {...props} {...context} />}
-  </Consumer>
+  <Consumer>{(context) => <EditorComponent {...props} {...context} />}</Consumer>
 );
 
 const mapDispatch = (dispatch) => ({
   actions: {
-    addMessage: bindActionCreators(addMessage, dispatch),
-  },
+    addMessage: bindActionCreators(addMessage, dispatch)
+  }
 });
 
 const connected = connect(null, mapDispatch)(JsonSchemaProvider);

@@ -12,13 +12,13 @@ import ExistedElementDialog from './ExistedElementDialog';
 const styles = {
   root: {
     margin: 4,
-    overflowWrap: 'anywhere',
+    overflowWrap: 'anywhere'
   },
   selected: {
-    background: '#444444',
+    background: '#444444'
   },
   isOver: {
-    background: '#232323',
+    background: '#232323'
   },
   cardHeader: {
     color: '#fff'
@@ -34,7 +34,7 @@ const SchemaItem = ({
   setSelection,
   createElementAt,
   deleteElementAt,
-  isElementExists,
+  isElementExists
 }) => {
   const [newElement, setNewElement] = React.useState(null);
   const [existed, setExisted] = React.useState(null);
@@ -43,7 +43,7 @@ const SchemaItem = ({
     accept: ['control', 'container'],
     collect: (monitor) => ({
       isOver: monitor.isOver({ shallow: true }),
-      canDrop: monitor.canDrop(),
+      canDrop: monitor.canDrop()
     }),
     drop(item, monitor) {
       const didDrop = monitor.didDrop();
@@ -51,7 +51,7 @@ const SchemaItem = ({
         return;
       }
       setNewElement(item);
-    },
+    }
   });
 
   const selected = selection.join() === path.join();
@@ -71,14 +71,14 @@ const SchemaItem = ({
         }}
         className={classNames(classes.root, {
           [classes.selected]: selected,
-          [classes.isOver]: isOver && canDrop,
+          [classes.isOver]: isOver && canDrop
         })}
       >
         <CardHeader
           className={classes.cardHeader}
           classes={{
             subheader: classes.cardHeader,
-            title: classes.cardHeader,
+            title: classes.cardHeader
           }}
           avatar={elementType.Icon ? <elementType.Icon /> : null}
           action={

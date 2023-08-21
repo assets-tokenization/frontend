@@ -14,14 +14,14 @@ const helpers = {
     inDotFormat: {},
     inHyphenFormat: {},
     fromDotsToHyphen: {},
-    fromHyphenToDots: {},
+    fromHyphenToDots: {}
   },
   string: {
     isUkrainianLettersOnlyAndSomeSymbolsEqual: {},
     isUkrainianLettersNumbersPunctuationMarksOnlyAndSomeSymbolsCountNotLess: {},
     isUkrainianLettersNumbersQuotesHyphenGapOnly: {},
-    isNotMoreOneHyphenOrSpaceInRow: {},
-  },
+    isNotMoreOneHyphenOrSpaceInRow: {}
+  }
 };
 
 helpers.date.dayOfBirthFromIpn = `((ipn) => {
@@ -143,22 +143,27 @@ helpers.date.isDateNotLess1stJanuaryYear = `(({
   year
 })`;
 
-helpers.date.inDotFormat = '(() => (new Date()).toISOString().slice(0, 10).split(\'-\').reverse().join(\'.\'))()';
+helpers.date.inDotFormat =
+  "(() => (new Date()).toISOString().slice(0, 10).split('-').reverse().join('.'))()";
 
-helpers.date.inHyphenFormat = '(() => (new Date()).toISOString().slice(0, 10).split(\'-\').join(\'-\'))()';
+helpers.date.inHyphenFormat =
+  "(() => (new Date()).toISOString().slice(0, 10).split('-').join('-'))()";
 
-helpers.date.fromDotsToHyphen = '((dataWithDots) => dataWithDots.split(\'.\').reverse().join(\'-\'))(dataWithDots)';
+helpers.date.fromDotsToHyphen =
+  "((dataWithDots) => dataWithDots.split('.').reverse().join('-'))(dataWithDots)";
 
-helpers.date.fromHyphenToDots = '((dataWithDots) => dataWithDots.split(\'-\').reverse().join(\'.\'))(dataWithDots)';
+helpers.date.fromHyphenToDots =
+  "((dataWithDots) => dataWithDots.split('-').reverse().join('.'))(dataWithDots)";
 // eslint-disable-next-line
 helpers.string.isUkrainianLettersOnlyAndSomeSymbolsEqual =
   '((value, length) => ((new RegExp(`^[АаБбВвГгҐґДдЕеЄєЖжЗзИиІіЇїЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщЬьЮюЯя]{${length}}$`)).test(value)))(value, length)';
 // eslint-disable-next-line
 helpers.string.isUkrainianLettersNumbersPunctuationMarksOnlyAndSomeSymbolsCountNotLess =
-  "((value, length) => ((new RegExp(`^[АаБбВвГгҐґДдЕеЄєЖжЗзИиІіЇїЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщЬьЮюЯя0-9№/ ,.\\-'’\"]{${length},}$`)).test(value)))(value, length)";
+  '((value, length) => ((new RegExp(`^[АаБбВвГгҐґДдЕеЄєЖжЗзИиІіЇїЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщЬьЮюЯя0-9№/ ,.\\-\'’"]{${length},}$`)).test(value)))(value, length)';
 // eslint-disable-next-line
 helpers.string.isUkrainianLettersNumbersQuotesHyphenGapOnly = `((value) => /^[-'‘’\" /А-ЩЬЮЯҐЄІЇа-щьюяґєії0-9]+$/.test(value))(value)`;
 
-helpers.string.isNotMoreOneHyphenOrSpaceInRow = '((value) => value && !/[-]{2,}/.test(value) && !/[ ]{2,}/.test(value))(value)';
+helpers.string.isNotMoreOneHyphenOrSpaceInRow =
+  '((value) => value && !/[-]{2,}/.test(value) && !/[ ]{2,}/.test(value))(value)';
 
 export default helpers;

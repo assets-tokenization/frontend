@@ -8,22 +8,22 @@ import withStyles from '@mui/styles/withStyles';
 import FileDataTable from 'components/FileDataTable';
 
 const styles = {
-    root: {
-        marginTop: 10,
-        marginBottom: 20
-    },
-    label: {
-        marginTop: 20
-    }
+  root: {
+    marginTop: 10,
+    marginBottom: 20
+  },
+  label: {
+    marginTop: 20
+  }
 };
 
 class CabinetFile extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {};
-    }
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
 
-    titleTemplate = attach => `
+  titleTemplate = (attach) => `
         <div style="font-weight: bold">
             ${attach.name}
         </div>
@@ -34,85 +34,73 @@ class CabinetFile extends React.Component {
         </div>
     `;
 
-    getValue = () => {
-        const { value } = this.props;
+  getValue = () => {
+    const { value } = this.props;
 
-        if (!value) return [];
+    if (!value) return [];
 
-        const setAttachInfo = attach => ({
-            ...attach,
-            id: attach.attachId || attach.documentId,
-            customName: this.titleTemplate(attach)
-        });
+    const setAttachInfo = (attach) => ({
+      ...attach,
+      id: attach.attachId || attach.documentId,
+      customName: this.titleTemplate(attach)
+    });
 
-        if (value && Array.isArray(value)) return value.map(item => setAttachInfo(item));
+    if (value && Array.isArray(value)) return value.map((item) => setAttachInfo(item));
 
-        return [setAttachInfo(value)];
-    };
+    return [setAttachInfo(value)];
+  };
 
-    renderDataTable = () => {
-        const {
-            actions,
-            fileStorage,
-            isDocument
-        } = this.props;
-        const data = this.getValue();
+  renderDataTable = () => {
+    const { actions, fileStorage, isDocument } = this.props;
+    const data = this.getValue();
 
-        const handleDownloadFile = isDocument ? actions.downloadPDFDocument : actions.downloadDocumentAttach;
+    const handleDownloadFile = isDocument
+      ? actions.downloadPDFDocument
+      : actions.downloadDocumentAttach;
 
-        return (
-            <FileDataTable
-                data={data}
-                fileStorage={fileStorage}
-                actions={{ handleDownloadFile }}
-            />
-        );
-    };
+    return <FileDataTable data={data} fileStorage={fileStorage} actions={{ handleDownloadFile }} />;
+  };
 
-    render = () => {
-        const {
-            hidden,
-            classes,
-            description
-        } = this.props;
+  render = () => {
+    const { hidden, classes, description } = this.props;
 
-        if (hidden) return null;
+    if (hidden) return null;
 
-        return (
-            <div className={classes.root}>
-                {description ? <Typography variant="h5">{description}</Typography> : null}
-                {this.renderDataTable()}
-            </div>
-        );
-    };
+    return (
+      <div className={classes.root}>
+        {description ? <Typography variant="h5">{description}</Typography> : null}
+        {this.renderDataTable()}
+      </div>
+    );
+  };
 }
 
 CabinetFile.propTypes = {
-    classes: PropTypes.object.isRequired,
-    actions: PropTypes.object,
-    fileStorage: PropTypes.object,
-    hidden: PropTypes.bool,
-    description: PropTypes.string,
-    value: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
-    isDocument: PropTypes.bool
+  classes: PropTypes.object.isRequired,
+  actions: PropTypes.object,
+  fileStorage: PropTypes.object,
+  hidden: PropTypes.bool,
+  description: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+  isDocument: PropTypes.bool
 };
 
 CabinetFile.defaultProps = {
-    actions: {},
-    fileStorage: {},
-    hidden: false,
-    description: null,
-    value: null,
-    isDocument: false
+  actions: {},
+  fileStorage: {},
+  hidden: false,
+  description: null,
+  value: null,
+  isDocument: false
 };
 
 const mapStateToProps = ({ files: { list } }) => ({ fileStorage: list });
 
-const mapDispatchToProps = dispatch => ({
-    actions: {
-        downloadDocumentAttach: bindActionCreators(downloadDocumentAttach, dispatch),
-        downloadPDFDocument: bindActionCreators(downloadPDFDocument, dispatch)
-    }
+const mapDispatchToProps = (dispatch) => ({
+  actions: {
+    downloadDocumentAttach: bindActionCreators(downloadDocumentAttach, dispatch),
+    downloadPDFDocument: bindActionCreators(downloadPDFDocument, dispatch)
+  }
 });
 
 const styled = withStyles(styles)(CabinetFile);

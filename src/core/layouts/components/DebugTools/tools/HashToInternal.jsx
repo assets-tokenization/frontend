@@ -7,9 +7,9 @@ import edsService from 'services/eds';
 const useStyles = makeStyles((theme) => ({
   content: {
     '& > *': {
-      marginBottom: theme.spacing(2),
-    },
-  },
+      marginBottom: theme.spacing(2)
+    }
+  }
 }));
 
 const HashToInternal = () => {
@@ -33,9 +33,7 @@ const HashToInternal = () => {
   }, [data, signedHash]);
 
   return (
-    <DialogContent
-      className={classes.content}
-    >
+    <DialogContent className={classes.content}>
       <TextField
         variant="outlined"
         multiline={true}
@@ -67,9 +65,8 @@ const HashToInternal = () => {
         label="Результат"
         value={result || error}
       />
-
     </DialogContent>
   );
-}
+};
 
 export default HashToInternal;

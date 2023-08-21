@@ -1,6 +1,6 @@
 const styles = () => ({
   clearIndicator: {
-    color: 'rgb(153, 153, 153)',
+    color: 'rgb(153, 153, 153)'
   },
   option: {
     fontSize: 16,
@@ -8,21 +8,21 @@ const styles = () => ({
     padding: 8,
     '&:hover': {
       backgroundColor: 'rgb(245, 245, 245)',
-      color: '#000',
-    },
+      color: '#000'
+    }
   },
   darkThemeLabel: {
     backgroundColor: '#2a2a2a',
     borderRadius: '4px 4px 0px 0px',
     '& fieldset': {
-      borderColor: 'transparent',
+      borderColor: 'transparent'
     },
     '& label': {
-      color: '#fff',
+      color: '#fff'
     },
     '& legend': {
-      maxWidth: 0.01,
-    },
+      maxWidth: 0.01
+    }
   }
 });
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import { useTranslate } from 'react-translate';
 import classNames from 'classnames';
 import makeStyles from '@mui/styles/makeStyles';
@@ -26,7 +26,7 @@ const styles = (theme) => ({
     [theme.breakpoints.down('sm')]: {
       fontSize: 12,
       fontWeight: 800,
-      lineHeight: '16px',
+      lineHeight: '16px'
     }
   },
   logo: {
@@ -41,13 +41,13 @@ const styles = (theme) => ({
     padding: '20px 60px',
     justifyContent: 'space-between',
     [theme.breakpoints.down('sm')]: {
-      padding: '4px 16px',
+      padding: '4px 16px'
     }
   },
   actionsBlock: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   userName: {
     display: 'flex',
@@ -55,10 +55,11 @@ const styles = (theme) => ({
     fontSize: 16,
     lineHeight: '24px',
     fontWeight: 500,
-    marginLeft: 20,
+    marginLeft: 20
   },
   toP2PButtonWrapper: {
-    background: 'radial-gradient(100% 176.6% at 100% 100%, rgba(222, 227, 245, 0.8) 0%, rgba(208, 217, 251, 0.4) 99.88%)',
+    background:
+      'radial-gradient(100% 176.6% at 100% 100%, rgba(222, 227, 245, 0.8) 0%, rgba(208, 217, 251, 0.4) 99.88%)',
     position: 'fixed',
     bottom: 0,
     left: 0,
@@ -78,21 +79,14 @@ const styles = (theme) => ({
     textDecoration: 'none',
     color: 'inherit',
     [theme.breakpoints.down('sm')]: {
-      display: 'flex',
+      display: 'flex'
     }
   }
 });
 
 const useStyles = makeStyles(styles);
 
-const Header = ({
-  navigateClick,
-  navigateText,
-  title,
-  hideLogo,
-  hideSMbutton,
-  history
-}) => {
+const Header = ({ navigateClick, navigateText, title, hideLogo, hideSMbutton, history }) => {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
 
@@ -135,37 +129,29 @@ const Header = ({
     prevOpen.current = open;
   }, [open]);
 
-  const isSM = useMediaQuery(theme => theme.breakpoints.down('sm'));
+  const isSM = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
   return (
     <div className={classes.header}>
-      {
-        hideLogo ? <div /> : (
-          <a href='/' className={classes.link}>
-            <Typography className={classes.headline}>
-              <img
-                src={headline_logo}
-                alt="headline_logo"
-                className={classes.logo}
-              />
-              {title || t('Title')}
-            </Typography>
-          </a>
-        )
-      }
+      {hideLogo ? (
+        <div />
+      ) : (
+        <a href="/" className={classes.link}>
+          <Typography className={classes.headline}>
+            <img src={headline_logo} alt="headline_logo" className={classes.logo} />
+            {title || t('Title')}
+          </Typography>
+        </a>
+      )}
 
       <div className={classes.actionsBlock}>
-
         {hideSMbutton && isSM ? null : (
           <div
             className={classNames({
               [classes.toP2PButtonWrapper]: isSM
             })}
           >
-            <Button
-              variant="outlined"
-              onClick={navigateClick}
-            >
+            <Button variant="outlined" onClick={navigateClick}>
               {navigateText || t('GoToP2P')}
             </Button>
           </div>
@@ -197,8 +183,7 @@ const Header = ({
             <Grow
               {...TransitionProps}
               style={{
-                transformOrigin:
-                  placement === 'bottom-start' ? 'left top' : 'left bottom',
+                transformOrigin: placement === 'bottom-start' ? 'left top' : 'left bottom'
               }}
             >
               <Paper>
@@ -209,11 +194,7 @@ const Header = ({
                     aria-labelledby="composition-button"
                     onKeyDown={handleListKeyDown}
                   >
-                    <MenuItem
-                      onClick={handleLogout}
-                    >
-                      {t('Logout')}
-                    </MenuItem>
+                    <MenuItem onClick={handleLogout}>{t('Logout')}</MenuItem>
                   </MenuList>
                 </ClickAwayListener>
               </Paper>
@@ -223,6 +204,6 @@ const Header = ({
       </div>
     </div>
   );
-}
+};
 
 export default Header;

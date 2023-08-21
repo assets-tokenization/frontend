@@ -3,14 +3,7 @@ import { useTranslate } from 'react-translate';
 import { SchemaForm } from 'components/JsonSchema';
 import parseDate from 'helpers/parseDate';
 
-const RenderDateFormat = ({
-  name,
-  fields,
-  errors,
-  value,
-  handleUpdateField,
-  months: options
-}) => {
+const RenderDateFormat = ({ name, fields, errors, value, handleUpdateField, months: options }) => {
   const t = useTranslate('VerifiedUserInfo');
 
   const dateObject = parseDate(value?.[name]?.date, 'DD.MM.YYYY') || {};
@@ -18,9 +11,9 @@ const RenderDateFormat = ({
   const handleChangeDate = (_, changing, value) => {
     dateObject[changing] = value;
 
-    const updatedDate = `${dateObject?.day || ''}.${
-      dateObject?.month || ''
-    }.${dateObject?.year || ''}`;
+    const updatedDate = `${dateObject?.day || ''}.${dateObject?.month || ''}.${
+      dateObject?.year || ''
+    }`;
 
     handleUpdateField(`${name}.date`, updatedDate);
   };

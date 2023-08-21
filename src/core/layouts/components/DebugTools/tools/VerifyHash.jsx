@@ -7,9 +7,9 @@ import edsService from 'services/eds';
 const useStyles = makeStyles((theme) => ({
   content: {
     '& > *': {
-      marginBottom: theme.spacing(2),
-    },
-  },
+      marginBottom: theme.spacing(2)
+    }
+  }
 }));
 
 const VerifyHash = () => {
@@ -33,9 +33,7 @@ const VerifyHash = () => {
   }, [hash, sign]);
 
   return (
-    <DialogContent
-      className={classes.content}
-    >
+    <DialogContent className={classes.content}>
       <TextField
         variant="outlined"
         multiline={true}
@@ -52,11 +50,7 @@ const VerifyHash = () => {
         value={sign}
         onChange={({ target: { value } }) => setSign(value)}
       />
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleClick}
-      >
+      <Button variant="contained" color="primary" onClick={handleClick}>
         Перевірити
       </Button>
       <TextField
@@ -68,6 +62,6 @@ const VerifyHash = () => {
       />
     </DialogContent>
   );
-}
+};
 
 export default VerifyHash;

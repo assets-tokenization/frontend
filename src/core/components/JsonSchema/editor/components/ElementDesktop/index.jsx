@@ -11,14 +11,14 @@ import FormPreview from './components/FormPreview';
 const editors = {
   VisualEditor,
   CodeEditor,
-  FormPreview,
+  FormPreview
 };
 
 const withStyles = makeStyles(() => ({
   root: {
     flexGrow: 1,
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'column'
   },
   action: {
     top: 4,
@@ -41,18 +41,12 @@ const ElementDesktop = () => {
     <>
       <div className={classes.action}>
         <Tooltip title={t('ChangeEditor')}>
-          <IconButton
-            onClick={() => setActive(active === 1 ? 0 : 1)}
-          >
-            {
-              active === 1 ? (
-                <AccountTreeIcon />
-              ) : (
-                <Typography className={classes.json5}>
-                  {'json5'}
-                </Typography>
-              )
-            }
+          <IconButton onClick={() => setActive(active === 1 ? 0 : 1)}>
+            {active === 1 ? (
+              <AccountTreeIcon />
+            ) : (
+              <Typography className={classes.json5}>{'json5'}</Typography>
+            )}
           </IconButton>
         </Tooltip>
       </div>

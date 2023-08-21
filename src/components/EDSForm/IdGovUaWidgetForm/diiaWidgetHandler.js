@@ -1,6 +1,4 @@
-
 class DiiaWidgetHandler {
-
   constructor(euSign) {
     this.euSign = euSign;
   }
@@ -25,7 +23,7 @@ class DiiaWidgetHandler {
       window.EndUser.SignAlgo.DSTU4145WithGOST34311,
       null,
       window.EndUser.SignType.CAdES_X_Long
-    )
+    );
   }
 }
 

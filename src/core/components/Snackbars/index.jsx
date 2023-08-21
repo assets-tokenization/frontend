@@ -10,8 +10,8 @@ const styles = {
     position: 'fixed',
     zIndex: 5000,
     maxWidth: 400,
-    width: '100%',
-  },
+    width: '100%'
+  }
 };
 
 const Snackbars = ({ classes, errors, onClose }) => (

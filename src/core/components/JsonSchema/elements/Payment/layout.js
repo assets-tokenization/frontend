@@ -10,118 +10,116 @@ import ElementContainer from 'components/JsonSchema/components/ElementContainer'
 import StringElement from 'components/JsonSchema/elements/StringElement';
 
 const styles = () => ({
-    groupWrapper: {
-        marginTop: 10
-    },
-    wrapper: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingTop: 8
-    },
-    flex: {
-        flex: 2
-    },
-    field: {
-        position: 'relative',
-        marginRight: 15,
-        '&>div': {
-            marginBottom: 0
-        }
-    },
-    buttonProgress: {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        marginTop: -12,
-        marginLeft: -12
-    },
-    icon: {
-        color: 'green'
+  groupWrapper: {
+    marginTop: 10
+  },
+  wrapper: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingTop: 8
+  },
+  flex: {
+    flex: 2
+  },
+  field: {
+    position: 'relative',
+    marginRight: 15,
+    '&>div': {
+      marginBottom: 0
     }
+  },
+  buttonProgress: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12
+  },
+  icon: {
+    color: 'green'
+  }
 });
 
 const PaymentLayout = ({
-    t,
-    classes,
-    error,
-    required,
-    description,
-    paymentValue,
-    loading,
-    loadingValue,
-    paymentAction,
-    isSuccess,
-    noMargin,
-    ...rest
+  t,
+  classes,
+  error,
+  required,
+  description,
+  paymentValue,
+  loading,
+  loadingValue,
+  paymentAction,
+  isSuccess,
+  noMargin,
+  ...rest
 }) => (
-    <FormControl variant="standard" margin={'dense'}>
-        <ElementContainer
-            description={description}
-            required={required}
-            error={error}
-            bottomSample={true}
-            className={classes.groupWrapper}
-            noMargin={noMargin}
+  <FormControl variant="standard" margin={'dense'}>
+    <ElementContainer
+      description={description}
+      required={required}
+      error={error}
+      bottomSample={true}
+      className={classes.groupWrapper}
+      noMargin={noMargin}
+    >
+      <div className={classes.wrapper}>
+        <span className={classNames(classes.field, classes.flex)}>
+          <StringElement
+            {...rest}
+            description={''}
+            readOnly={'true'}
+            required={true}
+            value={String(paymentValue)}
+            InputProps={{
+              endAdornment: <InputAdornment>{t('Currency')}</InputAdornment>
+            }}
+          />
+          {loadingValue && <CircularProgress size={24} className={classes.buttonProgress} />}
+        </span>
+        <Button
+          onClick={paymentAction}
+          size="large"
+          color="primary"
+          variant="contained"
+          className={classes.flex}
+          disabled={loadingValue || loading || isSuccess}
         >
-            <div className={classes.wrapper}>
-                <span className={classNames(classes.field, classes.flex)}>
-                    <StringElement
-                        {...rest}
-                        description={''}
-                        readOnly={'true'}
-                        required={true}
-                        value={String(paymentValue)}
-                        InputProps={
-                            {
-                                endAdornment: <InputAdornment>{t('Currency')}</InputAdornment>
-                            }
-                        }
-                    />
-                    {loadingValue && <CircularProgress size={24} className={classes.buttonProgress}/>}
-                </span>
-                <Button
-                    onClick={paymentAction}
-                    size="large"
-                    color="primary"
-                    variant="contained"
-                    className={classes.flex}
-                    disabled={loadingValue || loading || isSuccess}
-                >
-                    {isSuccess ? t('Paid') : t('MakePayment')}
-                    {loading && <CircularProgress size={24} className={classes.buttonProgress}/>}
-                </Button>
-                {isSuccess && <CheckRoundedIcon className={classes.icon} />}
-            </div>
-        </ElementContainer>
-    </FormControl>
+          {isSuccess ? t('Paid') : t('MakePayment')}
+          {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+        </Button>
+        {isSuccess && <CheckRoundedIcon className={classes.icon} />}
+      </div>
+    </ElementContainer>
+  </FormControl>
 );
 
 PaymentLayout.propTypes = {
-    t: PropTypes.func.isRequired,
-    paymentAction: PropTypes.func.isRequired,
-    classes: PropTypes.object.isRequired,
-    isSuccess: PropTypes.bool,
-    description: PropTypes.string,
-    hidden: PropTypes.bool,
-    loadingValue: PropTypes.bool,
-    loading: PropTypes.bool,
-    paymentValue: PropTypes.string,
-    error: PropTypes.object,
-    required: PropTypes.bool,
-    sample: PropTypes.oneOfType([PropTypes.string, PropTypes.bool])
+  t: PropTypes.func.isRequired,
+  paymentAction: PropTypes.func.isRequired,
+  classes: PropTypes.object.isRequired,
+  isSuccess: PropTypes.bool,
+  description: PropTypes.string,
+  hidden: PropTypes.bool,
+  loadingValue: PropTypes.bool,
+  loading: PropTypes.bool,
+  paymentValue: PropTypes.string,
+  error: PropTypes.object,
+  required: PropTypes.bool,
+  sample: PropTypes.oneOfType([PropTypes.string, PropTypes.bool])
 };
 
 PaymentLayout.defaultProps = {
-    isSuccess: false,
-    description: '',
-    hidden: false,
-    error: null,
-    required: false,
-    loadingValue: false,
-    loading: false,
-    sample: '',
-    paymentValue: 0
+  isSuccess: false,
+  description: '',
+  hidden: false,
+  error: null,
+  required: false,
+  loadingValue: false,
+  loading: false,
+  sample: '',
+  paymentValue: 0
 };
 
 const translated = translate('Elements')(PaymentLayout);

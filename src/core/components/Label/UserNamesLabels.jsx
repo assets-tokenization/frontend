@@ -2,14 +2,15 @@ import PropTypes from 'prop-types';
 
 import { getShortNameFromString } from 'helpers/getUserShortName';
 
-const UserNamesLabels = ({ userNames }) => userNames.map(userName => getShortNameFromString(userName)).join(', ');
+const UserNamesLabels = ({ userNames }) =>
+  userNames.map((userName) => getShortNameFromString(userName)).join(', ');
 
 UserNamesLabels.propTypes = {
-    userNames: PropTypes.array
+  userNames: PropTypes.array
 };
 
 UserNamesLabels.defaultProps = {
-    userNames: []
+  userNames: []
 };
 
 export default UserNamesLabels;

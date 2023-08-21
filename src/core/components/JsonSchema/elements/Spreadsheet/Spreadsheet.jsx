@@ -37,20 +37,16 @@ const Spreadsheet = ({
   const dataListRef = React.useRef();
   const [internalErrors, setInternalErrors] = React.useState();
 
-  const errors = React.useCallback(
-    [].concat(rest.errors, internalErrors).filter(Boolean),
-    [rest.errors, internalErrors]
-  );
+  const errors = React.useCallback([].concat(rest.errors, internalErrors).filter(Boolean), [
+    rest.errors,
+    internalErrors
+  ]);
 
   const onRowBlur = React.useCallback(
     async (start, end, setFocusToSelected) => {
       const slicedData = Array(value?.length).fill({});
 
-      slicedData.splice(
-        start,
-        end - start + 1,
-        ...(value || []).slice(start, end + 1)
-      );
+      slicedData.splice(start, end - start + 1, ...(value || []).slice(start, end + 1));
 
       const errors = await validateDataAsync(slicedData, rest.schema);
 
@@ -62,7 +58,7 @@ const Spreadsheet = ({
           })
           .map((row) => ({
             ...row,
-            path: [].concat(rest.path, row.path.split('.')).join('.'),
+            path: [].concat(rest.path, row.path.split('.')).join('.')
           }))
       );
 
@@ -74,8 +70,7 @@ const Spreadsheet = ({
   const [menuPosition, setMenuPosition] = React.useState(null);
 
   const onCellsChanged = (changes, additions) =>
-    !readOnly &&
-    output(onChange, value, items, useCellChangeHandler)(changes, additions);
+    !readOnly && output(onChange, value, items, useCellChangeHandler)(changes, additions);
 
   const onContextMenu = (e, cell, i, j) => {
     if (readOnly) {
@@ -88,7 +83,7 @@ const Spreadsheet = ({
       i,
       j,
       mouseX: e.clientX - 2,
-      mouseY: e.clientY - 4,
+      mouseY: e.clientY - 4
     });
   };
 

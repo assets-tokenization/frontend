@@ -1,15 +1,16 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { TranslatorProvider } from "react-translate";
-import { ThemeProvider, StyledEngineProvider, createTheme } from "@mui/material/styles";
-import Routes from "routes";
-import translation from "translation";
-import theme from "theme";
-import store from "store";
-import "assets/index.css";
-import reportWebVitals from "./reportWebVitals";
+import { TranslatorProvider } from 'react-translate';
+import { ThemeProvider, StyledEngineProvider, createTheme } from '@mui/material/styles';
+import Routes from 'routes';
+import translation from 'translation';
+import theme from 'theme';
+import store from 'store';
+import 'assets/index.css';
+import reportWebVitals from './reportWebVitals';
 
+// eslint-disable-next-line react/no-deprecated
 ReactDOM.render(
   <StyledEngineProvider injectFirst>
     <ThemeProvider theme={createTheme(theme)}>
@@ -19,8 +20,7 @@ ReactDOM.render(
         </Provider>
       </TranslatorProvider>
     </ThemeProvider>
-  </StyledEngineProvider>
-  ,
+  </StyledEngineProvider>,
   document.getElementById('root')
 );
 

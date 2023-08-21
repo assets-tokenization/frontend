@@ -13,17 +13,17 @@ const styles = () => ({
     display: '-webkit-box',
     '-webkit-box-orient': 'vertical',
     textOverflow: 'ellipsis',
-    overflow: 'hidden',
+    overflow: 'hidden'
   },
   lineClamp1: {
-    '-webkit-line-clamp': 1,
+    '-webkit-line-clamp': 1
   },
   lineClamp2: {
-    '-webkit-line-clamp': 2,
+    '-webkit-line-clamp': 2
   },
   lineClamp3: {
-    '-webkit-line-clamp': 3,
-  },
+    '-webkit-line-clamp': 3
+  }
 });
 
 const useStyles = makeStyles(styles);
@@ -40,8 +40,7 @@ const getTextLines = (title = '', containerWidth, textParams) => {
 
 const getText = (title) => {
   try {
-    const componenetText =
-      title.props.children || title?._owner?.child?.ref?.current?.innerText;
+    const componenetText = title.props.children || title?._owner?.child?.ref?.current?.innerText;
 
     if (!componenetText || typeof componenetText !== 'string') return '';
 
@@ -59,7 +58,7 @@ const RenderOneLine = ({
   disableTooltip,
   minWidthDefault,
   maxTextRows,
-  minWidthCustom,
+  minWidthCustom
 }) => {
   const classes = useStyles();
   const wrapper = React.useRef(null);
@@ -72,20 +71,13 @@ const RenderOneLine = ({
 
     const containerWidth = wrapper?.current?.offsetWidth;
 
-    const lines = getTextLines(
-      getText(title) || '',
-      containerWidth,
-      textParams
-    );
+    const lines = getTextLines(getText(title) || '', containerWidth, textParams);
 
     setTitleLines(lines);
   }, [title, textParams]);
 
   const minWidth =
-    minWidthCustom ||
-    Math.max(
-      ...[CELL_MIN_WIDTH, minWidthDefault, wrapper?.current?.offsetWidth]
-    );
+    minWidthCustom || Math.max(...[CELL_MIN_WIDTH, minWidthDefault, wrapper?.current?.offsetWidth]);
 
   const showTooltip = titleLines > maxTextRows && !disableTooltip && !isMobile;
 
@@ -96,7 +88,7 @@ const RenderOneLine = ({
           <span
             className={classNames({
               [classes.cutText]: true,
-              [classes['lineClamp' + maxTextRows]]: true,
+              [classes['lineClamp' + maxTextRows]]: true
             })}
             style={{ minWidth }}
           >
@@ -106,7 +98,7 @@ const RenderOneLine = ({
       ) : (
         <span
           style={{
-            minWidth: title ? minWidth : 'unset',
+            minWidth: title ? minWidth : 'unset'
           }}
         >
           {title}
@@ -121,7 +113,7 @@ RenderOneLine.propTypes = {
   textParams: PropTypes.string,
   disableTooltip: PropTypes.bool,
   minWidthDefault: PropTypes.string,
-  maxTextRows: PropTypes.number,
+  maxTextRows: PropTypes.number
 };
 
 RenderOneLine.defaultProps = {
@@ -129,7 +121,7 @@ RenderOneLine.defaultProps = {
   textParams: '400 15px Roboto',
   disableTooltip: false,
   minWidthDefault: '0px',
-  maxTextRows: 1,
+  maxTextRows: 1
 };
 
 export default connect(null, null)(RenderOneLine);

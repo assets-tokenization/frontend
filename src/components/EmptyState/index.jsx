@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import { useTranslate } from 'react-translate';
 import makeStyles from '@mui/styles/makeStyles';
 import { Typography, Button } from '@mui/material';
@@ -14,7 +14,7 @@ const styles = (theme) => ({
       fontSize: 16,
       marginTop: 10,
       marginBottom: 20,
-      lineHeight: '24px',
+      lineHeight: '24px'
     }
   },
   logo: {
@@ -32,34 +32,21 @@ const styles = (theme) => ({
 
 const useStyles = makeStyles(styles);
 
-const EmptyState = ({
-  children,
-  onClick,
-  actionText
-}) => {
+const EmptyState = ({ children, onClick, actionText }) => {
   const classes = useStyles();
   const t = useTranslate('Header');
 
   return (
     <>
-      <span
-        className={classes.logo}
-        role="img"
-        aria-label="man shrugging"
-      >
+      <span className={classes.logo} role="img" aria-label="man shrugging">
         🤷‍♂️
       </span>
-      <Typography className={classes.headline}>
-        {children}
-      </Typography>
-      <Button
-        onClick={onClick}
-        variant="contained"
-      >
+      <Typography className={classes.headline}>{children}</Typography>
+      <Button onClick={onClick} variant="contained">
         {actionText || t('GoToP2P')}
       </Button>
     </>
   );
-}
+};
 
 export default EmptyState;

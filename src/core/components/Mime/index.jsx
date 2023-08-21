@@ -1,29 +1,32 @@
-import {Component} from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
-import {translate} from 'react-translate';
+import { translate } from 'react-translate';
 
 class Mime extends Component {
-    getTypes() {
-        const {t, children} = this.props;
-        const types = children.split(',').map(t).filter((value, index, self) => self.indexOf(value) === index);
+  getTypes() {
+    const { t, children } = this.props;
+    const types = children
+      .split(',')
+      .map(t)
+      .filter((value, index, self) => self.indexOf(value) === index);
 
-        if (types.length === 2){
-            return types.join(t('OR'));
-        }
-
-        return types.join(', ');
+    if (types.length === 2) {
+      return types.join(t('OR'));
     }
 
-    render = () => this.getTypes();
+    return types.join(', ');
+  }
+
+  render = () => this.getTypes();
 }
 
 Mime.propTypes = {
-    children: PropTypes.node,
-    t:        PropTypes.func.isRequired
+  children: PropTypes.node,
+  t: PropTypes.func.isRequired
 };
 
 Mime.defaultProps = {
-    children: ''
+  children: ''
 };
 
 export default translate('MimeType')(Mime);

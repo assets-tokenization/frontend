@@ -36,23 +36,23 @@ const withStyles = makeStyles({
   root: {
     display: 'flex',
     flexDirection: 'column',
-    borderRight: '#757575 1px solid',
+    borderRight: '#757575 1px solid'
   },
   opened: {
-    minWidth: 300,
+    minWidth: 300
   },
   parent: {
     '& span': {
-      color: '#e2e2e2',
-    },
+      color: '#e2e2e2'
+    }
   },
   child: {
     '& span': {
-      color: '#e2e2e2',
-    },
+      color: '#e2e2e2'
+    }
   },
   paper: {
-    padding: 5,
+    padding: 5
   },
   headline: {
     display: 'flex',
@@ -97,7 +97,7 @@ const withStyles = makeStyles({
     justifyContent: 'flex-start'
   },
   icon: {
-    marginRight: 10,
+    marginRight: 10
   },
   importIcon: {
     transform: 'rotate(180deg)'
@@ -157,7 +157,7 @@ const SnippetList = () => {
 
     fetchData();
   }, [dispatch, snippetsChanges, groupsChanges]);
-  
+
   const handleExportSnippets = async (idList) => {
     setExporting(true);
     const blob = await dispatch(exportSnippets(idList || null));
@@ -187,7 +187,7 @@ const SnippetList = () => {
     } else {
       result = await dispatch(createSnippetsGroup(group));
     }
-    setGroupsUpdating(false);    
+    setGroupsUpdating(false);
     if (result instanceof Error) {
       dispatch(addMessage(new Message(result?.message, 'error')));
       return;
@@ -280,142 +280,119 @@ const SnippetList = () => {
         [classes.opened]: open
       })}
     >
-      <CollapseButton
-        open={open}
-        title={t('CollapseControlList')}
-        onClick={() => setOpen(!open)}
-      />
+      <CollapseButton open={open} title={t('CollapseControlList')} onClick={() => setOpen(!open)} />
 
-      {
-        open ? (
-          <div className={classes.search}>
-            <StringElement
-              description={t('SearchControls')}
-              value={search}
-              fullWidth={true}
-              darkTheme={true}
-              required={true}
-              variant={'outlined'}
-              onChange={setSearch}
-              inputProps={{ maxLength: 255 }}
-              noMargin={true}
-            />
-          </div>
-        ) : null
-      }
-      {
-        open ? (
-          <Scrollbar
-            options={{ disableHorizontalScrolling: true }}
-          >
-            <GroupedElementList
-              groups={groups}
-              snippets={snippets}
-              search={search}
-              readOnly={readOnly}
-              setActiveGroup={setActiveGroup}
-              setOpenGroup={setOpenGroup}
-              handleOpenCreateSnippet={handleOpenCreateSnippet}
-              setCreateSnippet={setCreateSnippet}
-              setActiveSnippet={setActiveSnippet}
-            />
-
-            {
-              groupsLoading || snippetsLoading ? (
-                <ProgressLine />
-              ) : null
-            }
-
-            {
-              readOnly ? null : (
-                <>
-                  <Button
-                    fullWidth={true}
-                    classes={{
-                      root: classes.actionRoot,
-                      label: classes.actionLabel
-                    }}
-                    onClick={() => setOpenGroup(!openGroup)}
-                  >
-                    <AddIcon className={classes.icon} />
-                    {t('AddGroup')}
-                  </Button>
-
-                  <div className={classes.divider} />
-
-                  <Button
-                    fullWidth={true}
-                    classes={{
-                      root: classes.actionRoot,
-                      label: classes.actionLabel
-                    }}
-                    onClick={() => handleExportSnippets()}
-                  >
-                    {
-                      exporting
-                        ? <CircularProgress size={24} className={classes.icon}/>
-                        : <IosShareIcon className={classes.icon} />
-                    }
-                    {t('ExportSnippets')}
-                  </Button>
-
-                  <input
-                    ref={filesRef}
-                    type="file"
-                    accept=".bpmn, application/bpmn"
-                    onChange={handleImportSnippets}
-                    hidden={true}
-                    multiple={false}
-                  />
-
-                  <Button
-                    fullWidth={true}
-                    classes={{
-                      root: classes.actionRoot,
-                      label: classes.actionLabel
-                    }}
-                    onClick={handleImportClick}
-                  >
-                    {
-                      importing
-                        ? <CircularProgress size={24} className={classes.icon}/>
-                        : (
-                          <IosShareIcon
-                            className={
-                              classNames({
-                                [classes.icon]: true,
-                                [classes.importIcon]: true
-                              })
-                            }
-                          />
-                        )
-                    }
-                    
-                    {t('ImportSnippets')}
-                  </Button>
-                </>
-              )
-            }
-
-          </Scrollbar>
-        ) : null
-      }
-
-      {
-        openGroup ? (
-          <CreateGroup
-            t={t}
-            readOnly={readOnly}
-            groups={groups}
-            open={true}
-            loading={groupsUpdating}
-            activeGroup={activeGroup}
-            handleClose={handleCloseGroupDialog}
-            handleCreateGroup={handleCreateGroup}
-            handleDeleteGroup={handleOpenConfirmDelete}
+      {open ? (
+        <div className={classes.search}>
+          <StringElement
+            description={t('SearchControls')}
+            value={search}
+            fullWidth={true}
+            darkTheme={true}
+            required={true}
+            variant={'outlined'}
+            onChange={setSearch}
+            inputProps={{ maxLength: 255 }}
+            noMargin={true}
           />
-        ) : null
-      }
+        </div>
+      ) : null}
+      {open ? (
+        <Scrollbar options={{ disableHorizontalScrolling: true }}>
+          <GroupedElementList
+            groups={groups}
+            snippets={snippets}
+            search={search}
+            readOnly={readOnly}
+            setActiveGroup={setActiveGroup}
+            setOpenGroup={setOpenGroup}
+            handleOpenCreateSnippet={handleOpenCreateSnippet}
+            setCreateSnippet={setCreateSnippet}
+            setActiveSnippet={setActiveSnippet}
+          />
+
+          {groupsLoading || snippetsLoading ? <ProgressLine /> : null}
+
+          {readOnly ? null : (
+            <>
+              <Button
+                fullWidth={true}
+                classes={{
+                  root: classes.actionRoot,
+                  label: classes.actionLabel
+                }}
+                onClick={() => setOpenGroup(!openGroup)}
+              >
+                <AddIcon className={classes.icon} />
+                {t('AddGroup')}
+              </Button>
+
+              <div className={classes.divider} />
+
+              <Button
+                fullWidth={true}
+                classes={{
+                  root: classes.actionRoot,
+                  label: classes.actionLabel
+                }}
+                onClick={() => handleExportSnippets()}
+              >
+                {exporting ? (
+                  <CircularProgress size={24} className={classes.icon} />
+                ) : (
+                  <IosShareIcon className={classes.icon} />
+                )}
+                {t('ExportSnippets')}
+              </Button>
+
+              <input
+                ref={filesRef}
+                type="file"
+                accept=".bpmn, application/bpmn"
+                onChange={handleImportSnippets}
+                hidden={true}
+                multiple={false}
+              />
+
+              <Button
+                fullWidth={true}
+                classes={{
+                  root: classes.actionRoot,
+                  label: classes.actionLabel
+                }}
+                onClick={handleImportClick}
+              >
+                {importing ? (
+                  <CircularProgress size={24} className={classes.icon} />
+                ) : (
+                  <IosShareIcon
+                    className={classNames({
+                      [classes.icon]: true,
+                      [classes.importIcon]: true
+                    })}
+                  />
+                )}
+
+                {t('ImportSnippets')}
+              </Button>
+            </>
+          )}
+        </Scrollbar>
+      ) : null}
+
+      {openGroup ? (
+        <CreateGroup
+          t={t}
+          readOnly={readOnly}
+          groups={groups}
+          open={true}
+          loading={groupsUpdating}
+          activeGroup={activeGroup}
+          handleClose={handleCloseGroupDialog}
+          handleCreateGroup={handleCreateGroup}
+          handleDeleteGroup={handleOpenConfirmDelete}
+        />
+      ) : null}
 
       <ConfirmDialog
         open={confirmGroupDelete}
@@ -427,23 +404,21 @@ const SnippetList = () => {
         darkTheme={true}
       />
 
-      {
-        createSnipper ? (
-          <CreateControlSnippet
-            t={t}
-            readOnly={readOnly}
-            loading={snippetsUpdating}
-            groups={groups}
-            activeSnippet={activeSnippet}
-            open={createSnipper}
-            chosenSnippetType={chosenSnippetType}
-            handleCreateSnippet={handleCreateSnippet}
-            handleDeleteSnippet={handleConfirmDeleteSnippet}
-            handleClose={handleCloseSnippetDialog}
-            handleExportSnippets={handleExportSnippets}
-          />
-        ) : null
-      }
+      {createSnipper ? (
+        <CreateControlSnippet
+          t={t}
+          readOnly={readOnly}
+          loading={snippetsUpdating}
+          groups={groups}
+          activeSnippet={activeSnippet}
+          open={createSnipper}
+          chosenSnippetType={chosenSnippetType}
+          handleCreateSnippet={handleCreateSnippet}
+          handleDeleteSnippet={handleConfirmDeleteSnippet}
+          handleClose={handleCloseSnippetDialog}
+          handleExportSnippets={handleExportSnippets}
+        />
+      ) : null}
 
       <ConfirmDialog
         open={confirmSnippetDelete}
@@ -456,6 +431,6 @@ const SnippetList = () => {
       />
     </div>
   );
-}
+};
 
 export default withEditor(SnippetList);

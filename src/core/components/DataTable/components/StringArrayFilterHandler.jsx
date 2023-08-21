@@ -12,77 +12,78 @@ import InputIcon from '@mui/icons-material/Input';
 import TextFormatIcon from '@mui/icons-material/TextFormat';
 
 const styles = {
-    root: {
-        display: 'flex',
-        padding: 8
-    }
+  root: {
+    display: 'flex',
+    padding: 8
+  }
 };
 
 class StringArrayFilterHandler extends FilterHandler {
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        this.state = {
-            value: Array.isArray(props.value) ? props.value : String(props.value).split(',')
-        };
-    }
-
-    renderIcon = () => <TextFormatIcon />;
-
-    renderChip = () => {
-        const { name, value } = this.props;
-        return [name, value].join(': ');
+    this.state = {
+      value: Array.isArray(props.value) ? props.value : String(props.value).split(',')
     };
+  }
 
-    componentDidMount = () => {
-        const { filterValue, onChange } = this.props;
-        filterValue && onChange(filterValue);
-    };
+  renderIcon = () => <TextFormatIcon />;
 
-    renderHandler() {
-        const { classes, onChange, type } = this.props;
-        const { value } = this.state;
+  renderChip = () => {
+    const { name, value } = this.props;
+    return [name, value].join(': ');
+  };
 
-        return (
-            <Paper elevation={0} className={classes.root}>
-                <TextField
-                    variant="standard"
-                    autoFocus={true}
-                    value={value.join(',')}
-                    onChange={({ target: { value: newValue } }) => this.setState({ value: newValue.split(',') })}
-                    onKeyPress={({ key }) => key === 'Enter' && onChange(value)}
-                    type={type}
-                    InputProps={
-                        {
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                    <IconButton onClick={() => onChange(value)} size="large">
-                                        <InputIcon />
-                                    </IconButton>
-                                </InputAdornment>
-                            )
-                        }
-                    } />
-            </Paper>
-        );
-    }
+  componentDidMount = () => {
+    const { filterValue, onChange } = this.props;
+    filterValue && onChange(filterValue);
+  };
+
+  renderHandler() {
+    const { classes, onChange, type } = this.props;
+    const { value } = this.state;
+
+    return (
+      <Paper elevation={0} className={classes.root}>
+        <TextField
+          variant="standard"
+          autoFocus={true}
+          value={value.join(',')}
+          onChange={({ target: { value: newValue } }) =>
+            this.setState({ value: newValue.split(',') })
+          }
+          onKeyPress={({ key }) => key === 'Enter' && onChange(value)}
+          type={type}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={() => onChange(value)} size="large">
+                  <InputIcon />
+                </IconButton>
+              </InputAdornment>
+            )
+          }}
+        />
+      </Paper>
+    );
+  }
 }
 
 StringArrayFilterHandler.propTypes = {
-    classes: PropTypes.object.isRequired,
-    name: PropTypes.string,
-    value: PropTypes.string,
-    type: PropTypes.string,
-    onChange: PropTypes.func,
-    filterValue: PropTypes.string
+  classes: PropTypes.object.isRequired,
+  name: PropTypes.string,
+  value: PropTypes.string,
+  type: PropTypes.string,
+  onChange: PropTypes.func,
+  filterValue: PropTypes.string
 };
 
 StringArrayFilterHandler.defaultProps = {
-    name: '',
-    value: '',
-    type: null,
-    filterValue: null,
-    onChange: () => null
+  name: '',
+  value: '',
+  type: null,
+  filterValue: null,
+  onChange: () => null
 };
 
 const styled = withStyles(styles)(StringArrayFilterHandler);

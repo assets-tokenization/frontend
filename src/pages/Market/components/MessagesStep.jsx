@@ -1,83 +1,57 @@
-import React from "react";
-import classNames from "classnames";
-import { Typography, Button } from "@mui/material";
+import React from 'react';
+import classNames from 'classnames';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 import Fade from '@mui/material/Fade';
-import PageTitle from "components/PageTitle";
-import Card from "components/Card";
+import PageTitle from 'components/PageTitle';
+import Card from 'components/Card';
+import ProgressLine from 'components/Preloader/ProgressLine';
 
-const MESSAGES = [
-  {
-    id: 1,
-    date: '01.08.2023, 10:34',
-    title: 'Ордер на покупку',
-    number: '123456789',
-    text: 'Вам надійшов ордер на покупку нерухомості за адресою Івано-Франківська обл., м. Івано-Франківськ, вул. Вʼячеслава Чорновола, 15',
-  },
-  {
-    id: 2,
-    date: '31.07.2023, 11:20',
-    title: 'Ордер на покупку',
-    number: '123456789',
-    text: 'Вам надійшов ордер на покупку нерухомості за адресою Івано-Франківська обл., c. Старі Богородчани, вул. Старокиївська, 36б',
-  }
-];
+const MessagesStep = ({ t, classes, toPurchase, messages, loading }) => {
+  const renderStep = React.useMemo(
+    () => (
+      <Fade in={true}>
+        <div>
+          <PageTitle>{t('MessagesTitle')}</PageTitle>
 
-const MessagesStep = ({
-  t,
-  classes,
-  toPurchase
-}) => {
+          <ProgressLine loading={loading} />
 
-  const renderStep = React.useMemo(() => (
-    <Fade in={true}>
-      <div>
-        <PageTitle>
-          {t('MessagesTitle')}
-        </PageTitle>
-
-        {
-          MESSAGES.length ? (
+          {loading ? null : (
             <>
-              {
-                MESSAGES.map((message, index) => (
-                  <Card
-                    key={message.title + index}
-                    className={classes.messagesCard}
-                  >
-                    <Typography className={classes.messagesDate}>
-                      {message?.date}
-                    </Typography>
-                    <Typography className={classes.messagesTitle}>
-                      {message?.title}
-                    </Typography>
-                    <Typography className={classes.messagesText}>
-                      {message?.text}
-                    </Typography>
-                    <div className={classNames({
-                      [classes.actions]: true,
-                      [classes.alignCenter]: true
-                    })}>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => toPurchase(message?.number)}
+              {messages.length ? (
+                <>
+                  {messages.map((message, index) => (
+                    <Card key={message.title + index} className={classes.messagesCard}>
+                      <Typography className={classes.messagesDate}>{message?.date}</Typography>
+                      <Typography className={classes.messagesTitle}>{message?.title}</Typography>
+                      <Typography className={classes.messagesText}>{message?.text}</Typography>
+                      <div
+                        className={classNames({
+                          [classes.actions]: true,
+                          [classes.alignCenter]: true
+                        })}
                       >
-                        {t('GoToPayment')}
-                      </Button>
-                    </div>
-                  </Card>
-                ))
-              }
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={() => toPurchase(message?.number)}
+                        >
+                          {t('GoToPayment')}
+                        </Button>
+                      </div>
+                    </Card>
+                  ))}
+                </>
+              ) : (
+                <div className={classes.noResults}>{t('NoMessagesText')}</div>
+              )}
             </>
-          ) : (
-            <div className={classes.noResults}>
-              {t('NoMessagesText')}
-            </div>
-          )
-        }
-      </div>
-    </Fade>
-  ), [t, classes, toPurchase]);
+          )}
+        </div>
+      </Fade>
+    ),
+    [t, classes, toPurchase, messages, loading]
+  );
 
   return renderStep;
 };

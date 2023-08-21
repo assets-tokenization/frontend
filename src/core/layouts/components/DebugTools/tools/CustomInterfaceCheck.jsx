@@ -16,7 +16,7 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
-  Select,
+  Select
 } from '@mui/material';
 import withStyles from '@mui/styles/withStyles';
 import CloseIcon from '@mui/icons-material/Close';
@@ -30,28 +30,28 @@ const styles = {
     display: 'flex',
     height: '100%',
     '& > div': {
-      flex: '.5',
-    },
+      flex: '.5'
+    }
   },
   rightContainer: {
     display: 'flex',
     height: '100%',
     flexDirection: 'column',
-    paddingLeft: 2,
+    paddingLeft: 2
   },
   funcContainer: {
-    flex: 1,
+    flex: 1
   },
   toolbar: {
     display: 'flex',
     justifyContent: 'flex-end',
-    minHeight: 40,
+    minHeight: 40
   },
   iconButton: {
     width: 26,
     height: 26,
-    padding: 1,
-  },
+    padding: 1
+  }
 };
 
 const editorOptions = {
@@ -59,7 +59,7 @@ const editorOptions = {
   enableLiveAutocompletion: true,
   enableSnippets: true,
   showLineNumbers: true,
-  tabSize: 4,
+  tabSize: 4
 };
 
 const CheckHiddenFunction = ({ t, classes, customInterface }) => {
@@ -92,7 +92,7 @@ const CheckHiddenFunction = ({ t, classes, customInterface }) => {
               parentSchema,
               parentData,
               funcType: 'hidden',
-              key: `${key} - hidden`,
+              key: `${key} - hidden`
             });
           }
           if (schema.checkRequired) {
@@ -103,7 +103,7 @@ const CheckHiddenFunction = ({ t, classes, customInterface }) => {
               parentSchema,
               parentData,
               funcType: 'checkRequired',
-              key: `${key} - checkRequired`,
+              key: `${key} - checkRequired`
             });
           }
         }
@@ -146,12 +146,7 @@ const CheckHiddenFunction = ({ t, classes, customInterface }) => {
 
     switch (element?.funcType) {
       case 'hidden': {
-        result = evaluate(
-          func,
-          customInterface?.data,
-          element?.data,
-          element?.parentValue
-        );
+        result = evaluate(func, customInterface?.data, element?.data, element?.parentValue);
         break;
       }
       case 'checkRequired': {
@@ -183,11 +178,7 @@ const CheckHiddenFunction = ({ t, classes, customInterface }) => {
     return (
       <FormControl variant="standard" fullWidth={true}>
         <InputLabel>{t('SelectElement')}</InputLabel>
-        <Select
-          variant="standard"
-          value={element?.key || ''}
-          onChange={handleSelectControl}
-        >
+        <Select variant="standard" value={element?.key || ''} onChange={handleSelectControl}>
           {controls.map((item) => (
             <MenuItem key={item.key} value={item.key}>
               {[item.key, item.schema.description].filter(Boolean).join(' - ')}
@@ -221,11 +212,7 @@ const CheckHiddenFunction = ({ t, classes, customInterface }) => {
             {renderControls()}
 
             {t('Function')}
-            <IconButton
-              onClick={openModal}
-              className={classes.iconButton}
-              size="large"
-            >
+            <IconButton onClick={openModal} className={classes.iconButton} size="large">
               <FullscreenIcon />
             </IconButton>
             <AceEditor
@@ -290,17 +277,15 @@ const CheckHiddenFunction = ({ t, classes, customInterface }) => {
   );
 };
 
-const mapStateToProps = ({
-  debugTools: { checkHiddenFuncs, customInterface },
-}) => ({
+const mapStateToProps = ({ debugTools: { checkHiddenFuncs, customInterface } }) => ({
   checkHiddenFuncs,
-  customInterface,
+  customInterface
 });
 
 const mapDispatchToProps = (dispatch) => ({
   actions: {
-    setCheckHiddenFunc: bindActionCreators(setCheckHiddenFunc, dispatch),
-  },
+    setCheckHiddenFunc: bindActionCreators(setCheckHiddenFunc, dispatch)
+  }
 });
 
 const styled = withStyles(styles)(CheckHiddenFunction);

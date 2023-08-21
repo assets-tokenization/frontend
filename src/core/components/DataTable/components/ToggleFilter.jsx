@@ -32,14 +32,14 @@ ToggleFilter.propTypes = {
   name: PropTypes.string,
   value: PropTypes.string,
   onChange: PropTypes.func,
-  chipLabel: PropTypes.string,
+  chipLabel: PropTypes.string
 };
 
 ToggleFilter.defaultProps = {
   name: '',
   value: '',
   onChange: () => null,
-  chipLabel: null,
+  chipLabel: null
 };
 
 export default translate('StringFilterHandler')(ToggleFilter);

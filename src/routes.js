@@ -1,14 +1,14 @@
-import React from "react";
-import { Route, Switch } from "react-router-dom";
-import { ConnectedRouter as Router } from "connected-react-router";
-import { history } from "store";
+import React from 'react';
+import { Route, Switch } from 'react-router-dom';
+import { ConnectedRouter as Router } from 'connected-react-router';
+import { history } from 'store';
 
-import Page404 from "pages/404";
-import Login from "pages/Login";
-import Home from "pages/Home";
-import ObjectScreen from "pages/ObjectScreen";
-import MarketScreen from "pages/Market";
-import Auth from "pages/Auth";
+import Page404 from 'pages/404';
+import Login from 'pages/Login';
+import Home from 'pages/Home';
+import ObjectScreen from 'pages/ObjectScreen';
+import MarketScreen from 'pages/Market';
+import Auth from 'pages/Auth';
 
 const Routes = () => (
   <Router history={history}>

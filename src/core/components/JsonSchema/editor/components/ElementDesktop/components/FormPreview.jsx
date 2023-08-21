@@ -3,7 +3,7 @@ import {
   SchemaForm,
   SchemaStepper,
   validateData,
-  handleChangeAdapter,
+  handleChangeAdapter
 } from 'components/JsonSchema';
 import Scrollbar from 'components/Scrollbar';
 import { withEditor } from 'components/JsonSchema/editor/JsonSchemaProvider';
@@ -13,14 +13,14 @@ import withStyles from '@mui/styles/withStyles';
 const styles = {
   root: {
     flex: 1,
-    backgroundColor: '#fafafa',
+    backgroundColor: '#fafafa'
   },
   schema: {
-    padding: 20,
+    padding: 20
   },
   actionBtn: {
-    marginTop: 20,
-  },
+    marginTop: 20
+  }
 };
 
 const FormPreview = ({ classes, newValue }) => {
@@ -49,13 +49,11 @@ const FormPreview = ({ classes, newValue }) => {
             demo={true}
             errors={errors}
             value={value && value[stepName]}
-            onChange={handleChangeAdapter(
-              value && value[stepName],
-              (stepValue) =>
-                setValue({
-                  ...value,
-                  [stepName]: stepValue,
-                })
+            onChange={handleChangeAdapter(value && value[stepName], (stepValue) =>
+              setValue({
+                ...value,
+                [stepName]: stepValue
+              })
             )}
             schema={properties[stepName]}
             stepName={stepName}
@@ -68,11 +66,7 @@ const FormPreview = ({ classes, newValue }) => {
             className={classes.actionBtn}
             onClick={() =>
               setErrors(
-                validateData(
-                  (value && value[stepName]) || {},
-                  properties[stepName] || {},
-                  value
-                )
+                validateData((value && value[stepName]) || {}, properties[stepName] || {}, value)
               )
             }
           >

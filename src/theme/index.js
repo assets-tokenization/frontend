@@ -3,14 +3,14 @@ import { createTheme } from '@mui/material/styles';
 const theme = createTheme({
   palette: {
     primary: {
-      main: 'rgba(34, 89, 228, 1)',
+      main: 'rgba(34, 89, 228, 1)'
     },
     secondary: {
-      main: '#19857b',
+      main: '#19857b'
     },
     error: {
-      main: '#EE0004',
-    },
+      main: '#EE0004'
+    }
   },
   components: {
     MuiFormHelperText: {
@@ -40,7 +40,7 @@ const theme = createTheme({
         paper: {
           minWidth: 680,
           '@media (max-width: 768px)': {
-            minWidth: 'unset',
+            minWidth: 'unset'
           },
           '@media (max-width: 425px)': {
             margin: 16
@@ -62,17 +62,17 @@ const theme = createTheme({
             fontWeight: 500,
             fontSize: 14,
             lineHeight: '20px',
-            padding: '10px 16px',
+            padding: '10px 16px'
           }
         },
         textPrimary: {
           '&:hover': {
-            backgroundColor: 'rgba(63, 111, 232, 0.08)',
+            backgroundColor: 'rgba(63, 111, 232, 0.08)'
           }
         },
         containedPrimary: {
           '&:hover': {
-            backgroundColor: 'rgba(0, 65, 231, 1)',
+            backgroundColor: 'rgba(0, 65, 231, 1)'
           }
         },
         outlinedPrimary: {
@@ -125,7 +125,7 @@ const theme = createTheme({
     MuiList: {
       styleOverrides: {
         root: {
-          padding: 0,
+          padding: 0
         }
       }
     },

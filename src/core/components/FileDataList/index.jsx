@@ -6,18 +6,18 @@ import DataList from 'components/DataList';
 import ListTemplate from 'components/FileDataList/ListTemplate';
 
 const FileDataList = ({ onClick, ...props }) => (
-    <DataList
-        {...props}
-        ItemTemplate={itemProps => <ListTemplate {...props} {...itemProps} onClick={onClick} />}
-    />
+  <DataList
+    {...props}
+    ItemTemplate={(itemProps) => <ListTemplate {...props} {...itemProps} onClick={onClick} />}
+  />
 );
 
 FileDataList.propTypes = {
-    onClick: PropTypes.func
+  onClick: PropTypes.func
 };
 
 FileDataList.defaultProps = {
-    onClick: () => null
+  onClick: () => null
 };
 
 export default FileDataList;

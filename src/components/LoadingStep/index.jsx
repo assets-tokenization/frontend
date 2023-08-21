@@ -1,12 +1,8 @@
-import React from "react";
+import React from 'react';
 import makeStyles from '@mui/styles/makeStyles';
-import {
-  DialogContent,
-  DialogContentText,
-  Button,
-} from "@mui/material";
-import classNames from "classnames";
-import SpinnerLoader from "components/SpinnerLoader";
+import { DialogContent, DialogContentText, Button } from '@mui/material';
+import classNames from 'classnames';
+import SpinnerLoader from 'components/SpinnerLoader';
 
 const styles = (theme) => ({
   dialogContent: {
@@ -19,7 +15,7 @@ const styles = (theme) => ({
     [theme.breakpoints.down('sm')]: {
       fontSize: 14,
       lineHeight: '21px',
-      fontWeight: 600,
+      fontWeight: 600
     }
   },
   dialogContentCenter: {
@@ -37,7 +33,7 @@ const styles = (theme) => ({
       '& button': {
         width: '100%',
         marginLeft: '0!important',
-        marginBottom: 10,
+        marginBottom: 10
       }
     }
   },
@@ -87,7 +83,7 @@ const styles = (theme) => ({
     [theme.breakpoints.down('sm')]: {
       marginBottom: 0,
       width: 56,
-      height: 56,
+      height: 56
     }
   },
   dialogTitleSuccess: {
@@ -102,12 +98,7 @@ const styles = (theme) => ({
 
 const useStyles = makeStyles(styles);
 
-const LoadingStep = ({
-  title,
-  description,
-  actionText,
-  onClick
-}) => {
+const LoadingStep = ({ title, description, actionText, onClick }) => {
   const classes = useStyles();
 
   return (
@@ -116,10 +107,7 @@ const LoadingStep = ({
 
       <DialogContent
         classes={{
-          root: classNames(
-            classes.dialogContent,
-            classes.dialogContentCenter
-          )
+          root: classNames(classes.dialogContent, classes.dialogContentCenter)
         }}
       >
         <DialogContentText
@@ -136,11 +124,7 @@ const LoadingStep = ({
         >
           {description}
         </DialogContentText>
-        <Button
-          variant="contained"
-          className={classes.dialogProcessingButton}
-          onClick={onClick}
-        >
+        <Button variant="contained" className={classes.dialogProcessingButton} onClick={onClick}>
           {actionText}
         </Button>
       </DialogContent>

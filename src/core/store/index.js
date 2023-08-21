@@ -2,7 +2,7 @@ import configureStore from 'store/configureStore';
 import { createBrowserHistory } from 'history';
 
 export const history = createBrowserHistory({
-    revertPopState: false
+  revertPopState: false
 });
 const store = configureStore(history);
 

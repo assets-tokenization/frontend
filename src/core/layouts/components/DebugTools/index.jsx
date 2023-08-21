@@ -13,38 +13,38 @@ import tools from './tools';
 
 const styles = {
   root: {
-    height: '100%',
+    height: '100%'
   },
   header: {
     padding: 0,
     borderBottom: 'rgb(199, 199, 199) 1px solid',
-    background: '#f1f1f1',
+    background: '#f1f1f1'
   },
   tabs: {
     flexGrow: 1,
     margin: 0,
-    minHeight: 'auto',
+    minHeight: 'auto'
   },
   tab: {
     minHeight: 31,
     fontSize: 12,
-    margin: 0,
+    margin: 0
   },
   toolContainer: {
-    height: 'calc(100% - 32px)',
+    height: 'calc(100% - 32px)'
   },
   indicator: {
-    display: 'none',
-  },
+    display: 'none'
+  }
 };
 
 class DebugTools extends React.Component {
   constructor(props) {
     super(props);
-    const onlyMocsUnit = this.props.userUnits.find(item => item?.id === 1000000190);
+    const onlyMocsUnit = this.props.userUnits.find((item) => item?.id === 1000000190);
     this.state = {
       activeTool: onlyMocsUnit ? 0 : 2,
-      onlyMocsUnit: onlyMocsUnit,
+      onlyMocsUnit: onlyMocsUnit
     };
   }
 
@@ -63,11 +63,11 @@ class DebugTools extends React.Component {
       EDSFormTest: tools.EDSFormTest,
       EDSSignVerify: tools.EDSSignVerify,
       HashToInternal: tools.HashToInternal,
-      VerifyHash: tools.VerifyHash,
+      VerifyHash: tools.VerifyHash
     };
 
     if (onlyMocsUnit) {
-      return { ExternalReaderMocks: tools.ExternalReaderMocks }
+      return { ExternalReaderMocks: tools.ExternalReaderMocks };
     }
 
     return concatTools;
@@ -95,11 +95,7 @@ class DebugTools extends React.Component {
               <Tab className={classes.tab} key={toolName} label={t(toolName)} />
             ))}
           </Tabs>
-          <IconButton
-            className={classes.button}
-            onClick={actions.toggleDebugMode}
-            size="large"
-          >
+          <IconButton className={classes.button} onClick={actions.toggleDebugMode} size="large">
             <CloseIcon />
           </IconButton>
         </Toolbar>
@@ -113,20 +109,20 @@ class DebugTools extends React.Component {
 
 DebugTools.propTypes = {
   classes: PropTypes.object.isRequired,
-  actions: PropTypes.object.isRequired,
+  actions: PropTypes.object.isRequired
 };
 
 DebugTools.defaultProps = {};
 
 const mapStateToProps = ({ auth: { info: userInfo, userUnits } }) => ({
   userInfo,
-  userUnits,
+  userUnits
 });
 
 const mapDispatchToProps = (dispatch) => ({
   actions: {
-    toggleDebugMode: bindActionCreators(toggleDebugMode, dispatch),
-  },
+    toggleDebugMode: bindActionCreators(toggleDebugMode, dispatch)
+  }
 });
 
 const styled = withStyles(styles)(DebugTools);

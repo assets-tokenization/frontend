@@ -25,39 +25,39 @@ export const locale = (t) => ({
     t('September'),
     t('October'),
     t('November'),
-    t('December'),
+    t('December')
   ],
   weekDays: [
     {
       name: t('Monday'),
-      short: t('M'),
+      short: t('M')
     },
     {
       name: t('Tuesday'),
-      short: t('T'),
+      short: t('T')
     },
     {
       name: t('Wednesday'),
-      short: t('W'),
+      short: t('W')
     },
     {
       name: t('Thursday'),
-      short: t('Th'),
+      short: t('Th')
     },
     {
       name: t('Friday'),
-      short: t('F'),
+      short: t('F')
     },
     {
       name: t('Saturday'),
       short: t('St'),
-      isWeekend: true,
+      isWeekend: true
     },
     {
       name: t('Sunday'),
       short: t('S'),
-      isWeekend: true,
-    },
+      isWeekend: true
+    }
   ],
   weekStartingIndex: 6,
   getToday(gregorainTodayObject) {
@@ -83,7 +83,7 @@ export const locale = (t) => ({
   to: t('to'),
   digitSeparator: ',',
   yearLetterSkip: 0,
-  isRtl: false,
+  isRtl: false
 });
 
 const setDafaultValue = (value) => {
@@ -94,7 +94,7 @@ const setDafaultValue = (value) => {
   return {
     day: Number(splitValue[0]),
     month: Number(splitValue[1]),
-    year: Number(splitValue[2]),
+    year: Number(splitValue[2])
   };
 };
 
@@ -107,8 +107,8 @@ const styles = (theme) => ({
     [theme.breakpoints.down('md')]: {
       display: 'block',
       marginTop: 15,
-      marginBottom: 20,
-    },
+      marginBottom: 20
+    }
   },
   text: {
     display: 'block',
@@ -125,8 +125,8 @@ const styles = (theme) => ({
     lineHeight: '1.1876em',
     letterSpacing: '-0.02em',
     [theme.breakpoints.down('md')]: {
-      fontSize: 13,
-    },
+      fontSize: 13
+    }
   },
   descriptionLabel: {
     display: 'block',
@@ -143,7 +143,7 @@ const styles = (theme) => ({
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',
     transformOrigin: 'top left',
-    transition: '.2s ease-in-out',
+    transition: '.2s ease-in-out'
   },
   descriptionLabelFireFox: {
     display: 'block',
@@ -156,23 +156,23 @@ const styles = (theme) => ({
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',
     transformOrigin: 'top left',
-    transition: '.2s ease-in-out',
+    transition: '.2s ease-in-out'
   },
   hasValue: {
     transform: 'translate(0, -12.5px) scale(0.75)',
     '-webkit-transform': 'translate(0, -12.5px) scale(0.75)',
     '-moz-transform': 'translate(0, -12.5px) scale(0.75)',
-    '-ms-transform': 'translate(0, -12.5px) scale(0.75)',
+    '-ms-transform': 'translate(0, -12.5px) scale(0.75)'
   },
   hasValueFireFox: {
     '-webkit-transform': 'translate(0, -12.5px) scale(0.75)',
     '-moz-transform': 'translate(0, -12.5px) scale(0.75)',
     '-ms-transform': 'translate(0, -12.5px) scale(0.75)',
-    transform: 'translate(0, -12.5px) scale(0.75)',
+    transform: 'translate(0, -12.5px) scale(0.75)'
   },
   clearButton: {
     zIndex: 100
-  },
+  }
 });
 
 const fillPeriod = ({ start, end, dateFormat }) => {
@@ -192,7 +192,7 @@ const fillPeriod = ({ start, end, dateFormat }) => {
 const parceDate = (date) => ({
   day: Number(date.format('DD')),
   month: Number(date.format('MM')),
-  year: Number(date.format('YYYY')),
+  year: Number(date.format('YYYY'))
 });
 
 const ModernCalendar = ({
@@ -211,13 +211,12 @@ const ModernCalendar = ({
   stepName,
   path,
   externalReaderMessage,
-  width,
+  width
 }) => {
   const [selected, setSelectedDay] = React.useState(setDafaultValue(value));
   const [mount, setMount] = React.useState(true);
 
-  const isFirefox =
-    (navigator?.userAgent || '').toLowerCase().indexOf('firefox') > -1;
+  const isFirefox = (navigator?.userAgent || '').toLowerCase().indexOf('firefox') > -1;
 
   const handleChange = async (newValue) => {
     const date = `${newValue.day}.${newValue.month}.${newValue.year}`;
@@ -265,13 +264,13 @@ const ModernCalendar = ({
       const period = fillPeriod({
         start: minDate,
         end: maxDate,
-        dateFormat,
+        dateFormat
       }).filter((el) => !allowedDays.includes(el));
 
       return period.map((item) => ({
         year: Number(moment(item, dateFormat).format('YYYY')),
         month: Number(moment(item, dateFormat).format('MM')),
-        day: Number(moment(item, dateFormat).format('DD')),
+        day: Number(moment(item, dateFormat).format('DD'))
       }));
     }
 
@@ -279,7 +278,7 @@ const ModernCalendar = ({
       return disabledDays.map((item) => ({
         year: Number(moment(item, dateFormat).format('YYYY')),
         month: Number(moment(item, dateFormat).format('MM')),
-        day: Number(moment(item, dateFormat).format('DD')),
+        day: Number(moment(item, dateFormat).format('DD'))
       }));
     }
 
@@ -308,7 +307,7 @@ const ModernCalendar = ({
                     [classes.descriptionLabel]: !isFirefox,
                     [classes.descriptionLabelFireFox]: isFirefox,
                     [classes.hasValue]: selected && !isFirefox,
-                    [classes.hasValueFireFox]: selected && isFirefox,
+                    [classes.hasValueFireFox]: selected && isFirefox
                   })}
                 >
                   {description}
@@ -327,18 +326,14 @@ const ModernCalendar = ({
                       ref={ref}
                       value={selected ? value : ''}
                       className={classNames({
-                        [classes.text]: true,
+                        [classes.text]: true
                       })}
                     />
                   )}
                 />
               </label>
               {selected ? (
-                <IconButton
-                  className={classes.clearButton}
-                  onClick={handleDelete}
-                  size="large"
-                >
+                <IconButton className={classes.clearButton} onClick={handleDelete} size="large">
                   <ClearIcon />
                 </IconButton>
               ) : null}
@@ -346,9 +341,7 @@ const ModernCalendar = ({
           </tr>
         </tbody>
       </table>
-      {equilPath(triggerExternalPath, [stepName].concat(path))
-        ? externalReaderMessage
-        : null}
+      {equilPath(triggerExternalPath, [stepName].concat(path)) ? externalReaderMessage : null}
     </>
   );
 };
@@ -362,7 +355,7 @@ ModernCalendar.propTypes = {
   minDate: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   maxDate: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   calendarPopperPosition: PropTypes.string,
-  width: PropTypes.string,
+  width: PropTypes.string
 };
 
 ModernCalendar.defaultProps = {
@@ -373,7 +366,7 @@ ModernCalendar.defaultProps = {
   minDate: false,
   maxDate: false,
   calendarPopperPosition: 'auto',
-  width: '225px',
+  width: '225px'
 };
 
 const styled = withStyles(styles)(ModernCalendar);

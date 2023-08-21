@@ -8,29 +8,29 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 
 const styles = {
-    row: {
-        cursor: 'pointer'
-    }
+  row: {
+    cursor: 'pointer'
+  }
 };
 
 const CollapsedTableRows = ({ classes, title, data, colSpan, renderRow }) => {
-    const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(true);
 
-    if (!data || !data.length) {
-        return null;
-    }
+  if (!data || !data.length) {
+    return null;
+  }
 
-    return <>
-        <TableRow hover={true} className={classes.row} onClick={() => setOpen(!open)}>
-            <TableCell colSpan={colSpan}>
-                <IconButton size="large">
-                    {open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
-                </IconButton>
-                {`${title}${open ? '' : ' (' + data.length + ')'}`}
-            </TableCell>
-        </TableRow>
-        {open ? data.map(renderRow) : null}
-    </>;
+  return (
+    <>
+      <TableRow hover={true} className={classes.row} onClick={() => setOpen(!open)}>
+        <TableCell colSpan={colSpan}>
+          <IconButton size="large">{open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}</IconButton>
+          {`${title}${open ? '' : ' (' + data.length + ')'}`}
+        </TableCell>
+      </TableRow>
+      {open ? data.map(renderRow) : null}
+    </>
+  );
 };
 
 export default withStyles(styles)(CollapsedTableRows);

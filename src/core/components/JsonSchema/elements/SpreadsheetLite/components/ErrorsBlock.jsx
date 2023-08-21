@@ -10,15 +10,15 @@ const styles = {
     backgroundColor: 'rgba(202, 0, 0, 0.1)',
     borderRadius: 5,
     marginBottom: 10,
-    maxWidth: 828,
+    maxWidth: 828
   },
   errorTitle: {
-    fontWeight: 700,
+    fontWeight: 700
   },
   errorText: {
     fontSize: 13,
     lineHeight: '18px',
-    color: 'rgba(185, 10, 10, 1)',
+    color: 'rgba(185, 10, 10, 1)'
   },
   errorIcon: {
     color: 'rgba(185, 10, 10, 1)'
@@ -28,11 +28,11 @@ const styles = {
     '& span': {
       fontSize: 13,
       lineHeight: '18px',
-      borderBottom: '1px solid rgba(0, 0, 0, 1)',
+      borderBottom: '1px solid rgba(0, 0, 0, 1)'
     }
   },
   listItemRoot: {
-    alignItems: 'start',
+    alignItems: 'start'
   },
   listItemTextRoot: {
     marginTop: 0
@@ -43,10 +43,7 @@ const useStyles = makeStyles(styles);
 const ERRORS_LIMIT = 3;
 const PROPERTY_POSITION = 1;
 
-const ErrorsBlock = ({
-  errors,
-  items: { properties }
-}) => {
+const ErrorsBlock = ({ errors, items: { properties } }) => {
   const [open, setOpen] = React.useState(false);
   const t = useTranslate('Elements');
   const classes = useStyles();
@@ -57,15 +54,8 @@ const ErrorsBlock = ({
 
   const toggleErrorList = () => setOpen(!open);
 
-  const RenderListItem = ({
-    error
-  }) => {
-    const {
-      path,
-      rowId,
-      errorText,
-      message
-    } = error;
+  const RenderListItem = ({ error }) => {
+    const { path, rowId, errorText, message } = error;
 
     const pathArray = path.split('.');
 
@@ -88,83 +78,59 @@ const ErrorsBlock = ({
           classes={{
             root: classes.listItemTextRoot
           }}
-          primary={(
+          primary={
             <>
-              <Typography
-                className={classNames(classes.errorText, classes.errorTitle)}
-              >
+              <Typography className={classNames(classes.errorText, classes.errorTitle)}>
                 {t('Line', { line: rowId + 1 })}
                 {', '}
                 {t('Column', { column: property })}
               </Typography>
-              <Typography
-                className={classes.errorText}
-              >
-                {errorText || message}
-              </Typography>
+              <Typography className={classes.errorText}>{errorText || message}</Typography>
             </>
-          )}
+          }
         />
       </ListItem>
     );
   };
 
   return (
-    <List
-      className={classes.errorWrapper}
-    >
-      {
-        errors.filter((_, index) => index < ERRORS_LIMIT).map((error, index) => (
-          <RenderListItem
-            key={index}
-            error={error}
-          />
-        ))
-      }
+    <List className={classes.errorWrapper}>
+      {errors
+        .filter((_, index) => index < ERRORS_LIMIT)
+        .map((error, index) => (
+          <RenderListItem key={index} error={error} />
+        ))}
 
-      {
-        errors.length > ERRORS_LIMIT ? (
-          <>
-            {
-              open ? (
-                <>
-                  {
-                    errors.filter((_, index) => index > ERRORS_LIMIT).map((error, index) => (
-                      <RenderListItem
-                        key={index}
-                        error={error}
-                      />
-                    ))
-                  }
-                </>
-              ) : null
-            }
-            <ListItem
-              className={classNames(classes.error, classes.errorBlock)}
-            >
-              <ListItemIcon />
+      {errors.length > ERRORS_LIMIT ? (
+        <>
+          {open ? (
+            <>
+              {errors
+                .filter((_, index) => index > ERRORS_LIMIT)
+                .map((error, index) => (
+                  <RenderListItem key={index} error={error} />
+                ))}
+            </>
+          ) : null}
+          <ListItem className={classNames(classes.error, classes.errorBlock)}>
+            <ListItemIcon />
 
-              <ListItemText
-                primary={(
-                  <Typography
-                    className={classes.borderBottom}
-                    onClick={toggleErrorList}
-                  >
-                    <span>
-                      {t(open ? 'HideLastErrors' : 'ShowLastErrors', {
-                        count: errors.length - ERRORS_LIMIT
-                      })}
-                    </span>
-                  </Typography>
-                )}
-              />
-            </ListItem>
-          </>
-        ) : null
-      }
+            <ListItemText
+              primary={
+                <Typography className={classes.borderBottom} onClick={toggleErrorList}>
+                  <span>
+                    {t(open ? 'HideLastErrors' : 'ShowLastErrors', {
+                      count: errors.length - ERRORS_LIMIT
+                    })}
+                  </span>
+                </Typography>
+              }
+            />
+          </ListItem>
+        </>
+      ) : null}
     </List>
   );
 };
 
 export default ErrorsBlock;
-

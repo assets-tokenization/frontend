@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Paper, TextField } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -25,7 +24,8 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 200,
     paddingTop: 10,
     paddingBottom: 10,
-    background: 'linear-gradient(0deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.12)), #121212',
+    background:
+      'linear-gradient(0deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.12)), #121212'
   },
   listItem: {
     color: '#fff',
@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const useKeyPress = function(targetKey) {
+const useKeyPress = function (targetKey) {
   const [keyPressed, setKeyPressed] = React.useState(false);
 
   React.useEffect(() => {
@@ -50,8 +50,8 @@ const useKeyPress = function(targetKey) {
       if (key === targetKey) {
         setKeyPressed(true);
       }
-    }
-  
+    };
+
     const upHandler = ({ key }) => {
       if (key === targetKey) {
         setKeyPressed(false);
@@ -80,19 +80,11 @@ const ListItem = ({ item, active, setHovered, classes, handleSelect }) => (
     onMouseEnter={() => setHovered(item)}
     onMouseLeave={() => setHovered(undefined)}
   >
-    <span>
-      {item.name}
-    </span>
+    <span>{item.name}</span>
   </div>
 );
 
-const ListExample = ({
-  list,
-  handleSelect,
-  position,
-  handleClose,
-  autoFocus
-}) => {
+const ListExample = ({ list, handleSelect, position, handleClose, autoFocus }) => {
   const downPress = useKeyPress('ArrowDown');
   const upPress = useKeyPress('ArrowUp');
   const enterPress = useKeyPress('Enter');
@@ -110,15 +102,13 @@ const ListExample = ({
 
   useEffect(() => {
     if (items.length && downPress) {
-      setCursor(prevState =>
-        (prevState < items.length - 1 ? prevState + 1 : prevState)
-      );
+      setCursor((prevState) => (prevState < items.length - 1 ? prevState + 1 : prevState));
     }
   }, [downPress, items.length]);
 
   useEffect(() => {
     if (items.length && upPress) {
-      setCursor(prevState => (prevState > 0 ? prevState - 1 : prevState));
+      setCursor((prevState) => (prevState > 0 ? prevState - 1 : prevState));
     }
   }, [items.length, upPress]);
 
@@ -143,22 +133,14 @@ const ListExample = ({
   return (
     <Paper
       style={position}
-      className={
-        classNames({
-          [classes.suggestionList]: true,
-          [classes.paper]: true,
-        })
-      }
+      className={classNames({
+        [classes.suggestionList]: true,
+        [classes.paper]: true
+      })}
     >
-      {
-        autoFocus ? (
-          <TextField
-            value="some value"
-            autoFocus={true}
-            className={classes.hidden}
-          />
-        ) : null
-      }
+      {autoFocus ? (
+        <TextField value="some value" autoFocus={true} className={classes.hidden} />
+      ) : null}
 
       {items.map((item, i) => (
         <ListItem

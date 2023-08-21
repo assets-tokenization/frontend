@@ -15,57 +15,57 @@ const styles = (theme) => ({
     maxWidth: 640,
     padding: 30,
     [theme.breakpoints.down('lg')]: {
-      padding: 16,
+      padding: 16
     },
     [theme.breakpoints.down('md')]: {
-      marginTop: 15,
-    },
+      marginTop: 15
+    }
   },
   blockHead: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
     [theme.breakpoints.down('lg')]: {
-      alignItems: 'end',
-    },
+      alignItems: 'end'
+    }
   },
   values: {
-    marginTop: 15,
+    marginTop: 15
   },
   removeMargin: {
     margin: 0,
-    marginTop: -5,
+    marginTop: -5
   },
   editButton: {
     '&>span': {
-      fontSize: 13,
+      fontSize: 13
     },
     [theme.breakpoints.down('lg')]: {
       justifyContent: 'flex-end',
-      padding: 0,
-    },
+      padding: 0
+    }
   },
   editImg: {
-    color: '#000',
+    color: '#000'
   },
   editText: {
     [theme.breakpoints.down('lg')]: {
-      display: 'none',
-    },
+      display: 'none'
+    }
   },
   title: {
     paddingRight: 15,
     [theme.breakpoints.down('lg')]: {
-      fontSize: 16,
-    },
+      fontSize: 16
+    }
   },
   flex: {
     display: 'flex',
-    alignItems: 'flex-start',
+    alignItems: 'flex-start'
   },
   dynamicTitleButton: {
     alignItems: 'flex-start',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   withoutPadding: {
     padding: '0 8px',
@@ -73,19 +73,19 @@ const styles = (theme) => ({
     justifyContent: 'start',
     marginBottom: 5,
     [theme.breakpoints.down('lg')]: {
-      minWidth: 73,
-    },
+      minWidth: 73
+    }
   },
   popupActionsWrapper: {
     display: 'flex',
     justifyContent: 'space-between',
-    flexDirection: 'column',
+    flexDirection: 'column'
   },
   editBtn: {
     position: 'absolute',
     top: 10,
-    right: 10,
-  },
+    right: 10
+  }
 });
 
 const EditTooltip = ({ t, open, setOpen, handleClickOpen, editText }) => (
@@ -106,11 +106,11 @@ EditTooltip.propTypes = {
   t: PropTypes.func.isRequired,
   handleClickOpen: PropTypes.func.isRequired,
   setOpen: PropTypes.func.isRequired,
-  open: PropTypes.object,
+  open: PropTypes.object
 };
 
 EditTooltip.defaultProps = {
-  open: false,
+  open: false
 };
 
 const RenderValues = ({
@@ -120,7 +120,7 @@ const RenderValues = ({
   rootDocument,
   properties,
   renderDataItem,
-  useParentData,
+  useParentData
 }) => (
   <div>
     {htmlBlock ? (
@@ -132,9 +132,7 @@ const RenderValues = ({
         useParentData={useParentData}
       />
     ) : (
-      Object.keys(properties || {}).map((item, index) =>
-        renderDataItem(item, index)
-      )
+      Object.keys(properties || {}).map((item, index) => renderDataItem(item, index))
     )}
   </div>
 );
@@ -145,7 +143,7 @@ RenderValues.propTypes = {
   params: PropTypes.object,
   rootDocument: PropTypes.object,
   properties: PropTypes.object,
-  useParentData: PropTypes.bool,
+  useParentData: PropTypes.bool
 };
 
 RenderValues.defaultProps = {
@@ -153,7 +151,7 @@ RenderValues.defaultProps = {
   params: null,
   rootDocument: null,
   properties: null,
-  useParentData: false,
+  useParentData: false
 };
 
 const Wrapper = ({
@@ -176,7 +174,7 @@ const Wrapper = ({
   deleteItemAction,
   handleClose,
   editText,
-  readOnly,
+  readOnly
 }) => {
   const [open, setOpen] = useState(false);
   const [deleting, toggleDeleting] = useState(false);
@@ -224,9 +222,7 @@ const Wrapper = ({
                   )}
                 >
                   <img src={Edit} alt="Edit" className={classes.editImg} />
-                  <span className={classes.editText}>
-                    {editText || t('Edit')}
-                  </span>
+                  <span className={classes.editText}>{editText || t('Edit')}</span>
                 </Button>
               )}
             </>
@@ -259,9 +255,7 @@ const Wrapper = ({
                 <Button
                   onClick={handleClickOpen}
                   className={classes.editBtn}
-                  startIcon={
-                    <img src={Edit} alt="Edit" className={classes.editImg} />
-                  }
+                  startIcon={<img src={Edit} alt="Edit" className={classes.editImg} />}
                 >
                   {editText}
                 </Button>
@@ -285,9 +279,7 @@ const Wrapper = ({
                 <Button
                   onClick={handleClickOpen}
                   className={classes.editBtn}
-                  startIcon={
-                    <img src={Edit} alt="Edit" className={classes.editImg} />
-                  }
+                  startIcon={<img src={Edit} alt="Edit" className={classes.editImg} />}
                 >
                   {editText}
                 </Button>
@@ -332,7 +324,7 @@ Wrapper.propTypes = {
   dynamicTitle: PropTypes.bool,
   style: PropTypes.object,
   useParentData: PropTypes.bool,
-  readOnly: PropTypes.bool,
+  readOnly: PropTypes.bool
 };
 
 Wrapper.defaultProps = {
@@ -345,7 +337,7 @@ Wrapper.defaultProps = {
   params: null,
   style: null,
   useParentData: false,
-  readOnly: false,
+  readOnly: false
 };
 
 const translated = translate('Elements')(Wrapper);

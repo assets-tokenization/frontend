@@ -10,29 +10,29 @@ const styles = (theme) => ({
     display: 'flex',
     gap: 16,
     '& > div': {
-      marginTop: 5,
+      marginTop: 5
     },
     '& > div:last-child': {
-      marginRight: 0,
+      marginRight: 0
     },
     [theme.breakpoints.down('lg')]: {
-      flexDirection: 'column',
-    },
+      flexDirection: 'column'
+    }
   },
   blockDisplay: {
-    display: 'block',
+    display: 'block'
   },
   formDescription: {
-    marginBottom: 0,
+    marginBottom: 0
   },
   container: {
-    marginBottom: 0,
+    marginBottom: 0
   },
   smBlockDisplay: {
     [theme.breakpoints.down('lg')]: {
-      flexDirection: 'unset',
-    },
-  },
+      flexDirection: 'unset'
+    }
+  }
 });
 
 class FormGroup extends React.Component {
@@ -99,7 +99,7 @@ class FormGroup extends React.Component {
       notRequiredLabel,
       parentValue,
       smBlockDisplay,
-      isPopup,
+      isPopup
     } = this.props;
 
     if (hidden) return null;
@@ -126,7 +126,7 @@ class FormGroup extends React.Component {
           className={classNames({
             [classes.inlineDisplay]: inlineDisplay,
             [classes.smBlockDisplay]: smBlockDisplay,
-            [classes.blockDisplay]: blockDisplay,
+            [classes.blockDisplay]: blockDisplay
           })}
         >
           {Object.keys(properties || {}).map((key) => (
@@ -151,9 +151,7 @@ class FormGroup extends React.Component {
               value={(value || {})[key]}
               onChange={onChange.bind(null, key)}
               required={
-                Array.isArray(schema.required)
-                  ? schema.required.includes(key)
-                  : schema.required
+                Array.isArray(schema.required) ? schema.required.includes(key) : schema.required
               }
               triggerExternalPath={triggerExternalPath}
               externalReaderMessage={externalReaderMessage}
@@ -179,7 +177,7 @@ FormGroup.propTypes = {
   triggerExternalPath: PropTypes.array,
   externalReaderMessage: PropTypes.node,
   smBlockDisplay: PropTypes.bool,
-  isPopup: PropTypes.bool,
+  isPopup: PropTypes.bool
 };
 
 FormGroup.defaultProps = {
@@ -194,7 +192,7 @@ FormGroup.defaultProps = {
   triggerExternalPath: null,
   externalReaderMessage: null,
   smBlockDisplay: false,
-  isPopup: false,
+  isPopup: false
 };
 
 export default withStyles(styles)(FormGroup);

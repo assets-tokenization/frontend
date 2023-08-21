@@ -8,18 +8,12 @@ const useTooltip = (className) => {
   useEffect(() => {
     const rootContainer = document.getElementsByClassName(className)[0];
 
-    const showTooltip = ({
-      value,
-      top,
-      left,
-      offsetHeight,
-      offsetWidth,
-    }) => {
+    const showTooltip = ({ value, top, left, offsetHeight, offsetWidth }) => {
       setTitle(value);
       setStyle({
         top: top + offsetHeight / 2,
         left: left + offsetWidth / 2,
-        position: 'fixed',
+        position: 'fixed'
       });
       setOpen(true);
     };
@@ -36,7 +30,7 @@ const useTooltip = (className) => {
           top,
           left,
           offsetHeight,
-          offsetWidth,
+          offsetWidth
         });
       }
 
@@ -53,7 +47,7 @@ const useTooltip = (className) => {
           top,
           left,
           offsetHeight,
-          offsetWidth,
+          offsetWidth
         });
       }
     };
@@ -72,6 +66,6 @@ const useTooltip = (className) => {
   }, [className]);
 
   return { open, title, style };
-}
+};
 
 export default useTooltip;

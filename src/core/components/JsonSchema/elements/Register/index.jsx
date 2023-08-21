@@ -5,21 +5,21 @@ import RelatedKeyRegister from 'components/JsonSchema/elements/Register/RelatedK
 import SingleKeyRegister from 'components/JsonSchema/elements/Register/SingleKeyRegister';
 
 const RegisterComponent = (props) => {
-    const {keyId} = props;
+  const { keyId } = props;
 
-    if (keyId) {
-        return <SingleKeyRegister {...props} />;
-    }
+  if (keyId) {
+    return <SingleKeyRegister {...props} />;
+  }
 
-    return <RelatedKeyRegister {...props} />;
+  return <RelatedKeyRegister {...props} />;
 };
 
 RegisterComponent.propTypes = {
-    keyId: PropTypes.number
+  keyId: PropTypes.number
 };
 
 RegisterComponent.defaultProps = {
-    keyId: null
+  keyId: null
 };
 
 export default RegisterComponent;

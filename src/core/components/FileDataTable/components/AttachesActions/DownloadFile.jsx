@@ -25,7 +25,7 @@ const DownloadFile = ({ item, t, handleDownloadFile, downloadIcon }) => {
   const icon = loading ? (
     <CircularProgress size={24} />
   ) : (
-    downloadIcon || (item.downloadIcon || <SaveAltIcon />)
+    downloadIcon || item.downloadIcon || <SaveAltIcon />
   );
 
   return (

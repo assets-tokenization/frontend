@@ -1,5 +1,5 @@
-import React from "react";
-import MobileDetect from "mobile-detect";
+import React from 'react';
+import MobileDetect from 'mobile-detect';
 import {
   Button,
   FormControl,
@@ -14,19 +14,19 @@ import {
   InputAdornment,
   IconButton,
   Typography,
-  CircularProgress,
-} from "@mui/material";
-import withStyles from "@mui/styles/withStyles";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import FileInputField from "components/CustomInput/FileInputField";
-import edsService from "services/eds";
-import config from "config";
-import ProxySettings from "components/EDSForm/ProxySettings";
+  CircularProgress
+} from '@mui/material';
+import withStyles from '@mui/styles/withStyles';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import FileInputField from 'components/CustomInput/FileInputField';
+import edsService from 'services/eds';
+import config from 'config';
+import ProxySettings from 'components/EDSForm/ProxySettings';
 import { ReactComponent as ArrowForwardIcon } from 'assets/images/arrowForwardWhite.svg';
 const { useProxySettings } = (config && config.eds) || {};
 const md = new MobileDetect(window.navigator.userAgent);
-const isIOS = md.is("iPhone") || md.os() === "iPadOS";
+const isIOS = md.is('iPhone') || md.os() === 'iPadOS';
 const isIPadOS =
   window.navigator.userAgent.match(/Mac/) &&
   window.navigator.maxTouchPoints &&
@@ -34,46 +34,46 @@ const isIPadOS =
 
 const styles = (theme) => ({
   content: {
-    padding: "0 !important",
-    marginBottom: 40,
+    padding: '0 !important',
+    marginBottom: 40
   },
   grow: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   menuItem: {
-    "@media screen and (max-width: 767px)": {
-      display: "block",
-      fontSize: "12px",
-      overflow: "hidden",
-      whiteSpace: "unset",
-      minHeight: "unset",
-      textOverflow: "ellipsis",
-    },
+    '@media screen and (max-width: 767px)': {
+      display: 'block',
+      fontSize: '12px',
+      overflow: 'hidden',
+      whiteSpace: 'unset',
+      minHeight: 'unset',
+      textOverflow: 'ellipsis'
+    }
   },
   actions: {
     marginTop: 10,
     padding: 0,
-    justifyContent: "flex-start",
-    [theme.breakpoints.down("md")]: {
+    justifyContent: 'flex-start',
+    [theme.breakpoints.down('md')]: {
       paddingLeft: 0,
       paddingRight: 0
-    },
+    }
   },
   progress: {
-    marginRight: 4,
+    marginRight: 4
   },
   progressText: {
-    marginBottom: 10,
+    marginBottom: 10
   },
   buttons: {
-    textTransform: "initial",
-    [theme.breakpoints.down("sm")]: {
-      width: "100%",
-      marginBottom: 20,
+    textTransform: 'initial',
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+      marginBottom: 20
     }
   },
   actionIcon: {
-    marginLeft: 10,
+    marginLeft: 10
   },
   fieldHeadline: {
     fontSize: 14,
@@ -82,12 +82,12 @@ const styles = (theme) => ({
     lineHeight: '17px',
     marginBottom: 10,
     marginTop: 20,
-    [theme.breakpoints.down("sm")]: {
+    [theme.breakpoints.down('sm')]: {
       fontSize: 11,
       fontWeight: 400,
       lineHeight: '16px',
       marginBottom: 5,
-      marginTop: 10,
+      marginTop: 10
     }
   }
 });
@@ -117,55 +117,49 @@ const FileKeySignFormContent = ({
   handleSelectKey,
   tryToSubmit,
   passwordRef,
-  toggleShowPassword,
+  toggleShowPassword
 }) => {
   const serverList = edsService.getServerList();
   return (
     <>
       <DialogContent className={classes.content}>
         <FormControl
-          variant="standard" fullWidth={true} id={setId("form")}
+          variant="standard"
+          fullWidth={true}
+          id={setId('form')}
           className="eds-form-dropzone"
         >
           <FileInputField
             t={t}
-            id={setId("file")}
-            label={t("Key")}
+            id={setId('file')}
+            label={t('Key')}
             error={!!errors.key}
             value={keyFile}
             margin="normal"
             disabled={busy}
             helperText={errors.key}
-            accept={isIOS || isIPadOS ? null : ".dat,.pfx,.pk8,.zs2,.jks,zs2"}
+            accept={isIOS || isIPadOS ? null : '.dat,.pfx,.pk8,.zs2,.jks,zs2'}
             onChange={handleKeyChange}
           />
-  
+
           {errors.server || showServerSelect ? (
             <>
-              
-
-              <Typography className={classes.fieldHeadline}>
-                {t("ACSKServer")}
-              </Typography>
+              <Typography className={classes.fieldHeadline}>{t('ACSKServer')}</Typography>
 
               <TextField
                 variant="outlined"
-                id={setId("server")}
+                id={setId('server')}
                 select={true}
                 value={server || 0}
                 error={!!errors.server}
-                onChange={handleChange("server")}
+                onChange={handleChange('server')}
                 margin="normal"
                 disabled={busy}
                 helperText={errors.server}
                 SelectProps={{ MenuProps: { className: classes.menu } }}
               >
-                <MenuItem
-                  value={0}
-                  id={setId("server-autodetect")}
-                  className={classes.menuItem}
-                >
-                  {t("ACSKAutoDetect")}
+                <MenuItem value={0} id={setId('server-autodetect')} className={classes.menuItem}>
+                  {t('ACSKAutoDetect')}
                 </MenuItem>
                 {serverList &&
                   serverList.map((option, index) => {
@@ -189,11 +183,11 @@ const FileKeySignFormContent = ({
             <>
               <TextField
                 variant="outlined"
-                id={setId("key")}
+                id={setId('key')}
                 select={true}
-                label={t("SelectedKey")}
+                label={t('SelectedKey')}
                 value={selectedKey}
-                onChange={handleChange("selectedKey")}
+                onChange={handleChange('selectedKey')}
                 margin="normal"
                 disabled={busy}
                 SelectProps={{ MenuProps: { className: classes.menu } }}
@@ -213,20 +207,18 @@ const FileKeySignFormContent = ({
             </>
           ) : null}
 
-          <Typography className={classes.fieldHeadline}>
-            {t("Password")}
-          </Typography>
+          <Typography className={classes.fieldHeadline}>{t('Password')}</Typography>
 
           <TextField
             variant="outlined"
             inputRef={passwordRef}
-            id={setId("password")}
-            value={password || ""}
+            id={setId('password')}
+            value={password || ''}
             error={!!errors.password}
             onKeyPress={tryToSubmit}
-            onChange={handleChange("password")}
+            onChange={handleChange('password')}
             margin="normal"
-            type={showPassword ? "text" : "password"}
+            type={showPassword ? 'text' : 'password'}
             disabled={busy}
             helperText={errors.password}
             InputProps={{
@@ -240,27 +232,23 @@ const FileKeySignFormContent = ({
                     {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
                   </IconButton>
                 </InputAdornment>
-              ),
+              )
             }}
           />
         </FormControl>
-        {useProxySettings ? (
-          <ProxySettings signer={edsService.getSigner()} busy={busy} />
-        ) : null}
+        {useProxySettings ? <ProxySettings signer={edsService.getSigner()} busy={busy} /> : null}
       </DialogContent>
       {busy ? (
         <>
           {signProgressText ? (
             <Typography className={classes.progressText}>
-              {signProgress ? (
-                <CircularProgress size={12} className={classes.progress} />
-              ) : null}
+              {signProgress ? <CircularProgress size={12} className={classes.progress} /> : null}
               {signProgressText}
             </Typography>
           ) : null}
           <LinearProgress
             value={signProgress}
-            variant={signProgress ? "determinate" : "indeterminate"}
+            variant={signProgress ? 'determinate' : 'indeterminate'}
           />
         </>
       ) : null}
@@ -270,11 +258,11 @@ const FileKeySignFormContent = ({
             size="large"
             onClick={onClose}
             disabled={busy}
-            id={setId("cancel-button")}
+            id={setId('cancel-button')}
             setId={(elementName) => setId(`cancel-${elementName}`)}
             className={classes.buttons}
           >
-            {t("Cancel")}
+            {t('Cancel')}
           </Button>
         ) : null}
         <Button
@@ -283,11 +271,11 @@ const FileKeySignFormContent = ({
           variant="contained"
           onClick={handleSelectKey}
           disabled={busy}
-          id={setId("sign-button")}
+          id={setId('sign-button')}
           setId={(elementName) => setId(`sign-${elementName}`)}
           className={classes.buttons}
         >
-          {readPrivateKeyText || t("Sign")}
+          {readPrivateKeyText || t('Sign')}
           <ArrowForwardIcon className={classes.actionIcon} />
         </Button>
       </DialogActions>
@@ -296,17 +284,17 @@ const FileKeySignFormContent = ({
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
-        id={setId("dialog")}
+        id={setId('dialog')}
         className={classes.dialog}
       >
         <DialogTitle
-          id={setId("dialog alert-dialog-title")}
+          id={setId('dialog alert-dialog-title')}
           className={classes.dialogContentWrappers}
         >
-          {t("SigningDataError")}
+          {t('SigningDataError')}
         </DialogTitle>
         <DialogContent className={classes.dialogContentWrappers}>
-          <DialogContentText id={setId("dialog alert-dialog-description")}>
+          <DialogContentText id={setId('dialog alert-dialog-description')}>
             {signingError}
           </DialogContentText>
         </DialogContent>
@@ -315,10 +303,10 @@ const FileKeySignFormContent = ({
             color="primary"
             onClick={handleClose}
             autoFocus={true}
-            id={setId("close-button")}
+            id={setId('close-button')}
             setId={(elementName) => setId(`close-${elementName}`)}
           >
-            {t("CloseDialog2")}
+            {t('CloseDialog2')}
           </Button>
         </DialogActions>
       </Dialog>

@@ -5,7 +5,7 @@ const highlightCyrillic = (aceRef, setMarkers) => {
   try {
     setTimeout(() => {
       const editor = aceRef.current?.editor;
-      
+
       if (!editor) return;
 
       const lines = editor.session.doc.getAllLines();
@@ -30,7 +30,7 @@ const highlightCyrillic = (aceRef, setMarkers) => {
                 endRow: rowIndex,
                 endCol: Number(i) + Number(match.index) + 2,
                 className: 'error-marker',
-                type: 'background',
+                type: 'background'
               };
             })
             .filter(Boolean);

@@ -9,7 +9,7 @@ import FileDataTableToolbar from './components/Toolbar';
 
 class FileDataTable extends React.Component {
   constructor(props) {
-    super(props); 
+    super(props);
     this.state = {
       rowsSelected: []
     };
@@ -40,7 +40,7 @@ class FileDataTable extends React.Component {
       handleDeleteFile,
       darkTheme,
       admin,
-      showCreatedDate,
+      showCreatedDate
     } = this.props;
 
     if (fileControl) {
@@ -49,7 +49,7 @@ class FileDataTable extends React.Component {
         fileStorage,
         directDownload,
         handleDownload,
-        handleDeleteFile,
+        handleDeleteFile
       });
     }
 
@@ -62,9 +62,9 @@ class FileDataTable extends React.Component {
       actions: {
         ...actions,
         onRowsSelect: this.onRowsSelect,
-        isRowSelectable: (file) => !(file instanceof File),
+        isRowSelectable: (file) => !(file instanceof File)
       },
-      darkTheme,
+      darkTheme
     });
   };
 
@@ -107,7 +107,7 @@ FileDataTable.propTypes = {
   handleDownload: PropTypes.func,
   printAction: PropTypes.bool,
   darkTheme: PropTypes.bool,
-  defaultView: PropTypes.string,
+  defaultView: PropTypes.string
 };
 
 FileDataTable.defaultProps = {
@@ -117,7 +117,7 @@ FileDataTable.defaultProps = {
   handleDownload: null,
   printAction: false,
   darkTheme: false,
-  defaultView: 'table',
+  defaultView: 'table'
 };
 
 export default translate('FileDataTable')(FileDataTable);

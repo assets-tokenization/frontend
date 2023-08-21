@@ -6,16 +6,10 @@ import {
   DialogContent,
   DialogActions,
   Button,
-  TextField,
+  TextField
 } from '@mui/material';
 
-const ElementIdDialog = ({
-  open,
-  onClose,
-  onSave,
-  variant = 'standard',
-  readOnly = false
-}) => {
+const ElementIdDialog = ({ open, onClose, onSave, variant = 'standard', readOnly = false }) => {
   const t = useTranslate('JsonSchemaEditor');
   const [value, setValue] = React.useState('');
 

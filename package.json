@@ -2,6 +2,7 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://95.216.140.202",
   "dependencies": {
     "@emotion/react": "11.11.1",
     "@emotion/styled": "11.11.0",
@@ -66,7 +67,10 @@
     "start": "sh -ac '. ./.env; react-scripts start'",
     "build": "sh -ac '. ./.env; react-scripts build'",
     "test": "sh -ac '. ./.env; react-scripts test'",
-    "eject": "sh -ac '. ./.env; react-scripts eject'"
+    "eject": "sh -ac '. ./.env; react-scripts eject'",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix",
+    "format": "prettier --write 'src/**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc"
   },
   "eslintConfig": {
     "extends": [
@@ -78,5 +82,12 @@
     ">0.2%",
     "not dead",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "eslint": "^8.47.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-react": "^7.33.2",
+    "prettier": "^3.0.2"
+  }
 }

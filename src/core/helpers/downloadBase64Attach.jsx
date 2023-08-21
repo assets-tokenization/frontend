@@ -1,20 +1,20 @@
 export default function ({ fileName, description, scanDocumentName }, blob) {
-    const { document, URL } = window;
+  const { document, URL } = window;
 
-    let url = blob;
+  let url = blob;
 
-    if ((typeof url === 'string' && !url.indexOf('data:') === 0) || blob instanceof Blob) {
-        url = URL.createObjectURL(blob);
-    }
+  if ((typeof url === 'string' && !url.indexOf('data:') === 0) || blob instanceof Blob) {
+    url = URL.createObjectURL(blob);
+  }
 
-    const element = document.createElement('a');
-    element.setAttribute('href', url);
-    element.setAttribute('download', fileName || description || scanDocumentName);
+  const element = document.createElement('a');
+  element.setAttribute('href', url);
+  element.setAttribute('download', fileName || description || scanDocumentName);
 
-    element.style.display = 'none';
-    document.body.appendChild(element);
+  element.style.display = 'none';
+  document.body.appendChild(element);
 
-    element.click();
+  element.click();
 
-    //document.body.removeChild(element);
+  //document.body.removeChild(element);
 }

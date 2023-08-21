@@ -2,42 +2,41 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/no-did-update-set-state */
 /* eslint-disable no-template-curly-in-string */
-import React from "react";
-import PropTypes from "prop-types";
-import { translate } from "react-translate";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import objectPath from "object-path";
-import qs from "qs";
-import Select from "components/Select";
-import { ChangeEvent } from "components/JsonSchema";
-import defaultProps from "components/JsonSchema/elements/Register/defaultProps";
-import ElementContainer from "components/JsonSchema/components/ElementContainer";
-import FieldLabel from "components/JsonSchema/components/FieldLabel";
-import diff from "helpers/diff";
-import sleep from "helpers/sleep";
-import evaluate from "helpers/evaluate";
-import equilPath from "helpers/equilPath";
-import waiter from "helpers/waitForAction";
-import queueFactory from "helpers/queueFactory";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { translate } from 'react-translate';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import objectPath from 'object-path';
+import qs from 'qs';
+import Select from 'components/Select';
+import { ChangeEvent } from 'components/JsonSchema';
+import defaultProps from 'components/JsonSchema/elements/Register/defaultProps';
+import ElementContainer from 'components/JsonSchema/components/ElementContainer';
+import FieldLabel from 'components/JsonSchema/components/FieldLabel';
+import diff from 'helpers/diff';
+import sleep from 'helpers/sleep';
+import evaluate from 'helpers/evaluate';
+import equilPath from 'helpers/equilPath';
+import waiter from 'helpers/waitForAction';
+import queueFactory from 'helpers/queueFactory';
 import uniqArrayDefault, { uniqbyValue as uniq } from 'helpers/arrayUnique';
-import processList from "services/processList";
-import { loadTask, updateTaskDocumentValues } from "application/actions/task";
+import processList from 'services/processList';
+import { loadTask, updateTaskDocumentValues } from 'application/actions/task';
 import {
   requestRegisterKeyRecords,
-  requestRegisterKeyRecordsFilter,
-} from "application/actions/registry";
+  requestRegisterKeyRecordsFilter
+} from 'application/actions/registry';
 import cleenDeep from 'clean-deep';
 
-
 const toOption = (option) =>
-  (option.id
+  option.id
     ? {
         ...option,
         value: option.id,
-        label: option.stringified,
+        label: option.stringified
       }
-    : null);
+    : null;
 
 class SingleKeyRegister extends React.Component {
   constructor(props) {
@@ -50,11 +49,10 @@ class SingleKeyRegister extends React.Component {
       filterData: this.getFilters(originDocument, documents.originDocument),
       search: '',
       page: 0,
-      loading: false,
+      loading: false
     };
 
-    const { taskId, readOnly, listenedValuesForRequest, usedInTable, actions } =
-      props;
+    const { taskId, readOnly, listenedValuesForRequest, usedInTable, actions } = props;
 
     this.queue = queueFactory.get(taskId + '-registers');
 
@@ -78,7 +76,7 @@ class SingleKeyRegister extends React.Component {
 
     if (listenedValuesForRequest) {
       this.listenValuesToUpdate({
-        initing: callOnInit,
+        initing: callOnInit
       });
       return;
     }
@@ -100,28 +98,22 @@ class SingleKeyRegister extends React.Component {
       multiple,
       keepSelection,
       value,
-      readOnly,
+      readOnly
     } = this.props;
     const { filterData, options } = this.state;
 
     if (originDocument.isFinal) return;
 
-    const unsavedFilterData = this.getFilters(
-      rootDocument,
-      documents.rootDocument
-    );
+    const unsavedFilterData = this.getFilters(rootDocument, documents.rootDocument);
 
-    const savedFilterData = this.getFilters(
-      originDocument,
-      documents.originDocument
-    );
+    const savedFilterData = this.getFilters(originDocument, documents.originDocument);
 
     if (options && diff(savedFilterData, unsavedFilterData)) {
       this.setState(
         {
           options: null,
           optionsArray: [],
-          page: 0,
+          page: 0
         },
         () => {
           this.toggleBusy(true);
@@ -130,7 +122,7 @@ class SingleKeyRegister extends React.Component {
             onChange(new ChangeEvent(multiple ? [] : null, true, true, true));
 
             this.setState({
-              search: '',
+              search: ''
             });
           }
         }
@@ -145,7 +137,7 @@ class SingleKeyRegister extends React.Component {
           options: null,
           optionsArray: [],
           filterData: savedFilterData,
-          page: 0,
+          page: 0
         },
         () => {
           const jobExists = this.queue.indexOf(this.init) >= 0;
@@ -180,35 +172,24 @@ class SingleKeyRegister extends React.Component {
       rootDocument,
       registerActions,
       setDefaultValue,
-      task: { meta: { defaultValueExecuted = [] } = {} } = {},
+      task: { meta: { defaultValueExecuted = [] } = {} } = {}
     } = this.props;
 
-    if (
-      setDefaultValue &&
-      !value &&
-      !defaultValueExecuted.includes(path.join('.'))
-    ) {
+    if (setDefaultValue && !value && !defaultValueExecuted.includes(path.join('.'))) {
       const params = evaluate(setDefaultValue, rootDocument.data);
 
       if (params) {
         const query = qs.parse(params);
-        const [record] = await registerActions.requestRegisterKeyRecordsFilter(
-          keyId,
-          {
-            data_like: query,
-            strict: true,
-          }
-        );
+        const [record] = await registerActions.requestRegisterKeyRecordsFilter(keyId, {
+          data_like: query,
+          strict: true
+        });
 
         if (!record) return;
 
         actions.setDefaultValueExecuted(path.join('.'));
 
-        waiter.addAction(
-          'setNull-' + path.join('-'),
-          () => onChange(record),
-          50
-        );
+        waiter.addAction('setNull-' + path.join('-'), () => onChange(record), 50);
       }
     }
   };
@@ -232,16 +213,13 @@ class SingleKeyRegister extends React.Component {
       taskId,
       path,
       stepName,
-      multiple,
+      multiple
     } = this.props;
     const { optionsArray: savedOptions } = this.state;
 
     if (originDocument.isFinal) return;
 
-    const filterData = this.getFilters(
-      originDocument,
-      documents.originDocument
-    );
+    const filterData = this.getFilters(originDocument, documents.originDocument);
 
     if (allFiltersRequired && Object.values(filterData).some((item) => !item)) {
       return;
@@ -285,7 +263,7 @@ class SingleKeyRegister extends React.Component {
       options,
       optionsArray,
       filterData,
-      loading: false,
+      loading: false
     });
 
     if (markWhenEmpty && !setDefaultValue) {
@@ -329,8 +307,7 @@ class SingleKeyRegister extends React.Component {
   };
 
   listenValuesToUpdate = async (props = {}) => {
-    const { listenedValuesForRequest, originDocument, rootDocument } =
-      this.props;
+    const { listenedValuesForRequest, originDocument, rootDocument } = this.props;
     const { initing } = props;
 
     if (!listenedValuesForRequest) return;
@@ -345,19 +322,11 @@ class SingleKeyRegister extends React.Component {
         const lockedField = parsePath[parsePath.length - 1].slice(1);
         const parentField = parsePath[0].slice(0, -1);
 
-        const origin = (
-          objectPath.get(originDocument.data, parentField) || []
-        ).filter(Boolean);
-        const root = (
-          objectPath.get(rootDocument.data, parentField) || []
-        ).filter(Boolean);
+        const origin = (objectPath.get(originDocument.data, parentField) || []).filter(Boolean);
+        const root = (objectPath.get(rootDocument.data, parentField) || []).filter(Boolean);
 
-        const loopedValueOrigin = origin
-          .map((item) => item[lockedField])
-          .filter(Boolean);
-        const loopedValueRoot = root
-          .map((item) => item[lockedField])
-          .filter(Boolean);
+        const loopedValueOrigin = origin.map((item) => item[lockedField]).filter(Boolean);
+        const loopedValueRoot = root.map((item) => item[lockedField]).filter(Boolean);
 
         if (!diff(loopedValueOrigin, loopedValueRoot)) return;
       } else {
@@ -409,12 +378,12 @@ class SingleKeyRegister extends React.Component {
       if (Array.isArray(searchQuery)) {
         addition = {
           search_equal_2: searchQuery.join('||'),
-          ...indexedSort,
+          ...indexedSort
         };
       } else {
         addition = {
           search_equal: searchQuery,
-          ...indexedSort,
+          ...indexedSort
         };
       }
     }
@@ -429,7 +398,7 @@ class SingleKeyRegister extends React.Component {
       autocomplete,
       originDocument: { id: originDocumentId },
       rootDocument: { id: rootDocumentId },
-      filtersFromSchema,
+      filtersFromSchema
     } = props;
 
     const { search, page } = state;
@@ -440,7 +409,7 @@ class SingleKeyRegister extends React.Component {
 
     let requestOptions = {
       strict: true,
-      limit: autocomplete ? 10 : 1500,
+      limit: autocomplete ? 10 : 1500
     };
 
     if (!filtersFromSchema) {
@@ -450,7 +419,7 @@ class SingleKeyRegister extends React.Component {
     if (filtersFromSchema) {
       requestOptions = {
         ...requestOptions,
-        ...this.getQueryParamsOutsideSchema(),
+        ...this.getQueryParamsOutsideSchema()
       };
     }
 
@@ -470,9 +439,7 @@ class SingleKeyRegister extends React.Component {
     const parts = value.split('.');
     const elementPathParts = ['data'].concat(stepName, path);
 
-    return parts.map((part, index) =>
-      (part === 'X' ? elementPathParts[index] : part)
-    );
+    return parts.map((part, index) => (part === 'X' ? elementPathParts[index] : part));
   };
 
   getFilters = (documentData = {}, alternative = {}) => {
@@ -482,10 +449,7 @@ class SingleKeyRegister extends React.Component {
 
     return filters.map(({ value }) => {
       const filterPath = this.normalizeFilterPath(value);
-      return (
-        objectPath.get(documentData, filterPath) ||
-        objectPath.get(alternative, filterPath)
-      );
+      return objectPath.get(documentData, filterPath) || objectPath.get(alternative, filterPath);
     });
   };
 
@@ -498,14 +462,11 @@ class SingleKeyRegister extends React.Component {
       originDocument,
       multiple,
       usedInTable,
-      autocomplete,
+      autocomplete
     } = this.props;
     const { optionsArray } = this.state;
 
-    const filterData = this.getFilters(
-      originDocument,
-      documents.originDocument
-    );
+    const filterData = this.getFilters(originDocument, documents.originDocument);
 
     const selectedOptionsIds = []
       .concat(selected)
@@ -515,16 +476,14 @@ class SingleKeyRegister extends React.Component {
     const selectedOptions =
       autocomplete && multiple
         ? selected
-        : (optionsArray || []).filter(({ id }) =>
-            selectedOptionsIds.includes(id)
-          );
+        : (optionsArray || []).filter(({ id }) => selectedOptionsIds.includes(id));
 
     const newValue = multiple ? selectedOptions : selectedOptions.shift();
 
     onChange && (await onChange(new ChangeEvent(newValue, true, true, true)));
 
     this.setState({
-      search: '',
+      search: ''
     });
 
     if ((filterData || additionalFilter) && !usedInTable) {
@@ -566,7 +525,7 @@ class SingleKeyRegister extends React.Component {
     this.setState(
       {
         search: value,
-        page: 0,
+        page: 0
       },
       () => {
         const { autocomplete } = this.props;
@@ -624,8 +583,7 @@ class SingleKeyRegister extends React.Component {
 
     const selected = [].concat(value).filter(Boolean).map(toOption);
     const inputValue = multiple ? selected : selected.shift();
-    const listToDisplay =
-      listenedValuesForRequest && !optionsArray ? [] : optionsArray;
+    const listToDisplay = listenedValuesForRequest && !optionsArray ? [] : optionsArray;
 
     return (
       <ElementContainer
@@ -670,9 +628,7 @@ class SingleKeyRegister extends React.Component {
           value={inputValue}
           options={listToDisplay}
         />
-        {equilPath(triggerExternalPath, [stepName].concat(path))
-          ? externalReaderMessage
-          : null}
+        {equilPath(triggerExternalPath, [stepName].concat(path)) ? externalReaderMessage : null}
       </ElementContainer>
     );
   };
@@ -684,11 +640,7 @@ SingleKeyRegister.propTypes = {
   description: PropTypes.string,
   sample: PropTypes.string,
   outlined: PropTypes.bool,
-  value: PropTypes.oneOfType([
-    PropTypes.bool,
-    PropTypes.array,
-    PropTypes.object,
-  ]),
+  value: PropTypes.oneOfType([PropTypes.bool, PropTypes.array, PropTypes.object]),
   error: PropTypes.object,
   multiple: PropTypes.bool,
   required: PropTypes.bool,
@@ -703,7 +655,7 @@ SingleKeyRegister.propTypes = {
   notRequiredLabel: PropTypes.string,
   active: PropTypes.bool,
   filtersFromSchema: PropTypes.bool,
-  callOnInit: PropTypes.bool,
+  callOnInit: PropTypes.bool
 };
 
 SingleKeyRegister.defaultProps = {
@@ -711,25 +663,16 @@ SingleKeyRegister.defaultProps = {
   active: true,
   value: null,
   filtersFromSchema: false,
-  callOnInit: true,
+  callOnInit: true
 };
 
 const mapDispatchToProps = (dispatch) => ({
   registerActions: {
     loadTask: bindActionCreators(loadTask, dispatch),
-    requestRegisterKeyRecords: bindActionCreators(
-      requestRegisterKeyRecords,
-      dispatch
-    ),
-    requestRegisterKeyRecordsFilter: bindActionCreators(
-      requestRegisterKeyRecordsFilter,
-      dispatch
-    ),
-    updateTaskDocumentValues: bindActionCreators(
-      updateTaskDocumentValues,
-      dispatch
-    ),
-  },
+    requestRegisterKeyRecords: bindActionCreators(requestRegisterKeyRecords, dispatch),
+    requestRegisterKeyRecordsFilter: bindActionCreators(requestRegisterKeyRecordsFilter, dispatch),
+    updateTaskDocumentValues: bindActionCreators(updateTaskDocumentValues, dispatch)
+  }
 });
 const translated = translate('Elements')(SingleKeyRegister);
 export default connect(null, mapDispatchToProps)(translated);

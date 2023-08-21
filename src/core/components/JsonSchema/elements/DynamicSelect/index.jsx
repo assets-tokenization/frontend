@@ -20,8 +20,7 @@ class DynamicSelect extends React.Component {
       .filter(Boolean)
       .map(({ id, [idFieldName]: customId }) => id || customId);
 
-    const selectedOptions =
-      options
+    const selectedOptions = options
       .filter(({ id }) => selectedOptionsIds.includes(id))
       .map((option) => {
         if (idFieldName) {
@@ -31,12 +30,7 @@ class DynamicSelect extends React.Component {
         return option;
       });
 
-    onChange(
-      new ChangeEvent(
-        multiple ? selectedOptions : selectedOptions.shift(),
-        true
-      )
-    );
+    onChange(new ChangeEvent(multiple ? selectedOptions : selectedOptions.shift(), true));
   };
 
   getOptions = () => {
@@ -44,9 +38,7 @@ class DynamicSelect extends React.Component {
 
     if (!dataPath && !schemaOptions) return [];
 
-    const dataSource = isPopup
-      ? documents?.rootDocument?.data
-      : rootDocument?.data;
+    const dataSource = isPopup ? documents?.rootDocument?.data : rootDocument?.data;
 
     if (!dataSource) return [];
 
@@ -54,9 +46,7 @@ class DynamicSelect extends React.Component {
 
     if (!options || !Array.isArray(options)) return [];
 
-    const cleared = options
-      .filter(Boolean)
-      .filter((value) => Object.keys(value).length !== 0);
+    const cleared = options.filter(Boolean).filter((value) => Object.keys(value).length !== 0);
 
     const mapped = cleared.map((el, i) => cleenDeep(this.mapData(el, i)));
 
@@ -73,12 +63,7 @@ class DynamicSelect extends React.Component {
 
     if (!dataMapping) return option;
 
-    const result = evaluate(
-      dataMapping,
-      option,
-      i,
-      documents?.rootDocument?.data
-    );
+    const result = evaluate(dataMapping, option, i, documents?.rootDocument?.data);
 
     if (result instanceof Error) return option;
 
@@ -127,9 +112,7 @@ class DynamicSelect extends React.Component {
   setTitle = (option) => {
     const { labelKeys } = this.props;
 
-    return (labelKeys || [])
-      .map((el) => el && option[el] && option[el])
-      .join(' ');
+    return (labelKeys || []).map((el) => el && option[el] && option[el]).join(' ');
   };
 
   getValue = () => {
@@ -152,24 +135,15 @@ class DynamicSelect extends React.Component {
 
     const options = this.getOptions();
 
-    const existing = options.find(({
-      id,
-      [idFieldName]: customId
-    }) => [id, customId].includes(value.id));
+    const existing = options.find(({ id, [idFieldName]: customId }) =>
+      [id, customId].includes(value.id)
+    );
 
     if (!existing) onChange(undefined);
   };
 
   render = () => {
-    const {
-      description,
-      required,
-      error,
-      hidden,
-      path,
-      notRequiredLabel,
-      ...rest
-    } = this.props;
+    const { description, required, error, hidden, path, notRequiredLabel, ...rest } = this.props;
 
     if (hidden) return null;
 
@@ -219,7 +193,7 @@ DynamicSelect.propTypes = {
   dataMapping: PropTypes.string,
   multiple: PropTypes.bool,
   isPopup: PropTypes.bool,
-  idFieldName: PropTypes.string,
+  idFieldName: PropTypes.string
 };
 
 DynamicSelect.defaultProps = {
@@ -232,7 +206,7 @@ DynamicSelect.defaultProps = {
   dataMapping: null,
   multiple: false,
   isPopup: false,
-  idFieldName: null,
+  idFieldName: null
 };
 
 export default DynamicSelect;

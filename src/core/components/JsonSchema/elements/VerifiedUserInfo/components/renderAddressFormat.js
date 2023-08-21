@@ -1,17 +1,9 @@
 import React from 'react';
 import { useTranslate } from 'react-translate';
 import { SchemaForm } from 'components/JsonSchema';
-import cleenDeep from 'clean-deep'
+import cleenDeep from 'clean-deep';
 
-const RenderAddressFormat = ({
-  name,
-  fields,
-  errors,
-  value,
-  handleUpdateField,
-  path,
-  actions
-}) => {
+const RenderAddressFormat = ({ name, fields, errors, value, handleUpdateField, path, actions }) => {
   const [actualAtu, setActualAtu] = React.useState({});
 
   const t = useTranslate('VerifiedUserInfo');
@@ -29,7 +21,7 @@ const RenderAddressFormat = ({
       district: district || null,
       city: city || null
     });
-    
+
     await handleUpdateField(name, mappedValue);
 
     setActualAtu(mappedValue);
@@ -226,17 +218,17 @@ const RenderAddressFormat = ({
               address: {
                 region: value?.[name]?.region || {},
                 district: value?.[name]?.district || {},
-                city: value?.[name]?.city || {},
+                city: value?.[name]?.city || {}
               },
               street: value?.[name]?.street || {},
               building: {
                 building: value?.[name]?.building?.value || '',
-                korp: value?.[name]?.korp?.value || '',
+                korp: value?.[name]?.korp?.value || ''
               },
               isPrivateHouse: value?.[name]?.isPrivateHouse ? ['приватний будинок'] : [],
               apartment: {
                 apartment: value?.[name]?.apartment?.value || '',
-                index: value?.[name]?.index?.value || '',
+                index: value?.[name]?.index?.value || ''
               }
             }}
             onChange={handleChangeAddress}

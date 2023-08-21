@@ -9,10 +9,10 @@ import MobileDetect from 'mobile-detect';
 const styles = {
   hideDefaultScroll: {
     '&::-webkit-scrollbar': {
-      display: 'none',
+      display: 'none'
     },
-    scrollbarWidth: 'none',
-  },
+    scrollbarWidth: 'none'
+  }
 };
 
 const md = new MobileDetect(window.navigator.userAgent);
@@ -21,7 +21,7 @@ class Scrollbar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isMobile: !!md.mobile(),
+      isMobile: !!md.mobile()
     };
   }
 
@@ -29,18 +29,14 @@ class Scrollbar extends React.Component {
 
   updateScrollOnSafari = () => {
     const isSafari =
-      (window.navigator.userAgent || '').toLowerCase().indexOf('safari') !==
-        -1 || false;
+      (window.navigator.userAgent || '').toLowerCase().indexOf('safari') !== -1 || false;
     const { isMobile } = this.state;
 
     if (!isSafari || isMobile) return;
 
     clearTimeout(this.timeout);
 
-    this.timeout = setTimeout(
-      () => this.scrollBarRef && this.scrollBarRef.updateScroll(),
-      200
-    );
+    this.timeout = setTimeout(() => this.scrollBarRef && this.scrollBarRef.updateScroll(), 200);
   };
 
   render() {
@@ -64,11 +60,8 @@ class Scrollbar extends React.Component {
 }
 
 Scrollbar.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-  ]).isRequired,
-  classes: PropTypes.object.isRequired,
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
+  classes: PropTypes.object.isRequired
 };
 const styled = withStyles(styles)(Scrollbar);
 export default styled;

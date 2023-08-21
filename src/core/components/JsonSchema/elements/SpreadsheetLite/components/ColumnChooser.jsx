@@ -7,11 +7,7 @@ import MenuItem from '@mui/material/MenuItem';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
-const ColumnChooser = ({
-  selectedColumns,
-  columns,
-  setSelectedColumns
-}) => {
+const ColumnChooser = ({ selectedColumns, columns, setSelectedColumns }) => {
   const t = useTranslate('Elements');
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -20,7 +16,7 @@ const ColumnChooser = ({
 
   const handleChooseColumns = (id) => {
     if (selectedColumns.includes(id)) {
-      setSelectedColumns(selectedColumns.filter(columnId => columnId !== id));
+      setSelectedColumns(selectedColumns.filter((columnId) => columnId !== id));
     } else {
       setSelectedColumns([...selectedColumns, id]);
     }
@@ -29,10 +25,7 @@ const ColumnChooser = ({
   return (
     <>
       <Tooltip title={t('ColumnChooser')}>
-        <IconButton
-          size="large"
-          onClick={handleClick}
-        >
+        <IconButton size="large" onClick={handleClick}>
           <ViewColumnIcon />
         </IconButton>
       </Tooltip>
@@ -46,27 +39,20 @@ const ColumnChooser = ({
           'aria-labelledby': 'basic-button'
         }}
       >
-        {
-          columns.map(({
-            id,
-            description
-          }) => {
-            return (
-              <MenuItem key={id} onClick={() => handleChooseColumns(id)}>
-                <ListItemIcon>
-                  {
-                    selectedColumns.includes(id)
-                      ? <CheckBoxIcon fontSize="small" />
-                      : <CheckBoxOutlineBlankIcon fontSize="small" />
-                  }
-                </ListItemIcon>
-                <ListItemText>
-                  {description}
-                </ListItemText>
-              </MenuItem>
-            );
-          })
-        }
+        {columns.map(({ id, description }) => {
+          return (
+            <MenuItem key={id} onClick={() => handleChooseColumns(id)}>
+              <ListItemIcon>
+                {selectedColumns.includes(id) ? (
+                  <CheckBoxIcon fontSize="small" />
+                ) : (
+                  <CheckBoxOutlineBlankIcon fontSize="small" />
+                )}
+              </ListItemIcon>
+              <ListItemText>{description}</ListItemText>
+            </MenuItem>
+          );
+        })}
       </Menu>
     </>
   );

@@ -7,7 +7,7 @@ import {
   DialogContent,
   DialogTitle,
   MenuItem,
-  TextField,
+  TextField
 } from '@mui/material';
 import withStyles from '@mui/styles/withStyles';
 
@@ -16,9 +16,9 @@ const styles = (theme) => ({
     minHeight: 36,
     [theme.breakpoints.down('md')]: {
       fontSize: 13,
-      lineHeight: '22px',
-    },
-  },
+      lineHeight: '22px'
+    }
+  }
 });
 
 const CustomValueSelect = ({ t, classes, customValueText, onChange }) => {
@@ -35,20 +35,13 @@ const CustomValueSelect = ({ t, classes, customValueText, onChange }) => {
       <MenuItem className={classes.menuItem} onClick={showCustomValueDialog}>
         {customValueText || t('CustomValue')}
       </MenuItem>
-      <Dialog
-        open={open}
-        onClose={() => setOpen(false)}
-        maxWidth="sm"
-        fullWidth={true}
-      >
+      <Dialog open={open} onClose={() => setOpen(false)} maxWidth="sm" fullWidth={true}>
         <DialogTitle>{customValueText || t('CustomValue')}</DialogTitle>
         <DialogContent>
           <TextField
             variant="standard"
             value={customValue}
-            onChange={({ target: { value: newCustomValue } }) =>
-              setCustomValue(newCustomValue)
-            }
+            onChange={({ target: { value: newCustomValue } }) => setCustomValue(newCustomValue)}
           />
         </DialogContent>
         <DialogActions>

@@ -25,7 +25,8 @@ const styles = {
     transition: 'margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
     boxShadow: 'none',
     backgroundSize: '200% 300%',
-    backgroundImage: 'linear-gradient(217deg, rgba(255, 0, 0, 0.8), rgba(255, 0, 0, 0) 70.71%), linear-gradient(127deg, rgba(0, 0, 255, 0.8), rgba(0, 0, 255, 0) 70.71%), linear-gradient(336deg, rgba(0, 255, 0, 0.8), rgba(0, 255, 0, 0) 70.71%)'
+    backgroundImage:
+      'linear-gradient(217deg, rgba(255, 0, 0, 0.8), rgba(255, 0, 0, 0) 70.71%), linear-gradient(127deg, rgba(0, 0, 255, 0.8), rgba(0, 0, 255, 0) 70.71%), linear-gradient(336deg, rgba(0, 255, 0, 0.8), rgba(0, 255, 0, 0) 70.71%)'
   },
   content: {
     padding: '26px 32px',
@@ -105,14 +106,16 @@ const VerifiedUserInfo = (props) => {
   } = props;
   const t = useTranslate('VerifiedUserInfo');
   const classes = useStyles();
-  const userInfo = useSelector(state => state.auth);
+  const userInfo = useSelector((state) => state.auth);
 
   if (hidden) {
     return null;
   }
 
-  const verifiedFields = Object.keys(value?.verified || {}).filter((key) => value?.verified[key]) || [];
-  const unVerifiedFields = Object.keys(value?.verified || {}).filter((key) => !value?.verified[key]) || [];
+  const verifiedFields =
+    Object.keys(value?.verified || {}).filter((key) => value?.verified[key]) || [];
+  const unVerifiedFields =
+    Object.keys(value?.verified || {}).filter((key) => !value?.verified[key]) || [];
 
   const allFieldsFound = !unVerifiedFields.length;
 
@@ -128,17 +131,11 @@ const VerifiedUserInfo = (props) => {
       maxWidth={maxWidth}
       noMargin={noMargin}
     >
-      {
-        allFieldsFound ? (
-          <div className={classes.headline}>
-            {t('VerifiedUserFullInfo')}
-          </div>
-        ) : (
-          <div className={classes.headline}>
-            {t('VerifiedUserPartialInfo')}
-          </div>
-        )   
-      }
+      {allFieldsFound ? (
+        <div className={classes.headline}>{t('VerifiedUserFullInfo')}</div>
+      ) : (
+        <div className={classes.headline}>{t('VerifiedUserPartialInfo')}</div>
+      )}
 
       <RenderFields
         t={t}

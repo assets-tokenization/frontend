@@ -11,5 +11,5 @@ export const quillFormats = [
   'indent',
   'background',
   'color',
-	'link'
+  'link'
 ];

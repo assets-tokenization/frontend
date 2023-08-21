@@ -107,7 +107,7 @@ const CreateGroup = (props) => {
     >
       <DialogTitle
         classes={{
-          root: classes.dialogTitle,
+          root: classes.dialogTitle
         }}
       >
         {t('CreateCroupTitle')}
@@ -133,55 +133,52 @@ const CreateGroup = (props) => {
                 : null
             }
           />
-          <ProgressLine
-            loading={loading}
-            classes={classes.progressLineWrapper}
-          />
+          <ProgressLine loading={loading} classes={classes.progressLineWrapper} />
         </DialogContentText>
       </DialogContent>
       <DialogActions
         classes={{
-          root: classes.dialogAction,
+          root: classes.dialogAction
         }}
       >
-        {
-          activeGroup && !readOnly ? (
-            <Button
-              classes={{
-                root: classes.closeAction,
-              }}
-              onClick={handleDeleteGroup}
-            >
-              <DeleteOutlineOutlinedIcon className={classes.icon} />
-              {t('Delete')}
-            </Button>
-          ) : <div />
-        }
+        {activeGroup && !readOnly ? (
+          <Button
+            classes={{
+              root: classes.closeAction
+            }}
+            onClick={handleDeleteGroup}
+          >
+            <DeleteOutlineOutlinedIcon className={classes.icon} />
+            {t('Delete')}
+          </Button>
+        ) : (
+          <div />
+        )}
 
         <div>
           <Button
             onClick={handleClose}
             classes={{
-              root: classes.closeAction,
+              root: classes.closeAction
             }}
           >
             {t('Close')}
           </Button>
 
-          {
-            readOnly ? <div /> : (
-              <Button
-                variant="contained"
-                color="primary"
-                classes={{
-                  root: classes.saveAction,
-                }}
-                onClick={handleSave}
-              >
-                {t('Save')}
-              </Button>
-            )
-          }
+          {readOnly ? (
+            <div />
+          ) : (
+            <Button
+              variant="contained"
+              color="primary"
+              classes={{
+                root: classes.saveAction
+              }}
+              onClick={handleSave}
+            >
+              {t('Save')}
+            </Button>
+          )}
         </div>
       </DialogActions>
     </Dialog>

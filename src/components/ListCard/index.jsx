@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 import { useTranslate } from 'react-translate';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import { Typography, Button } from '@mui/material';
 import { ReactComponent as ArrowForwardIcon } from 'assets/images/arrowForwardBlue.svg';
-import StatusLabel from "components/StatusLabel";
+import StatusLabel from 'components/StatusLabel';
 
 const styles = (theme) => ({
   card: {
@@ -19,7 +19,7 @@ const styles = (theme) => ({
       marginLeft: -8,
       marginRight: -8,
       padding: 16,
-      marginBottom: 8,
+      marginBottom: 8
     }
   },
   cardTitle: {
@@ -32,7 +32,7 @@ const styles = (theme) => ({
       lineHeight: '21px',
       '& a': {
         textDecoration: 'none',
-        color: 'rgba(34, 89, 228, 1)',
+        color: 'rgba(34, 89, 228, 1)'
       }
     }
   },
@@ -46,7 +46,7 @@ const styles = (theme) => ({
     [theme.breakpoints.down('sm')]: {
       fontSize: 10,
       fontWeight: 500,
-      lineHeight: '14px',
+      lineHeight: '14px'
     }
   },
   cardDetails: {
@@ -68,7 +68,7 @@ const styles = (theme) => ({
     [theme.breakpoints.down('sm')]: {
       fontSize: 11,
       lineHeight: '16px',
-      fontWeight: 400,
+      fontWeight: 400
     }
   },
   dot: {
@@ -77,7 +77,7 @@ const styles = (theme) => ({
     height: 4,
     borderRadius: '50%',
     backgroundColor: 'rgba(217, 217, 217, 1)',
-    margin: '0 8px',
+    margin: '0 8px'
   },
   divider: {
     marginLeft: -24,
@@ -92,17 +92,17 @@ const styles = (theme) => ({
   actions: {
     display: 'flex',
     paddingTop: 16,
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   actionIcon: {
-    marginLeft: 8,
+    marginLeft: 8
   },
   detailsButton: {
     marginLeft: -8
   },
   toTokenButton: {
     [theme.breakpoints.down('sm')]: {
-      width: '100%',
+      width: '100%'
     }
   },
   header: {
@@ -131,14 +131,14 @@ const styles = (theme) => ({
     [theme.breakpoints.down('sm')]: {
       fontSize: 10,
       lineHeight: '14px',
-      marginBottom: 10,
+      marginBottom: 10
     }
   },
   deTokenButton: {
     marginRight: 8,
     [theme.breakpoints.down('sm')]: {
       marginRight: 0,
-      marginTop: 10,
+      marginTop: 10
     }
   },
   tokenizedActions: {
@@ -148,7 +148,7 @@ const styles = (theme) => ({
       alignItems: 'flex-start',
       width: '100%',
       '& button': {
-        width: '100%',
+        width: '100%'
       }
     }
   },
@@ -163,14 +163,7 @@ const styles = (theme) => ({
 const useStyles = makeStyles(styles);
 
 const ListCard = ({
-  item: {
-    title,
-    number,
-    tokenized,
-    type,
-    totalArea,
-    livingArea
-  },
+  item: { title, number, tokenized, type, totalArea, livingArea },
   tokenizeProcess,
   sellingStatus,
   openDetails,
@@ -185,7 +178,7 @@ const ListCard = ({
   const t = useTranslate('HomeScreen');
   const classes = useStyles();
 
-  const isSM = useMediaQuery(theme => theme.breakpoints.down('sm'));
+  const isSM = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
   const handleTokenize = (event) => {
     if (mainAction) {
@@ -198,58 +191,26 @@ const ListCard = ({
   return (
     <div className={classes.card}>
       <div className={classes.header}>
-        <Typography className={classes.cardNumber}>
-          {t('Number', { number })}
-        </Typography>
+        <Typography className={classes.cardNumber}>{t('Number', { number })}</Typography>
 
         <div>
-          {
-            tokenized && ![sellingStatus, finished].includes(true) ? (
-              <StatusLabel>
-                {t('Tokenized')}
-              </StatusLabel>
-            ) : null
-          }
-          {
-            sellingStatus ? (
-              <StatusLabel
-                pending={true}
-              >
-                {t('Selling')}
-              </StatusLabel>
-            ) : null
-          }
-          {
-            finished ? (
-              <StatusLabel
-                finished={true}
-              >
-                {t('Archived')}
-              </StatusLabel>
-            ) : null
-          }
+          {tokenized && ![sellingStatus, finished].includes(true) ? (
+            <StatusLabel>{t('Tokenized')}</StatusLabel>
+          ) : null}
+          {sellingStatus ? <StatusLabel pending={true}>{t('Selling')}</StatusLabel> : null}
+          {finished ? <StatusLabel finished={true}>{t('Archived')}</StatusLabel> : null}
         </div>
       </div>
 
-      {
-        price ? (
-          <Typography className={classes.cardPrice}>
-            {price}
-          </Typography>
-        ) : null
-      }
+      {price ? <Typography className={classes.cardPrice}>{price}</Typography> : null}
 
-      {
-        isSM ? (
-          <Typography className={classes.cardTitle}>
-            <a href={`${detailsLink || 'details'}/${number}`}>{title}</a>
-          </Typography>
-        ) : (
-          <Typography className={classes.cardTitle}>
-            {title}
-          </Typography>
-        )
-      }
+      {isSM ? (
+        <Typography className={classes.cardTitle}>
+          <a href={`${detailsLink || 'details'}/${number}`}>{title}</a>
+        </Typography>
+      ) : (
+        <Typography className={classes.cardTitle}>{title}</Typography>
+      )}
 
       <div className={classes.cardDetails}>
         <Typography className={classes.cardDetailsTitle}>
@@ -265,59 +226,44 @@ const ListCard = ({
         </Typography>
       </div>
 
-      {
-        !isSM || !finished ? <div className={classes.divider} /> : null
-      }
+      {!isSM || !finished ? <div className={classes.divider} /> : null}
 
       <div className={classes.actions}>
-        {
-          !isSM ? (
-            <Button
-              className={classes.detailsButton}
-              onClick={() => openDetails(number)}
-            >
-              {t('ObjectDetails')}
-              <ArrowForwardIcon className={classes.actionIcon} />
-            </Button>
-          ) : null
-        }
+        {!isSM ? (
+          <Button className={classes.detailsButton} onClick={() => openDetails(number)}>
+            {t('ObjectDetails')}
+            <ArrowForwardIcon className={classes.actionIcon} />
+          </Button>
+        ) : null}
 
-        {
-          !finished ? (
-            <>
-              {
-                tokenized && !hideSecondaryAction ? (
-                  <div className={classes.tokenizedActions}>
-                    <Button
-                      color={!secondaryActionText ? 'error' : 'primary'}
-                      className={classes.deTokenButton}
-                    >
-                      {secondaryActionText || t('DeToken')}
-                    </Button>
-                    <Button
-                      variant="contained"
-                      className={classes.toTokenButton}
-                      onClick={mainAction}
-                    >
-                      {mainActionText || t('ToP2P')}
-                    </Button>
-                  </div>
-                ) : (
-                  <Button
-                    variant="contained"
-                    className={classes.toTokenButton}
-                    onClick={() => handleTokenize(number)}
-                  >
-                    {mainActionText || t('ToToken')}
-                  </Button>
-                )
-              }
-            </>
-          ) : null
-        }
+        {!finished ? (
+          <>
+            {tokenized && !hideSecondaryAction ? (
+              <div className={classes.tokenizedActions}>
+                <Button
+                  color={!secondaryActionText ? 'error' : 'primary'}
+                  className={classes.deTokenButton}
+                >
+                  {secondaryActionText || t('DeToken')}
+                </Button>
+                <Button variant="contained" className={classes.toTokenButton} onClick={mainAction}>
+                  {mainActionText || t('ToP2P')}
+                </Button>
+              </div>
+            ) : (
+              <Button
+                variant="contained"
+                className={classes.toTokenButton}
+                onClick={() => handleTokenize(number)}
+              >
+                {mainActionText || t('ToToken')}
+              </Button>
+            )}
+          </>
+        ) : null}
       </div>
     </div>
   );
-}
+};
 
 export default ListCard;

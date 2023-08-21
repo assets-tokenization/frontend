@@ -1,6 +1,6 @@
 export default {
-    string: '',
-    object: {},
-    array: [],
-    number: 0
+  string: '',
+  object: {},
+  array: [],
+  number: 0
 };

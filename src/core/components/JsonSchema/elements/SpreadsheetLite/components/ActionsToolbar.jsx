@@ -14,7 +14,7 @@ const styles = {
   countWrapper: {
     display: 'flex',
     alignItems: 'center',
-    marginLeft: 30,
+    marginLeft: 30
   },
   countLabel: {
     fontSize: 13
@@ -31,7 +31,7 @@ const styles = {
     marginLeft: 10
   },
   errorCount: {
-    backgroundColor: '#B3261E',
+    backgroundColor: '#B3261E'
   }
 };
 
@@ -59,18 +59,12 @@ export const ActionsToolbar = ({
   return (
     <Toolbar disableGutters>
       <Tooltip title={t('ToggleFullscreen')}>
-        <IconButton
-          onClick={() => setFullScreen(true)}
-          size="large"
-        >
+        <IconButton onClick={() => setFullScreen(true)} size="large">
           <FullscreenIcon />
         </IconButton>
       </Tooltip>
 
-      <ImportButton
-        onImport={onImport}
-        disabled={readOnly}
-      />
+      <ImportButton onImport={onImport} disabled={readOnly} />
 
       <ColumnChooser
         columns={columns}
@@ -78,56 +72,34 @@ export const ActionsToolbar = ({
         setSelectedColumns={setSelectedColumns}
       />
 
-      <ClearDataButton
-        onChange={onChange}
-        actions={actions}
-        disabled={readOnly}
-      />
+      <ClearDataButton onChange={onChange} actions={actions} disabled={readOnly} />
 
-      <UndoButton
-        undo={undo}
-        disabled={!hasPrevious || readOnly}
-      />
+      <UndoButton undo={undo} disabled={!hasPrevious || readOnly} />
 
-      <RedoButton
-        redo={redo}
-        disabled={!hasNext || readOnly}
-      />
+      <RedoButton redo={redo} disabled={!hasNext || readOnly} />
 
-      {
-        value?.length > 0 ? (
-          <div className={classes.countWrapper}>
-            <Typography className={classes.countLabel}>
-              {t('LinesCount')}
-            </Typography>
-            <span className={classes.count}>
-              {value.length}
-            </span>
-          </div>
-        ) : null
-      }
+      {value?.length > 0 ? (
+        <div className={classes.countWrapper}>
+          <Typography className={classes.countLabel}>{t('LinesCount')}</Typography>
+          <span className={classes.count}>{value.length}</span>
+        </div>
+      ) : null}
 
-      {
-        errors?.length > 0 ? (
-          <div className={classes.countWrapper}>
-            <Typography className={classes.countLabel}>
-              {t('ErrorCount')}
-            </Typography>
-            <span
-              className={
-                classNames({
-                  [classes.count]: true,
-                  [classes.errorCount]: true
-                })
-              }
-            >
-              {errors.length}
-            </span>
-          </div>
-        ) : null
-      }
+      {errors?.length > 0 ? (
+        <div className={classes.countWrapper}>
+          <Typography className={classes.countLabel}>{t('ErrorCount')}</Typography>
+          <span
+            className={classNames({
+              [classes.count]: true,
+              [classes.errorCount]: true
+            })}
+          >
+            {errors.length}
+          </span>
+        </div>
+      ) : null}
     </Toolbar>
   );
-}
+};
 
 export default ActionsToolbar;

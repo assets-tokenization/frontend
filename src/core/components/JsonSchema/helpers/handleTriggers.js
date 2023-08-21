@@ -67,12 +67,12 @@ const handleTriggers = (
           console.error('trigger error', {
             sourcePath,
             targetPath,
-            calculateFunc,
+            calculateFunc
           });
           result.commit({
             type: 'calc trigger error',
             calculateFunc,
-            targetPath,
+            targetPath
           });
           return;
         }
@@ -94,7 +94,7 @@ const handleTriggers = (
             taskSchema,
             documentData: copySource,
             documentDataModified: origin,
-            targetPath,
+            targetPath
           });
         } catch (e) {
           console.error('trigger error', e);

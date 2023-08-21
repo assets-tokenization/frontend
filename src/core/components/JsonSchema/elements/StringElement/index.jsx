@@ -8,7 +8,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  TextField,
+  TextField
 } from '@mui/material';
 import withStyles from '@mui/styles/withStyles';
 import MenuItem from '@mui/material/MenuItem';
@@ -23,8 +23,8 @@ import ChangeEvent from 'components/JsonSchema/ChangeEvent';
 const style = () => ({
   menuItem: {
     minHeight: 36,
-    whiteSpace: 'normal',
-  },
+    whiteSpace: 'normal'
+  }
 });
 
 class StringElement extends React.Component {
@@ -87,8 +87,7 @@ class StringElement extends React.Component {
   };
 
   getMask = () => {
-    const { mask, stepName, value, rootDocument, parentValue, defaultMask } =
-      this.props;
+    const { mask, stepName, value, rootDocument, parentValue, defaultMask } = this.props;
 
     if (typeof mask === 'string') return mask;
 
@@ -126,19 +125,13 @@ class StringElement extends React.Component {
   handleChange = ({ target, target: { value } }) => {
     const { changeOnBlur } = this.props;
     const { onChange, changeCase, replaceLatinAnalogs, cutTags } = this.props;
-    const caseValue = changeCase
-      ? this.changeCaseFunctions(target, changeCase)
-      : value;
+    const caseValue = changeCase ? this.changeCaseFunctions(target, changeCase) : value;
     const replaceLatinCharecters = replaceLatinAnalogs
       ? this.replaceLatinCharactersAnalog(caseValue)
       : caseValue;
-    const withoutHtml = cutTags
-      ? this.removeHtml(replaceLatinCharecters)
-      : replaceLatinCharecters;
+    const withoutHtml = cutTags ? this.removeHtml(replaceLatinCharecters) : replaceLatinCharecters;
 
-    const changes = changeOnBlur
-      ? new ChangeEvent(withoutHtml, true)
-      : withoutHtml;
+    const changes = changeOnBlur ? new ChangeEvent(withoutHtml, true) : withoutHtml;
     onChange && onChange(changes);
   };
 
@@ -152,13 +145,12 @@ class StringElement extends React.Component {
       customValue,
       value,
       customValueText,
-      customValuePrefix = '',
+      customValuePrefix = ''
     } = this.props;
 
     if (options) {
       let items = [];
-      const customValueSelected =
-        customValue && !!value && !options.find(({ id }) => id === value);
+      const customValueSelected = customValue && !!value && !options.find(({ id }) => id === value);
 
       if (customValueSelected) {
         items.push(
@@ -171,16 +163,10 @@ class StringElement extends React.Component {
       items = items.concat(
         Object.values(options).map((option, key) => {
           const optionName =
-            typeof option === 'string'
-              ? option
-              : option.stringified || option.name;
+            typeof option === 'string' ? option : option.stringified || option.name;
           const optionValue = typeof option === 'string' ? option : option.id;
           return (
-            <MenuItem
-              key={key}
-              value={optionValue}
-              className={classes.menuItem}
-            >
+            <MenuItem key={key} value={optionValue} className={classes.menuItem}>
               {optionName}
             </MenuItem>
           );
@@ -303,7 +289,7 @@ StringElement.propTypes = {
   rootDocument: PropTypes.object.isRequired,
   parentValue: PropTypes.object.isRequired,
   defaultMask: PropTypes.string,
-  changeOnBlur: PropTypes.bool,
+  changeOnBlur: PropTypes.bool
 };
 
 StringElement.defaultProps = {
@@ -318,7 +304,7 @@ StringElement.defaultProps = {
   value: undefined,
   mask: '',
   defaultMask: null,
-  changeOnBlur: false,
+  changeOnBlur: false
 };
 
 const styled = withStyles(style)(StringElement);

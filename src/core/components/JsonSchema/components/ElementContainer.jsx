@@ -18,54 +18,54 @@ const styles = (theme) => ({
     marginTop: 5,
     maxWidth: 640,
     [theme.breakpoints.down('lg')]: {
-      marginBottom: 20,
+      marginBottom: 20
     },
     [theme.breakpoints.down('md')]: {
-      marginBottom: 10,
+      marginBottom: 10
     },
     [theme.breakpoints.down('sm')]: {
-      fontSize: 13,
-    },
+      fontSize: 13
+    }
   },
   noMargin: {
-    margin: 0,
+    margin: 0
   },
   sample: {
-    color: 'rgba(0, 0, 0, 0.38)',
+    color: 'rgba(0, 0, 0, 0.38)'
   },
   groupContainer: {
     position: 'relative',
     marginTop: 20,
     [theme.breakpoints.down('md')]: {
-      marginBottom: 20,
-    },
+      marginBottom: 20
+    }
   },
   outlined: {
     border: '1px solid rgba(224, 224, 224, 1)',
-    padding: '0 20px',
+    padding: '0 20px'
   },
   errored: {
     borderColor: '#f44336',
-    color: '#f44336',
+    color: '#f44336'
   },
   sampleComponent: {
     whiteSpace: 'normal',
     fontSize: 11,
     marginLeft: 0,
-    marginRight: 0,
+    marginRight: 0
   },
   rowDisplay: {
     display: 'inline-block',
-    width: '50%',
+    width: '50%'
   },
   labelRoot: {
     '& legend': {
       opacity: 1,
       [theme.breakpoints.down('md')]: {
-        fontSize: 13,
-      },
-    },
-  },
+        fontSize: 13
+      }
+    }
+  }
 });
 
 const getCoordinated = (position) => {
@@ -94,10 +94,9 @@ const ElementContainer = ({
   bottomSample,
   containerRef,
   notRequiredLabel,
-  descriptionClassName,
+  descriptionClassName
 }) => {
-  const sampleText =
-    sample && typeof sample === 'string' ? renderHTML(sample) : sample;
+  const sampleText = sample && typeof sample === 'string' ? renderHTML(sample) : sample;
 
   const sampleComponent =
     (error || sampleText) && !noMargin ? (
@@ -118,25 +117,22 @@ const ElementContainer = ({
         classes.root,
         {
           [classes.rowDisplay]: row,
-          [classes.noMargin]: noMargin,
+          [classes.noMargin]: noMargin
         },
         className
       )}
       classes={{
-        root: classes.labelRoot,
+        root: classes.labelRoot
       }}
       style={{
         width,
         maxWidth,
-        ...(position ? getCoordinated(position) : {}),
+        ...(position ? getCoordinated(position) : {})
       }}
       row={row.toString()}
     >
       {description ? (
-        <FormLabel
-          component="legend"
-          className={classNames(descriptionClassName)}
-        >
+        <FormLabel component="legend" className={classNames(descriptionClassName)}>
           <FieldLabel
             description={description}
             required={required}
@@ -161,10 +157,7 @@ const ElementContainer = ({
 };
 
 ElementContainer.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-  ]).isRequired,
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
   classes: PropTypes.object.isRequired,
   sample: PropTypes.string,
   description: PropTypes.string,
@@ -173,7 +166,7 @@ ElementContainer.propTypes = {
   row: PropTypes.bool,
   bottomError: PropTypes.bool,
   position: PropTypes.object,
-  notRequiredLabel: PropTypes.string,
+  notRequiredLabel: PropTypes.string
 };
 
 ElementContainer.defaultProps = {
@@ -184,7 +177,7 @@ ElementContainer.defaultProps = {
   row: false,
   bottomError: false,
   position: null,
-  notRequiredLabel: null,
+  notRequiredLabel: null
 };
 
 const styled = withStyles(styles)(ElementContainer);

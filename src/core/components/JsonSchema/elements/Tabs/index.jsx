@@ -14,7 +14,7 @@ import { useTabs } from './useTabs';
 
 const useStyles = makeStyles(() => ({
   chips: {
-    margin: '0 15px 15px 0',
+    margin: '0 15px 15px 0'
   },
   isMobile: {
     margin: 0,
@@ -24,14 +24,14 @@ const useStyles = makeStyles(() => ({
     margin: 0,
     padding: 0,
     paddingLeft: 15,
-    borderLeft: '1px solid #e6e6e6',
+    borderLeft: '1px solid #e6e6e6'
   },
   expandMore: {
     marginBottom: 20,
     marginLeft: -12
   },
   activeTabStyle: {
-    borderLeft: '1px solid #004BC1',
+    borderLeft: '1px solid #004BC1'
   }
 }));
 
@@ -49,9 +49,7 @@ const TabsControl = (props) => {
     properties,
     parentValue,
     options,
-    options: {
-      orientation, position, columnLeft, columnRight
-    } = {},
+    options: { orientation, position, columnLeft, columnRight } = {},
     ...rest
   } = props;
   const [isMobile] = React.useState(() => {
@@ -64,21 +62,21 @@ const TabsControl = (props) => {
   const { tabs, errored, activeTab, activeSchema, handleChange, tabKey } = useTabs(props);
 
   if (hidden) return null;
-  
-  const chipsList = tabs.map((key) => ({
-    title: properties[key].description,
-  })).filter((_, index) => {
-    if (expanded) return true;
 
-    if (isMobile && !expanded && index >= CHIPS_LIMIT) return false;
+  const chipsList = tabs
+    .map((key) => ({
+      title: properties[key].description
+    }))
+    .filter((_, index) => {
+      if (expanded) return true;
 
-    return true;
-  });
+      if (isMobile && !expanded && index >= CHIPS_LIMIT) return false;
+
+      return true;
+    });
 
   return (
-    <ElementContainer
-      maxWidth={'unset'}
-    >
+    <ElementContainer maxWidth={'unset'}>
       <TabsContainer
         isMobile={isMobile}
         position={position}
@@ -99,11 +97,11 @@ const TabsControl = (props) => {
             className={classNames({
               [classes.chips]: true,
               [classes.outlined]: variant === 'outlined',
-              [classes.isMobileChip]: isMobile && options,
+              [classes.isMobileChip]: isMobile && options
             })}
             classes={{
               root: classNames({
-                [classes.isMobile]: isMobile && options,
+                [classes.isMobile]: isMobile && options
               })
             }}
           />
@@ -112,7 +110,7 @@ const TabsControl = (props) => {
             <IconButton
               onClick={() => setExpanded(!expanded)}
               className={classNames({
-                [classes.expandMore]: isMobile,
+                [classes.expandMore]: isMobile
               })}
             >
               {expanded ? <ExpandLessIcon /> : <MoreHorizIcon />}
@@ -133,6 +131,6 @@ const TabsControl = (props) => {
       </TabsContainer>
     </ElementContainer>
   );
-}
+};
 
 export default TabsControl;

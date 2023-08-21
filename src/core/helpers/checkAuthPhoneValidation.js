@@ -9,25 +9,26 @@ const ON_ERROR_CLOSE = 'ON_ERROR_CLOSE';
 const SNACKBAR_ID = 'SNACKBAR_MESSAGE';
 
 export default (params) => {
-    const { phone, valid } = params || {};
-    const { phone: phoneValid } = valid || {};
-    const { dispatch } = store;
+  const { phone, valid } = params || {};
+  const { phone: phoneValid } = valid || {};
+  const { dispatch } = store;
 
-    if (!phone || phoneValid) {
-        return;
-    }
+  if (!phone || phoneValid) {
+    return;
+  }
 
-    const handleClose = () => dispatch({ type: ON_ERROR_CLOSE, payload: SNACKBAR_ID });
+  const handleClose = () => dispatch({ type: ON_ERROR_CLOSE, payload: SNACKBAR_ID });
 
-    const action = () => dispatch({
-        type: ON_MESSAGE_ADD,
-        payload: {
-            handleClose,
-            id: SNACKBAR_ID,
-            variant: 'default',
-            content: <ValidatePhoneMessage handleClose={handleClose} />
-        }
+  const action = () =>
+    dispatch({
+      type: ON_MESSAGE_ADD,
+      payload: {
+        handleClose,
+        id: SNACKBAR_ID,
+        variant: 'default',
+        content: <ValidatePhoneMessage handleClose={handleClose} />
+      }
     });
 
-    setTimeout(action, 2000);
+  setTimeout(action, 2000);
 };

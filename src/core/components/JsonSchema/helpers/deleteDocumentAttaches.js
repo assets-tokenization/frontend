@@ -5,56 +5,61 @@ import { API_URL } from 'services/api';
 import storage from 'helpers/storage';
 import diff from 'deep-diff';
 
-const attachesToArray = (array, name) => flatten([].concat(array).filter(Boolean).map((data) => data[name]).filter(Boolean));
+const attachesToArray = (array, name) =>
+  flatten(
+    []
+      .concat(array)
+      .filter(Boolean)
+      .map((data) => data[name])
+      .filter(Boolean)
+  );
 
-const deleteDocumentAttaches = ({
-    taskSchema,
-    documentData,
-    documentDataModified,
-    targetPath
-}) => {
-    try {
-        const controlPath = `properties.${targetPath.split('.').join('.properties.')}`;
+const deleteDocumentAttaches = ({ taskSchema, documentData, documentDataModified, targetPath }) => {
+  try {
+    const controlPath = `properties.${targetPath.split('.').join('.properties.')}`;
 
-        const controlSchema = objectPath.get(taskSchema?.jsonSchema, controlPath);
-        
-        const selectFilesPath = findPathDeep(controlSchema, value => value === 'select.files');
+    const controlSchema = objectPath.get(taskSchema?.jsonSchema, controlPath);
 
-        if (!selectFilesPath) return;
-    
-        const filesControlPath = `${controlPath}.${selectFilesPath}`.replace('.control', '');
-    
-        const filesControlDataPath = filesControlPath.replace(/properties./g, '').replace(/items./g, '').split('.');
+    const selectFilesPath = findPathDeep(controlSchema, (value) => value === 'select.files');
 
-        const fieldName = filesControlDataPath.pop();
+    if (!selectFilesPath) return;
 
-        const controlDataOrigin = objectPath.get(documentData, filesControlDataPath);
-        const controlDataActual = objectPath.get(documentDataModified, filesControlDataPath);
+    const filesControlPath = `${controlPath}.${selectFilesPath}`.replace('.control', '');
 
-        const attachesOrigin = attachesToArray(controlDataOrigin, fieldName);
-        const attachesActual = attachesToArray(controlDataActual, fieldName);
+    const filesControlDataPath = filesControlPath
+      .replace(/properties./g, '')
+      .replace(/items./g, '')
+      .split('.');
 
-        if (!diff(attachesOrigin, attachesActual)) return;
+    const fieldName = filesControlDataPath.pop();
 
-        attachesOrigin.forEach((file) => {
-            if (attachesActual.find(({ id }) => file.id === id)) return;
+    const controlDataOrigin = objectPath.get(documentData, filesControlDataPath);
+    const controlDataActual = objectPath.get(documentDataModified, filesControlDataPath);
 
-            if (!file) return;
+    const attachesOrigin = attachesToArray(controlDataOrigin, fieldName);
+    const attachesActual = attachesToArray(controlDataActual, fieldName);
 
-            const { documentId, id } = file;
+    if (!diff(attachesOrigin, attachesActual)) return;
 
-            fetch(`${API_URL}documents/${documentId}/attachments/${id}`, {
-                method: 'delete',
-                cache: 'reload',
-                headers: {
-                    'Content-Type': 'application/json',
-                    token: storage.getItem('token')
-                }
-            });
-        });
-    } catch (e) {
-        console.log('loop attaches error', e);
-    }
+    attachesOrigin.forEach((file) => {
+      if (attachesActual.find(({ id }) => file.id === id)) return;
+
+      if (!file) return;
+
+      const { documentId, id } = file;
+
+      fetch(`${API_URL}documents/${documentId}/attachments/${id}`, {
+        method: 'delete',
+        cache: 'reload',
+        headers: {
+          'Content-Type': 'application/json',
+          token: storage.getItem('token')
+        }
+      });
+    });
+  } catch (e) {
+    console.log('loop attaches error', e);
+  }
 };
 
 export default deleteDocumentAttaches;

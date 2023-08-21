@@ -22,16 +22,16 @@ const styles = () => ({
   root: {
     marginTop: 10,
     marginBottom: 20,
-    width: '100%',
+    width: '100%'
   },
   noMargin: {
-    margin: 0,
+    margin: 0
   },
   label: {
     marginTop: 60,
     fontSize: 20,
     lineHeight: '24px',
-    marginBottom: 15,
+    marginBottom: 15
   },
   modal: {
     zIndex: 9999,
@@ -46,22 +46,22 @@ const styles = () => ({
     backgroundColor: 'rgba(255,255,255,0.6)',
     '& > *': {
       height: 'auto',
-      padding: 0,
-    },
+      padding: 0
+    }
   },
   simleListItem: {
     borderBottom: '2px solid #000',
     marginBottom: 15,
     justifyContent: 'space-between',
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   simleListWrapper: {
-    marginTop: 10,
+    marginTop: 10
   },
   description: {
-    marginBottom: 10,
-  },
+    marginBottom: 10
+  }
 });
 
 class SelectFiles extends React.Component {
@@ -71,13 +71,13 @@ class SelectFiles extends React.Component {
     this.state = {
       uploadFileList: [],
       rejected: null,
-      loading: false,
+      loading: false
     };
 
     this.queue = queueFactory.get(taskId);
     this.queue.on('end', () => {
       this.setState({
-        loading: false,
+        loading: false
       });
     });
   }
@@ -89,9 +89,7 @@ class SelectFiles extends React.Component {
   componentDidUpdate(prevProps) {
     const { value } = this.props;
 
-    if (
-      (prevProps.value && prevProps.value.length) !== (value && value.length)
-    ) {
+    if ((prevProps.value && prevProps.value.length) !== (value && value.length)) {
       this.handleRemoveHidden();
     }
   }
@@ -135,31 +133,32 @@ class SelectFiles extends React.Component {
   };
 
   // eslint-disable-next-line no-async-promise-executor
-  handleCompressFile = (attach) => new Promise(async (resolve) => {
-    const { outputQuality, compressTypes } = this.props;
+  handleCompressFile = (attach) =>
+    new Promise(async (resolve) => {
+      const { outputQuality, compressTypes } = this.props;
 
-    if (!outputQuality || !compressTypes || !attach) {
-      return resolve(attach);
-    }
-
-    const compressing = compressTypes.find((type) => {
-      return attach.type.includes(type);
-    });
-
-    const compressData = {
-      attach,
-      outputQuality
-    };
-  
-    switch (compressing) {
-      case 'image':
-        return resolve(await compressImage(compressData));
-      case 'pdf':
-        return resolve(await compressPDF(compressData));
-      default:
+      if (!outputQuality || !compressTypes || !attach) {
         return resolve(attach);
-    }
-  });
+      }
+
+      const compressing = compressTypes.find((type) => {
+        return attach.type.includes(type);
+      });
+
+      const compressData = {
+        attach,
+        outputQuality
+      };
+
+      switch (compressing) {
+        case 'image':
+          return resolve(await compressImage(compressData));
+        case 'pdf':
+          return resolve(await compressPDF(compressData));
+        default:
+          return resolve(attach);
+      }
+    });
 
   uploadFile = (file, labels, fileIndex) => () =>
     // eslint-disable-next-line no-async-promise-executor
@@ -172,7 +171,7 @@ class SelectFiles extends React.Component {
         metaData,
         stepName,
         path,
-        changeName,
+        changeName
       } = this.props;
 
       const fileList = Object.values(value || {});
@@ -187,14 +186,14 @@ class SelectFiles extends React.Component {
         size: file.size,
         type: file.type,
         labels,
-        contestName,
+        contestName
       };
 
       let fileName = file.name;
 
       if (changeName) {
         fileName = this.evaluateFile(changeName, attachObject);
- 
+
         if (fileName instanceof Error) {
           fileName.commit({ type: 'select files changeName' });
           fileName = file.name;
@@ -224,7 +223,7 @@ class SelectFiles extends React.Component {
       await loadTaskAction();
 
       setBusy(false);
-  
+
       if (!(uploadedFile instanceof Error)) {
         fileList[fileIndex] = {
           ...uploadedFile,
@@ -232,7 +231,7 @@ class SelectFiles extends React.Component {
           labels,
           contestName,
           metaData: meta,
-          size: uploadedFile?.size,
+          size: uploadedFile?.size
         };
 
         this.handleChange(fileList, true, true);
@@ -240,7 +239,7 @@ class SelectFiles extends React.Component {
 
       this.setState(
         {
-          uploadFileList: uploadFileList.slice(1),
+          uploadFileList: uploadFileList.slice(1)
         },
         async () => {
           await sleep(10);
@@ -261,8 +260,8 @@ class SelectFiles extends React.Component {
 
     this.setState({
       rejected: {
-        message: t('FileSizeLimitReached'),
-      },
+        message: t('FileSizeLimitReached')
+      }
     });
   };
 
@@ -289,15 +288,13 @@ class SelectFiles extends React.Component {
             file.labels = labels;
             return file;
           })
-        ),
+        )
       },
       async () => {
         if (!demo) {
           await actions.handleStore();
           acceptedFiles.forEach((file, index) =>
-            this.queue.push(
-              this.uploadFile(file, labels, index + fileList.length)
-            )
+            this.queue.push(this.uploadFile(file, labels, index + fileList.length))
           );
         }
       }
@@ -305,15 +302,7 @@ class SelectFiles extends React.Component {
   };
 
   renderDataTableList = ({ list, dragEvents }) => {
-    const {
-      view,
-      labels,
-      actions,
-      readOnly,
-      fileStorage,
-      simpleList,
-      classes,
-    } = this.props;
+    const { view, labels, actions, readOnly, fileStorage, simpleList, classes } = this.props;
     const { uploadFileList, loading } = this.state;
 
     if (!list || !list.length) return null;
@@ -326,9 +315,7 @@ class SelectFiles extends React.Component {
               <span>{attach?.name}</span>
               <IconButton
                 onClick={() =>
-                  (readOnly || uploadFileList.length
-                    ? null
-                    : this.handleDeleteFile(attach))
+                  readOnly || uploadFileList.length ? null : this.handleDeleteFile(attach)
                 }
                 size="large"
               >
@@ -348,9 +335,8 @@ class SelectFiles extends React.Component {
         fileStorage={fileStorage}
         groupBy={labels ? 'labels' : undefined}
         actions={{
-          handleDeleteFile:
-            readOnly || uploadFileList.length ? null : this.handleDeleteFile,
-          handleDownloadFile: actions.handleDownloadFile,
+          handleDeleteFile: readOnly || uploadFileList.length ? null : this.handleDeleteFile,
+          handleDownloadFile: actions.handleDownloadFile
         }}
         loading={loading}
       />
@@ -376,21 +362,19 @@ class SelectFiles extends React.Component {
       maxLength,
       multiple,
       width,
-      maxWidth,
+      maxWidth
     } = this.props;
 
     const { uploadFileList, rejected, loading } = this.state;
 
     if (hidden) return null;
 
-    const fileList = []
-      .concat(Object.values(value || {}), uploadFileList)
-      .filter(Boolean);
+    const fileList = [].concat(Object.values(value || {}), uploadFileList).filter(Boolean);
 
     const renderDataTable = (dragEvents) =>
       this.renderDataTableList({
         list: fileList,
-        dragEvents,
+        dragEvents
       });
 
     const limitReached = maxLength && maxLength === fileList.length;
@@ -407,9 +391,7 @@ class SelectFiles extends React.Component {
             {description}
           </Typography>
         ) : null}
-        {sample ? (
-          <div className={classes.raw}>{renderHTML(sample)}</div>
-        ) : null}
+        {sample ? <div className={classes.raw}>{renderHTML(sample)}</div> : null}
         {labels && labels.length ? (
           <>
             {labels.map((label) => (
@@ -421,12 +403,10 @@ class SelectFiles extends React.Component {
                 {this.renderDataTableList({
                   list: (() => {
                     if (!fileList || !fileList.length) return null;
-                    const filesByLabel = fileList.filter(
-                      ({ labels }) => label === labels[0]
-                    );
+                    const filesByLabel = fileList.filter(({ labels }) => label === labels[0]);
                     if (!filesByLabel.length) return null;
                     return filesByLabel;
-                  })(),
+                  })()
                 })}
 
                 <SelectFileArea

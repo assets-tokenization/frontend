@@ -4,12 +4,7 @@ import renderHTML from 'helpers/renderHTML';
 
 import PropTypes from 'prop-types';
 
-import {
-  Typography,
-  FormControl,
-  FormHelperText,
-  Toolbar,
-} from '@mui/material';
+import { Typography, FormControl, FormHelperText, Toolbar } from '@mui/material';
 
 import withStyles from '@mui/styles/withStyles';
 
@@ -23,45 +18,45 @@ const styles = (theme) => ({
     marginTop: 20,
     maxWidth: 640,
     [theme.breakpoints.down('md')]: {
-      marginBottom: 20,
-    },
+      marginBottom: 20
+    }
   },
   withPadding: {
     padding: '10px 20px',
-    marginBottom: '0 !important',
+    marginBottom: '0 !important'
   },
   fullWidth: {
-    maxWidth: 'unset',
+    maxWidth: 'unset'
   },
   sample: {
-    maxWidth: 1000,
+    maxWidth: 1000
   },
   description: {
     maxWidth: 1000,
     [theme.breakpoints.down('md')]: {
       fontSize: 16,
-      lineHeight: '24px',
-    },
+      lineHeight: '24px'
+    }
   },
   groupContainer: {
     position: 'relative',
     marginTop: 0,
     marginBottom: 40,
     [theme.breakpoints.down('md')]: {
-      marginBottom: 0,
-    },
+      marginBottom: 0
+    }
   },
   outlined: {
     border: '1px solid rgba(224, 224, 224, 1)',
-    padding: '0 20px',
+    padding: '0 20px'
   },
   outlinedSample: {
     maxWidth: 1000,
-    marginTop: 0,
+    marginTop: 0
   },
   errored: {
     borderColor: '#f44336',
-    color: '#f44336',
+    color: '#f44336'
   },
   requiredFieldError: {
     position: 'relative',
@@ -69,12 +64,12 @@ const styles = (theme) => ({
     [theme.breakpoints.down('md')]: {
       top: 0,
       marginBottom: 5,
-      marginTop: 0,
-    },
+      marginTop: 0
+    }
   },
   noMargin: {
-    margin: 0,
-  },
+    margin: 0
+  }
 });
 
 const ElementGroupContainer = ({
@@ -95,10 +90,9 @@ const ElementGroupContainer = ({
   path,
   useOwnContainer,
   notRequiredLabel,
-  noMargin,
+  noMargin
 }) => {
-  const sampleText =
-    sample && typeof sample === 'string' ? renderHTML(sample) : sample;
+  const sampleText = sample && typeof sample === 'string' ? renderHTML(sample) : sample;
 
   const actionToolbar = actionButtons ? (
     <Toolbar disableGutters={true}>{actionButtons}</Toolbar>
@@ -111,7 +105,7 @@ const ElementGroupContainer = ({
       className={classNames(
         {
           // [classes.errored]: !!error,
-          [classes.description]: true,
+          [classes.description]: true
         },
         descriptionClassName
       )}
@@ -148,7 +142,7 @@ const ElementGroupContainer = ({
             [classes.fullWidth]: fullWidth,
             [classes.outlined]: outlined,
             [classes.errored]: !!error,
-            [classes.noMargin]: noMargin,
+            [classes.noMargin]: noMargin
           },
           className
         )}
@@ -164,10 +158,7 @@ const ElementGroupContainer = ({
         {children}
       </FormControl>
       {error ? (
-        <FormHelperText
-          className={!noMargin ? classes.requiredFieldError : null}
-          error={!!error}
-        >
+        <FormHelperText className={!noMargin ? classes.requiredFieldError : null} error={!!error}>
           <EJVError error={error} />
         </FormHelperText>
       ) : null}
@@ -176,13 +167,10 @@ const ElementGroupContainer = ({
 };
 
 ElementGroupContainer.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-  ]).isRequired,
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
   sample: PropTypes.string,
   description: PropTypes.string,
-  notRequiredLabel: PropTypes.string,
+  notRequiredLabel: PropTypes.string
 };
 
 ElementGroupContainer.defaultProps = {
@@ -191,7 +179,7 @@ ElementGroupContainer.defaultProps = {
   width: null,
   maxWidth: null,
   notRequiredLabel: null,
-  variant: 'h5',
+  variant: 'h5'
 };
 
 export default withStyles(styles)(ElementGroupContainer);

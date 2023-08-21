@@ -1,4 +1,4 @@
-const readFileAsync = (file) => (
+const readFileAsync = (file) =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
 
@@ -12,8 +12,7 @@ const readFileAsync = (file) => (
     reader.onerror = reject;
 
     reader.readAsText(file);
-  })
-);
+  });
 
 export default (file, callback) => {
   const reader = new FileReader();

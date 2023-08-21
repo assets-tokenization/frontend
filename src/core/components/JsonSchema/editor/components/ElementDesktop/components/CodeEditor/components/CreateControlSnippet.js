@@ -101,20 +101,12 @@ const setDefaultGroup = (snippet) => {
     return {
       ...snippet?.snippetGroup,
       label: snippet?.snippetGroup?.name
-    }
+    };
   }
   return null;
 };
 
-const RenderCodeEditor = ({
-  t,
-  label,
-  classes,
-  value,
-  onChange,
-  mode,
-  height
-}) => {
+const RenderCodeEditor = ({ t, label, classes, value, onChange, mode, height }) => {
   const [isFullScreen, setIsFullScreen] = React.useState(false);
 
   const renderEditor = (props) => (
@@ -137,7 +129,7 @@ const RenderCodeEditor = ({
         showLineNumbers: true,
         tabSize: 4,
         useSoftTabs: true,
-        highlightActiveLine: true,
+        highlightActiveLine: true
       }}
     />
   );
@@ -146,12 +138,8 @@ const RenderCodeEditor = ({
     <>
       <Typography className={classes.editorLabel}>
         {label}
-        <Tooltip
-          title={t('FullScreen')}
-        >
-          <IconButton
-            onClick={() => setIsFullScreen(!isFullScreen)}
-          >
+        <Tooltip title={t('FullScreen')}>
+          <IconButton onClick={() => setIsFullScreen(!isFullScreen)}>
             <FullscreenIcon />
           </IconButton>
         </Tooltip>
@@ -159,12 +147,8 @@ const RenderCodeEditor = ({
 
       {renderEditor()}
 
-      <FullScreenDialog
-        open={isFullScreen}
-        title={label}
-        onClose={() => setIsFullScreen(false)}
-      >
-        {renderEditor({ height: '100%'})}
+      <FullScreenDialog open={isFullScreen} title={label} onClose={() => setIsFullScreen(false)}>
+        {renderEditor({ height: '100%' })}
       </FullScreenDialog>
     </>
   );
@@ -201,22 +185,27 @@ const CreateGroup = ({
       return;
     }
 
-    handleCreateSnippet(cleenDeep({
-      name: snippetName,
-      type,
-      snippetGroupName: snippetGroup?.name,
-      data: JSON.stringify(cleenDeep({
-        code: snippetCode,
-        json: triggersCode,
-        innerJson: additionCode,
-        icon: chosenIcon
-      }))
-    }));
+    handleCreateSnippet(
+      cleenDeep({
+        name: snippetName,
+        type,
+        snippetGroupName: snippetGroup?.name,
+        data: JSON.stringify(
+          cleenDeep({
+            code: snippetCode,
+            json: triggersCode,
+            innerJson: additionCode,
+            icon: chosenIcon
+          })
+        )
+      })
+    );
   };
 
-  const groupOptions = (groups.map((group) => ({
-    label: group.name, ...group
-  })));
+  const groupOptions = groups.map((group) => ({
+    label: group.name,
+    ...group
+  }));
 
   return (
     <Dialog
@@ -230,201 +219,178 @@ const CreateGroup = ({
     >
       <DialogTitle
         classes={{
-          root: classes.dialogTitle,
+          root: classes.dialogTitle
         }}
       >
         {t(type === 'function' ? 'CreateFunctionTitle' : 'CreateSnippetsTitle')}
       </DialogTitle>
       <DialogContent>
         <DialogContentText>
-          {
-            type === 'function' ? (
-              <>
-                <StringElement
-                  description={t('FunctionName')}
-                  fullWidth={true}
-                  darkTheme={true}
-                  required={true}
-                  variant={'outlined'}
-                  inputProps={{ maxLength: 255 }}
-                  autoFocus={true}
-                  onChange={(value) => setSnippetName(value)}
-                  value={snippetName}
-                  error={
-                    errorSnippetName
-                      ? { message: t('RequiredField') }
-                      : null
-                  }
-                />
+          {type === 'function' ? (
+            <>
+              <StringElement
+                description={t('FunctionName')}
+                fullWidth={true}
+                darkTheme={true}
+                required={true}
+                variant={'outlined'}
+                inputProps={{ maxLength: 255 }}
+                autoFocus={true}
+                onChange={(value) => setSnippetName(value)}
+                value={snippetName}
+                error={errorSnippetName ? { message: t('RequiredField') } : null}
+              />
 
-                <RenderCodeEditor
-                  t={t}
-                  label={t('FunctionCode')}
-                  classes={classes}
-                  value={snippetCode}
-                  onChange={setSnippetCode}
-                  mode={'javascript'}
-                  height={170}
-                />
+              <RenderCodeEditor
+                t={t}
+                label={t('FunctionCode')}
+                classes={classes}
+                value={snippetCode}
+                onChange={setSnippetCode}
+                mode={'javascript'}
+                height={170}
+              />
 
-                <div className={classes.divider} />
+              <div className={classes.divider} />
 
-                <Select
-                  description={t('GroupInMenu')}
-                  options={groupOptions}
-                  value={snippetGroup}
-                  fullWidth={true}
-                  required={true}
-                  darkTheme={true}
-                  variant={'outlined'}
-                  onChange={(value) => setSnippetGroup(value)}
-                  error={
-                    errorGroup
-                      ? { message: t('RequiredField') }
-                      : null
-                  }
-                />
-              </>
-            ) : (
-              <>
-                <StringElement
-                  description={t('ControlName')}
-                  fullWidth={true}
-                  darkTheme={true}
-                  required={true}
-                  variant={'outlined'}
-                  inputProps={{ maxLength: 255 }}
-                  autoFocus={true}
-                  onChange={(value) => setSnippetName(value)}
-                  value={snippetName}
-                  error={
-                    errorSnippetName
-                      ? { message: t('RequiredField') }
-                      : null
-                  }
-                />
+              <Select
+                description={t('GroupInMenu')}
+                options={groupOptions}
+                value={snippetGroup}
+                fullWidth={true}
+                required={true}
+                darkTheme={true}
+                variant={'outlined'}
+                onChange={(value) => setSnippetGroup(value)}
+                error={errorGroup ? { message: t('RequiredField') } : null}
+              />
+            </>
+          ) : (
+            <>
+              <StringElement
+                description={t('ControlName')}
+                fullWidth={true}
+                darkTheme={true}
+                required={true}
+                variant={'outlined'}
+                inputProps={{ maxLength: 255 }}
+                autoFocus={true}
+                onChange={(value) => setSnippetName(value)}
+                value={snippetName}
+                error={errorSnippetName ? { message: t('RequiredField') } : null}
+              />
 
-                <RenderCodeEditor
-                  t={t}
-                  label={t('ControlCode')}
-                  classes={classes}
-                  value={snippetCode}
-                  onChange={setSnippetCode}
-                  mode={'javascript'}
-                  height={170}
-                />
+              <RenderCodeEditor
+                t={t}
+                label={t('ControlCode')}
+                classes={classes}
+                value={snippetCode}
+                onChange={setSnippetCode}
+                mode={'javascript'}
+                height={170}
+              />
 
-                <RenderCodeEditor
-                  t={t}
-                  label={t('TriggersCode')}
-                  classes={classes}
-                  value={triggersCode}
-                  onChange={setTriggersCode}
-                  mode={'json'}
-                  height={115}
-                />
+              <RenderCodeEditor
+                t={t}
+                label={t('TriggersCode')}
+                classes={classes}
+                value={triggersCode}
+                onChange={setTriggersCode}
+                mode={'json'}
+                height={115}
+              />
 
-                <RenderCodeEditor
-                  t={t}
-                  label={t('AdditionalCode')}
-                  classes={classes}
-                  value={additionCode}
-                  onChange={setAdditionCode}
-                  mode={'json'}
-                  height={115}
-                />
+              <RenderCodeEditor
+                t={t}
+                label={t('AdditionalCode')}
+                classes={classes}
+                value={additionCode}
+                onChange={setAdditionCode}
+                mode={'json'}
+                height={115}
+              />
 
-                <div className={classes.divider} />
+              <div className={classes.divider} />
 
-                <Select
-                  description={t('GroupInMenu')}
-                  options={groupOptions}
-                  value={snippetGroup}
-                  fullWidth={true}
-                  required={true}
-                  darkTheme={true}
-                  variant={'outlined'}
-                  onChange={(value) => setSnippetGroup(value)}
-                  error={
-                    errorGroup
-                      ? { message: t('RequiredField') }
-                      : null
-                  }
-                />
-              </>
-            )
-          }
+              <Select
+                description={t('GroupInMenu')}
+                options={groupOptions}
+                value={snippetGroup}
+                fullWidth={true}
+                required={true}
+                darkTheme={true}
+                variant={'outlined'}
+                onChange={(value) => setSnippetGroup(value)}
+                error={errorGroup ? { message: t('RequiredField') } : null}
+              />
+            </>
+          )}
 
-          <IconList
-            t={t}
-            chosenIcon={chosenIcon}
-            handleChoose={setChosenIcon}
-          />
+          <IconList t={t} chosenIcon={chosenIcon} handleChoose={setChosenIcon} />
 
-          <ProgressLine
-            loading={loading}
-            classes={classes.progressLineWrapper}
-          />
+          <ProgressLine loading={loading} classes={classes.progressLineWrapper} />
         </DialogContentText>
       </DialogContent>
 
       <DialogActions
         classes={{
-          root: classes.dialogAction,
+          root: classes.dialogAction
         }}
       >
-        {
-          activeSnippet && !readOnly ? (
-            <div>
-              <Button
-                onClick={handleDeleteSnippet}
-                classes={{
-                  root: classes.closeAction,
-                }}
-              >
-                <DeleteOutlineOutlinedIcon className={classes.icon} />
-                {t('Delete')}
-              </Button>
+        {activeSnippet && !readOnly ? (
+          <div>
+            <Button
+              onClick={handleDeleteSnippet}
+              classes={{
+                root: classes.closeAction
+              }}
+            >
+              <DeleteOutlineOutlinedIcon className={classes.icon} />
+              {t('Delete')}
+            </Button>
 
-              <Button
-                onClick={() => handleExportSnippets({
+            <Button
+              onClick={() =>
+                handleExportSnippets({
                   idList: [activeSnippet?.id]
-                })}
-                classes={{
-                  root: classes.closeAction,
-                }}
-              >
-                <IosShareIcon className={classes.icon} />
-                {t('ExportSnippet')}
-              </Button>
-            </div>
-          ) : <div />
-        }
+                })
+              }
+              classes={{
+                root: classes.closeAction
+              }}
+            >
+              <IosShareIcon className={classes.icon} />
+              {t('ExportSnippet')}
+            </Button>
+          </div>
+        ) : (
+          <div />
+        )}
 
         <div>
           <Button
             onClick={handleClose}
             classes={{
-              root: classes.closeAction,
+              root: classes.closeAction
             }}
           >
             {t('Close')}
           </Button>
 
-          {
-            readOnly ? <div /> : (
-              <Button
-                variant="contained"
-                color="primary"
-                classes={{
-                  root: classes.saveAction,
-                }}
-                onClick={handleSave}
-              >
-                {t('Save')}
-              </Button>   
-            )
-          }
+          {readOnly ? (
+            <div />
+          ) : (
+            <Button
+              variant="contained"
+              color="primary"
+              classes={{
+                root: classes.saveAction
+              }}
+              onClick={handleSave}
+            >
+              {t('Save')}
+            </Button>
+          )}
         </div>
       </DialogActions>
     </Dialog>

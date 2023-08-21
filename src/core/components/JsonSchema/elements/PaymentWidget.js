@@ -17,7 +17,7 @@ import {
   getPaymentInfo,
   getPaymentStatus,
   loadTask,
-  validateAppleSession,
+  validateAppleSession
 } from 'application/actions/task';
 import {
   Typography,
@@ -27,7 +27,7 @@ import {
   AppBar,
   Radio,
   RadioGroup,
-  FormControlLabel,
+  FormControlLabel
 } from '@mui/material';
 import withStyles from '@mui/styles/withStyles';
 import ProgressLine from 'components/Preloader/ProgressLine';
@@ -44,16 +44,9 @@ import applePay from 'assets/img/applepay.svg';
 import privat_24 from 'assets/img/privat24.svg';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 
-const {
-  tranzzoToken,
-  posId,
-  gpayMerchantId,
-  paymentEnvironment,
-  paymentCheckDelay,
-} = config;
+const { tranzzoToken, posId, gpayMerchantId, paymentEnvironment, paymentCheckDelay } = config;
 
-const awaitDelay = (delay) =>
-  new Promise((fulfill) => setTimeout(fulfill, delay));
+const awaitDelay = (delay) => new Promise((fulfill) => setTimeout(fulfill, delay));
 const initTimeout = 200;
 const requestDelay = paymentCheckDelay || 3000;
 
@@ -61,37 +54,37 @@ const styles = (theme) => ({
   widgetWrapper: {
     padding: '23px 0px 15px 30px',
     '& iframe': {
-      height: '180px!important',
-    },
+      height: '180px!important'
+    }
   },
   widgetWrapperOneMethod: {
     paddingTop: 23,
     '& iframe': {
-      height: '180px!important',
-    },
+      height: '180px!important'
+    }
   },
   icon: {
-    color: 'green',
+    color: 'green'
   },
   flex: {
-    display: 'flex',
+    display: 'flex'
   },
   mt20: {
-    marginTop: 20,
+    marginTop: 20
   },
   mb20: {
-    marginBottom: 20,
+    marginBottom: 20
   },
   errorText: {
     marginBottom: 10,
     [theme.breakpoints.down('md')]: {
-      fontSize: 13,
-    },
+      fontSize: 13
+    }
   },
   appBar: {
     top: 'auto',
     backgroundColor: '#fff',
-    bottom: 0,
+    bottom: 0
   },
   toolbar: {
     margin: 0,
@@ -99,41 +92,41 @@ const styles = (theme) => ({
     paddingLeft: 0,
     [theme.breakpoints.up('sm')]: {
       padding: '20px 32px',
-      paddingLeft: 0,
-    },
+      paddingLeft: 0
+    }
   },
   button: {
-    marginRight: 16,
+    marginRight: 16
   },
   createPDF: {
     [theme.breakpoints.up('sm')]: {
       padding: 0,
-      fontSize: '0.8rem',
-    },
+      fontSize: '0.8rem'
+    }
   },
   removeBtn: {
     color: 'rgba(0, 0, 0, 0.54)',
     borderColor: 'transparent',
-    marginLeft: 'auto',
+    marginLeft: 'auto'
   },
   disabledBorder: {
-    border: 'none!important',
+    border: 'none!important'
   },
   loaderWrapper: {
     marginBottom: 20,
-    marginTop: 20,
+    marginTop: 20
   },
   successMessage: {
     position: 'fixed',
-    width: '100%',
+    width: '100%'
   },
   paymentTypes: {
     paddingTop: 40,
-    paddingRight: 30,
+    paddingRight: 30
   },
   finalTextWrapper: {
     display: 'flex',
-    marginBottom: 50,
+    marginBottom: 50
   },
   hidden: {
     display: 'none'
@@ -161,42 +154,40 @@ class PaymentWidget extends React.Component {
       widget: defaultMethod === 'card',
       applepay: defaultMethod === 'applePay',
       gpay: defaultMethod === 'googlePay',
-      privat24: defaultMethod === 'privatPay',
+      privat24: defaultMethod === 'privatPay'
     };
 
     this.triggerTokenizer = React.createRef();
     this.queue = queue({ autostart: true, concurrency: 1 });
     this.queueAppleGoogle = queue({ autostart: true, concurrency: 1 });
 
-    this.broadcastChannel = new BroadcastChannel([props.rootDocument?.id].concat(props.path || []).join());
+    this.broadcastChannel = new BroadcastChannel(
+      [props.rootDocument?.id].concat(props.path || []).join()
+    );
     this.broadcastChannel.onmessage = this.handleBroadcastMessage;
   }
 
   handleBroadcastMessage = (event) => {
-    const {
-      isSuccess,
-      isPending,
-    } = this.state;
+    const { isSuccess, isPending } = this.state;
 
     const message = JSON.parse(event.data);
     switch (message.type) {
       case 'paymentState':
-        if (
-          message.payload?.isSuccess
-          || message.payload?.isPending
-        ) {
+        if (message.payload?.isSuccess || message.payload?.isPending) {
           this.setState({ anotherPaymentWidgetIsBusy: true });
         }
         break;
       case 'checkWidgetStatus':
         if (isPending || isSuccess) {
-          this.broadcastChannel.postMessage(JSON.stringify({
-            type: 'paymentState',
-            payload: {
-              isSuccess,
-              isPending,
-            },
-          }));
+          this.broadcastChannel.postMessage(
+            JSON.stringify({
+              type: 'paymentState',
+              payload: {
+                isSuccess,
+                isPending
+              }
+            })
+          );
         }
         break;
       case 'activePaymentWidgetFocus':
@@ -207,7 +198,7 @@ class PaymentWidget extends React.Component {
       default:
       // Nothing to do
     }
-  }
+  };
 
   setId = () => {
     const { path } = this.props;
@@ -220,7 +211,7 @@ class PaymentWidget extends React.Component {
 
     onChange({
       ...value,
-      [name]: data === null ? [] : data || val,
+      [name]: data === null ? [] : data || val
     });
   };
 
@@ -253,7 +244,7 @@ class PaymentWidget extends React.Component {
       path,
       items,
       steps,
-      value,
+      value
     } = this.props;
     const { loading } = this.state;
 
@@ -277,9 +268,7 @@ class PaymentWidget extends React.Component {
               value={(value || {})[key]}
               onChange={this.handleChange.bind(null, key)}
               required={
-                Array.isArray(schema.required)
-                  ? schema.required.includes(key)
-                  : schema.required
+                Array.isArray(schema.required) ? schema.required.includes(key) : schema.required
               }
             />
           </div>
@@ -304,8 +293,7 @@ class PaymentWidget extends React.Component {
 
     if (!isSuccess && !isPending) {
       this.validateControl();
-      const errorMessage = (data) =>
-        (data && data.status_description) || 'ErrorPaymentStatus';
+      const errorMessage = (data) => (data && data.status_description) || 'ErrorPaymentStatus';
       importActions.addMessage(new Message(errorMessage(extraData), 'error'));
     }
 
@@ -326,7 +314,7 @@ class PaymentWidget extends React.Component {
     const {
       taskId,
       importActions,
-      rootDocument: { id },
+      rootDocument: { id }
     } = this.props;
 
     const result = await importActions.getPaymentStatus(id);
@@ -344,9 +332,7 @@ class PaymentWidget extends React.Component {
     } = this.props;
 
     if (!tokenData || !tokenData.token) {
-      importActions.addMessage(
-        new Message('FaildedGettingPaymentToken', 'error')
-      );
+      importActions.addMessage(new Message('FaildedGettingPaymentToken', 'error'));
       this.initWidget();
       return;
     }
@@ -367,7 +353,7 @@ class PaymentWidget extends React.Component {
     } else {
       this.parseResult({
         result,
-        isUserAction: true,
+        isUserAction: true
       });
     }
 
@@ -398,9 +384,9 @@ class PaymentWidget extends React.Component {
         loading: false,
         validateErrors: [
           {
-            errorText: t('ErrorValidatingDocument'),
-          },
-        ],
+            errorText: t('ErrorValidatingDocument')
+          }
+        ]
       });
 
       this.queue.stop();
@@ -419,8 +405,8 @@ class PaymentWidget extends React.Component {
     const virtualizedValue = {
       ...(value || {}),
       isSuccess: getProcessedFromPayment({
-        ...(value || {}),
-      }),
+        ...(value || {})
+      })
     };
 
     const errors = validateData(virtualizedValue, schema, rootDocument?.data);
@@ -430,9 +416,9 @@ class PaymentWidget extends React.Component {
         loading: false,
         validateErrors: [
           {
-            errorText: errors.map(({ errorText }) => errorText).join(', '),
-          },
-        ],
+            errorText: errors.map(({ errorText }) => errorText).join(', ')
+          }
+        ]
       });
     }
   };
@@ -446,7 +432,7 @@ class PaymentWidget extends React.Component {
       rootPath,
       commitAfterPayment,
       finalText,
-      template: { jsonSchema },
+      template: { jsonSchema }
     } = this.props;
 
     if (!commitAfterPayment) {
@@ -458,14 +444,7 @@ class PaymentWidget extends React.Component {
       );
     }
 
-    return (
-      <SuccessMessage
-        {...jsonSchema}
-        taskId={taskId}
-        rootPath={rootPath}
-        task={task}
-      />
-    );
+    return <SuccessMessage {...jsonSchema} taskId={taskId} rootPath={rootPath} task={task} />;
   };
 
   parseResult = async ({ result, isUserAction, silent, isReload }) => {
@@ -477,8 +456,7 @@ class PaymentWidget extends React.Component {
 
     if (!paymentInfo) return;
 
-    const { processed, calculated, calculatedHistory, paymentRequestData } =
-      paymentInfo;
+    const { processed, calculated, calculatedHistory, paymentRequestData } = paymentInfo;
 
     this.setState({ calculatedHistory });
 
@@ -489,7 +467,7 @@ class PaymentWidget extends React.Component {
     if (!calculated) return;
 
     const {
-      extraData: { user_action_required, user_action_url },
+      extraData: { user_action_required, user_action_url }
     } = calculated;
 
     if (user_action_required && isUserAction) {
@@ -505,9 +483,7 @@ class PaymentWidget extends React.Component {
     const processedItem = processed && processed[processed.length - 1];
 
     if (!processedItem) {
-      isReload &&
-        !silent &&
-        this.showStatus({ isSuccess: false, isPending: true });
+      isReload && !silent && this.showStatus({ isSuccess: false, isPending: true });
       return;
     }
 
@@ -525,7 +501,7 @@ class PaymentWidget extends React.Component {
       isPending,
       isProcessed,
       processed,
-      extraData,
+      extraData
     });
 
     if (!silent) {
@@ -555,26 +531,18 @@ class PaymentWidget extends React.Component {
       loopRequest.forEach((index) =>
         this.queue.push(async () => {
           const { commitAfterPayment, task } = this.props;
-          const {
-            isSuccess,
-            isPending,
-            calculatedHistory,
-            processed,
-            extraData,
-            messageShown,
-          } = this.state;
+          const { isSuccess, isPending, calculatedHistory, processed, extraData, messageShown } =
+            this.state;
 
           const isFinished = commitAfterPayment ? task?.finished : true;
 
           if (isSuccess && isFinished) return;
 
           const isLastItem =
-            (calculatedHistory && calculatedHistory.length) ===
-            (processed && processed.length);
+            (calculatedHistory && calculatedHistory.length) === (processed && processed.length);
 
           if (!isSuccess && !isPending && isLastItem) {
-            !messageShown &&
-              this.showStatus({ isSuccess, isPending, extraData });
+            !messageShown && this.showStatus({ isSuccess, isPending, extraData });
             return;
           }
 
@@ -582,7 +550,7 @@ class PaymentWidget extends React.Component {
 
           await this.checkPaymentStatus({
             silent: index < loopRequest.length - 1,
-            isReload: true,
+            isReload: true
           });
         })
       );
@@ -610,9 +578,9 @@ class PaymentWidget extends React.Component {
       selector: this.setId(),
       style: 'diia',
       properties: {
-        showSubmit: false,
+        showSubmit: false
       },
-      onToken: this.onToken,
+      onToken: this.onToken
     });
 
     this.widget.open();
@@ -621,17 +589,13 @@ class PaymentWidget extends React.Component {
   initWidgetEvents = () => {
     const { importActions } = this.props;
 
-    document.addEventListener('widget-init-ready', () =>
-      this.setState({ loading: false })
-    );
+    document.addEventListener('widget-init-ready', () => this.setState({ loading: false }));
 
     document.addEventListener('widget-init-error', (e) => {
-      importActions.addMessage(
-        new Message(`${e.detail.id}, ${e.detail.message}`, 'error')
-      );
+      importActions.addMessage(new Message(`${e.detail.id}, ${e.detail.message}`, 'error'));
       this.setState({
         initError: e.detail.message,
-        loading: false,
+        loading: false
       });
     });
 
@@ -646,14 +610,16 @@ class PaymentWidget extends React.Component {
 
       current.addEventListener('click', () => {
         this.widget.validateForm().then(async (isValid) => {
-          this.broadcastChannel.postMessage(JSON.stringify({
-            type: 'paymentState',
-            payload: {
-              isPending: true,
-            },
-          }));
+          this.broadcastChannel.postMessage(
+            JSON.stringify({
+              type: 'paymentState',
+              payload: {
+                isPending: true
+              }
+            })
+          );
           const valid = await actions.validateStep(null, {
-            ignorePaymentControl: true,
+            ignorePaymentControl: true
           });
 
           const validDocument = await this.validateDocument();
@@ -675,7 +641,7 @@ class PaymentWidget extends React.Component {
       applepay: false,
       gpay: false,
       privat24: false,
-      [value]: checked,
+      [value]: checked
     });
   };
 
@@ -698,15 +664,13 @@ class PaymentWidget extends React.Component {
 
       await this.checkPaymentStatus({
         silent: !isLast,
-        isReload: true,
+        isReload: true
       });
 
       if (isLast) this.setState({ loading: false });
     };
 
-    loopRequest.forEach((index) =>
-      this.queueAppleGoogle.push(() => checkStatus(index))
-    );
+    loopRequest.forEach((index) => this.queueAppleGoogle.push(() => checkStatus(index)));
   };
 
   initPayment = async () => {
@@ -714,7 +678,7 @@ class PaymentWidget extends React.Component {
       actions,
       importActions,
       rootDocument: { id },
-      paymentControlPath,
+      paymentControlPath
     } = this.props;
     const { applepay, gpay } = this.state;
 
@@ -726,7 +690,7 @@ class PaymentWidget extends React.Component {
 
     if (!(applepay && window.ApplePaySession)) {
       valid = await actions.validateStep(null, {
-        ignorePaymentControl: true,
+        ignorePaymentControl: true
       });
 
       validDocument = await this.validateDocument();
@@ -738,7 +702,7 @@ class PaymentWidget extends React.Component {
 
     if (gpay) {
       const paymentsClient = new window.google.payments.api.PaymentsClient({
-        environment: paymentEnvironment,
+        environment: paymentEnvironment
       });
 
       const paymentRequest = {
@@ -746,44 +710,43 @@ class PaymentWidget extends React.Component {
         apiVersionMinor: 0,
         merchantInfo: {
           merchantId: gpayMerchantId,
-          merchantName: 'DIIA',
+          merchantName: 'DIIA'
         },
         allowedPaymentMethods: [
           {
             type: 'CARD',
             parameters: {
               allowedAuthMethods: ['PAN_ONLY', 'CRYPTOGRAM_3DS'],
-              allowedCardNetworks: ['MASTERCARD', 'VISA'],
+              allowedCardNetworks: ['MASTERCARD', 'VISA']
             },
             tokenizationSpecification: {
               type: 'PAYMENT_GATEWAY',
               parameters: {
                 gateway: 'tranzzo',
-                gatewayMerchantId: posId,
-              },
-            },
-          },
+                gatewayMerchantId: posId
+              }
+            }
+          }
         ],
         transactionInfo: {
           currencyCode: 'UAH',
           totalPriceStatus: 'FINAL',
-          totalPrice: String(this.getAmount()),
-        },
+          totalPrice: String(this.getAmount())
+        }
       };
 
       if (paymentsClient) {
         paymentsClient
           .loadPaymentData(paymentRequest)
           .then(async (paymentData) => {
-            const paymentToken =
-              paymentData.paymentMethodData.tokenizationData.token;
+            const paymentToken = paymentData.paymentMethodData.tokenizationData.token;
             const encrypted = window.btoa(paymentToken);
 
             this.setState({ loading: true });
 
             const result = await importActions.getPaymentInfo(id, {
               paymentControlPath,
-              extraData: { payway, ccToken: encrypted },
+              extraData: { payway, ccToken: encrypted }
             });
 
             this.setState({ loading: false });
@@ -806,8 +769,8 @@ class PaymentWidget extends React.Component {
         merchantCapabilities: ['supports3DS'],
         total: {
           label: 'ФК ЕДИНИЙ ПРОСТІР',
-          amount: String(this.getAmount()),
-        },
+          amount: String(this.getAmount())
+        }
       };
 
       const applePaySession = new window.ApplePaySession(9, paymentRequest);
@@ -822,7 +785,7 @@ class PaymentWidget extends React.Component {
           validationUrl,
           displayName,
           initiative,
-          initiativeContext,
+          initiativeContext
         });
 
         if (merchantSession instanceof Error) {
@@ -843,7 +806,7 @@ class PaymentWidget extends React.Component {
           extraData: {
             payway,
             ccToken: tokenB64
-          },
+          }
         });
 
         this.setState({ loading: false });
@@ -860,7 +823,7 @@ class PaymentWidget extends React.Component {
       applePaySession.begin();
 
       const validApplePay = await actions.validateStep(null, {
-        ignorePaymentControl: true,
+        ignorePaymentControl: true
       });
 
       const validDocumentApplePay = await this.validateDocument();
@@ -868,13 +831,12 @@ class PaymentWidget extends React.Component {
       if (!validApplePay || !validDocumentApplePay) {
         applePaySession.abort();
       }
-
     } else {
       this.setState({ loading: true });
 
       const result = await importActions.getPaymentInfo(id, {
         paymentControlPath,
-        extraData: { payway },
+        extraData: { payway }
       });
 
       this.setState({ loading: false });
@@ -896,9 +858,7 @@ class PaymentWidget extends React.Component {
     const { widget, applepay, gpay, privat24, loading } = this.state;
 
     const id = this.setId();
-    const isAppleSupported = !!(
-      window.PaymentRequest && window.ApplePaySession
-    );
+    const isAppleSupported = !!(window.PaymentRequest && window.ApplePaySession);
 
     if (allowMethods.length === 1) {
       const method = allowMethods[0];
@@ -938,7 +898,7 @@ class PaymentWidget extends React.Component {
           {allowMethods.includes('card') ? (
             <>
               <FormControlLabel
-                control={(
+                control={
                   <Radio
                     id={'widget-radio'}
                     value={'widget'}
@@ -946,7 +906,7 @@ class PaymentWidget extends React.Component {
                     onChange={this.handleRadioChange}
                     disabled={loading}
                   />
-                )}
+                }
                 label={t('Widget')}
               />
 
@@ -961,7 +921,7 @@ class PaymentWidget extends React.Component {
           {allowMethods.includes('applePay') && isAppleSupported ? (
             <>
               <FormControlLabel
-                control={(
+                control={
                   <Radio
                     id={'applepay-radio'}
                     value={'applepay'}
@@ -969,7 +929,7 @@ class PaymentWidget extends React.Component {
                     onChange={this.handleRadioChange}
                     disabled={loading}
                   />
-                )}
+                }
                 label={renderHTML(
                   `<div style="display:flex;"><span style="margin-right: 11px;">Apple Pay</span> <img src=${applePay} alt="Apple Pay"/></div>`
                 )}
@@ -980,7 +940,7 @@ class PaymentWidget extends React.Component {
           {allowMethods.includes('googlePay') ? (
             <>
               <FormControlLabel
-                control={(
+                control={
                   <Radio
                     id={'gpay-radio'}
                     value={'gpay'}
@@ -988,7 +948,7 @@ class PaymentWidget extends React.Component {
                     onChange={this.handleRadioChange}
                     disabled={loading}
                   />
-                )}
+                }
                 label={renderHTML(
                   `<div style="display:flex;"><span style="margin-right: 11px;">Google Pay</span> <img src=${googlePay} alt="Google Pay"/></div>`
                 )}
@@ -999,7 +959,7 @@ class PaymentWidget extends React.Component {
           {allowMethods.includes('privatPay') ? (
             <>
               <FormControlLabel
-                control={(
+                control={
                   <Radio
                     id={'privat-radio'}
                     value={'privat24'}
@@ -1007,7 +967,7 @@ class PaymentWidget extends React.Component {
                     onChange={this.handleRadioChange}
                     disabled={loading}
                   />
-                )}
+                }
                 label={renderHTML(
                   `<div style="display:flex;"><span style="margin-right: 11px;">Privat Pay</span> <img src=${privat_24} alt="Privat"/></div>`
                 )}
@@ -1051,7 +1011,7 @@ class PaymentWidget extends React.Component {
       handlePrevStep,
       allowMethods,
       task,
-      commitAfterPayment,
+      commitAfterPayment
     } = this.props;
     const {
       loading,
@@ -1063,7 +1023,7 @@ class PaymentWidget extends React.Component {
       processed,
       widget,
       validateErrors,
-      anotherPaymentWidgetIsBusy,
+      anotherPaymentWidgetIsBusy
     } = this.state;
 
     if (!allowMethods || !allowMethods.length) return null;
@@ -1071,9 +1031,7 @@ class PaymentWidget extends React.Component {
     if (hidden) return null;
 
     const isFinalScreen =
-      isSuccess ||
-      (processed &&
-        processed.find(({ status: { isSuccess: anyPayed } }) => anyPayed));
+      isSuccess || (processed && processed.find(({ status: { isSuccess: anyPayed } }) => anyPayed));
     const successedAndCommited = commitAfterPayment ? task.finished : true;
 
     if (isFinalScreen && successedAndCommited) {
@@ -1175,12 +1133,10 @@ class PaymentWidget extends React.Component {
               size="large"
               color="primary"
               variant="contained"
-              className={
-                classNames({
-                  [classes.button]: true,
-                  [classes.hidden]: !widget
-                })
-              }
+              className={classNames({
+                [classes.button]: true,
+                [classes.hidden]: !widget
+              })}
               disabled={loading || initError}
             >
               {t('MakePayment')}
@@ -1191,24 +1147,17 @@ class PaymentWidget extends React.Component {
               size="large"
               color="primary"
               variant="contained"
-              className={
-                classNames({
-                  [classes.button]: true,
-                  [classes.hidden]: widget
-                })
-              }
+              className={classNames({
+                [classes.button]: true,
+                [classes.hidden]: widget
+              })}
               disabled={loading || initError}
             >
               {t('MakePayment')}
             </Button>
-
           </Toolbar>
           <Toolbar className={classes.toolbar}>
-            <img
-              src={mastercard}
-              alt="Mastercard"
-              className={classes.paymentTypes}
-            />
+            <img src={mastercard} alt="Mastercard" className={classes.paymentTypes} />
             <img src={visa} alt="Visa" className={classes.paymentTypes} />
           </Toolbar>
         </AppBar>
@@ -1245,7 +1194,7 @@ PaymentWidget.propTypes = {
   commitAfterPayment: PropTypes.bool,
   finalText: PropTypes.string,
   allowMethods: PropTypes.array,
-  defaultMethod: PropTypes.string,
+  defaultMethod: PropTypes.string
 };
 
 PaymentWidget.defaultProps = {
@@ -1259,12 +1208,10 @@ PaymentWidget.defaultProps = {
   commitAfterPayment: false,
   finalText: false,
   allowMethods: ['googlePay', 'applePay', 'privatPay', 'card'],
-  defaultMethod: 'card',
+  defaultMethod: 'card'
 };
 
-const mapStateToProps = ({
-  errors: { list }
-}) => ({
+const mapStateToProps = ({ errors: { list } }) => ({
   errorsList: list
 });
 
@@ -1274,8 +1221,8 @@ const mapDispatchToProps = (dispatch) => ({
     getPaymentStatus: bindActionCreators(getPaymentStatus, dispatch),
     loadTask: bindActionCreators(loadTask, dispatch),
     addMessage: bindActionCreators(addMessage, dispatch),
-    validateAppleSession: bindActionCreators(validateAppleSession, dispatch),
-  },
+    validateAppleSession: bindActionCreators(validateAppleSession, dispatch)
+  }
 });
 
 const styled = withStyles(styles)(PaymentWidget);

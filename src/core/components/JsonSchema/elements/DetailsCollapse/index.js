@@ -19,7 +19,7 @@ const DetailsCollapse = ({
   stepName,
   pure,
   accordion,
-  fullWidth,
+  fullWidth
 }) => {
   if (hidden) return null;
 
@@ -99,7 +99,7 @@ DetailsCollapse.propTypes = {
   pure: PropTypes.bool,
   accordion: PropTypes.bool,
   fullWidth: PropTypes.bool,
-  dataPath: PropTypes.string,
+  dataPath: PropTypes.string
 };
 
 DetailsCollapse.defaultProps = {
@@ -114,7 +114,7 @@ DetailsCollapse.defaultProps = {
   pure: false,
   accordion: false,
   fullWidth: false,
-  dataPath: false,
+  dataPath: false
 };
 
 export default translate('Elements')(DetailsCollapse);

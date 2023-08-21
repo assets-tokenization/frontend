@@ -11,52 +11,52 @@ import RenderPassportFormat from './renderPassportFormat';
 const months = (t) => [
   {
     id: '01',
-    name: t('January'),
+    name: t('January')
   },
   {
     id: '02',
-    name: t('February'),
+    name: t('February')
   },
   {
     id: '03',
-    name: t('March'),
+    name: t('March')
   },
   {
     id: '04',
-    name: t('April'),
+    name: t('April')
   },
   {
     id: '05',
-    name: t('May'),
+    name: t('May')
   },
   {
     id: '06',
-    name: t('June'),
+    name: t('June')
   },
   {
     id: '07',
-    name: t('July'),
+    name: t('July')
   },
   {
     id: '08',
-    name: t('August'),
+    name: t('August')
   },
   {
     id: '09',
-    name: t('September'),
+    name: t('September')
   },
   {
     id: '10',
-    name: t('October'),
+    name: t('October')
   },
   {
     id: '11',
-    name: t('November'),
+    name: t('November')
   },
   {
     id: '12',
-    name: t('December'),
-  },
+    name: t('December')
+  }
 ];
 
 let timeout = null;
@@ -91,13 +91,11 @@ const UserInputFields = ({
     return (
       <>
         {fields.some((field) => personalDataFields.includes(field)) ? (
-          <div className={classes.infoBlockHeadline}>
-            {t('personalData')}
-          </div>
+          <div className={classes.infoBlockHeadline}>{t('personalData')}</div>
         ) : null}
       </>
     );
-  }
+  };
 
   return (
     <>
@@ -177,11 +175,11 @@ UserInputFields.propTypes = {
   getSavingInterval: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
   errors: PropTypes.array,
-  actions: PropTypes.object.isRequired,
+  actions: PropTypes.object.isRequired
 };
 
 UserInputFields.defaultProps = {
-  errors: [],
+  errors: []
 };
 
 export default UserInputFields;

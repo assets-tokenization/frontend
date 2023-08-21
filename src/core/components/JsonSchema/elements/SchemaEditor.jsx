@@ -18,7 +18,7 @@ const useStyles = makeStyles(() => ({
     letterSpacing: '-0.09em',
     color: 'rgba(255, 255, 255, 0.7)',
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   actionWrapper: {
     display: 'flex',
@@ -29,8 +29,8 @@ const useStyles = makeStyles(() => ({
     position: 'relative',
     left: -8,
     '&:hover': {
-      backgroundColor: '#2e2e2e',
-    },
+      backgroundColor: '#2e2e2e'
+    }
   },
   actionLabel: {
     fontWeight: 500,
@@ -38,11 +38,11 @@ const useStyles = makeStyles(() => ({
     color: '#FFFFFF',
     fontSize: 16,
     textTransform: 'initial',
-    textAlign: 'left',
+    textAlign: 'left'
   },
   chevronIcon: {
-    fill: 'rgba(255, 255, 255, 0.7)',
-  },
+    fill: 'rgba(255, 255, 255, 0.7)'
+  }
 }));
 
 const SchemaEditor = ({
@@ -58,7 +58,7 @@ const SchemaEditor = ({
   setBusy,
   handleSave,
   darkTheme,
-  additionDescription,
+  additionDescription
 }) => {
   const classes = useStyles();
 
@@ -71,23 +71,13 @@ const SchemaEditor = ({
     <>
       {darkTheme ? (
         <>
-          <Button
-            className={classes.actionWrapper}
-            onClick={() => setOpen(true)}
-          >
-            <Typography className={classes.actionLabel}>
-              {description}
-            </Typography>
+          <Button className={classes.actionWrapper} onClick={() => setOpen(true)}>
+            <Typography className={classes.actionLabel}>{description}</Typography>
             <span className={classes.modelabel}>{'JSON5'}</span>
           </Button>
         </>
       ) : (
-        <Button
-          size="small"
-          variant="outlined"
-          fullWidth={true}
-          onClick={() => setOpen(true)}
-        >
+        <Button size="small" variant="outlined" fullWidth={true} onClick={() => setOpen(true)}>
           {t('OpenEditor')}
         </Button>
       )}

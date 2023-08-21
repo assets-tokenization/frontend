@@ -2,29 +2,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { translate } from 'react-translate';
 import classNames from 'classnames';
-import {
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Divider,
-  IconButton,
-} from '@mui/material';
+import { FormControl, InputLabel, Select, MenuItem, Divider, IconButton } from '@mui/material';
 import withStyles from '@mui/styles/withStyles';
 import ClearIcon from '@mui/icons-material/Clear';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 
 const styles = {
   formControl: {
-    padding: '0 0 10px',
+    padding: '0 0 10px'
   },
   darkThemeLabel: {
     backgroundColor: '#2a2a2a',
     borderRadius: 4,
     padding: 0,
     '& fieldset': {
-      borderColor: 'transparent',
-    },
+      borderColor: 'transparent'
+    }
   },
   darkThemeSelect: {},
   chevronIcon: {
@@ -32,14 +25,14 @@ const styles = {
     padding: 0,
     marginRight: 0,
     '& svg': {
-      fill: 'rgba(255, 255, 255, 0.7)',
-    },
+      fill: 'rgba(255, 255, 255, 0.7)'
+    }
   },
   darkThemeSelectRoot: {
     '&::before': {
-      display: 'none',
-    },
-  },
+      display: 'none'
+    }
+  }
 };
 
 const SelectComponent = ({
@@ -57,7 +50,7 @@ const SelectComponent = ({
   darkTheme,
   variant,
   allowDelete,
-  placeholder,
+  placeholder
 }) => {
   if (hidden) return null;
 
@@ -67,14 +60,14 @@ const SelectComponent = ({
           <IconButton
             {...props}
             classes={{
-              root: classes.chevronIcon,
+              root: classes.chevronIcon
             }}
             disabled={readOnly}
             size="large"
           >
             <ChevronLeftIcon />
           </IconButton>
-        ),
+        )
       }
     : {};
 
@@ -83,31 +76,27 @@ const SelectComponent = ({
       fullWidth={true}
       className={classNames({
         [classes.formControl]: true,
-        [classes.darkThemeLabel]: darkTheme,
+        [classes.darkThemeLabel]: darkTheme
       })}
       style={{ width }}
       variant={variant}
     >
-      {description ? (
-        <InputLabel htmlFor={path.join('-')}>{description}</InputLabel>
-      ) : null}
+      {description ? <InputLabel htmlFor={path.join('-')}>{description}</InputLabel> : null}
 
       <Select
         variant={variant}
         autoFocus={autoFocus}
         disabled={readOnly}
         value={value || placeholder}
-        onChange={({ target: { value: newValue } }) =>
-          onChange && onChange(newValue)
-        }
+        onChange={({ target: { value: newValue } }) => onChange && onChange(newValue)}
         inputProps={{
-          id: path.join('-'),
+          id: path.join('-')
         }}
         classes={{
           select: classNames({
-            [classes.darkThemeSelect]: darkTheme,
+            [classes.darkThemeSelect]: darkTheme
           }),
-          root: classes.darkThemeSelectRoot,
+          root: classes.darkThemeSelectRoot
         }}
         {...IconComponent}
       >
@@ -120,9 +109,7 @@ const SelectComponent = ({
 
         {value && allowDelete ? <Divider light={true} component="li" /> : null}
 
-        {!options || !options.length ? (
-          <MenuItem value={null}>{t('EmptyData')}</MenuItem>
-        ) : null}
+        {!options || !options.length ? <MenuItem value={null}>{t('EmptyData')}</MenuItem> : null}
 
         {options.map(({ id, name, stringified }) => (
           <MenuItem key={id} value={id}>
@@ -153,7 +140,7 @@ SelectComponent.defaultProps = {
   darkTheme: false,
   variant: 'standard',
   allowDelete: true,
-  placeholder: '',
+  placeholder: ''
 };
 
 const styled = withStyles(styles)(SelectComponent);

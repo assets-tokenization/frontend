@@ -16,7 +16,7 @@ const WorkflowProcesses = {
   ShowAllPerformerUsers: 'Показати',
   PerformerUsers: 'Мають доступ',
   Close: 'Закрити',
-  Name: 'Статус',
+  Name: 'Статус'
 };
 
 export default {
@@ -33,8 +33,7 @@ export default {
     NoPermissionIp: 'Ви не маєте повноважень для перегляду цієї сторінки',
     'NoPermissionIp subtitle': 'Зверніться до служби підтримки',
     NoPermissionTitle: 'Немає доступу',
-    'User without needed role.':
-      'Обліковий запис не має прав доступу в цей розділ',
+    'User without needed role.': 'Обліковий запис не має прав доступу в цей розділ',
     SwitchUser: 'Використайте інший обліковий запис',
     ConnectionFailed: "Немає з'єднання з сервером",
     'ConnectionFailed subtitle':
@@ -46,11 +45,10 @@ export default {
     'Access denied.': 'Обліковий запис не має прав доступу',
     'Access denied. subtitle': 'Зверніться до адміністратора, або',
     'Declined by user access rules.': 'Обліковий запис не має прав доступу',
-    'Declined by user access rules. subtitle':
-      'Зверніться до адміністратора, або',
+    'Declined by user access rules. subtitle': 'Зверніться до адміністратора, або',
     NoUnitFound: 'Увага',
     'NoUnitFound subtitle':
-      'Шановний користувач! Для відкриття доступу до меню кабінету зверніться, будь-ласка, до свого керівника.',
+      'Шановний користувач! Для відкриття доступу до меню кабінету зверніться, будь-ласка, до свого керівника.'
   },
   Navigator: {
     EnabledIndividualMockPage: 'Індивідуальні моки',
@@ -115,7 +113,7 @@ export default {
     UsersList: 'Список',
     KibanaTitle: 'Дашборди',
     HealthCheckListTitle: 'Компоненти',
-    FavoritesListTitle: 'Обране',
+    FavoritesListTitle: 'Обране'
   },
   TaskListPage: {
     Header: 'Задачі',
@@ -158,7 +156,7 @@ export default {
     LegalEntity: 'Юридична особа',
     Status: 'Статус',
     DueDate: 'кінцевий термін виконання',
-    UserName: 'Заявник {{userName}}',
+    UserName: 'Заявник {{userName}}'
   },
   TaskPage: {
     birthDateErrorText: 'Помилка в даті народження, вона не може бути більше поточної',
@@ -168,7 +166,8 @@ export default {
     birthDateErrorText4: 'Перегляньте дату видачі паспорта чи ІД-картки',
     birthDateErrorText5: 'Рік народження повинен бути більшим 1900',
     chooseGender: 'Виберіть стать',
-    userDataEmailError: 'Адресу в цьому домені для отримання державних послуг використовувати не можна',
+    userDataEmailError:
+      'Адресу в цьому домені для отримання державних послуг використовувати не можна',
     unzrError: 'Номер має містити 14 цифр',
     unzrError1: 'Невірно введений номер',
     PassportCardErrorText: 'Має містити 2 букви',
@@ -198,7 +197,8 @@ export default {
     foreignersDocumentNumberErrorText1: 'Номер має містити 6 цифр',
     foreignersDocumentNumberErrorText2: 'Номер має починатись з цифри 8',
     foreignersDocumentNumberErrorText3: 'Номер має починатись з цифри 9',
-    foreignersDocumentIssueDateErrorText: 'Дата видачі не може бути більше від поточної. Укажіть, будь ласка, точну дату ',
+    foreignersDocumentIssueDateErrorText:
+      'Дата видачі не може бути більше від поточної. Укажіть, будь ласка, точну дату ',
     foreignersDocumentIssueDateErrorText1: 'Дата видачі не може бути раніше 2018 року',
     foreignersDocumentIssueDateErrorText2: 'В обраному місяці менше днів, ніж ви вказали',
     foreignersDocumentIssueDateErrorText3: 'Не високосний рік. У лютому тільки 28 днів.',
@@ -232,8 +232,7 @@ export default {
     SaveBtn: 'Зберегти',
     PrintBtn: 'Надрукувати',
     DeleteTaskConfirmation: 'Дійсно видалити заяву?',
-    DeleteTaskConfirmationText:
-      'Заява буде видалено остаточно, відновити її вже не буде можливим.',
+    DeleteTaskConfirmationText: 'Заява буде видалено остаточно, відновити її вже не буде можливим.',
     RemoveDraft: 'Видалити чернетку',
     "Sign certificate PEM not match user's PEM.":
       'Ви не можете підписати документ цим ключем. Використовуйте ключ, за допомогою якого ви авторизувались в кабінеті',
@@ -241,11 +240,9 @@ export default {
       'Ви не можете підписати документ цим ключем. Використовуйте ключ, за допомогою якого ви авторизувались в кабінеті',
     GoToNextTask: 'Перейти до наступної задачі',
     ErrorMessageHeader: 'Помилка',
-    ErrorMessageReassigned:
-      'Виконавця задачі було змінено. Ви більше не маєте до неї доступу.',
+    ErrorMessageReassigned: 'Виконавця задачі було змінено. Ви більше не маєте до неї доступу.',
     ErrorLoadingTasks: 'Неможливо завантажити задачу',
-    "User doesn't have any access to task.":
-      'Немає доступу для перегляду цієї задачі',
+    "User doesn't have any access to task.": 'Немає доступу для перегляду цієї задачі',
     ErrorLoadingTemplate: 'Неможливо завантажити шаблон задачі',
     ErrorCommitDocument: 'Виникла помилка при надсиланні документа',
     DueDate: 'Кінцева дата виконання',
@@ -275,8 +272,7 @@ export default {
     'Signed name not match needed.':
       'ПІБ, вказане в електронному ключі, не збігається з ПІБ користувача.',
     RequiredField: "Обов'язкове поле",
-    'User doesn’t have any access to task.':
-      'Ви не маєте доступу до цієї заяви',
+    'User doesn’t have any access to task.': 'Ви не маєте доступу до цієї заяви',
     'User names are not equal.':
       'ПІБ, вказане у вашому електронному ключі, не збігається з ПІБ у списку підписантів. Зверніться, будь ласка, до ініціатора підписання для виправлення помилки.',
     "Can't update - document contains signatures.":
@@ -290,21 +286,17 @@ export default {
       'Підписати заяву буде можливо після підпису заявника.',
     'Sign not available.': 'Підписання не доступне, Ви не маєте права підпису',
     'Commit not available.': 'Ви не маєте права надсилання даних',
-    'User is not in signerUsers list.':
-      'Користувач відсутній у списку підписантів',
+    'User is not in signerUsers list.': 'Користувач відсутній у списку підписантів',
     StepNotConfigurated: 'Послуга не налаштована',
     Attachments: 'Додатки',
     '404 not found': 'Сторінку не знайдено',
     SignProcessSignFile:
       'Підписання файлів {{progress}} з {{total}}. Не закривайте, будь ласка, вікно.',
-    SignProcessSignTaskDocument:
-      'Відправка підписів на сервер. Не закривайте, будь ласка, вікно.',
-    SignProcessSignP7S:
-      'Створення P7S підпису. Не закривайте, будь ласка, вікно.',
+    SignProcessSignTaskDocument: 'Відправка підписів на сервер. Не закривайте, будь ласка, вікно.',
+    SignProcessSignP7S: 'Створення P7S підпису. Не закривайте, будь ласка, вікно.',
     SignProcessSignP7SAttach:
       'Створення P7S підпису файлів {{progress}} з {{total}}. Не закривайте, будь ласка, вікно.',
-    SignProcessSignAdditionalData:
-      'Підписання додаткових даних. Не закривайте, будь ласка, вікно.',
+    SignProcessSignAdditionalData: 'Підписання додаткових даних. Не закривайте, будь ласка, вікно.',
     SignProcessSignTaskDocumentSignData:
       'Підписання даних документа. Не закривайте, будь ласка, вікно.',
     noOptionsText: 'Не знайдено',
@@ -325,10 +317,9 @@ export default {
     CancelHandling: 'Відмінити',
     HandlingDescription: 'Взято в роботу {{time}}, {{user}}',
     LostPageConfirmation: 'Залишити сайт?',
-    LostPageConfirmationText:
-      'Ви не надіслали документ, але можете зробити це пізніше',
+    LostPageConfirmationText: 'Ви не надіслали документ, але можете зробити це пізніше',
     'Error: Only one draft allowed.': 'Помилка: дозволено лише одну чернетку',
-    FailCreatingTask: 'Посилання для замовлення послуги не дійсне, або тимчасово не доступне',
+    FailCreatingTask: 'Посилання для замовлення послуги не дійсне, або тимчасово не доступне'
   },
   CreateTaskDialog: {
     SelectTemplate: 'Виберіть послугу',
@@ -337,7 +328,7 @@ export default {
     SelectProject: 'Виберіть проєкт',
     SearchProject: 'Пошук проєкта',
     SearchProjectHelpText: 'Почніть вводити назву проєкта',
-    Close: 'Закрити',
+    Close: 'Закрити'
   },
   Errors: {
     PrivateQuestionnaireInitError: 'Помилка при ініціалізації анкети',
@@ -367,31 +358,23 @@ export default {
     FailDeletingFile: 'Виникла помилка при видаленні файлу',
     FailDeletingTask: 'Виникла помилка при видаленні задачі',
     FailGeneratingDocument: 'Помилка генерування документа',
-    FailLoadingWorkflowTemplates:
-      'Виникла помилка завантаження шаблонів послуг',
+    FailLoadingWorkflowTemplates: 'Виникла помилка завантаження шаблонів послуг',
     FailGettingDocument: 'Виникла помилка при завантаженні файлу',
     FailSigningDocument: 'Виникла помилка при підписанні документу',
     FailGettingAttachments: 'Виникла помилка при завантаженні всіх документів',
     FailSettingsTaskSigners: 'Виникла помилка призначення підписантів',
-    FailGettingUnreadMessageCount:
-      'Виникла помилка при завантаженні непрочитанних повідомлень',
+    FailGettingUnreadMessageCount: 'Виникла помилка при завантаженні непрочитанних повідомлень',
     FailGettingUnreadInboxCount:
       'Виникла помилка при завантаженні непрочитанних отриманих документів',
-    FailLoadingWorkflowStatuses:
-      'Виникла помилка при завантаженні статусів послуг',
-    FailLoadingRegisterKeyRecords:
-      'Виникла помилка при завантаженні ключів реєстра',
-    FailLoadingDocumentAsicContainer:
-      'Виникла помилка при завантаженні ASIC контейнера',
+    FailLoadingWorkflowStatuses: 'Виникла помилка при завантаженні статусів послуг',
+    FailLoadingRegisterKeyRecords: 'Виникла помилка при завантаженні ключів реєстра',
+    FailLoadingDocumentAsicContainer: 'Виникла помилка при завантаженні ASIC контейнера',
     FailLoadingDocumentAttachPreview: 'Виникла помилка при завантаженні превью',
     FailLoadingDocumentTemplate: 'Виникла помилка при завантаженні шаблону',
-    FailGettingUnreadTaskCount:
-      'Виникла помилка при завантаженні непрочитанних задач',
-    FailGettingUnreadUnitTaskCount:
-      'Виникла помилка при завантаженні непрочитанних задач відділу',
+    FailGettingUnreadTaskCount: 'Виникла помилка при завантаженні непрочитанних задач',
+    FailGettingUnreadUnitTaskCount: 'Виникла помилка при завантаженні непрочитанних задач відділу',
     FailMarkTaskRead: 'Виникла помилка при позначенні задачі як прочитаної',
-    FailExportingWorkflow:
-      'Цей процес не можна експортувати, бо він містить помилку',
+    FailExportingWorkflow: 'Цей процес не можна експортувати, бо він містить помилку',
     FailImportingWorkflow: 'Виникла помилка при імпортуванні послуги',
     FailSavingUnit: 'Виникла помилка при збереженні підрозділу',
     FailCalculating: 'Виникла поммилка при підрахунку',
@@ -416,8 +399,7 @@ export default {
     FailDeletingWorkflow:
       'Даний процес видалити неможливо, тому що він використовується у інших процесах',
     FailRequestExternalData: 'Виникла помилка при завантаженні даних',
-    RegistersAccessNotAllowed:
-      'У вас відсутній доступ на перегляд записів реєстру',
+    RegistersAccessNotAllowed: 'У вас відсутній доступ на перегляд записів реєстру',
     RegistersSignaruteError: 'Дані реєстру не верифіковано',
     FailGettingPaymentInfo: 'Виникла помилка при отриманні даних про оплату',
     FailGettingPaymentStatus: 'Виникла помилка при отриманні статусу оплати',
@@ -429,31 +411,25 @@ export default {
     PaymentCheckCode: 'Оплата не пройшла. Перевірте код з смс',
     FailGettingRegistersKeys: 'Виникла помилка при отриманні ключів реєстру',
     ErrorSavingWorkflow: 'Виникла помилка під час збереження процесу',
-    FailToUpdateWorkflowProcessTask:
-      'Виникла помилка під час збереження задачі',
+    FailToUpdateWorkflowProcessTask: 'Виникла помилка під час збереження задачі',
     WorkflowOldVersionError: 'Ваша версія процесу застаріла. Оновіть сторінку.',
     FailSearchingUsers: 'Виникла помилка при пошуку користувачів',
     FailGettingWorkflowVersions: 'Виникла помилка при отриманні версій процесу',
     FailCreatingWorkflowVersion: 'Виникла помилка при створенні версії процесу',
     CreatingVersionSuccess: 'Нова версія процесу успішно створена',
-    FailRestoringWorkflowVersion:
-      'Виникла помилка при відновленні версії процесу',
+    FailRestoringWorkflowVersion: 'Виникла помилка при відновленні версії процесу',
     RestoringVersionSuccess: 'Версію процесу успішно відновлено',
-    FailSettingRegistersAccess:
-      'Виникла помилка під час створення прав доступу',
-    FailGettingRegistersAccess:
-      'Виникла помилка під час отримання прав доступу',
+    FailSettingRegistersAccess: 'Виникла помилка під час створення прав доступу',
+    FailGettingRegistersAccess: 'Виникла помилка під час отримання прав доступу',
     FailPutingRegistersAccess: 'Виникла помилка під час оновлення прав доступу',
-    FailPutingRegistersAccessByStrictAccess: 
+    FailPutingRegistersAccessByStrictAccess:
       'Активація strictAccess можлива тільки при вимкненій ознаці isPersonal',
-    FailRestartingWorkflowProcess:
-      'Виникла помилка під час перезапуску процесу',
+    FailRestartingWorkflowProcess: 'Виникла помилка під час перезапуску процесу',
     FailRestartingWorkflowProcessFromPoint:
       'Виникла помилка під час перезапуску процесу з даної точки',
     FailCheckingExternalReader: 'Помилка при перевірці даних в реєстрі',
     FailValidatingDocument: 'Сталася помилка, перевірте введені дані',
-    FailReadOnlySavingWorkflow:
-      'Коригування процесу відключено на даному середовищі',
+    FailReadOnlySavingWorkflow: 'Коригування процесу відключено на даному середовищі',
     FaildedGettingPaymentToken: 'Помилка генерування токену картки',
     'update or delete on table "units" violates foreign key constraint "unit_access_unit_id_fkey" on table "unit_access"':
       'Видалення неможливе, поки підрозділу надано доступи до реєстрів',
@@ -474,8 +450,7 @@ export default {
       "Трансакція відхилена. Банк не затвердив операцію. Будь ласка, зв'яжіться з банком.",
     'The limit for the amount or number of customer payments has been exceeded. Amount or transaction limit has been exceeded.':
       'Обмеження суми або кількості платежів клієнта перевищено. Сума або ліміт транзакції перевищено.',
-    FailSavingUnitExclusiveUnits:
-      'Користувач з id {{userId}} вже має роль в іншому підрозділі',
+    FailSavingUnitExclusiveUnits: 'Користувач з id {{userId}} вже має роль в іншому підрозділі',
     AddingUserSuccess: 'Користувача успішно додано',
     DeletingUserSuccess: 'Користувача успішно видалено',
     AddingHeadSuccess: 'Керівника успішно додано',
@@ -490,22 +465,17 @@ export default {
       'Помилка авторизації. Зверніться до банку-емітента',
     'Failed to verify the card for participation in 3DSecure':
       'Не вдалося перевірити картку для участі в 3DSecure',
-    'Authorization error. Contact issuer bank':
-      'Помилка авторизації. Зверніться до банку-емітента',
+    'Authorization error. Contact issuer bank': 'Помилка авторизації. Зверніться до банку-емітента',
     'Failed to verify the card for participation in 3DSecure.':
       'Не вдалося перевірити картку для участі в 3DSecure',
     ReindexSuccess: 'Успішно реіндексовано ключ "{{name}}"',
-    AfterhandlersReindexSuccess:
-      'Успішно реіндексовано в еластік ключ "{{name}}"',
+    AfterhandlersReindexSuccess: 'Успішно реіндексовано в еластік ключ "{{name}}"',
     ReindexFailed: 'Помилка реіндексаціі ключа "{{name}}"',
-    AfterhandlersReindexFailed:
-      'Помилка реіндексаціі в еластік ключа "{{name}}"',
+    AfterhandlersReindexFailed: 'Помилка реіндексаціі в еластік ключа "{{name}}"',
     PaymentInitError:
       'Сталась помилка ініціалізації віджету оплати. Оновіть, будь ласка, сторінку.',
-    TokenExpiring:
-      'Сесія закінчиться менш ніж за {{diff}} хвилин. Не забудьте зберегти зміни.',
-    FailDeletingSignatures:
-      'Документ надіслано. Відкликання підпису неможливе.',
+    TokenExpiring: 'Сесія закінчиться менш ніж за {{diff}} хвилин. Не забудьте зберегти зміни.',
+    FailDeletingSignatures: 'Документ надіслано. Відкликання підпису неможливе.',
     FailInformingSigners: 'Виникла помилка при запрошенні підписантів',
     ErrorGettingMocks: 'Помилка при завантадженні моків',
     ErrorCreatingMocks: 'Помилка при створенні моку',
@@ -513,26 +483,23 @@ export default {
     CreatingMockSuccess: 'Мок успішно створено',
     DeletingMockSuccess: 'Мок успішно видалено',
     DeletingMockError: 'Виникла помилка при видаленні моку',
-    UserCertificateExpiring:
-      'Термін дії вашого особистого ключа спливає {{days}}.',
-    UserCertificateExpiringDay:
-      'Термін дії вашого особистого ключа спливає менш ніж за день',
+    UserCertificateExpiring: 'Термін дії вашого особистого ключа спливає {{days}}.',
+    UserCertificateExpiringDay: 'Термін дії вашого особистого ключа спливає менш ніж за день',
     ErrorGettingMessagesTemplates: 'Помилка при завантаженні списку',
     SavingSuccess: 'Успішно збережено',
     '404 not found': 'Не знайдено',
     ErrorGettingStatistics: 'Помилка при завантаженні списку статистик',
     ExportRegistersSuccess: 'Ключ успішно експортовано',
     ImportingRegistersSuccess: 'Ключ успішно імпортовано',
-    'This document does not provide a P7S':
-      'У даному документі не передбачено P7S підпис.',
-    NumberTemplateAlreadyExported:
-      'Шаблон номеру {{filesInfo}} імортовано успішно',
+    'This document does not provide a P7S': 'У даному документі не передбачено P7S підпис.',
+    NumberTemplateAlreadyExported: 'Шаблон номеру {{filesInfo}} імортовано успішно',
     NumberTemplateAlreadyExists: 'Шаблон номеру {{filesInfo}} вже існує.',
-    FailStoringRecordAllowTokens: 'Схема ключа містить поля з опцією allowTokens',
+    FailStoringRecordAllowTokens: 'Схема ключа містить поля з опцією allowTokens'
   },
   Elements: {
     MaxItemsReached: 'Максимальна кількість записів досягнута',
-    MaxItemsReachedDescription: 'В таблиці досягнута максимальна кількість записів: {{maxItems}}. На даний момент немає можливості додавати нові дані',
+    MaxItemsReachedDescription:
+      'В таблиці досягнута максимальна кількість записів: {{maxItems}}. На даний момент немає можливості додавати нові дані',
     ShowLastErrors: 'Показати ще {{count}} помилок',
     HideLastErrors: 'Приховати помилки',
     Line: 'рядок {{line}}',
@@ -582,8 +549,7 @@ export default {
     SelectFiles: 'завантажте їх зі свого носія',
     MaxFileSizeLimit: 'Максимальний розмір одного файлу: {{size}}',
     MinFileSizeLimit: 'Мінімальний розмір одного файлу: {{size}}',
-    FileSizeLimitReached:
-      'Перевищено допустимий розмір або некоректний формат файлу',
+    FileSizeLimitReached: 'Перевищено допустимий розмір або некоректний формат файлу',
     FileTypeLimit: 'Допустимі формати: {{types}}',
     FileName: 'Документ',
     FileDate: 'Дата',
@@ -624,10 +590,8 @@ export default {
     FailToValidateCode: 'Невірний код підтвердження',
     SendAnotherCode: 'Надіслати ще раз',
     SendAnotherCodeCounDown: 'Надіслати ще раз зможете через {{counter}}',
-    PhoneIsAlreadyExists:
-      'Цей номер телефону ({{contact}}) вже використовується в системі.',
-    EmailIsAlreadyExists:
-      'Ця електронна адреса ({{contact}}) вже використовується в системі.',
+    PhoneIsAlreadyExists: 'Цей номер телефону ({{contact}}) вже використовується в системі.',
+    EmailIsAlreadyExists: 'Ця електронна адреса ({{contact}}) вже використовується в системі.',
     FailToSendVerifyCode: 'Виникла помилка при відправці. Спробуйте пізніше.',
     Edit: 'Редагувати',
     Phone: 'Телефон',
@@ -650,8 +614,7 @@ export default {
     OpenTableEditor: 'Відкрити таблицю',
     TableError: 'У таблиці допущено помилки.',
     ResolveErrors: 'Увага',
-    ResolveErrorsPrompt:
-      'Перш ніж покинути редактор, виправте помилки в схемі.',
+    ResolveErrorsPrompt: 'Перш ніж покинути редактор, виправте помилки в схемі.',
     DeletePrompt: 'Увага',
     DeletePropmtDescription: 'Закриваючи це вікно, ви видалите введені дані',
     AddNewRow: 'Додати новий рядок',
@@ -733,7 +696,8 @@ export default {
     Serie: 'Серія',
     Number: 'Номер',
     AgreeConfirmation: 'У вашому профілі не вистачає даних',
-    AgreeConfirmationText: 'Щоб продовжити роботу в особистому кабінеті, оновіть, будь ласка, дані в профілі.',
+    AgreeConfirmationText:
+      'Щоб продовжити роботу в особистому кабінеті, оновіть, будь ласка, дані в профілі.',
     acceptButtonText: 'Зрозуміло',
     indexSample: 'Дізнатися свій індекс можна',
     index: 'Індекс',
@@ -786,10 +750,8 @@ export default {
     stamp: 'Печатка',
     Timeout: 'Вийшов час виконання функції. Спробуйте пізніше',
     ACSKServer: 'Кваліфікований надавач електронних довірчих послуг',
-    ACSKServerHint:
-      'Виберіть центр сертифікацій, який видав вам електронний підпис',
-    SelectServer:
-      'Виберіть центр сертифікацій, який видав вам електронний підпис',
+    ACSKServerHint: 'Виберіть центр сертифікацій, який видав вам електронний підпис',
+    SelectServer: 'Виберіть центр сертифікацій, який видав вам електронний підпис',
     Key: 'Файл ключа',
     KeyHint: "Виберіть файл особистого ключа на своєму комп'ютері",
     SelectedKey: 'Ключ',
@@ -806,10 +768,8 @@ export default {
     FileKeySignMethod: 'Файловий ключ',
     HardwareKeySignMethod: 'Апаратний ключ',
     IdGovUaWidgetSignMethod: 'id.gov.ua',
-    HardwareKeySignMethodNotSupportedMobile:
-      'Апаратний ключ не підтримується в мобільній версії',
-    HardwareKeySignMethodNotSupportedBrowser:
-      'Апаратний ключ не підтримується вашим браузером',
+    HardwareKeySignMethodNotSupportedMobile: 'Апаратний ключ не підтримується в мобільній версії',
+    HardwareKeySignMethodNotSupportedBrowser: 'Апаратний ключ не підтримується вашим браузером',
     SelectKmType: 'Тип пристрою',
     SelectKmDevice: 'Пристрій',
     TypeHint: 'Виберіть тип пристрою',
@@ -824,8 +784,7 @@ export default {
     ProxySettingsAnonymous: 'Анонімно',
     ProxySettingsUser: 'Користувач',
     ProxySettingsPassword: 'Пароль',
-    CantDetectACSK:
-      'Нажаль, ми не змогли автоматично визначити центр сертифікацї вашого ключа',
+    CantDetectACSK: 'Нажаль, ми не змогли автоматично визначити центр сертифікацї вашого ключа',
     ACSKAutoDetect: 'Визначити автоматично',
     DropFiles: 'Перетягніть сюди файл ключа або {{link}}',
     UploadFiles: 'оберіть його зі свого носія',
@@ -849,7 +808,7 @@ export default {
     DiiaSignMethod: 'Дія.Підпис',
     Continue: 'Продовжити',
     ExpiringTitle: 'Увага!',
-    ExpiringDescription: 'Термін дії вашого особистого ключа спливає {{days}}.',
+    ExpiringDescription: 'Термін дії вашого особистого ключа спливає {{days}}.'
   },
   DataTable: {
     DISPLAYED_ROWS: 'з {{from}} по {{to}} із {{total}}',
@@ -893,11 +852,11 @@ export default {
     name: 'ПІБ',
     id: 'Ідентифікатор',
     ipn: 'РНОКПП',
-    actions: 'Дії',
+    actions: 'Дії'
   },
   DataList: {
     Back: 'Попередня сторінка',
-    Forward: 'Наступна сторінка',
+    Forward: 'Наступна сторінка'
   },
   RegistryPage: {
     Restore: 'Відновити запис',
@@ -911,8 +870,7 @@ export default {
     SearchRegister: 'Пошук по назві реєстру',
     RequiredDateField: 'Поле дата та час є обов’язковими',
     HasUnsavedData: 'Увага!',
-    HasUnsavedDataPrompt:
-      'Запис містить незбережені дані, ви дійсно хочете закрити вікно?',
+    HasUnsavedDataPrompt: 'Запис містить незбережені дані, ви дійсно хочете закрити вікно?',
     title: 'Редактор реєстрів',
     SelectKey: 'Виберіть реєстр...',
     SelectRegistryKeyLabel: 'Ключ реєстра',
@@ -927,8 +885,7 @@ export default {
     Close: 'Закрити',
     Save: 'Зберегти',
     DeleteRecordConfirmation: 'Дійсно видалити запис?',
-    DeleteRecordConfirmationText:
-      'Запис буде видалено остаточно, відновити вже не буде можливим.',
+    DeleteRecordConfirmationText: 'Запис буде видалено остаточно, відновити вже не буде можливим.',
     AddNewRow: 'Новий запис',
     NoData: 'Немає записів',
     Actions: 'Дії',
@@ -966,7 +923,7 @@ export default {
     ProcessingComplete: 'Результат відновлення',
     keyId: 'Ключ: ',
     TimeFormat: 'Час у форматі ГГ:ХХ:СС',
-    TimeError: 'Дата та час не можуть бути більшими за поточні',
+    TimeError: 'Дата та час не можуть бути більшими за поточні'
   },
   MimeType: {
     OR: ' або ',
@@ -987,25 +944,23 @@ export default {
     '.gif': 'GIF зображення',
     'application/pdf': 'PDF документ',
     'application/msword': 'документ Word',
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-      'документ Word',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'документ Word',
     'application/vnd.oasis.opendocument.text': 'документ Word',
     'application/rtf': 'документ Word',
     'application/vnd.ms-excel': 'документ Excel',
-    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
-      'документ Excel',
-    '.geojson': '.geojson',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'документ Excel',
+    '.geojson': '.geojson'
   },
   EJV: {
     CheckValid: 'Перевірте поле',
     SchemaNotFound: 'Не знайдена схема "{{ref}"',
     ShouldIncludeLessThan: [
       'Повинно мати не більше одного елемента',
-      'Повинно мати не більше {{n}} елементів',
+      'Повинно мати не більше {{n}} елементів'
     ],
     ShouldIncludeMoreThan: [
       'Повинно мати не менше одного елемента',
-      'Повинно мати не менше {{n}} елементів',
+      'Повинно мати не менше {{n}} елементів'
     ],
     ShouldNotInclude: 'Не повинно мати додаткові поля',
     NotEquilsTo: 'Не відповідає заданим параметрам',
@@ -1018,32 +973,29 @@ export default {
     MustEquilsToSchema: 'Повинно відповідати схемі "{{keyword}}"',
     ShouldBeLessThan: [
       'Повинно бути не довше одного символа',
-      'Повинно бути не довше {{n}} символів',
+      'Повинно бути не довше {{n}} символів'
     ],
     ShouldBeMoreThan: [
       'Повинно бути не менше одного символа',
-      'Повинно бути не менше {{n}} символів',
+      'Повинно бути не менше {{n}} символів'
     ],
     ShouldHaveLessPropertiesThan: [
       'Повинно мати не менше одного поля',
-      'Повинно мати не менше {{n}} полів',
+      'Повинно мати не менше {{n}} полів'
     ],
     ShouldHaveMorePropertiesThan: [
       'Повинно мати не більше одного поля',
-      'Повинно мати не більше {{n}} полів',
+      'Повинно мати не більше {{n}} полів'
     ],
     MustBeMultipleOf: 'має бути кратным {{multipleOf}}',
     ShouldNotBe: 'Повинно не відповідати схемі в "not"',
     ShouldBeOneOf: 'Повинно відповідати в точності одній схемі в "oneOf"',
-    ShouldPatternRequired:
-      'Повинно мати поле, відповідно прикладу "{{missingPattern}}"',
+    ShouldPatternRequired: 'Повинно мати поле, відповідно прикладу "{{missingPattern}}"',
     InvalidPropertyName: 'ім\'я поля "{{propertyName}}" не відповідає схемі',
     ReqiredField: "Обов'язкове поле",
-    ShouldHaveUniqueElements:
-      'не Повинно мати повторних елементів ({{j}}) та {{i}} однакові)',
+    ShouldHaveUniqueElements: 'не Повинно мати повторних елементів ({{j}}) та {{i}} однакові)',
     AllFieldsRequired: 'Необхідно заповнити усі поля',
-    ContactConfirmationRequired:
-      'Необхідно ввести правильний код підтверждення',
+    ContactConfirmationRequired: 'Необхідно ввести правильний код підтверждення'
   },
   WorkflowListPage: {
     InboxTitle: 'Замовлені послуги',
@@ -1059,8 +1011,7 @@ export default {
     SubmittedAt: 'Дата подання',
     DeleteWorkflow: 'Видалити',
     EmptyListTitle: 'Ви не замовили жодної послуги',
-    EmptyListDescription:
-      'Тут будуть відображатись послуги, які ви замовили, та хід їх розгляду',
+    EmptyListDescription: 'Тут будуть відображатись послуги, які ви замовили, та хід їх розгляду',
     EmptyProjectListTitle: 'Ви не подали жодного проєкту',
     EmptyProjectListDescription:
       'Тут будуть відображатись проєкти, які ви подали та хід їх розгляду',
@@ -1083,10 +1034,11 @@ export default {
     All: 'Усі',
     TrashPage: 'Кошик',
     TaskPaid: 'Послугу оплачено',
-    DeleteDraftDiscription: 'Послугу за цією чернеткою заяви вже оплачено. У разі видалення заяви, відновити її не вдасться. Упевнені, що хочете видалити заяву?',
+    DeleteDraftDiscription:
+      'Послугу за цією чернеткою заяви вже оплачено. У разі видалення заяви, відновити її не вдасться. Упевнені, що хочете видалити заяву?',
     Ok: 'Зрозуміло',
     'Error: The task has been paid.':
-      'Схоже, ви оплатили послугу, але не завершили замовлення послуги. Таку чернетку не можна видалити.',
+      'Схоже, ви оплатили послугу, але не завершили замовлення послуги. Таку чернетку не можна видалити.'
   },
   TrashListPage: {
     TrashPage: 'Кошик',
@@ -1099,14 +1051,12 @@ export default {
     DeleteProjectTrashConfirmationText:
       'Проєкти будуть видалені остаточно, відновити їх вже буде неможливо.',
     RestoreTrashConfirmation: 'Дійсно відновити послуги?',
-    RestoreTrashConfirmationText:
-      'Послуги буде відновлено. Їх можна буде знову видалити.',
+    RestoreTrashConfirmationText: 'Послуги буде відновлено. Їх можна буде знову видалити.',
     RestoreProjectTrashConfirmation: 'Дійсно відновити проєкти?',
-    RestoreProjectTrashConfirmationText:
-      'Проєкти буде відновлено. Їх можна буде знову видалити.',
+    RestoreProjectTrashConfirmationText: 'Проєкти буде відновлено. Їх можна буде знову видалити.',
     EmptyTrashListTitle: 'Кошик порожній',
     EmptyTrashListDescription: 'Тут будуть відображатись видалені послуги',
-    WorkflowName: 'Послуга',
+    WorkflowName: 'Послуга'
   },
   WorkflowPage: {
     Loading: 'Завантаження...',
@@ -1128,7 +1078,7 @@ export default {
     IncomingMessage: 'Вхідне повідомлення:',
     Delete: 'Видалити',
     PageNotFound: 'Сторінка не знайдена',
-    DownloadFileP7S: 'Завантажити P7S',
+    DownloadFileP7S: 'Завантажити P7S'
   },
   MessageListPage: {
     From: 'Від дати',
@@ -1149,13 +1099,13 @@ export default {
     DeletePermanentConfirmation: 'Дійсно видалити повідомлення?',
     DeletePermanentConfirmationText:
       'Повідомлення будуть видалені остаточно, відновити їх вже буде неможливо.',
-    MarkAllAsRead: 'Позначити як прочитане',
+    MarkAllAsRead: 'Позначити як прочитане'
   },
   MessagePage: {
     CreatedAt: 'Надіслано {{time}}',
     Loading: 'Завантаження...',
     DecryptMessage: 'Розшифрувати',
-    DecryptionDialogTitle: 'Розшифрувати поовідомлення',
+    DecryptionDialogTitle: 'Розшифрувати поовідомлення'
   },
   UserProfile: {
     EditUserHeader: 'Профіль користувача',
@@ -1181,19 +1131,15 @@ export default {
     ConfirmText: 'Для увімкнення вам буде надіслано смс з кодом на номер:',
     EmailError: 'Некоректна адреса Email',
     NotChangeEmailError: 'Ви ввели ту саму адресу',
-    DuplicateEmailError:
-      'Ця електронна адреса  вже зареєстрована за іншим акаунтом',
+    DuplicateEmailError: 'Ця електронна адреса  вже зареєстрована за іншим акаунтом',
     EmailDialogTitle: 'Зміна адреси Email',
     PhoneDialogTitle: 'Зміна номеру телефону',
-    EmailDialogText:
-      'Введіть нову адресу. На неї вам буде відправлено лист з кодом підтвердження:',
+    EmailDialogText: 'Введіть нову адресу. На неї вам буде відправлено лист з кодом підтвердження:',
     PhoneDialogText:
       'Введіть новий номер. На нього вам буде відправлено смс з кодом підтвердження:',
     PhoneAlreadyExists: 'Цей телефонний номер вже використовується',
-    TextWaitForCode:
-      'Будь ласка, зачекайте на лист та введіть код у поле нижче:',
-    TextWaitForSMSCode:
-      'Будь ласка, зачекайте на SMS та введіть код у поле нижче:',
+    TextWaitForCode: 'Будь ласка, зачекайте на лист та введіть код у поле нижче:',
+    TextWaitForSMSCode: 'Будь ласка, зачекайте на SMS та введіть код у поле нижче:',
     SendMail: 'Надіслати лист',
     ValidationFalse: 'Код не пройшов перевірку',
     CodeInputLabel: 'Код підтвердження',
@@ -1223,7 +1169,7 @@ export default {
     PassportSeries: 'Серія',
     PassportNumber: 'Номер',
     PassportIssueDate: 'Дата видачі',
-    PassportIssuedBy: 'Ким виданий',
+    PassportIssuedBy: 'Ким виданий'
   },
   DatePicker: {
     Label: 'Дата',
@@ -1267,7 +1213,7 @@ export default {
     St: 'Сб',
     defaultPlaceholder: 'Обрати...',
     from: 'з',
-    to: 'до',
+    to: 'до'
   },
   InboxFilesListPage: {
     InboxFilesTitle: 'Отримані документи',
@@ -1277,11 +1223,11 @@ export default {
     InboxFilesNumber: 'Номер',
     InboxFilesName: 'Документ',
     CreatedAt: 'Дата отримання',
-    MarkAllAsRead: 'Позначити як прочитане',
+    MarkAllAsRead: 'Позначити як прочитане'
   },
   Labels: {
     DueDate: 'На виконання {{date}}',
-    Expired: 'Прострочено на {{date}}',
+    Expired: 'Прострочено на {{date}}'
   },
   InboxFilesPage: {
     Loading: 'Завантаження...',
@@ -1290,7 +1236,7 @@ export default {
     DownloadAsic: 'Завантажити документи з підписом',
     SaveBtn: 'Зберегти',
     PrintBtn: 'Надрукувати',
-    FileLoadingError: 'Завантажений файл не знайдено',
+    FileLoadingError: 'Завантажений файл не знайдено'
   },
   FileDataTable: {
     FileName: 'Документ',
@@ -1311,17 +1257,17 @@ export default {
     bytes: 'байт'
   },
   SignerListComponent: {
-    EmptySignerList: 'Список підписантів пустий',
+    EmptySignerList: 'Список підписантів пустий'
   },
   SmartMessage: {
-    CloneWorkflow: 'Створити нову задачу',
+    CloneWorkflow: 'Створити нову задачу'
   },
   Settings: {
     SettingsTitle: 'Імпорт/Експорт послуги',
     ImportFromFile: 'Імпортувати з файлу',
     Upload: 'Завантажити',
     Import: 'Імпорт',
-    Export: 'Експорт',
+    Export: 'Експорт'
   },
   PageTitles: {
     InboxTitle: 'Замовлені послуги',
@@ -1332,16 +1278,16 @@ export default {
     ReportTemplates: 'Шаблони звітів',
     QrTemplatesList: 'QR витяг',
     CustomInterfaces: 'Інтерфейси',
-    FavoritesListTitle: 'Обране',
+    FavoritesListTitle: 'Обране'
   },
   MessagesNotify: {
-    AllMessages: 'Всі повідомлення',
+    AllMessages: 'Всі повідомлення'
   },
   TreeListSelect: {
     Select: 'Не обрано',
     Loading: 'Завантаження...',
     Search: 'Пошук...',
-    Close: 'Закрити',
+    Close: 'Закрити'
   },
   WorkflowListAdminPage: {
     AdminWorkflowList: 'BPMN та форми',
@@ -1355,8 +1301,7 @@ export default {
     CreateWorkflow: 'Створити',
     FillNewId: 'Введіть ID нового процесу',
     OverwriteWorkflowConfirmation: 'Процес {{filesInfo}} вже існує.',
-    OverwriteWorkflowConfirmationText:
-      'Ви дійсно бажаєте виконати перезапис існуючого процесу?',
+    OverwriteWorkflowConfirmationText: 'Ви дійсно бажаєте виконати перезапис існуючого процесу?',
     NewWorkflow: 'Створення процесу',
     Continue: 'Продовжити',
     Customer: 'Замовник',
@@ -1367,8 +1312,7 @@ export default {
     WorkflowErrorTitle: 'Виникла помилка',
     'Workflow already exists.': 'Процес з таким ID вже існує',
     '403 forbidden': 'Створення процесу відключено на даному середовищі',
-    '403 forbidden_deleting':
-      'Видалення процесу відключено на даному середовищі',
+    '403 forbidden_deleting': 'Видалення процесу відключено на даному середовищі',
     DeleteWorkflow: 'Видалити процес',
     DeleteWorkflowDialogTitle: 'Ви дійсно бажаєте видалити процес?',
     DeleteWorkflowDialogDescription:
@@ -1386,21 +1330,17 @@ export default {
     ToWorkProcess: 'Перенести до робочих',
     ToTestProcess: 'Перенести до тестових',
     ChangeCategoryPrompt: 'Увага',
-    ChangeCategoryDescription:
-      'Чи ви хочете перемістити процес {{name}} до списку продуктових?',
-    ChangeCategoryTestDescription:
-      'Чи ви хочете перемістити процес {{name}} до списку тестових?',
+    ChangeCategoryDescription: 'Чи ви хочете перемістити процес {{name}} до списку продуктових?',
+    ChangeCategoryTestDescription: 'Чи ви хочете перемістити процес {{name}} до списку тестових?',
     SubscribeWorkflow: 'Підписатись на помилки процесу',
     UnSubscribeWorkflow: 'Відписатись від помилок процесу',
     SubscribePrompt: 'Підписатись на обрані процеси',
-    SubscribePropmtDescription:
-      'Ви будете підписані на помилки обраних процесів',
+    SubscribePropmtDescription: 'Ви будете підписані на помилки обраних процесів',
     unSubscribePrompt: 'Відписатись від обраних процесів',
-    unSubscribePropmtDescription:
-      'Ви будете відписані від помилок обраних процесів',
+    unSubscribePropmtDescription: 'Ви будете відписані від помилок обраних процесів',
     SubscribeProcessTooltip: 'Підписатись на помилки обраних процесів',
     UnSubscribeProcessTooltip: 'Відписатись від обраних процесів',
-    WorkflowSubscribed: 'Мої підписки',
+    WorkflowSubscribed: 'Мої підписки'
   },
   DebugTools: {
     MockInitError: 'Моки не налаштовані',
@@ -1443,8 +1383,7 @@ export default {
     OverwriteUnitsConfirmationText:
       'Ви дійсно бажаєте виконати перезапис існуючих підрозділів: {{filesInfo}}?',
     OverwriteUnitsConfirmationOne: 'Юніт {{filesInfo}} вже існує.',
-    OverwriteUnitsConfirmationTextOne:
-      'Ви дійсно бажаєте виконати перезапис існуючого підрозділу?',
+    OverwriteUnitsConfirmationTextOne: 'Ви дійсно бажаєте виконати перезапис існуючого підрозділу?',
     CreatedAt: 'Дата створення',
     UpdatedAt: 'Дата оновлення',
     DeleteUnitsDialogTitle: 'Ви дійсно бажаєте видалити вибрані підрозділи?',
@@ -1456,11 +1395,10 @@ export default {
     Close: 'Закрити',
     RequiredField: "Обов'язкове поле",
     'Error: Unit already exists.': 'Підрозділ з такою назвою вже існує',
-    'Error: Unit id already exists.':
-      'Підрозділ з таким ідентифікатором вже існує',
+    'Error: Unit id already exists.': 'Підрозділ з таким ідентифікатором вже існує',
     Id: 'Номер',
     BasedOn: 'Базовий підрозділ',
-    name: 'Назва підрозділу',
+    name: 'Назва підрозділу'
   },
   UnitPage: {
     Unit: 'Підрозділ',
@@ -1490,7 +1428,7 @@ export default {
     RemoveFromFavorites: 'Видалити з обраних',
     AddToFavorites: 'Додати до обраних',
     EditName: 'Змінити назву або опис',
-    UploadCSV: 'Завантажити з csv',
+    UploadCSV: 'Завантажити з csv'
   },
   WorkflowCategoryListPage: {
     CreateCategory: 'Створити',
@@ -1504,7 +1442,7 @@ export default {
     Save: 'Зберегти',
     EditCategory: 'Редагувати',
     DeleteCategory: 'Видалити',
-    RequiredField: 'Назва не може бути порожньою',
+    RequiredField: 'Назва не може бути порожньою'
   },
   RegistryListAdminPage: {
     SelectRegisterToExport: 'Виберіть ключі реєстрів для експорту',
@@ -1525,8 +1463,7 @@ export default {
     EditRegister: 'Редагувати',
     ImportRegisters: 'Імпортувати',
     OverwriteRegisterConfirmation: 'Реєстри з таким ID вже існують',
-    OverwriteRegisterConfirmationText:
-      'Ви дійсно бажаєте виконати перезапис існуючих реєстрів?',
+    OverwriteRegisterConfirmationText: 'Ви дійсно бажаєте виконати перезапис існуючих реєстрів?',
     HowToExport: 'Як експортувати?',
     HowToImport: 'Як імпортувати?',
     Continue: 'Продовжити',
@@ -1537,8 +1474,7 @@ export default {
     AddData: 'Додати нові записи',
     FailExportingRegisters: 'Виникла помилка при експортуванні реєстрів',
     ErrorWhileExportingRegister: 'Помилка експортування реєстру',
-    RegisterExportErrorMessage:
-      'Цей реєстр занадто великий для експорту з даними.',
+    RegisterExportErrorMessage: 'Цей реєстр занадто великий для експорту з даними.',
     CloseErrorDialog: 'Закрити',
     CloseKeysDialog: 'Закрити',
     RegistryKeys: 'Ключі реєстру',
@@ -1547,8 +1483,7 @@ export default {
     RegisterID: 'ID реєстру',
     KeyId: 'ID ключа реєстру',
     Unique: 'Колонка, яка має містити тільки унікальні записи',
-    UniqueDescription:
-      'Записи зі співпадінням значень в колонці не будуть завантажені',
+    UniqueDescription: 'Записи зі співпадінням значень в колонці не будуть завантажені',
     ErrorImportingKeys: 'Помилка при імпорті ключів з XLS',
     RequiredField: "Обов'язкове поле",
     NewRegister: 'Новий реєстр',
@@ -1565,10 +1500,8 @@ export default {
       'Ви дійсно бажаєте видалити реєстр "{{register}}"? Ця дія безповоротна. Якщо ви видалите реєстр, відновити його буде неможливо.',
     DeleteError: 'Помилка видалення реєстру',
     'Can not delete.': 'Реєстр містить заповнені дані.',
-    'Can not create.':
-      'Неможливо створити реєстр, можливо, назва вже використовується.',
-    'Can not update.':
-      'Неможливо змінити реєстр, можливо, назва вже використовується.',
+    'Can not create.': 'Неможливо створити реєстр, можливо, назва вже використовується.',
+    'Can not update.': 'Неможливо змінити реєстр, можливо, назва вже використовується.',
     UseStream: 'Використовувати потік',
     RegistryId: 'ID реєстру',
     RegistryKeyId: 'ID ключа реєстру',
@@ -1606,7 +1539,7 @@ export default {
     ImportRegisterKeys: 'Імпорт ключів реєстру',
     Key: 'Ключ {{value}}',
     Register: 'Реєстр {{value}}',
-    RegistrySearchPlaceholder: 'Пошук по реєстрам',
+    RegistrySearchPlaceholder: 'Пошук по реєстрам'
   },
   KeyListAdminPage: {
     ExportExcelFunction: 'Функція експорту в xlsx',
@@ -1647,7 +1580,8 @@ export default {
     KeyNameExists: 'В цьому реєстрі ключ з такою назвою вже існує',
     FieldDescriptionText: 'Опис поля',
     SignatureDetails: 'Дані про підпис',
-    'Cannot set the key as personal when strict access is enabled.': 'Не можна встановити ключ як особистий, коли включений strict access',
+    'Cannot set the key as personal when strict access is enabled.':
+      'Не можна встановити ключ як особистий, коли включений strict access'
   },
   WorkflowLogs: {
     CreatedAt: 'Дата',
@@ -1657,7 +1591,7 @@ export default {
     Task: 'Задача',
     WorkflowIncomingMessage: 'Вхідне повідомлення',
     WorkflowOutgoingMessage: 'Вихідне повідомлення',
-    Gateway: 'Шлюз',
+    Gateway: 'Шлюз'
   },
   ProcessesListPage: {
     SearchLogs: 'Пошук по логах',
@@ -1722,8 +1656,7 @@ export default {
     ActionsWithProcess: 'Дії з процесом',
     CheckAsNotError: 'Позначити як "Без помилки"',
     ClearLoops: 'Очистити зациклення',
-    CheckAsNotErrorTitle:
-      'Ви дійсно бажаєте позначити процес як "Без помилки"?',
+    CheckAsNotErrorTitle: 'Ви дійсно бажаєте позначити процес як "Без помилки"?',
     CheckAsNotErrorDescription:
       'Ця дія безповоротна. Якщо ви позначите процес як "Без помилки", його відновити буде неможливо.',
     isFinal: 'Процес завершено',
@@ -1738,18 +1671,16 @@ export default {
     No: 'Ні',
     Download: 'Завантажити',
     RestartProcessTooltip: 'Перезапуск обраних процесів',
-    RestartProcessFromPointTooltip:
-      'Перезапуск обраних процесів з певної точки',
+    RestartProcessFromPointTooltip: 'Перезапуск обраних процесів з певної точки',
     RestartPrompt: 'Підтвердження перезапуску',
     RestartPromptDescription: 'Обрані процеси {{count}} будуть перезапущені',
     RestartPromptAllDescription:
       'Ви перезапускаєте всі процеси, які відповідають параметрам пошуку. Продовжити?',
-    RestartPromptPointDescription:
-      'Обрані процесу будуть перезапущені з обраної точки: {{point}}.',
+    RestartPromptPointDescription: 'Обрані процесу будуть перезапущені з обраної точки: {{point}}.',
     RestartSuccessSuccess: 'Перезапуск завершено',
-    CheckAsNotErrorMassTitle:
-      'Зняття ознаки помилки з процесів',
-    CheckAsNotErrorMassDescription: 'Серед обраних процесів, з {{count}} буде знято ознаку помилки. Продовжити?',
+    CheckAsNotErrorMassTitle: 'Зняття ознаки помилки з процесів',
+    CheckAsNotErrorMassDescription:
+      'Серед обраних процесів, з {{count}} буде знято ознаку помилки. Продовжити?',
     CheckAsNotErrorMassProcessing: 'Позначено без помилки: {{value}} з {{count}}',
     CheckAsNotErrorSuccess: 'Процеси позначено як "Без помилки"',
     ErrorRestart: 'Сталась помилка при перезапуску',
@@ -1770,7 +1701,7 @@ export default {
     taskTemplateId: 'Задача: {{value}}',
     eventTemplateId: 'Подія: {{value}}',
     gatewayTemplateId: 'Шлюз: {{value}}',
-    RequiredField: 'Необхідно обрати значення',
+    RequiredField: 'Необхідно обрати значення'
   },
   UserAccessJournalPage: {
     UserAccessJournal: 'Зміни ролей',
@@ -1812,7 +1743,7 @@ export default {
     FromShort: 'З',
     ToShort: 'По',
     ClientName: 'Сервіс',
-    ClientId: 'ID сервісу',
+    ClientId: 'ID сервісу'
   },
   UserProcessesListPage: {
     UserProcessesListPageTitle: 'Дії в системі',
@@ -1836,7 +1767,7 @@ export default {
     EmptyFilters: 'Для генерації звіту, оберіть будь ласка фільтри',
     Ok: 'Добре',
     FromShort: 'З',
-    ToShort: 'По',
+    ToShort: 'По'
   },
   SelectFilterHandler: {
     doing: 'В процесі',
@@ -1845,7 +1776,7 @@ export default {
     withErrors: 'Тільки з помилками',
     withoutErrors: 'Без помилок',
     isDraft: 'Чернетка',
-    EmptyList: 'Список порожній',
+    EmptyList: 'Список порожній'
   },
   SelectUserDialog: {
     Search: 'Пошук',
@@ -1856,10 +1787,10 @@ export default {
     SearchResults: 'Результати пошуку:',
     SearchByName: 'по імені',
     SearchByIPN: 'по ІПН',
-    SearchByID: 'по ID',
+    SearchByID: 'по ID'
   },
   AdminTools: {
-    SelectDebugUser: 'Увійти від імені...',
+    SelectDebugUser: 'Увійти від імені...'
   },
   NumberTemplateListPage: {
     TemplateId: 'Номер шаблону',
@@ -1875,18 +1806,16 @@ export default {
     CreateNewTemplate: 'Новий шаблон',
     DeleteSelectedTemplates: 'Видалити',
     DeleteTemplateDialogTitle: 'Підтвердження видалення',
-    DeleteTemplateDialogDescription:
-      'Ви дійсно хочете видалити вибраний шаблон?',
+    DeleteTemplateDialogDescription: 'Ви дійсно хочете видалити вибраний шаблон?',
     ImportTemplates: 'Імпортувати',
     DeleteTemplates: 'Видалити шаблони номерів',
-    DeleteTemplatesDialogDescription:
-      'Ви дійсно хочете видалити вибрані шаблони?',
-    Actions: 'Дії',
+    DeleteTemplatesDialogDescription: 'Ви дійсно хочете видалити вибрані шаблони?',
+    Actions: 'Дії'
   },
   NumberTemplatePage: {
     Loading: 'Завантаження...',
     Back: 'Повернутись до списку',
-    Save: 'Зберегти зміни',
+    Save: 'Зберегти зміни'
   },
   UserListPage: {
     Blocked: 'Заблокований',
@@ -1943,7 +1872,7 @@ export default {
     rnokpp: 'РНОКПП',
     DismatchRnokpp: 'Введений РНОКПП не збігається з РНОКПП користувача',
     EmptyRnokpp: 'Необхідно ввести РНОКПП',
-    ...WorkflowProcesses,
+    ...WorkflowProcesses
   },
   HealthCheckListPage: {
     HealthCheckListPage: 'Статуси сервісів',
@@ -1989,7 +1918,7 @@ export default {
     registerServiceMeta: 'registerServiceMeta',
     taskServiceMeta: 'taskServiceMeta',
     previewServiceMeta: 'previewServiceMeta',
-    oauthServiceMeta: 'oauthServiceMeta',
+    oauthServiceMeta: 'oauthServiceMeta'
   },
   JsonSchemaEditor: {
     GroupNameAlreadyExist: 'Група з такою назвою вже існує',
@@ -2001,7 +1930,7 @@ export default {
     Controls: 'Контроли',
     SnippetIcon: 'Піктограмка',
     AddSnippet: 'Додати сніпет',
-    RequiredField: 'Обов\'язкове поле',
+    RequiredField: "Обов'язкове поле",
     Delete: 'Видалити',
     Close: 'Закрити',
     CreateCroupTitle: 'Налаштування групи в меню',
@@ -2093,7 +2022,7 @@ export default {
     Collapse: 'Згорнути',
     CollapseControlList: 'Бібліотека контролів',
     DeleteGroupPrompt: 'Увага',
-    DeleteGroupPromptDescription: 'Дійсно видилити групу "{{name}}"?',
+    DeleteGroupPromptDescription: 'Дійсно видилити групу "{{name}}"?'
   },
   UserIdsFilterHandler: {
     Search: 'Пошук',
@@ -2101,14 +2030,14 @@ export default {
     EmptySelection: 'Користувачі не обрані',
     EmptySearchResults: 'Користувачі не знайдені',
     Apply: 'Застосувати',
-    Others: 'ще {{length}}...',
+    Others: 'ще {{length}}...'
   },
   WorkflowProcesses,
   StringFilterHandlerSearchable: {
     loadingText: 'Завантаження...',
     noOptionsText: 'Не знайдено',
     openText: 'Відкрити',
-    placeholder: 'ПІБ, РНОКПП або ID користувача',
+    placeholder: 'ПІБ, РНОКПП або ID користувача'
   },
   UIFilterList: {
     UIFilters: 'Розділи кабінету',
@@ -2123,7 +2052,7 @@ export default {
     DeletePropmtDescription: 'Ви дійсно хочете видалити налаштування розділу?',
     Error: 'Помилка',
     Cancel: 'Скасувати',
-    'Invalid value': 'Недійсне значення',
+    'Invalid value': 'Недійсне значення'
   },
   InterfacesList: {
     CustomInterfaces: 'Інтерфейси',
@@ -2140,7 +2069,7 @@ export default {
     Error: 'Помилка',
     Cancel: 'Скасувати',
     'Invalid value': 'Недійсне значення',
-    Actions: 'Дії',
+    Actions: 'Дії'
   },
   ReportListPage: {
     Parameters: 'Параметри',
@@ -2182,12 +2111,11 @@ export default {
     FailedStatus: 'Помилка',
     InProgressStatus: 'В процесі',
     UnitMember: 'Підрозділи що мають доступ',
-    Access: 'Доступ',
+    Access: 'Доступ'
   },
   DiiaSignForm: {
     DiiaSignFormTitle: 'Підпис в додатку Дія',
-    DiiaSignFormDescription:
-      'Відскануйте QR код додатком Дія і дотримуйтесь інструкції',
+    DiiaSignFormDescription: 'Відскануйте QR код додатком Дія і дотримуйтесь інструкції',
     DiiaSignFormDescriptionMobile: 'Натисніть кнопку і дотримуйтесь інструкції',
     DiiaSignFormLoading: 'Завантаження даних для підпису...',
     PreparingDeeplink: 'Формування QR коду для підпису...',
@@ -2206,7 +2134,7 @@ export default {
       'РНОКПП електронно-цифрового підпису не збігається з РНОКПП користувача.',
     QrTimer: 'Цей код діятиме ще {{timerValue}}',
     QrTimerRiched:
-      'Цей код більше не активний, будь ласка, натисність кнопку "Оновити QR-код" та відскануйте його ще раз',
+      'Цей код більше не активний, будь ласка, натисність кнопку "Оновити QR-код" та відскануйте його ще раз'
   },
   EnabledMockPage: {
     ChooseUser: 'Виберіть користувача',
@@ -2249,7 +2177,7 @@ export default {
     User: 'Користувач',
     Search: 'Пошук моку',
     method: 'Метод',
-    mock: 'Мок',
+    mock: 'Мок'
   },
   MessageTemplatesList: {
     MessageTemplatesList: 'Шаблони повідомлень',
@@ -2265,7 +2193,7 @@ export default {
       'Ви дійсно хочете видалити шаблон "{{title}}"? Ця дія безповоротна. Якщо ви видалите шаблон, відновити його буде неможливо.',
     Actions: 'Дії',
     '{"message":"Type must be \'sms\' or \'email\'"}': 'Тип повідомлення має бути sms або email',
-    '{"message":"Text id empty"}': 'Поле текст не може бути пустим',
+    '{"message":"Text id empty"}': 'Поле текст не може бути пустим'
   },
   QrTemplatesList: {
     QrTemplatesList: 'QR витяг',
@@ -2282,15 +2210,15 @@ export default {
     Actions: 'Дії',
     Save: 'Зберегти',
     Cancel: 'Закрити',
-    QrExcerpt : "QR витяг",
+    QrExcerpt: 'QR витяг',
     MapppingFields: 'Маппінг полів',
     Template: 'Шаблон',
     GeneratedDeepLink: 'Генерувати deep link для QR витягу',
     QrExcerptSettings: 'Налаштування qr витягу',
-    MethodIsRequired: 'Назва методу обов\'язкова',
+    MethodIsRequired: "Назва методу обов'язкова",
     Status: 'Статус',
     Active: 'Активний',
-    Inactive: 'Неактивний',
+    Inactive: 'Неактивний'
   },
   MetricsPage: {
     MetricsPageTitle: 'Метрики',
@@ -2313,7 +2241,7 @@ export default {
     NoData: 'За "{{search}}" записів не знайдено',
     maxDateMessage: 'Дата більша за поточну',
     invalidDateMessage: 'Некоректна дата',
-    minDateMessage: 'Дата менше мінімальної',
+    minDateMessage: 'Дата менше мінімальної'
   },
   FavoritesPage: {
     FavoritesListTitle: 'Обране',
@@ -2327,10 +2255,10 @@ export default {
     AddToFavorites: 'Додати до обраних',
     DeletePrompt: 'Підтвердження видалення',
     DeletePromtDescription:
-      'Ви дійсно хочете видалити з обраних "{{title}}"? Його можна буде повернути пізніше.',
+      'Ви дійсно хочете видалити з обраних "{{title}}"? Його можна буде повернути пізніше.'
   },
   SignFilesLimit: {
     SignFilesLimit:
-      "Підпис великого об'єму. Рекомендуємо скористатись підписом за допомогою файлового ключа",
-  },
+      "Підпис великого об'єму. Рекомендуємо скористатись підписом за допомогою файлового ключа"
+  }
 };

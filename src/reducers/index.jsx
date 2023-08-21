@@ -1,8 +1,8 @@
-import { combineReducers } from "redux";
+import { combineReducers } from 'redux';
 
-import reducers from "reducers";
+import reducers from 'reducers';
 
-const RESET_STATE = "APP/RESET_STATE";
+const RESET_STATE = 'APP/RESET_STATE';
 
 const clearState = ({ app, auth, eds }) => ({ app, auth, eds });
 

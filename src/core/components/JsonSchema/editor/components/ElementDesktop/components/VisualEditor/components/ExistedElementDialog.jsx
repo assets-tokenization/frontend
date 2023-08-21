@@ -6,7 +6,7 @@ import {
   DialogContent,
   DialogActions,
   Button,
-  Typography,
+  Typography
 } from '@mui/material';
 
 const ExistedElementDialog = ({ t, open, onClose, onSave }) => (

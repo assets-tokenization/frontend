@@ -1,17 +1,15 @@
-import React from "react";
-import Preloader from "components/Preloader";
+import React from 'react';
+import Preloader from 'components/Preloader';
 
-const Auth = ({
-  history
-}) => {
+const Auth = ({ history }) => {
   React.useEffect(() => {
     setTimeout(() => {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
 
       if (token) {
-        history.push("/home");
+        history.push('/home');
       } else {
-        history.push("/login");
+        history.push('/login');
       }
     }, 1000);
   }, [history]);

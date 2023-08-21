@@ -1,1 +1,1 @@
-export default page => element => `${page}-${element}`;
+export default (page) => (element) => `${page}-${element}`;

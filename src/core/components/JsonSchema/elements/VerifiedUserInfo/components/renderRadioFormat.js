@@ -2,13 +2,7 @@ import React from 'react';
 import { useTranslate } from 'react-translate';
 import { SchemaForm } from 'components/JsonSchema';
 
-const RenderRadioFormat = ({
-  name,
-  fields,
-  errors,
-  value,
-  handleUpdateField
-}) => {
+const RenderRadioFormat = ({ name, fields, errors, value, handleUpdateField }) => {
   const t = useTranslate('VerifiedUserInfo');
 
   return (

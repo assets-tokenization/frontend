@@ -13,274 +13,283 @@ import objectPath from 'object-path';
 import ElementContainer from '../components/ElementContainer';
 
 class TreeSelect extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            loading: false
-        };
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: false
+    };
+  }
+
+  async componentDidMount() {
+    const { records, actions, keyId, originDocument } = this.props;
+    const keyIds = [].concat(keyId).join(',');
+
+    if (
+      keyId &&
+      !records[keyIds] &&
+      !processList.has('requestRegisterRelatedKeyRecords', keyIds) &&
+      !originDocument.isFinal
+    ) {
+      this.setState({ loading: true });
+      await processList.set(
+        'requestRegisterRelatedKeyRecords',
+        actions.requestRegisterRelatedKeyRecords,
+        keyIds
+      );
+      this.setState({ loading: false });
     }
+  }
 
-    async componentDidMount() {
-        const { records, actions, keyId, originDocument } = this.props;
-        const keyIds = [].concat(keyId).join(',');
+  filterOptions = (items) => {
+    const { filters } = this.props;
+    const checkOption = (option) => {
+      const isFiltered = ({ name, value }) => {
+        if (!value || !value.length) return false;
 
-        if (keyId && !records[keyIds] && !processList.has('requestRegisterRelatedKeyRecords', keyIds) && !originDocument.isFinal) {
-            this.setState({ loading: true });
-            await processList.set('requestRegisterRelatedKeyRecords', actions.requestRegisterRelatedKeyRecords, keyIds);
-            this.setState({ loading: false });
-        }
-    }
+        const isArray = Array.isArray(value);
 
-    filterOptions = (items) => {
-        const { filters } = this.props;
-        const checkOption = (option) => {
-            const isFiltered = ({ name, value }) => {
-                if (!value || !value.length) return false;
+        if (!isArray) return option[name] !== value;
 
-                const isArray = Array.isArray(value);
+        if (isArray) return (value || []).map((val) => val[name]).includes(option[name]);
 
-                if (!isArray) return option[name] !== value;
+        return false;
+      };
 
-                if (isArray) return (value || []).map(val => val[name]).includes(option[name]);
-
-                return false;
-            };
-
-            return filters.some(isFiltered);
-        };
-
-        return items.map(item => ({
-            ...item,
-            hiddenOption: checkOption(item)
-        }));
+      return filters.some(isFiltered);
     };
 
-    setTitle = (item, type) => {
-        const { fieldToDisplay } = this.props;
+    return items.map((item) => ({
+      ...item,
+      hiddenOption: checkOption(item)
+    }));
+  };
 
-        if (!fieldToDisplay) return item[type];
+  setTitle = (item, type) => {
+    const { fieldToDisplay } = this.props;
 
-        const result = evaluate(fieldToDisplay, item);
+    if (!fieldToDisplay) return item[type];
 
-        if (result instanceof Error) return JSON.stringify(result);
+    const result = evaluate(fieldToDisplay, item);
 
-        return result;
-    };
+    if (result instanceof Error) return JSON.stringify(result);
 
-    recordsToOptions = (list, firstLevelId) => {
-        const { filters } = this.props;
-        const optionsList = filters ? this.filterOptions(list) : list;
+    return result;
+  };
 
-        return arrayToTree(optionsList.map(item => ({
-            ...item,
-            name: this.setTitle(item, 'name'),
-            label: this.setTitle(item, 'label'),
-            isRelationLink: item.keyId === firstLevelId ? 0 : item.isRelationLink
-        })), {
-            customID: 'isRelationId',
-            parentProperty: 'isRelationLink',
-            childrenProperty: 'items'
+  recordsToOptions = (list, firstLevelId) => {
+    const { filters } = this.props;
+    const optionsList = filters ? this.filterOptions(list) : list;
+
+    return arrayToTree(
+      optionsList.map((item) => ({
+        ...item,
+        name: this.setTitle(item, 'name'),
+        label: this.setTitle(item, 'label'),
+        isRelationLink: item.keyId === firstLevelId ? 0 : item.isRelationLink
+      })),
+      {
+        customID: 'isRelationId',
+        parentProperty: 'isRelationLink',
+        childrenProperty: 'items'
+      }
+    );
+  };
+
+  sortRecords = (options) => {
+    const { sortBy } = this.props;
+
+    if (!sortBy) return options;
+
+    const by = Object.keys(sortBy);
+    const order = Object.values(sortBy);
+
+    const sortItems = (array) => {
+      if (!array) return [];
+
+      sortArray(array, { by, order });
+
+      const recursive = (arr) => {
+        arr.forEach(({ items }) => {
+          if (!items) return;
+          sortArray(items, { by, order });
+          recursive(items);
         });
+      };
+
+      recursive(array);
+
+      return array;
     };
 
-    sortRecords = options => {
-        const { sortBy } = this.props;
+    return sortItems(options);
+  };
 
-        if (!sortBy) return options;
+  getOptions = () => {
+    const { records, options, keyId, dataPath, rootDocument } = this.props;
 
-        const by = Object.keys(sortBy);
-        const order = Object.values(sortBy);
+    if (keyId) {
+      const levels = [].concat(keyId);
+      const keyIds = levels.join(',');
+      const mapRecords = records[keyIds] && this.recordsToOptions(records[keyIds], levels.shift());
+      return this.sortRecords(mapRecords);
+    }
 
-        const sortItems = array => {
-            if (!array) return [];
+    if (dataPath) {
+      const values = objectPath.get(rootDocument.data, dataPath);
+      return Array.isArray(values) ? values : [];
+    }
 
-            sortArray(array, { by, order });
+    return options;
+  };
 
-            const recursive = arr => {
-                arr.forEach(({ items }) => {
-                    if (!items) return;
-                    sortArray(items, { by, order });
-                    recursive(items);
-                });
-            };
+  hideEmptyParents = (options) => {
+    const { keyId, filters } = this.props;
 
-            recursive(array);
+    if (!Array.isArray(keyId) || !filters) return options;
 
-            return array;
-        };
+    const loop = (array) => {
+      array.forEach((element) => {
+        const { items } = element;
+        if (!items) return;
 
-        return sortItems(options);
+        const isHidden = items.filter((item) => item.hiddenOption === true);
+        const parentEmpty = isHidden.length === items.length;
+        element.hiddenOption = parentEmpty;
+
+        if (!parentEmpty) loop(items);
+      });
     };
 
-    getOptions = () => {
-        const { records, options, keyId, dataPath, rootDocument } = this.props;
+    keyId.forEach(() => loop(options || []));
 
-        if (keyId) {
-            const levels = [].concat(keyId);
-            const keyIds = levels.join(',');
-            const mapRecords = records[keyIds] && this.recordsToOptions(records[keyIds], levels.shift());
-            return this.sortRecords(mapRecords);
-        }
+    return options;
+  };
 
-        if (dataPath) {
-            const values = objectPath.get(rootDocument.data, dataPath);
-            return Array.isArray(values) ? values : [];
-        }
+  render = () => {
+    const {
+      helperText,
+      value,
+      sample,
+      description,
+      required,
+      error,
+      readOnly,
+      onChange,
+      path,
+      hidden,
+      registerSelect,
+      customOnChange,
+      className,
+      isDisabled,
+      noMargin,
+      multiple,
+      customHandleChange,
+      usedInTable,
+      notRequiredLabel,
+      chipsValue
+    } = this.props;
+    const { loading } = this.state;
 
-        return options;
-    };
+    if (hidden) return null;
 
-    hideEmptyParents = (options) => {
-        const { keyId, filters } = this.props;
+    const options = this.getOptions();
+    const items = this.hideEmptyParents(options);
+    const handleChange = customOnChange || onChange;
 
-        if (!Array.isArray(keyId) || !filters) return options;
-
-        const loop = (array) => {
-            array.forEach(element => {
-                const { items } = element;
-                if (!items) return;
-
-                const isHidden = items.filter(item => item.hiddenOption === true);
-                const parentEmpty = isHidden.length === items.length;
-                element.hiddenOption = parentEmpty;
-
-                if (!parentEmpty) loop(items);
-            });
-        };
-
-        keyId.forEach(() => loop((options || [])));
-
-        return options;
-    };
-
-    render = () => {
-        const {
-            helperText,
-            value,
-            sample,
-            description,
-            required,
-            error,
-            readOnly,
-            onChange,
-            path,
-            hidden,
-            registerSelect,
-            customOnChange,
-            className,
-            isDisabled,
-            noMargin,
-            multiple,
-            customHandleChange,
-            usedInTable,
-            notRequiredLabel,
-            chipsValue
-        } = this.props;
-        const { loading } = this.state;
-
-        if (hidden) return null;
-
-        const options = this.getOptions();
-        const items = this.hideEmptyParents(options);
-        const handleChange = customOnChange || onChange;
-
-        return (
-            <ElementContainer
-                sample={sample}
-                required={required}
-                description={!registerSelect ? description : null}
-                error={!registerSelect ? error : null}
-                className={className || null}
-                noMargin={noMargin}
-                notRequiredLabel={notRequiredLabel}
-            >
-                <FormControl variant="standard" fullWidth={true}>
-                    <TreeListSelect
-                        id={path.join('-')}
-                        path={path}
-                        placeholder={helperText}
-                        usedInTable={usedInTable}
-                        disabled={readOnly || !options || isDisabled}
-                        readOnly={readOnly}
-                        items={items}
-                        selected={value}
-                        onSelect={selected => handleChange && handleChange(selected)}
-                        customHandleChange={customHandleChange}
-                        error={!!error}
-                        registerSelect={registerSelect}
-                        description={description}
-                        loading={loading}
-                        required={required}
-                        multiple={multiple}
-                        notRequiredLabel={notRequiredLabel}
-                        chipsValue={chipsValue}
-                    />
-                </FormControl>
-            </ElementContainer>
-        );
-    };
+    return (
+      <ElementContainer
+        sample={sample}
+        required={required}
+        description={!registerSelect ? description : null}
+        error={!registerSelect ? error : null}
+        className={className || null}
+        noMargin={noMargin}
+        notRequiredLabel={notRequiredLabel}
+      >
+        <FormControl variant="standard" fullWidth={true}>
+          <TreeListSelect
+            id={path.join('-')}
+            path={path}
+            placeholder={helperText}
+            usedInTable={usedInTable}
+            disabled={readOnly || !options || isDisabled}
+            readOnly={readOnly}
+            items={items}
+            selected={value}
+            onSelect={(selected) => handleChange && handleChange(selected)}
+            customHandleChange={customHandleChange}
+            error={!!error}
+            registerSelect={registerSelect}
+            description={description}
+            loading={loading}
+            required={required}
+            multiple={multiple}
+            notRequiredLabel={notRequiredLabel}
+            chipsValue={chipsValue}
+          />
+        </FormControl>
+      </ElementContainer>
+    );
+  };
 }
 
 TreeSelect.propTypes = {
-    helperText: PropTypes.string,
-    records: PropTypes.object,
-    keyId: PropTypes.oneOfType([
-        PropTypes.number,
-        PropTypes.string
-    ]),
-    sample: PropTypes.string,
-    description: PropTypes.string,
-    required: PropTypes.bool,
-    readOnly: PropTypes.bool,
-    options: PropTypes.array,
-    value: PropTypes.object,
-    error: PropTypes.object,
-    actions: PropTypes.object.isRequired,
-    onChange: PropTypes.func.isRequired,
-    path: PropTypes.array,
-    hidden: PropTypes.bool,
-    registerSelect: PropTypes.bool,
-    customOnChange: PropTypes.func,
-    className: PropTypes.object,
-    isDisabled: PropTypes.bool,
-    filters: PropTypes.array,
-    fieldToDisplay: PropTypes.string,
-    sortBy: PropTypes.object,
-    dataPath: PropTypes.string,
-    customHandleChange: PropTypes.func,
-    chipsValue: PropTypes.node
+  helperText: PropTypes.string,
+  records: PropTypes.object,
+  keyId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  sample: PropTypes.string,
+  description: PropTypes.string,
+  required: PropTypes.bool,
+  readOnly: PropTypes.bool,
+  options: PropTypes.array,
+  value: PropTypes.object,
+  error: PropTypes.object,
+  actions: PropTypes.object.isRequired,
+  onChange: PropTypes.func.isRequired,
+  path: PropTypes.array,
+  hidden: PropTypes.bool,
+  registerSelect: PropTypes.bool,
+  customOnChange: PropTypes.func,
+  className: PropTypes.object,
+  isDisabled: PropTypes.bool,
+  filters: PropTypes.array,
+  fieldToDisplay: PropTypes.string,
+  sortBy: PropTypes.object,
+  dataPath: PropTypes.string,
+  customHandleChange: PropTypes.func,
+  chipsValue: PropTypes.node
 };
 
 TreeSelect.defaultProps = {
-    helperText: '',
-    records: {},
-    sample: '',
-    description: '',
-    required: false,
-    readOnly: false,
-    options: [],
-    value: null,
-    error: null,
-    keyId: null,
-    path: [],
-    hidden: false,
-    registerSelect: false,
-    customOnChange: null,
-    className: null,
-    isDisabled: false,
-    filters: null,
-    fieldToDisplay: null,
-    sortBy: null,
-    dataPath: undefined,
-    customHandleChange: () => {},
-    chipsValue: null
+  helperText: '',
+  records: {},
+  sample: '',
+  description: '',
+  required: false,
+  readOnly: false,
+  options: [],
+  value: null,
+  error: null,
+  keyId: null,
+  path: [],
+  hidden: false,
+  registerSelect: false,
+  customOnChange: null,
+  className: null,
+  isDisabled: false,
+  filters: null,
+  fieldToDisplay: null,
+  sortBy: null,
+  dataPath: undefined,
+  customHandleChange: () => {},
+  chipsValue: null
 };
 
 const mapStateToPops = ({ registry: { relatedRecords } }) => ({ records: relatedRecords });
-const mapDispatchToProps = dispatch => ({
-    actions: {
-        requestRegisterRelatedKeyRecords: bindActionCreators(requestRegisterRelatedKeyRecords, dispatch)
-    }
+const mapDispatchToProps = (dispatch) => ({
+  actions: {
+    requestRegisterRelatedKeyRecords: bindActionCreators(requestRegisterRelatedKeyRecords, dispatch)
+  }
 });
 
 export default connect(mapStateToPops, mapDispatchToProps)(TreeSelect);

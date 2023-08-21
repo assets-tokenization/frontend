@@ -1,11 +1,11 @@
 const app = {
   state: {
-    widgetOrigin: null,
+    widgetOrigin: null
   },
   reducers: {
-    setWidgetOrigin: (state, widgetOrigin) => ({ ...state, widgetOrigin }),
+    setWidgetOrigin: (state, widgetOrigin) => ({ ...state, widgetOrigin })
   },
-  effects: (dispatch) => ({}),
+  effects: (dispatch) => ({})
 };
 
 export default app;

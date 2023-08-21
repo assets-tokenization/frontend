@@ -34,29 +34,40 @@ const ON_FILTER_PRESET_DELETE = 'ON_FILTER_PRESET_DELETE';
 
 let loadTimeout = null;
 
-export const closeError = ({ sourceName }) => errorIndex => ({
+export const closeError =
+  ({ sourceName }) =>
+  (errorIndex) => ({
     type: dispatchType(sourceName, ON_ERROR_CLOSE),
     payload: errorIndex
-});
+  });
 
-export const onRowsSelect = ({ sourceName }) => allRowsSelected => ({
+export const onRowsSelect =
+  ({ sourceName }) =>
+  (allRowsSelected) => ({
     type: dispatchType(sourceName, ON_ROW_SELECT),
     payload: allRowsSelected
-});
+  });
 
-export const onFilterPresetAdd = ({ sourceName }) => preset => ({
+export const onFilterPresetAdd =
+  ({ sourceName }) =>
+  (preset) => ({
     type: dispatchType(sourceName, ON_FILTER_PRESET_ADD),
     payload: preset
-});
+  });
 
-export const onFilterPresetDelete = ({ sourceName }) => presetIndex => ({
+export const onFilterPresetDelete =
+  ({ sourceName }) =>
+  (presetIndex) => ({
     type: dispatchType(sourceName, ON_FILTER_PRESET_DELETE),
     payload: presetIndex
-});
+  });
 
-export const load = ({ sourceName, dataURL, getDataUrl, method = 'GET', requestData = {}, getQueryBody }) => () => (dispatch) => {
+export const load =
+  ({ sourceName, dataURL, getDataUrl, method = 'GET', requestData = {}, getQueryBody }) =>
+  () =>
+  (dispatch) => {
     const dataTable = store.getState()[sourceName];
-    
+
     // remove filtered param from request
     delete dataTable?.filters?.filtered;
 
@@ -65,172 +76,236 @@ export const load = ({ sourceName, dataURL, getDataUrl, method = 'GET', requestD
     let request;
 
     switch (method) {
-        case 'POST': {
-            const requestBody = getQueryBody ? getQueryBody(dataTable) : requestData;
-            request = api.post(url, requestBody, dispatchType(sourceName, GET_LIST), dispatch);
-            break;
-        }
-        case 'GET':
-        default:
-            request = api.get(url, dispatchType(sourceName, GET_LIST), dispatch);
+      case 'POST': {
+        const requestBody = getQueryBody ? getQueryBody(dataTable) : requestData;
+        request = api.post(url, requestBody, dispatchType(sourceName, GET_LIST), dispatch);
+        break;
+      }
+      case 'GET':
+      default:
+        request = api.get(url, dispatchType(sourceName, GET_LIST), dispatch);
     }
 
     return request.catch((error) => {
-        // dispatch(addError(new Error('FailFetchingRows')));
-        Sentry.captureException(error);
-        return error;
+      // dispatch(addError(new Error('FailFetchingRows')));
+      Sentry.captureException(error);
+      return error;
     });
-};
+  };
 
-export const onChangePage = model => (currentPage, forceLoad = true, timeout = true) => (dispatch) => {
+export const onChangePage =
+  (model) =>
+  (currentPage, forceLoad = true, timeout = true) =>
+  (dispatch) => {
     dispatch({
-        type: dispatchType(model.sourceName, ON_CHANGE_PAGE),
-        payload: currentPage + 1
+      type: dispatchType(model.sourceName, ON_CHANGE_PAGE),
+      payload: currentPage + 1
     });
 
     clearTimeout(loadTimeout);
 
     loadTimeout = setTimeout(() => forceLoad && load(model)()(dispatch), timeout ? 500 : 0);
-};
+  };
 
-export const onChangeRowsPerPage = model => (numberOfRows, forceLoad = true) => (dispatch) => {
+export const onChangeRowsPerPage =
+  (model) =>
+  (numberOfRows, forceLoad = true) =>
+  (dispatch) => {
     dispatch({
-        type: dispatchType(model.sourceName, ON_CHANGE_ROWS_PER_PAGE),
-        payload: numberOfRows
+      type: dispatchType(model.sourceName, ON_CHANGE_ROWS_PER_PAGE),
+      payload: numberOfRows
     });
 
     return forceLoad && load(model)()(dispatch);
-};
+  };
 
-export const onSearchChange = model => (searchText, forceLoad = true, searchKeys) => (dispatch) => {
+export const onSearchChange =
+  (model) =>
+  (searchText, forceLoad = true, searchKeys) =>
+  (dispatch) => {
     const { sourceName, searchFilterField = 'name' } = model;
     const dataTable = store.getState()[sourceName];
 
     dispatch({
-        type: dispatchType(sourceName, ON_FILTER_CHANGE),
-        payload: { ...dataTable.filters, [searchFilterField]: searchText, searchKeys }
+      type: dispatchType(sourceName, ON_FILTER_CHANGE),
+      payload: { ...dataTable.filters, [searchFilterField]: searchText, searchKeys }
     });
 
     return forceLoad && load(model)()(dispatch);
-};
+  };
 
-export const onFilterChange = model => (filters, forceLoad = true) => (dispatch) => {
+export const onFilterChange =
+  (model) =>
+  (filters, forceLoad = true) =>
+  (dispatch) => {
     const { sourceName } = model;
 
     dispatch({
-        type: dispatchType(sourceName, ON_FILTER_CHANGE),
-        payload: { ...filters, filtered: !!filters.filtered }
+      type: dispatchType(sourceName, ON_FILTER_CHANGE),
+      payload: { ...filters, filtered: !!filters.filtered }
     });
 
     return forceLoad && load(model)()(dispatch);
-};
+  };
 
-export const isRowSelectable = () => item => () => !item.finished;
+export const isRowSelectable = () => (item) => () => !item.finished;
 
 const getURL = (model, useQueryParams = true) => {
-    const dataTable = store.getState()[model.sourceName];
-    const getUrlFunc = (model.getDataUrl || model.composeUrl);
-    const url = getUrlFunc ? getUrlFunc(model.dataURL, dataTable, useQueryParams) : model.dataURL;
-    return url;
+  const dataTable = store.getState()[model.sourceName];
+  const getUrlFunc = model.getDataUrl || model.composeUrl;
+  const url = getUrlFunc ? getUrlFunc(model.dataURL, dataTable, useQueryParams) : model.dataURL;
+  return url;
 };
 
-export const onRowsDelete = model => (rowsDeleted, forceLoad = true) => dispatch => promiseChain(rowsDeleted
-    .map(rowId => () => api.del([getURL(model, false), rowId].join('/'), {}, dispatchType(model.sourceName, ON_ROWS_DELETE), dispatch)))
-    .then(() => forceLoad && load(model)()(dispatch))
-    .catch((error) => {
+export const onRowsDelete =
+  (model) =>
+  (rowsDeleted, forceLoad = true) =>
+  (dispatch) =>
+    promiseChain(
+      rowsDeleted.map(
+        (rowId) => () =>
+          api.del(
+            [getURL(model, false), rowId].join('/'),
+            {},
+            dispatchType(model.sourceName, ON_ROWS_DELETE),
+            dispatch
+          )
+      )
+    )
+      .then(() => forceLoad && load(model)()(dispatch))
+      .catch((error) => {
         Sentry.captureException(error);
         return error;
-    });
+      });
 
-export const onRowsDeletePermanent = model => (rowsDeleted, forceLoad = true) => dispatch => promiseChain(rowsDeleted
-    .map(rowId => () => api.del([getURL(model, false), rowId, 'permanent'].join('/'), {}, dispatchType(model.sourceName, ON_ROWS_DELETE_PERMANENT), dispatch)))
-    .then(() => forceLoad && load(model)()(dispatch))
-    .catch((error) => {
+export const onRowsDeletePermanent =
+  (model) =>
+  (rowsDeleted, forceLoad = true) =>
+  (dispatch) =>
+    promiseChain(
+      rowsDeleted.map(
+        (rowId) => () =>
+          api.del(
+            [getURL(model, false), rowId, 'permanent'].join('/'),
+            {},
+            dispatchType(model.sourceName, ON_ROWS_DELETE_PERMANENT),
+            dispatch
+          )
+      )
+    )
+      .then(() => forceLoad && load(model)()(dispatch))
+      .catch((error) => {
         dispatch(addError(new Error('FailDeletingRows')));
         Sentry.captureException(error);
         return forceLoad && load(model)()(dispatch);
-    });
+      });
 
-export const onRowsRecover = model => (rowsDeleted, forceLoad = true) => dispatch => promiseChain(rowsDeleted
-    .map(rowId => () => api.post([getURL(model, false), rowId, 'recover'].join('/'), {}, dispatchType(model.sourceName, ON_ROWS_RECOVER), dispatch)))
-    .then(() => forceLoad && load(model)()(dispatch))
-    .catch((error) => {
+export const onRowsRecover =
+  (model) =>
+  (rowsDeleted, forceLoad = true) =>
+  (dispatch) =>
+    promiseChain(
+      rowsDeleted.map(
+        (rowId) => () =>
+          api.post(
+            [getURL(model, false), rowId, 'recover'].join('/'),
+            {},
+            dispatchType(model.sourceName, ON_ROWS_RECOVER),
+            dispatch
+          )
+      )
+    )
+      .then(() => forceLoad && load(model)()(dispatch))
+      .catch((error) => {
         dispatch(addError(new Error('FailRecoveringRows')));
         Sentry.captureException(error);
         return forceLoad && load(model)()(dispatch);
-    });
+      });
 
-export const onColumnSortChange = model => (column, direction, forceLoad = true, hard = false) => (dispatch) => {
+export const onColumnSortChange =
+  (model) =>
+  (column, direction, forceLoad = true, hard = false) =>
+  (dispatch) => {
     const { sourceName } = model;
 
     dispatch({
-        type: dispatchType(sourceName, COLUMN_SORT_CHANGE),
-        payload: { column, direction, hard }
+      type: dispatchType(sourceName, COLUMN_SORT_CHANGE),
+      payload: { column, direction, hard }
     });
 
     return forceLoad && load(model)()(dispatch);
-};
+  };
 
-export const clearFilters = ({ sourceName }) => () => ({
+export const clearFilters =
+  ({ sourceName }) =>
+  () => ({
     type: dispatchType(sourceName, CLEAR_FILTERS)
-});
+  });
 
-export const updateRecordValues = ({ sourceName }) => (rowId, data) => ({
+export const updateRecordValues =
+  ({ sourceName }) =>
+  (rowId, data) => ({
     type: dispatchType(sourceName, UPDATE_RECORD_VALUES),
     payload: { rowId, data }
-});
+  });
 
-export const createRecord = model => data => async (dispatch) => {
-    const dataTable = store.getState()[model.sourceName];
-    const url = (model.getDataUrl || model.composeUrl)(model.dataURL, dataTable, false);
-    return api.post(url, data, dispatchType(model.sourceName, CREATE_RECORD), dispatch)
-        .catch((error) => {
-            dispatch(addError(new Error('FailCreatingRecord')));
-            Sentry.captureException(error);
-        });
-};
-
-export const storeRecord = model => (rowId, data) => (dispatch) => {
-    const dataTable = store.getState()[model.sourceName];
-    const url = (model.getDataUrl || model.composeUrl)(model.dataURL, dataTable, false);
-    return api.put([url, rowId].join('/'), data, dispatchType(model.sourceName, STORE_RECORD), dispatch).catch((error) => {
-        if (error.message === 'AccessError: Key contains fields with allowTokens option.') {
-            dispatch(addError(new Error('FailStoringRecordAllowTokens')));
-        } else {
-            dispatch(addError(new Error('FailStoringRecord')));
-        }
-        Sentry.captureException(error);
+export const createRecord = (model) => (data) => async (dispatch) => {
+  const dataTable = store.getState()[model.sourceName];
+  const url = (model.getDataUrl || model.composeUrl)(model.dataURL, dataTable, false);
+  return api
+    .post(url, data, dispatchType(model.sourceName, CREATE_RECORD), dispatch)
+    .catch((error) => {
+      dispatch(addError(new Error('FailCreatingRecord')));
+      Sentry.captureException(error);
     });
 };
 
-export const toggleColumnVisible = ({ sourceName }) => columnName => ({
+export const storeRecord = (model) => (rowId, data) => (dispatch) => {
+  const dataTable = store.getState()[model.sourceName];
+  const url = (model.getDataUrl || model.composeUrl)(model.dataURL, dataTable, false);
+  return api
+    .put([url, rowId].join('/'), data, dispatchType(model.sourceName, STORE_RECORD), dispatch)
+    .catch((error) => {
+      if (error.message === 'AccessError: Key contains fields with allowTokens option.') {
+        dispatch(addError(new Error('FailStoringRecordAllowTokens')));
+      } else {
+        dispatch(addError(new Error('FailStoringRecord')));
+      }
+      Sentry.captureException(error);
+    });
+};
+
+export const toggleColumnVisible =
+  ({ sourceName }) =>
+  (columnName) => ({
     type: dispatchType(sourceName, TOGGLE_COLUMN_VISIBLE),
     payload: columnName
-});
+  });
 
-export const setHiddenColumns = ({ sourceName }) => columns => ({
+export const setHiddenColumns =
+  ({ sourceName }) =>
+  (columns) => ({
     type: dispatchType(sourceName, SET_HIDDEN_COLUMNS),
     payload: columns
-});
+  });
 
-export const setDefaultData = model => ({
-    rowsPerPage,
-    page
-}, forceLoad = true) => (dispatch) => {
-
+export const setDefaultData =
+  (model) =>
+  ({ rowsPerPage, page }, forceLoad = true) =>
+  (dispatch) => {
     if (rowsPerPage) {
-        dispatch({
-            type: dispatchType(model.sourceName, ON_CHANGE_ROWS_PER_PAGE),
-            payload: rowsPerPage
-        });
+      dispatch({
+        type: dispatchType(model.sourceName, ON_CHANGE_ROWS_PER_PAGE),
+        payload: rowsPerPage
+      });
     }
 
     if (page) {
-        dispatch({
-            type: dispatchType(model.sourceName, ON_CHANGE_PAGE),
-            payload: page
-        });
+      dispatch({
+        type: dispatchType(model.sourceName, ON_CHANGE_PAGE),
+        payload: page
+      });
     }
 
     return forceLoad && load(model)()(dispatch);
-};
+  };

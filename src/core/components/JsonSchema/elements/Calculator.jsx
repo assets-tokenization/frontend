@@ -12,7 +12,7 @@ const Calculator = ({
   calculate,
   disableIfEmptyValue = false,
   ignorePopupUseOwnData = false,
-  documents,
+  documents
 }) => {
   React.useEffect(() => {
     const update = async () => {

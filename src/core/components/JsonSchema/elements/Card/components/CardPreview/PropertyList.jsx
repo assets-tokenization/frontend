@@ -8,61 +8,69 @@ import { makeStyles } from '@mui/styles';
 import evaluate from 'helpers/evaluate';
 
 const withStyles = makeStyles({
-    primary: {
-        fontSize: 12,
-        color: 'rgba(0, 0, 0, 0.54)'
-    },
-    secondary: {
-        color: 'rgba(0, 0, 0, 1)'
-    }
+  primary: {
+    fontSize: 12,
+    color: 'rgba(0, 0, 0, 0.54)'
+  },
+  secondary: {
+    color: 'rgba(0, 0, 0, 1)'
+  }
 });
 
-const stringify = value => value.name || value.label || value.stringified || JSON.stringify(value);
+const stringify = (value) =>
+  value.name || value.label || value.stringified || JSON.stringify(value);
 
-const toString = value => {
-    let result = value;
+const toString = (value) => {
+  let result = value;
 
-    if (Array.isArray(result)) {
-        result = [].concat(result).filter(Boolean).map(stringify).join();
+  if (Array.isArray(result)) {
+    result = [].concat(result).filter(Boolean).map(stringify).join();
+  }
+
+  if (typeof result === 'object') {
+    while (typeof result === 'object') {
+      result = stringify(result);
     }
+  }
 
-    if (typeof result === 'object') {
-        while(typeof result === 'object'){
-            result = stringify(result);
-        }
-    }
-
-    return result;
-}
-
+  return result;
+};
 
 const PropertyList = ({ schema, value = {} }) => {
-    const classes = withStyles();
+  const classes = withStyles();
 
-    const previewProperties = React.useMemo(() => {
-        if (schema.previewProperties) {
-            const schemaPreviewProperties = evaluate(schema.previewProperties, value);
+  const previewProperties = React.useMemo(() => {
+    if (schema.previewProperties) {
+      const schemaPreviewProperties = evaluate(schema.previewProperties, value);
 
-            return Object.keys(schemaPreviewProperties).reduce((acc, key) => ({
-                ...acc,
-                [key]: objectPath.get(value, schemaPreviewProperties[key])
-            }), {});
-        }
+      return Object.keys(schemaPreviewProperties).reduce(
+        (acc, key) => ({
+          ...acc,
+          [key]: objectPath.get(value, schemaPreviewProperties[key])
+        }),
+        {}
+      );
+    }
 
-        return Object.keys(schema.properties).reduce((acc, key) => ({
-            ...acc,
-            [schema.properties[key].description || key]: value[key]
-        }), {});
-    }, [schema.previewProperties, schema.properties, value]);
+    return Object.keys(schema.properties).reduce(
+      (acc, key) => ({
+        ...acc,
+        [schema.properties[key].description || key]: value[key]
+      }),
+      {}
+    );
+  }, [schema.previewProperties, schema.properties, value]);
 
-    return Object.keys(previewProperties).filter(key => previewProperties[key]).map((key, index) => (
-        <ListItem key={index}>
-            <ListItemText
-                classes={classes}
-                secondary={toString(previewProperties[key] ?? '-')}
-                primary={key}
-            />
-        </ListItem>
+  return Object.keys(previewProperties)
+    .filter((key) => previewProperties[key])
+    .map((key, index) => (
+      <ListItem key={index}>
+        <ListItemText
+          classes={classes}
+          secondary={toString(previewProperties[key] ?? '-')}
+          primary={key}
+        />
+      </ListItem>
     ));
 };
 

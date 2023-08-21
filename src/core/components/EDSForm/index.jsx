@@ -25,23 +25,23 @@ const styles = (theme) => ({
       whiteSpace: 'nowrap',
       textOverflow: 'ellipsis',
       margin: 0,
-      padding: 0,
-    },
+      padding: 0
+    }
   },
   tabsRoot: {
     [theme.breakpoints.down('md')]: {
-      margin: '0!important',
-    },
+      margin: '0!important'
+    }
   },
   containerXs: {
     [theme.breakpoints.down('md')]: {
       padding: '0!important',
-      justifyContent: 'space-between',
-    },
+      justifyContent: 'space-between'
+    }
   },
   tabsWrapper: {
-    marginBottom: 10,
-  },
+    marginBottom: 10
+  }
 });
 
 const EDSForm = ({ t, classes, setId, diiaSign, ...rest }) => {
@@ -54,26 +54,26 @@ const EDSForm = ({ t, classes, setId, diiaSign, ...rest }) => {
       forms.push({
         id: 'file-key',
         name: t('FileKeySignMethod'),
-        component: FileKeySignForm,
+        component: FileKeySignForm
       });
       forms.push({
         id: 'hardware-key',
         name: t('HardwareKeySignMethod'),
-        component: HardwareKeySignForm,
+        component: HardwareKeySignForm
       });
     }
     if (diiaSign) {
       forms.push({
         id: 'diia-sign',
         name: t('DiiaSignMethod'),
-        component: DiiaSignForm,
+        component: DiiaSignForm
       });
     }
     if (idGovUaWidget.enabled) {
       forms.push({
         id: 'id-gov-ua-widget-sign',
         name: t('IdGovUaWidgetSignMethod'),
-        component: IdGovUaWidgetForm,
+        component: IdGovUaWidgetForm
       });
     }
     return forms;
@@ -93,7 +93,7 @@ const EDSForm = ({ t, classes, setId, diiaSign, ...rest }) => {
         className={classes.tabsWrapper}
         classes={{
           flexContainer: classNames(classes.tabsContainer, classes.containerXs),
-          root: classes.tabsRoot,
+          root: classes.tabsRoot
         }}
       >
         {forms.map((form, index) => (
@@ -123,11 +123,11 @@ const EDSForm = ({ t, classes, setId, diiaSign, ...rest }) => {
 EDSForm.propTypes = {
   setId: PropTypes.func,
   t: PropTypes.func.isRequired,
-  onSelectKey: PropTypes.func.isRequired,
+  onSelectKey: PropTypes.func.isRequired
 };
 
 EDSForm.defaultProps = {
-  setId: setComponentsId('sign-form'),
+  setId: setComponentsId('sign-form')
 };
 
 const styled = withStyles(styles)(EDSForm);

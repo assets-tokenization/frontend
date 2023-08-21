@@ -1,9 +1,9 @@
-import React from "react";
-import { connect } from "react-redux";
-import { translate } from "react-translate";
-import PropTypes from "prop-types";
-import MobileDetect from "mobile-detect";
-import { TimeoutError } from "promise-timeout";
+import React from 'react';
+import { connect } from 'react-redux';
+import { translate } from 'react-translate';
+import PropTypes from 'prop-types';
+import MobileDetect from 'mobile-detect';
+import { TimeoutError } from 'promise-timeout';
 
 import {
   Button,
@@ -20,73 +20,73 @@ import {
   //   Hidden,
   InputAdornment,
   IconButton,
-  CircularProgress,
-} from "@mui/material";
+  CircularProgress
+} from '@mui/material';
 
-import withStyles from "@mui/styles/withStyles";
+import withStyles from '@mui/styles/withStyles';
 
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
-import Preloader from "components/Preloader";
-import edsService from "services/eds";
+import Preloader from 'components/Preloader';
+import edsService from 'services/eds';
 import renderHTML from 'helpers/renderHTML';
 
-import config from "config";
+import config from 'config';
 
-import DeviceSelect from "./components/DeviceSelect";
-import ProxySettings from "../ProxySettings";
+import DeviceSelect from './components/DeviceSelect';
+import ProxySettings from '../ProxySettings';
 
 const { useProxySettings, showServerList } = (config && config.eds) || {};
 
 const styles = (theme) => ({
   content: {
-    padding: "0 !important",
-    marginBottom: 40,
+    padding: '0 !important',
+    marginBottom: 40
   },
   grow: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   errorText: {
     padding: 20,
     marginBottom: 20,
     paddingLeft: 0,
-    fontSize: "1rem",
-    lineHeight: "1.5em",
-    color: "rgba(0, 0, 0, 0.87)",
-    "& > div > a": {
-      textDecoration: "none",
-      color: "#0059aa",
+    fontSize: '1rem',
+    lineHeight: '1.5em',
+    color: 'rgba(0, 0, 0, 0.87)',
+    '& > div > a': {
+      textDecoration: 'none',
+      color: '#0059aa'
     },
-    "& > div > a:hover": {
-      textDecoration: "underline",
-      color: "#000",
+    '& > div > a:hover': {
+      textDecoration: 'underline',
+      color: '#000'
     },
-    "@media screen and (max-width: 767px)": {
-      display: "block",
-      fontSize: 14,
-    },
+    '@media screen and (max-width: 767px)': {
+      display: 'block',
+      fontSize: 14
+    }
   },
   actions: {
     marginTop: 10,
-    justifyContent: "flex-start",
-    [theme.breakpoints.down("md")]: {
+    justifyContent: 'flex-start',
+    [theme.breakpoints.down('md')]: {
       paddingLeft: 0,
       paddingRight: 0,
-      display: "inline-grid",
-    },
+      display: 'inline-grid'
+    }
   },
   progress: {
-    marginRight: 4,
+    marginRight: 4
   },
   progressText: {
-    marginBottom: 10,
-  },
+    marginBottom: 10
+  }
 });
 
 const serviceMessages = [
-  "Виникла помилка при доступі до носія ключової інформації",
-  "Виникла помилка при зчитуванні особистого ключа з носія ключової інформації",
+  'Виникла помилка при доступі до носія ключової інформації',
+  'Виникла помилка при зчитуванні особистого ключа з носія ключової інформації'
 ];
 
 class HardwareKeySignForm extends React.Component {
@@ -99,15 +99,15 @@ class HardwareKeySignForm extends React.Component {
       server: 0,
       password: null,
       error: hardwareSigner.error,
-      kmType: "",
-      kmDevice: "",
+      kmType: '',
+      kmDevice: '',
       updating: false,
       errors: {},
       signingError: null,
       showErrorDialog: false,
       showServerSelect: props.showServerList,
       waiting: true,
-      itsMobile: !!md.mobile(),
+      itsMobile: !!md.mobile()
     };
   }
 
@@ -155,7 +155,7 @@ class HardwareKeySignForm extends React.Component {
       this.setState({ errors });
     });
 
-  tryToSubmit = ({ key }) => key === "Enter" && this.handleSelectKey();
+  tryToSubmit = ({ key }) => key === 'Enter' && this.handleSelectKey();
 
   handleClose = () => this.setState({ showErrorDialog: false });
 
@@ -186,13 +186,8 @@ class HardwareKeySignForm extends React.Component {
       }
 
       try {
-        await signer.execute("setServer", acskServer);
-        const encodedKey = await signer.execute(
-          "ReadHardwareKey",
-          kmType,
-          kmDevice,
-          password
-        );
+        await signer.execute('setServer', acskServer);
+        const encodedKey = await signer.execute('ReadHardwareKey', kmType, kmDevice, password);
         return encodedKey;
       } catch (e) {
         if (!iterate || serviceMessages.includes(e.message)) {
@@ -207,21 +202,18 @@ class HardwareKeySignForm extends React.Component {
 
       if (privateKey === null) {
         this.setState({
-          errors: { server: t("CantDetectACSK") },
-          showServerSelect: true,
+          errors: { server: t('CantDetectACSK') },
+          showServerSelect: true
         });
       } else {
-        await onSelectKey(
-          privateKey,
-          signer,
-          () => signer.execute("ResetPrivateKey"),
-          { type: "hardware" }
-        );
+        await onSelectKey(privateKey, signer, () => signer.execute('ResetPrivateKey'), {
+          type: 'hardware'
+        });
       }
     } catch (e) {
       this.setState({
         signingError: e instanceof TimeoutError ? t(e.message) : e.message,
-        showErrorDialog: true,
+        showErrorDialog: true
       });
     }
 
@@ -234,19 +226,19 @@ class HardwareKeySignForm extends React.Component {
     const errors = {};
 
     if (server === null) {
-      errors.server = t("SelectServer");
+      errors.server = t('SelectServer');
     }
 
-    if (kmType === "") {
-      errors.kmType = t("SelectType");
+    if (kmType === '') {
+      errors.kmType = t('SelectType');
     }
 
-    if (kmDevice === "") {
-      errors.kmDevice = t("SelectDevice");
+    if (kmDevice === '') {
+      errors.kmDevice = t('SelectDevice');
     }
 
     if (!password) {
-      errors.password = t("FillPassword");
+      errors.password = t('FillPassword');
     }
 
     return errors;
@@ -263,7 +255,7 @@ class HardwareKeySignForm extends React.Component {
       kmTypes,
       readPrivateKeyText,
       signProgress,
-      signProgressText,
+      signProgressText
     } = this.props;
 
     const {
@@ -278,7 +270,7 @@ class HardwareKeySignForm extends React.Component {
       waiting,
       itsMobile,
       showServerSelect,
-      showPassword,
+      showPassword
     } = this.state;
 
     // const { hardwareSigner: signer } = edsService;
@@ -287,11 +279,11 @@ class HardwareKeySignForm extends React.Component {
 
     const serverList = edsService.getServerList();
 
-    const warningPaper = (causeOfError, text = "") => (
+    const warningPaper = (causeOfError, text = '') => (
       <Typography
         variant="h5"
         gutterBottom={true}
-        id={setId("warning-text")}
+        id={setId('warning-text')}
         className={classes.errorText}
       >
         {text || t(`HardwareKeySignMethodNotSupported${causeOfError}`)}
@@ -303,11 +295,11 @@ class HardwareKeySignForm extends React.Component {
     }
 
     if (itsMobile) {
-      return warningPaper("Mobile");
+      return warningPaper('Mobile');
     }
 
     if (!inited) {
-      return waiting ? <Preloader /> : warningPaper("BROWSER");
+      return waiting ? <Preloader /> : warningPaper('BROWSER');
     }
 
     return (
@@ -317,28 +309,24 @@ class HardwareKeySignForm extends React.Component {
             variant="standard"
             fullWidth={true}
             className={classes.formControl}
-            id={setId("form")}
+            id={setId('form')}
           >
             {errors.server || showServerSelect ? (
               <TextField
                 variant="standard"
-                id={setId("server")}
+                id={setId('server')}
                 select={true}
-                label={t("ACSKServer")}
+                label={t('ACSKServer')}
                 value={server || 0}
                 error={!!errors.server}
-                onChange={this.handleChange("server")}
+                onChange={this.handleChange('server')}
                 margin="normal"
                 disabled={busy}
                 helperText={errors.server}
                 SelectProps={{ MenuProps: { className: classes.menu } }}
               >
-                <MenuItem
-                  value={0}
-                  id={setId("server-autodetect")}
-                  className={classes.menuItem}
-                >
-                  {t("ACSKAutoDetect")}
+                <MenuItem value={0} id={setId('server-autodetect')} className={classes.menuItem}>
+                  {t('ACSKAutoDetect')}
                 </MenuItem>
                 {serverList &&
                   serverList.map((option, index) => {
@@ -365,19 +353,19 @@ class HardwareKeySignForm extends React.Component {
               onChange={this.handleChange}
               error={errors.kmType}
             />
-            {kmType !== "" ? (
+            {kmType !== '' ? (
               <TextField
                 variant="standard"
-                id={setId("device")}
+                id={setId('device')}
                 select={true}
-                label={t("SelectKmDevice")}
+                label={t('SelectKmDevice')}
                 className={classes.textField}
                 value={kmDevice}
-                onChange={this.handleChange("kmDevice")}
+                onChange={this.handleChange('kmDevice')}
                 SelectProps={{
                   MenuProps: {
-                    className: classes.menu,
-                  },
+                    className: classes.menu
+                  }
                 }}
                 disabled={busy || kmTypes[kmType].devices.length === 1}
                 margin="normal"
@@ -398,14 +386,14 @@ class HardwareKeySignForm extends React.Component {
             ) : null}
             <TextField
               variant="standard"
-              id={setId("password")}
-              label={t("Password")}
-              value={password || ""}
+              id={setId('password')}
+              label={t('Password')}
+              value={password || ''}
               error={!!errors.password}
               onKeyPress={this.tryToSubmit}
-              onChange={this.handleChange("password")}
+              onChange={this.handleChange('password')}
               margin="normal"
-              type={showPassword ? "text" : "password"}
+              type={showPassword ? 'text' : 'password'}
               disabled={busy}
               helperText={errors.password}
               InputProps={{
@@ -413,39 +401,29 @@ class HardwareKeySignForm extends React.Component {
                   <InputAdornment position="end">
                     <IconButton
                       aria-label="toggle password visibility"
-                      onClick={() =>
-                        this.setState({ showPassword: !showPassword })
-                      }
+                      onClick={() => this.setState({ showPassword: !showPassword })}
                       size="large"
                     >
-                      {showPassword ? (
-                        <VisibilityIcon />
-                      ) : (
-                        <VisibilityOffIcon />
-                      )}
+                      {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
                     </IconButton>
                   </InputAdornment>
-                ),
+                )
               }}
             />
           </FormControl>
-          {useProxySettings ? (
-            <ProxySettings signer={edsService.getSigner()} busy={busy} />
-          ) : null}
+          {useProxySettings ? <ProxySettings signer={edsService.getSigner()} busy={busy} /> : null}
         </DialogContent>
         {busy ? (
           <>
             {signProgressText ? (
               <Typography className={classes.progressText}>
-                {signProgress ? (
-                  <CircularProgress size={12} className={classes.progress} />
-                ) : null}
+                {signProgress ? <CircularProgress size={12} className={classes.progress} /> : null}
                 {signProgressText}
               </Typography>
             ) : null}
             <LinearProgress
               value={signProgress}
-              variant={signProgress ? "determinate" : "indeterminate"}
+              variant={signProgress ? 'determinate' : 'indeterminate'}
             />
           </>
         ) : null}
@@ -456,10 +434,10 @@ class HardwareKeySignForm extends React.Component {
               size="large"
               onClick={onClose}
               disabled={busy}
-              id={setId("cancel-button")}
+              id={setId('cancel-button')}
               setId={(elementName) => setId(`cancel-${elementName}`)}
             >
-              {t("Cancel")}
+              {t('Cancel')}
             </Button>
           ) : //  </Hidden>
           null}
@@ -469,10 +447,10 @@ class HardwareKeySignForm extends React.Component {
             variant="contained"
             onClick={this.handleSelectKey}
             disabled={busy}
-            id={setId("sign-button")}
+            id={setId('sign-button')}
             setId={(elementName) => setId(`sign-${elementName}`)}
           >
-            {readPrivateKeyText || t("Sign")}
+            {readPrivateKeyText || t('Sign')}
           </Button>
         </DialogActions>
         <Dialog
@@ -480,17 +458,17 @@ class HardwareKeySignForm extends React.Component {
           onClose={this.handleClose}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
-          id={setId("dialog")}
+          id={setId('dialog')}
           className={classes.dialog}
         >
           <DialogTitle
-            id={setId("dialog alert-dialog-title")}
+            id={setId('dialog alert-dialog-title')}
             className={classes.dialogContentWrappers}
           >
-            {t("SigningDataError")}
+            {t('SigningDataError')}
           </DialogTitle>
           <DialogContent className={classes.dialogContentWrappers}>
-            <DialogContentText id={setId("dialog alert-dialog-description")}>
+            <DialogContentText id={setId('dialog alert-dialog-description')}>
               {signingError}
             </DialogContentText>
           </DialogContent>
@@ -501,10 +479,10 @@ class HardwareKeySignForm extends React.Component {
               variant="contained"
               onClick={this.handleClose}
               autoFocus={true}
-              id={setId("close-button")}
+              id={setId('close-button')}
               setId={(elementName) => setId(`close-${elementName}`)}
             >
-              {t("CloseDialog")}
+              {t('CloseDialog')}
             </Button>
           </DialogActions>
         </Dialog>
@@ -521,15 +499,15 @@ HardwareKeySignForm.propTypes = {
   inited: PropTypes.bool.isRequired,
   onSelectKey: PropTypes.func.isRequired,
   error: PropTypes.string,
-  showServerList: PropTypes.bool,
+  showServerList: PropTypes.bool
 };
 
 HardwareKeySignForm.defaultProps = {
-  error: "",
-  showServerList,
+  error: '',
+  showServerList
 };
 
 // decorate and export
 const styled = withStyles(styles)(HardwareKeySignForm);
-const translated = translate("SignForm")(styled);
+const translated = translate('SignForm')(styled);
 export default connect(({ eds }) => eds)(translated);

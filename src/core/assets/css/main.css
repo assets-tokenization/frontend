@@ -1,113 +1,112 @@
 html,
 body,
 #root {
-    height: 100%;
-    overflow: hidden;
+  height: 100%;
+  overflow: hidden;
 }
 
 #root {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .ps {
-    overflow: scroll !important;
+  overflow: scroll !important;
 }
 
 .ps::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
-
 
 /* .ps__rail-x,
 .ps__rail-y {
     z-index: 2000;
 } */
 
-.pg-viewer-wrapper .pdf-canvas>canvas {
-    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.5);
+.pg-viewer-wrapper .pdf-canvas > canvas {
+  box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.5);
 }
 
 .rst__rowContents {
-    padding-right: 0;
+  padding-right: 0;
 }
 
 .djs-overlay-statuses:hover {
-    z-index: 10;
+  z-index: 10;
 }
 
 .Resizer {
-    background: #000;
-    opacity: .2;
-    z-index: 1;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    -moz-background-clip: padding;
-    -webkit-background-clip: padding;
-    background-clip: padding-box;
+  background: #000;
+  opacity: 0.2;
+  z-index: 1;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding;
+  background-clip: padding-box;
 }
 
 .Resizer:hover {
-    -webkit-transition: all 2s ease;
-    transition: all 2s ease;
+  -webkit-transition: all 2s ease;
+  transition: all 2s ease;
 }
 
 .Resizer.horizontal {
-    height: 11px;
-    margin: -5px 0;
-    border-top: 5px solid rgba(255, 255, 255, 0);
-    border-bottom: 5px solid rgba(255, 255, 255, 0);
-    cursor: row-resize;
-    width: 100%;
+  height: 11px;
+  margin: -5px 0;
+  border-top: 5px solid rgba(255, 255, 255, 0);
+  border-bottom: 5px solid rgba(255, 255, 255, 0);
+  cursor: row-resize;
+  width: 100%;
 }
 
 .Resizer.horizontal:hover {
-    border-top: 5px solid rgba(0, 0, 0, 0.5);
-    border-bottom: 5px solid rgba(0, 0, 0, 0.5);
+  border-top: 5px solid rgba(0, 0, 0, 0.5);
+  border-bottom: 5px solid rgba(0, 0, 0, 0.5);
 }
 
 .Resizer.vertical {
-    width: 11px;
-    margin: 0 -5px;
-    border-left: 5px solid rgba(255, 255, 255, 0);
-    border-right: 5px solid rgba(255, 255, 255, 0);
-    cursor: col-resize;
+  width: 11px;
+  margin: 0 -5px;
+  border-left: 5px solid rgba(255, 255, 255, 0);
+  border-right: 5px solid rgba(255, 255, 255, 0);
+  cursor: col-resize;
 }
 
 .Resizer.vertical:hover {
-    border-left: 5px solid rgba(0, 0, 0, 0.5);
-    border-right: 5px solid rgba(0, 0, 0, 0.5);
+  border-left: 5px solid rgba(0, 0, 0, 0.5);
+  border-right: 5px solid rgba(0, 0, 0, 0.5);
 }
 
 .Resizer.disabled {
-    cursor: not-allowed;
+  cursor: not-allowed;
 }
 
 .Resizer.disabled:hover {
-    border-color: transparent;
+  border-color: transparent;
 }
 
 .Pane {
-    overflow: hidden;
+  overflow: hidden;
 }
 
 .unsupported-message {
-    padding: 0
+  padding: 0;
 }
 
 .data-grid-container .data-grid .cell {
-    height: 22px;
-    overflow: hidden;
+  height: 22px;
+  overflow: hidden;
 }
 
-.data-grid-container .data-grid .cell>input {
-    width: 100%;
-    height: 100%;
+.data-grid-container .data-grid .cell > input {
+  width: 100%;
+  height: 100%;
 }
 
 .scroll-visible .ps__rail-x {
-    opacity: 0.6;
+  opacity: 0.6;
 }
 
 .data-grid-container .data-grid.clip .cell,
@@ -115,36 +114,36 @@ body,
 .data-grid-container .data-grid .cell.clip,
 .data-grid-container .data-grid.wrap .cell.clip,
 .data-grid-container .data-grid.nowrap .cell.clip {
-    white-space: inherit;
+  white-space: inherit;
 }
 
 .bjs-powered-by {
-    display: none;
+  display: none;
 }
 
 .react-pdf__Page {
-    overflow: auto;
+  overflow: auto;
 }
 
 .data-grid-container .data-grid .cell.selected {
-    box-shadow: none;
-    background-color: rgb(33 133 208 / 15%);
-    overflow-x: visible;
+  box-shadow: none;
+  background-color: rgb(33 133 208 / 15%);
+  overflow-x: visible;
 }
 
 .codeMarker {
-    background-color: #5c5c5c;
-    position: absolute;
-    z-index: 20;
+  background-color: #5c5c5c;
+  position: absolute;
+  z-index: 20;
 }
 
 .cut-text .dsg-cell-header-container {
-    overflow: hidden;
-    display: -moz-box;
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -moz-line-clamp: 1;
-    -moz-box-orient: vertical;
-    -webkit-box-orient: vertical;
-    text-overflow: ellipsis;
+  overflow: hidden;
+  display: -moz-box;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -moz-line-clamp: 1;
+  -moz-box-orient: vertical;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
 }

@@ -24,11 +24,7 @@ const ImportButton = ({ onImport, disabled }) => {
   return (
     <>
       <Tooltip title={t('Import')}>
-        <IconButton
-          disabled={disabled}
-          onClick={() => inputRef.current.click()}
-          size="large"
-        >
+        <IconButton disabled={disabled} onClick={() => inputRef.current.click()} size="large">
           <FolderOpenIcon />
         </IconButton>
       </Tooltip>

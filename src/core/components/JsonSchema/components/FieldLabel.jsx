@@ -1,26 +1,22 @@
 import { useTranslate } from 'react-translate';
 import renderHTML from 'helpers/renderHTML';
 
-const FieldLabel = ({
-    description,
-    notRequiredLabel,
-    required
-}) => {
-    const t = useTranslate('Elements');
+const FieldLabel = ({ description, notRequiredLabel, required }) => {
+  const t = useTranslate('Elements');
 
-    const combineDescription = () => {
-        let text = ' (' + t('NotRequired') + ')';
+  const combineDescription = () => {
+    let text = ' (' + t('NotRequired') + ')';
 
-        if (notRequiredLabel) text = ' (' + notRequiredLabel + ')';
-    
-        if (typeof notRequiredLabel === 'string' && !notRequiredLabel.length) text = '';
-    
-        return renderHTML(description + (required ? '' : text));
-    };
+    if (notRequiredLabel) text = ' (' + notRequiredLabel + ')';
 
-    const templated = combineDescription();
+    if (typeof notRequiredLabel === 'string' && !notRequiredLabel.length) text = '';
 
-    return templated;
+    return renderHTML(description + (required ? '' : text));
+  };
+
+  const templated = combineDescription();
+
+  return templated;
 };
 
 export default FieldLabel;

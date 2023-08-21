@@ -21,7 +21,7 @@ const SelectFileArea = ({
   renderContent,
   readOnly,
   onDropRejected,
-  path,
+  path
 }) => {
   const [active, setActive] = React.useState(false);
   const id = (path || []).join('-');
@@ -57,18 +57,14 @@ const SelectFileArea = ({
                   <input id={id} {...getInputProps()} />
                   <div className={classes.uploadButtonContainer}>
                     {t('DropFiles', {
-                      link: (
-                        <div className={classes.link}>{t('SelectFiles')}</div>
-                      ),
+                      link: <div className={classes.link}>{t('SelectFiles')}</div>
                     })}
                   </div>
                 </label>
                 <Limits accept={accept} maxSize={maxSize} />
               </div>
             ) : null}
-            {renderContent
-              ? renderContent({ onDragEnter, onDragLeave, onDragOver, onDrop })
-              : null}
+            {renderContent ? renderContent({ onDragEnter, onDragLeave, onDragOver, onDrop }) : null}
           </div>
         );
       }}

@@ -6,33 +6,33 @@ import { Button } from '@mui/material';
 import withStyles from '@mui/styles/withStyles';
 
 const styles = {
-    buttonMargin: {
-        marginBottom: 10
-    }
+  buttonMargin: {
+    marginBottom: 10
+  }
 };
 
 const ArrayElementAddBtn = ({ classes, handleAddItem, addItemText, disabled }) => (
-    <Button
-        variant="contained"
-        disabled={disabled}
-        color="primary"
-        className={classes.buttonMargin}
-        onClick={handleAddItem}
-        id="add-item-text"
-    >
-        {addItemText}
-    </Button>
+  <Button
+    variant="contained"
+    disabled={disabled}
+    color="primary"
+    className={classes.buttonMargin}
+    onClick={handleAddItem}
+    id="add-item-text"
+  >
+    {addItemText}
+  </Button>
 );
 
 ArrayElementAddBtn.propTypes = {
-    classes: PropTypes.object.isRequired,
-    handleAddItem: PropTypes.func,
-    addItemText: PropTypes.string
+  classes: PropTypes.object.isRequired,
+  handleAddItem: PropTypes.func,
+  addItemText: PropTypes.string
 };
 
 ArrayElementAddBtn.defaultProps = {
-    handleAddItem: () => null,
-    addItemText: ''
+  handleAddItem: () => null,
+  addItemText: ''
 };
 
 export default withStyles(styles)(ArrayElementAddBtn);

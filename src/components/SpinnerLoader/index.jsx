@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 import makeStyles from '@mui/styles/makeStyles';
-import Spinner from "assets/images/Spinner-Gradient-7.svg";
+import Spinner from 'assets/images/Spinner-Gradient-7.svg';
 
 const styles = (theme) => ({
   spinner: {
@@ -16,8 +16,8 @@ const styles = (theme) => ({
   },
   '@keyframes spin': {
     '100%': {
-      transform: 'rotate(360deg)',
-    },
+      transform: 'rotate(360deg)'
+    }
   }
 });
 
@@ -26,13 +26,7 @@ const useStyles = makeStyles(styles);
 const SpinnerLoader = () => {
   const classes = useStyles();
 
-  return (
-    <img
-      src={Spinner}
-      alt="spinner icon"
-      className={classes.spinner}
-    />
-  );
+  return <img src={Spinner} alt="spinner icon" className={classes.spinner} />;
 };
 
 export default SpinnerLoader;

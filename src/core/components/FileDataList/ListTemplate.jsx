@@ -10,76 +10,102 @@ import DownloadP7SFile from 'components/FileDataTable/components/AttachesActions
 import ShowPreview from 'components/FileDataTable/components/AttachesActions/ShowPreview';
 import { humanDateTimeFormat } from 'helpers/humanDateFormat';
 
-const styles = theme => ({
-    details: {
-        padding: 24,
-        display: 'block',
-        [theme.breakpoints.down('md')]: {
-            padding: 20
-        }
-    },
-    toolbar: {
-        padding: 0,
-        width: '100%'
-    },
-    grow: {
-        display: 'flex',
-        justifyContent: 'flex-end',
-        flex: '0 1 auto'
-    },
-    time: {
-        fontSize: 14,
-        opacity: 0.5,
-        [theme.breakpoints.down('md')]: {
-            fontSize: 10,
-            lineHeight: '14px'
-        }
+const styles = (theme) => ({
+  details: {
+    padding: 24,
+    display: 'block',
+    [theme.breakpoints.down('md')]: {
+      padding: 20
     }
+  },
+  toolbar: {
+    padding: 0,
+    width: '100%'
+  },
+  grow: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    flex: '0 1 auto'
+  },
+  time: {
+    fontSize: 14,
+    opacity: 0.5,
+    [theme.breakpoints.down('md')]: {
+      fontSize: 10,
+      lineHeight: '14px'
+    }
+  }
 });
 
 const ListTemplate = (props) => {
-    const { classes, fileName, updatedAt, createdAt, fileStorage, actions, preview, meta, hasP7sSignature } = props;
+  const {
+    classes,
+    fileName,
+    updatedAt,
+    createdAt,
+    fileStorage,
+    actions,
+    preview,
+    meta,
+    hasP7sSignature
+  } = props;
 
-    return (
-        <Accordion expanded={true}>
-            <AccordionDetails className={classes.details}>
-                <Toolbar className={classes.toolbar}>
-                    <FileNameColumn
-                        name={fileName}
-                        extension={fileName.split('.').pop()}
-                        meta={meta?.description}
-                    />
-                    <div className={classes.grow}>
-                        {preview ? <ShowPreview item={props} fileStorage={fileStorage} handleDownloadFile={actions.handleDownloadFile} /> : null }
-                        <DownloadFile item={props} fileStorage={fileStorage} handleDownloadFile={actions.handleDownloadFile} />
-                        {hasP7sSignature ? <DownloadP7SFile item={props} fileStorage={fileStorage} handleDownloadFile={actions.handleDownloadFile}/> : null}
-                    </div>
-                </Toolbar>
-                <Typography variant="body2" className={classes.time}>
-                    {humanDateTimeFormat(updatedAt || createdAt)}
-                </Typography>
-            </AccordionDetails>
-        </Accordion>
-    );
+  return (
+    <Accordion expanded={true}>
+      <AccordionDetails className={classes.details}>
+        <Toolbar className={classes.toolbar}>
+          <FileNameColumn
+            name={fileName}
+            extension={fileName.split('.').pop()}
+            meta={meta?.description}
+          />
+          <div className={classes.grow}>
+            {preview ? (
+              <ShowPreview
+                item={props}
+                fileStorage={fileStorage}
+                handleDownloadFile={actions.handleDownloadFile}
+              />
+            ) : null}
+            <DownloadFile
+              item={props}
+              fileStorage={fileStorage}
+              handleDownloadFile={actions.handleDownloadFile}
+            />
+            {hasP7sSignature ? (
+              <DownloadP7SFile
+                item={props}
+                fileStorage={fileStorage}
+                handleDownloadFile={actions.handleDownloadFile}
+              />
+            ) : null}
+          </div>
+        </Toolbar>
+        <Typography variant="body2" className={classes.time}>
+          {humanDateTimeFormat(updatedAt || createdAt)}
+        </Typography>
+      </AccordionDetails>
+    </Accordion>
+  );
 };
 
 ListTemplate.propTypes = {
-    classes: PropTypes.object.isRequired,
-    fileName: PropTypes.string,
-    updatedAt: PropTypes.string,
-    createdAt: PropTypes.string,
-    fileStorage: PropTypes.object,
-    actions: PropTypes.object,
-    preview: PropTypes.bool
+  classes: PropTypes.object.isRequired,
+  fileName: PropTypes.string,
+  updatedAt: PropTypes.string,
+  createdAt: PropTypes.string,
+  fileStorage: PropTypes.object,
+  actions: PropTypes.object,
+  preview: PropTypes.bool
 };
 
 ListTemplate.defaultProps = {
-    fileName: '',
-    updatedAt: '',
-    createdAt: '',
-    fileStorage: {},
-    actions: {},
-    preview: false
+  fileName: '',
+  updatedAt: '',
+  createdAt: '',
+  fileStorage: {},
+  actions: {},
+  preview: false
 };
 
 const mapStateToProps = ({ files: { list } }) => ({ fileStorage: list });

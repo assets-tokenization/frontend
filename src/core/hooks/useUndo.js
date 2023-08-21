@@ -1,59 +1,58 @@
-import React from "react";
+import React from 'react';
 import diff from 'helpers/diff';
 
-const useUndo = (value, onChange, {
-    maxElements = 10
-} = {}) => {
-    const [past, setPast] = React.useState([value]);
-    const [future, setFuture] = React.useState([]);
+const useUndo = (value, onChange, { maxElements = 10 } = {}) => {
+  const [past, setPast] = React.useState([value]);
+  const [future, setFuture] = React.useState([]);
 
-    React.useEffect(() => {
-        const diffs = diff(value || {}, past[past.length - 1] || {}) && diff(value || {}, future[future.length - 1] || {})
-        if (!diffs) {
-            return;
-        }
+  React.useEffect(() => {
+    const diffs =
+      diff(value || {}, past[past.length - 1] || {}) &&
+      diff(value || {}, future[future.length - 1] || {});
+    if (!diffs) {
+      return;
+    }
 
-        if (past.length === maxElements) {
-            past.shift();
-        }
-        setPast([...past, value]);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [value]);
+    if (past.length === maxElements) {
+      past.shift();
+    }
+    setPast([...past, value]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
 
-    const undo = React.useCallback(() => {
-        if (past.length <= 1) {
-            return;
-        }
-        
-        const element = past.pop();
-        setPast([...past]);
-        setFuture([...future, element]);
+  const undo = React.useCallback(() => {
+    if (past.length <= 1) {
+      return;
+    }
 
-        setTimeout(() => {
-            onChange(past[past.length - 1]);
-        }, 250);
-    }, [future, onChange, past]);
+    const element = past.pop();
+    setPast([...past]);
+    setFuture([...future, element]);
 
-    const redo = React.useCallback(() => {
-        if (future.length < 1) {
-            return;
-        }
-        const element = future.pop();
-        setFuture([...future]);
-        setPast([...past, element]);
+    setTimeout(() => {
+      onChange(past[past.length - 1]);
+    }, 250);
+  }, [future, onChange, past]);
 
-        setTimeout(() => {
-            onChange(element);
-        }, 250);
-    }, [future, onChange, past]);
+  const redo = React.useCallback(() => {
+    if (future.length < 1) {
+      return;
+    }
+    const element = future.pop();
+    setFuture([...future]);
+    setPast([...past, element]);
 
-    return {
-        undo,
-        redo,
-        hasNext: future.length > 0,
-        hasPrevious: past.length > 1
-    };
+    setTimeout(() => {
+      onChange(element);
+    }, 250);
+  }, [future, onChange, past]);
+
+  return {
+    undo,
+    redo,
+    hasNext: future.length > 0,
+    hasPrevious: past.length > 1
+  };
 };
-
 
 export default useUndo;

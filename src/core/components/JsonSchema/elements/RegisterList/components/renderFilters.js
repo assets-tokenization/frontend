@@ -14,43 +14,43 @@ const styles = () => ({
     display: 'flex',
     justifyContent: 'start',
     alignItems: 'center',
-    marginBottom: 40,
+    marginBottom: 40
   },
   filterItem: {
-    marginRight: 27,
+    marginRight: 27
   },
   noBorder: {
     border: 'none',
     '&>svg': {
       fontSize: 20,
-      opacity: 0.5,
+      opacity: 0.5
     },
     '&:after': {
-      display: 'none',
+      display: 'none'
     },
     '&:before': {
-      display: 'none',
-    },
+      display: 'none'
+    }
   },
   selectMenu: {
     boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)',
     '& ul': {
-      padding: 0,
-    },
+      padding: 0
+    }
   },
   selectRoot: {
     fontSize: 13,
     paddingRight: '10px!important',
     '& svg': {
-      display: 'none',
-    },
+      display: 'none'
+    }
   },
   dropArrow: {
     fontSize: 20,
     opacity: 0.5,
     top: -2,
     cursor: 'pointer',
-    position: 'relative',
+    position: 'relative'
   },
   menuItem: {
     fontSize: 13,
@@ -61,12 +61,12 @@ const styles = () => ({
     '& svg': {
       position: 'absolute',
       left: 17,
-      top: 7,
-    },
+      top: 7
+    }
   },
   checkboxLabel: {
-    fontSize: 13,
-  },
+    fontSize: 13
+  }
 });
 
 const RenderFilters = ({
@@ -78,7 +78,7 @@ const RenderFilters = ({
   setSort,
   sortDirection,
   setSortDirection,
-  rootDocument,
+  rootDocument
 }) => {
   let [timeout] = React.useState(null);
 
@@ -90,7 +90,7 @@ const RenderFilters = ({
     <div
       className={classes.filterItem}
       style={{
-        width: filter?.width,
+        width: filter?.width
       }}
       key={_.uniqueId()}
     >
@@ -127,23 +127,20 @@ const RenderFilters = ({
                 options={getOptions(filter)}
                 noMargin={true}
                 path={[key, _.uniqueId()]}
-                startAdornment={(
+                startAdornment={
                   <>
                     {filter?.startAdornment ? (
-                      <img
-                        src={renderHTML(filter?.startAdornment)}
-                        alt={'filter icon'}
-                      />
+                      <img src={renderHTML(filter?.startAdornment)} alt={'filter icon'} />
                     ) : null}
                   </>
-                )}
+                }
                 onChange={(value) => {
                   clearTimeout(timeout);
                   timeout = setTimeout(
                     () => {
                       onFilterChange({
                         ...requestFilters,
-                        [key]: value,
+                        [key]: value
                       });
                     },
                     filter?.options ? 50 : 1000
@@ -158,22 +155,22 @@ const RenderFilters = ({
           return (
             <FilterWrapper filter={filter} key={_.uniqueId()}>
               <FormControlLabel
-                control={(
+                control={
                   <Checkbox
                     checked={requestFilters[key]}
                     onChange={() =>
                       onFilterChange({
                         ...requestFilters,
-                        [key]: requestFilters[key] === true ? '' : true,
+                        [key]: requestFilters[key] === true ? '' : true
                       })
                     }
                     name={key}
                     color="primary"
                   />
-                )}
+                }
                 label={filter?.description}
                 classes={{
-                  label: classes.checkboxLabel,
+                  label: classes.checkboxLabel
                 }}
               />
             </FilterWrapper>
@@ -203,13 +200,13 @@ const RenderFilters = ({
                   </>
                 )}
                 classes={{
-                  root: classes.selectRoot,
+                  root: classes.selectRoot
                 }}
                 className={classes.noBorder}
                 MenuProps={{
                   classes: {
-                    paper: classes.selectMenu,
-                  },
+                    paper: classes.selectMenu
+                  }
                 }}
               >
                 {filter?.options.map(({ id, name }) => (
@@ -217,7 +214,7 @@ const RenderFilters = ({
                     key={_.uniqueId()}
                     value={id}
                     classes={{
-                      root: classes.menuItem,
+                      root: classes.menuItem
                     }}
                   >
                     {sort === id ? <CheckIcon /> : null}

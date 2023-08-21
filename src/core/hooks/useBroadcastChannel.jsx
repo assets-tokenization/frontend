@@ -17,6 +17,6 @@ const useBroadcastChannel = (channelNameRaw = [], onMessage) => {
   return (message) => {
     channel.postMessage(JSON.stringify(message));
   };
-}
+};
 
 export default useBroadcastChannel;

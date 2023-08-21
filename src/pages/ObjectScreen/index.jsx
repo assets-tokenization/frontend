@@ -1,23 +1,29 @@
-import React from "react";
+import React from 'react';
 import { useTranslate } from 'react-translate';
-import classNames from "classnames";
+import classNames from 'classnames';
 import Slider from 'react-slick';
+import { useDispatch } from 'react-redux';
 import { useFilePicker } from 'use-file-picker';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import L from 'leaflet';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { FullscreenControl } from "react-leaflet-fullscreen";
-import makeStyles from '@mui/styles/makeStyles'
-import { Typography, Button, TextField, IconButton } from "@mui/material";
+import { FullscreenControl } from 'react-leaflet-fullscreen';
+import makeStyles from '@mui/styles/makeStyles';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import IconButton from '@mui/material/IconButton';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import Dialog from '@mui/material/Dialog';
 import Slide from '@mui/material/Slide';
-import Header from "components/Header";
-import Card from "components/Card";
-import PageTitle from "components/PageTitle";
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import StatusLabel from "components/StatusLabel";
+import Header from 'components/Header';
+import Card from 'components/Card';
+import PageTitle from 'components/PageTitle';
+import StatusLabel from 'components/StatusLabel';
+import Preloader from 'components/Preloader';
+import { getDetails } from 'actions';
 import SliderArrow from 'assets/images/sliderArrow.svg';
 import FullscreenIcon from 'assets/images/fullscreen_icon.svg';
 import CloseIcon from 'assets/images/closeIcon.svg';
@@ -25,20 +31,20 @@ import arrowRight from 'assets/images/arrowRight.svg';
 import arrowLeft from 'assets/images/arrowLeft.svg';
 import LockIcon from 'assets/images/lock_icon.svg';
 import LocationOnIcon from 'assets/images/pin.svg';
-import "leaflet/dist/leaflet.css";
-import "react-leaflet-fullscreen/styles.css";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import 'leaflet/dist/leaflet.css';
+import 'react-leaflet-fullscreen/styles.css';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-  
+
 const markerIcon = new L.Icon({
   iconUrl: LocationOnIcon,
   iconRetinaUrl: LocationOnIcon,
-  popupAnchor:  [-0, -0],
-  iconSize: [32,45],     
+  popupAnchor: [-0, -0],
+  iconSize: [32, 45]
 });
 
 const styles = (theme) => ({
@@ -49,7 +55,7 @@ const styles = (theme) => ({
     marginBottom: 60,
     [theme.breakpoints.down('sm')]: {
       padding: '16px 16px',
-      marginBottom: 60,
+      marginBottom: 60
     }
   },
   backButton: {
@@ -86,7 +92,7 @@ const styles = (theme) => ({
       height: 180,
       marginBottom: 40,
       fontSize: 14,
-      lineHeight: '21px',
+      lineHeight: '21px'
     }
   },
   addFileButtonIcon: {
@@ -101,7 +107,7 @@ const styles = (theme) => ({
     [theme.breakpoints.down('sm')]: {
       fontSize: 16,
       lineHeight: '24px',
-      marginBottom: 16,
+      marginBottom: 16
     }
   },
   detailsBlock: {
@@ -126,7 +132,7 @@ const styles = (theme) => ({
     width: '100%',
     gap: '24px',
     [theme.breakpoints.down('sm')]: {
-      display: 'block',
+      display: 'block'
     }
   },
   detailsTitle: {
@@ -137,7 +143,7 @@ const styles = (theme) => ({
     flex: 1,
     [theme.breakpoints.down('sm')]: {
       fontSize: 14,
-      lineHeight: '21px',
+      lineHeight: '21px'
     }
   },
   detailsDescription: {
@@ -147,7 +153,7 @@ const styles = (theme) => ({
     flex: 1,
     [theme.breakpoints.down('sm')]: {
       fontSize: 14,
-      lineHeight: '21px',
+      lineHeight: '21px'
     }
   },
   addDescriptionText: {
@@ -176,7 +182,7 @@ const styles = (theme) => ({
   mapContainer: {
     height: 400,
     [theme.breakpoints.down('sm')]: {
-      height: 180,
+      height: 180
     }
   },
   descriptionInput: {
@@ -200,7 +206,7 @@ const styles = (theme) => ({
     color: '#1A1A1A'
   },
   disabledDescriptionInput: {
-    background: 'transparent',
+    background: 'transparent'
   },
   textFieldActions: {
     display: 'flex',
@@ -212,8 +218,8 @@ const styles = (theme) => ({
         flex: 1,
         marginLeft: 0,
         '&:last-child': {
-          marginLeft: 16,
-        },
+          marginLeft: 16
+        }
       }
     },
     [theme.breakpoints.down('sm')]: {
@@ -229,8 +235,8 @@ const styles = (theme) => ({
       [theme.breakpoints.down('sm')]: {
         marginLeft: 0,
         '&:last-child': {
-          marginLeft: 0,
-        },
+          marginLeft: 0
+        }
       }
     },
     [theme.breakpoints.down('sm')]: {
@@ -247,7 +253,7 @@ const styles = (theme) => ({
     }
   },
   disabledDescriptionWrapper: {
-    position: 'relative',
+    position: 'relative'
   },
   lockIcon: {
     position: 'absolute',
@@ -319,7 +325,7 @@ const styles = (theme) => ({
       right: 8,
       padding: 0,
       width: 32,
-      height: 32,
+      height: 32
     }
   },
   fullscreenIcon: {
@@ -327,7 +333,7 @@ const styles = (theme) => ({
     height: 40,
     [theme.breakpoints.down('sm')]: {
       width: 32,
-      height: 32,
+      height: 32
     }
   },
   dialogTitle: {
@@ -361,12 +367,12 @@ const styles = (theme) => ({
   },
   sliderDialogWrapper: {
     [theme.breakpoints.down('sm')]: {
-      marginTop: 93,
+      marginTop: 93
     }
   },
   sliderDialogPaper: {
     [theme.breakpoints.down('sm')]: {
-      margin: 0,
+      margin: 0
     }
   },
   sliderImage: {
@@ -406,21 +412,21 @@ const styles = (theme) => ({
   carouselDialogArrowNext: {
     right: 135,
     [theme.breakpoints.down('sm')]: {
-      right: 16,
+      right: 16
     }
   },
   carouselDialogArrowPrev: {
     left: 135,
     [theme.breakpoints.down('sm')]: {
-      left: 'unset',
+      left: 'unset'
     }
   },
   smDescriptionWrapper: {
     maxHeight: 200,
-    overflow: 'hidden',
+    overflow: 'hidden'
   },
   smDescriptionWrapperOpen: {
-    maxHeight: 'unset',
+    maxHeight: 'unset'
   },
   showMoreButton: {
     width: '100%',
@@ -447,45 +453,43 @@ const styles = (theme) => ({
 
 const useStyles = makeStyles(styles);
 
-const OBJECT_DATA = {
-  title: 'Івано-Франківська обл., м. Івано-Франківськ, вул. Вʼячеслава Чорновола, 15',
-  tokenized: true,
-  description: `Продається готовий до проживання будинок в центральній частині міста. Відкривається чудова панорама на усе місто. Планування - двосотроннє.
-  Здійснено заміну усіх панорамних вікон на покращений енергозберігаючий варіант з трикамерним профілем. Встановлено теплу підлогу у ванній, кухні та коридорі.Ремонт в ідеальному стані. Виконано у стриманих кольорах, стіни пофарбовано німецькою фарбою, яка легко миється не втрачаючи кольору.
-  В будинку просторий гардероб, який легко вміщає особисті речі сімї з 4-х осіб. Велика, простора ванна, у якій залишається пральна машина та додатковий санвузол.В помешканні також залишаються усі меблі, а це: - диван, телевізор, робочий стіл під ноутбук у спальні- два ліжка, два столи та стінка у дитячій- меблі та техніка на кухні (холодильник, духова шафа, газова поверхня, посудомийна машина, стіл)- додаткова робоча зона у кухні (стіл для ноутбука)- прихожа
-  Поруч школи, садочки, кінотеатри та уся необхідна інфраструктура.`,
-  photos: [],
-  number: '1209141981209',
-  address: 'Івано-Франківська обл., м. Івано-Франківськ, вул. Вʼячеслава Чорновола, 15',
-  type: 'Будинок',
-  lawData: 'Тут вказується дата державної реєстрації права власності, розмір частки та хто володіє власністю',
-  location: [48.9226, 24.7111],
-  document: 'Тут вказується назва документу, дата та видавник документу',
-  ownForm: 'Приватна',
-  expDate: 'Введено в експлуатацію',
-  govRegistrator: 'Приватний нотаріус Бовбалан Надія Ростиславівна, Івано-Франківський міський нотаріальний округ, м.Івано-Франківськ',
-  objectDescription: 'Площа (га): 0.0569. Дата державної реєстрації земельної ділянки: 17.07.2009, орган, що здійснив державну реєстрацію земельної ділянки: Головне управління земельних ресурсів виконавчого органу Івано-Фарнківської міської ради',
-  totalArea: '6 сот',
-  livingArea: '140 м2',
-  problems: 'Тут вказується арешт будинку або квартири) або нерухомість в іпотеці, то відомості будуть відображені на сторінці нерухомості'
-};
-
-const ObjectScreen = ({
-  history,
-  hideHeader,
-  handleClickBack,
-  readOnly
-}) => {
+const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
+  const [loadingData, setLoading] = React.useState(false);
+  const [objectData, setData] = React.useState(null);
   const [openTextEditor, setOpenTextEditor] = React.useState(false);
-  const [description, setDescription] = React.useState(OBJECT_DATA.description);
-  const [files, setFiles] = React.useState(OBJECT_DATA.photos);
+  const [description, setDescription] = React.useState(null);
+  const [files, setFiles] = React.useState([]);
   const [openSlider, setOpenSLider] = React.useState(false);
   const [showMore, setShowMore] = React.useState(false);
   const mainSlider = React.useRef(null);
   const secondarySlider = React.useRef(null);
   const dialogSlider = React.useRef(null);
+  const dispatch = useDispatch();
 
-  const isSM = useMediaQuery(theme => theme.breakpoints.down('sm'));
+  React.useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+
+      const result = await getDetails()(dispatch);
+
+      if (result instanceof Error) {
+        setLoading(false);
+        return;
+      }
+
+      setData(result);
+
+      setDescription(result.description);
+
+      setFiles(result.photos);
+
+      setLoading(false);
+    };
+
+    fetchData();
+  }, [dispatch]);
+
+  const isSM = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
   const handleClickOpenSlider = (index) => {
     setOpenSLider(true);
@@ -494,9 +498,7 @@ const ObjectScreen = ({
     }, 100);
   };
 
-  const handleCloseSlider = () => {
-    setOpenSLider(false);
-  };
+  const handleCloseSlider = () => setOpenSLider(false);
 
   const [openFileSelector, { loading }] = useFilePicker({
     accept: 'image/*',
@@ -515,120 +517,108 @@ const ObjectScreen = ({
 
   const handleBack = handleClickBack || (() => history.push('/'));
 
-  const SampleNextArrow = React.useCallback((props) => {
-    const { className, onClick } = props;
+  const SampleNextArrow = React.useCallback(
+    (props) => {
+      const { className, onClick } = props;
 
-    return (
-      <div
-        className={classNames(className, {
-          [classes.carouselArrowNext]: true,
-          [classes.carouselArrow]: true,
-          [classes.hidden]: isSM
-        })}
-        onClick={onClick}
-      >
-        <img
-          src={SliderArrow}
-          alt={'slider prev arrow'}
-        />
-      </div>
-    );
-  }, [classes, isSM]);
+      return (
+        <div
+          className={classNames(className, {
+            [classes.carouselArrowNext]: true,
+            [classes.carouselArrow]: true,
+            [classes.hidden]: isSM
+          })}
+          onClick={onClick}
+        >
+          <img src={SliderArrow} alt={'slider prev arrow'} />
+        </div>
+      );
+    },
+    [classes, isSM]
+  );
 
-  const SamplePrevArrow = React.useCallback((props) => {
-    const { className, onClick } = props;
+  const SamplePrevArrow = React.useCallback(
+    (props) => {
+      const { className, onClick } = props;
 
-    return (
-      <div
-        className={classNames(className, {
-          [classes.carouselArrowPrev]: true,
-          [classes.carouselArrow]: true,
-          [classes.hidden]: isSM
-        })}
-        onClick={onClick}
-      >
-        <img
-          src={SliderArrow}
-          alt={'slider next arrow'}
-        />
-      </div>
-    );
-  }, [classes, isSM]);
+      return (
+        <div
+          className={classNames(className, {
+            [classes.carouselArrowPrev]: true,
+            [classes.carouselArrow]: true,
+            [classes.hidden]: isSM
+          })}
+          onClick={onClick}
+        >
+          <img src={SliderArrow} alt={'slider next arrow'} />
+        </div>
+      );
+    },
+    [classes, isSM]
+  );
 
-  const SampleDialogNextArrow = React.useCallback((props) => {
-    const { className, onClick } = props;
+  const SampleDialogNextArrow = React.useCallback(
+    (props) => {
+      const { className, onClick } = props;
 
-    return (
-      <div
-        className={classNames(className, {
-          [classes.carouselArrowNext]: true,
-          [classes.carouselDialogArrowNext]: true,
-          [classes.carouselArrow]: true,
-        })}
-        onClick={onClick}
-      >
+      return (
+        <div
+          className={classNames(className, {
+            [classes.carouselArrowNext]: true,
+            [classes.carouselDialogArrowNext]: true,
+            [classes.carouselArrow]: true
+          })}
+          onClick={onClick}
+        >
+          <img src={arrowRight} alt={'slider next arrow'} />
+        </div>
+      );
+    },
+    [classes]
+  );
 
-        <img
-          src={arrowRight}
-          alt={'slider next arrow'}
-        />
-      </div>
-    );
-  }, [classes]);
+  const SampleDialogPrevArrow = React.useCallback(
+    (props) => {
+      const { className, onClick } = props;
 
-  const SampleDialogPrevArrow = React.useCallback((props) => {
-    const { className, onClick } = props;
+      return (
+        <div
+          className={classNames(className, {
+            [classes.carouselArrowPrev]: true,
+            [classes.carouselDialogArrowPrev]: true,
+            [classes.carouselArrow]: true,
+            [classes.noRotate]: true
+          })}
+          onClick={onClick}
+        >
+          <img src={arrowLeft} alt={'slider next arrow'} />
+        </div>
+      );
+    },
+    [classes]
+  );
 
-    return (
-      <div
-        className={classNames(className, {
-          [classes.carouselArrowPrev]: true,
-          [classes.carouselDialogArrowPrev]: true,
-          [classes.carouselArrow]: true,
-          [classes.noRotate]: true
-        })}
-        onClick={onClick}
-      >
-        <img
-          src={arrowLeft}
-          alt={'slider next arrow'}
-        />
-      </div>
-    );
-  }, [classes]);
+  if (loadingData || !objectData) {
+    return <Preloader />;
+  }
 
   return (
     <>
-      {
-        hideHeader ? null : (
-          <Header
-            navigateClick={toMarket}
-          />
-        )
-      }
+      {hideHeader ? null : <Header navigateClick={toMarket} />}
 
       <div className={classes.wrapper}>
-        <Button
-          onClick={handleBack}
-          className={classes.backButton}
-        >
+        <Button onClick={handleBack} className={classes.backButton}>
           <ChevronLeftIcon />
           {t('ToList')}
         </Button>
 
-        <PageTitle>
-          {OBJECT_DATA.title}
-        </PageTitle>
+        <PageTitle>{objectData.title}</PageTitle>
 
-        {
-          OBJECT_DATA.tokenized ? (
-            <div className={classes.statusWrapper}>
-              <StatusLabel>
-                {t('Tokenized')}
-              </StatusLabel>
-            </div>
-          ) : null
-        }
+        {objectData.tokenized ? (
+          <div className={classes.statusWrapper}>
+            <StatusLabel>{t('Tokenized')}</StatusLabel>
+          </div>
+        ) : null}
 
         <Slider
           dots={false}
@@ -641,70 +631,64 @@ const ObjectScreen = ({
           nextArrow={<SampleNextArrow />}
           prevArrow={<SamplePrevArrow />}
         >
-          {
-            files.map((file, index) => (
+          {files.map((file, index) => (
+            <div key={index}>
+              <div
+                className={classes.sliderImage}
+                style={{
+                  backgroundImage: `url(${file.content})`
+                }}
+              />
+              <div className={classes.currentPageStatus}>
+                {t('photo', {
+                  index: index + 1,
+                  total: files.length
+                })}
+              </div>
+              <IconButton
+                onClick={() => {
+                  handleClickOpenSlider(index);
+                }}
+                className={classes.fullscreenIconWrapper}
+              >
+                <img
+                  src={FullscreenIcon}
+                  alt={'fullscreen icon'}
+                  className={classes.fullscreenIcon}
+                />
+              </IconButton>
+            </div>
+          ))}
+        </Slider>
+
+        {files.length > 1 ? (
+          <Slider
+            dots={false}
+            infinite={false}
+            speed={500}
+            slidesToShow={isSM ? 5 : 8}
+            arrows={false}
+            swipeToSlide={true}
+            focusOnSelect={true}
+            ref={secondarySlider}
+            asNavFor={mainSlider?.current}
+            className="secondary-slider"
+          >
+            {files.map((file, index) => (
               <div key={index}>
                 <div
-                  className={classes.sliderImage}
+                  className={classNames({
+                    [classes.sliderImage]: true,
+                    [classes.sliderImagePreview]: true
+                  })}
                   style={{
                     backgroundImage: `url(${file.content})`
                   }}
                 />
-                <div className={classes.currentPageStatus}>
-                  {t('photo', {
-                    index: index + 1,
-                    total: files.length
-                  })}
-                </div>
-                <IconButton
-                  onClick={() => {
-                    handleClickOpenSlider(index);
-                  }}
-                  className={classes.fullscreenIconWrapper}
-                >
-                  <img
-                    src={FullscreenIcon}
-                    alt={'fullscreen icon'}
-                    className={classes.fullscreenIcon}
-                  />
-                </IconButton>
               </div>
-            ))
-          }
-        </Slider>
-
-        {
-          files.length > 1 ? (
-            <Slider
-              dots={false}
-              infinite={false}
-              speed={500}
-              slidesToShow={isSM ? 5 : 8}
-              arrows={false}
-              swipeToSlide={true}
-              focusOnSelect={true}
-              ref={secondarySlider}
-              asNavFor={mainSlider?.current}
-              className="secondary-slider"
-            >
-              {
-                files.map((file, index) => (
-                  <div key={index}>
-                    <div
-                      className={classNames({
-                        [classes.sliderImage]: true,
-                        [classes.sliderImagePreview]: true
-                      })}
-                      style={{
-                        backgroundImage: `url(${file.content})`
-                      }}
-                    />
-                  </div>
-                ))
-              }
-            </Slider>
-          ) : null
-        }
+            ))}
+          </Slider>
+        ) : null}
 
         <Dialog
           fullScreen
@@ -733,330 +717,238 @@ const ObjectScreen = ({
               prevArrow={<SampleDialogPrevArrow />}
               ref={dialogSlider}
             >
-              {
-                files.map((file, index) => (
-                  <div key={index}>
-                    <div
-                      className={classNames({
-                        [classes.sliderImage]: true,
-                        [classes.dialogSliderImage]: true
-                      })}
-                      style={{
-                        backgroundImage: `url(${file.content})`
-                      }}
-                    />
-                  </div>
-                ))
-              }
+              {files.map((file, index) => (
+                <div key={index}>
+                  <div
+                    className={classNames({
+                      [classes.sliderImage]: true,
+                      [classes.dialogSliderImage]: true
+                    })}
+                    style={{
+                      backgroundImage: `url(${file.content})`
+                    }}
+                  />
+                </div>
+              ))}
             </Slider>
           </div>
         </Dialog>
 
-        {
-          !readOnly ? (
-            <>
-              {
-                files.length > 0 ? (
-                  <Button
-                    onClick={() => openFileSelector()}
-                    disabled={loading}
-                    className={classes.addYetPhotoButton}
-                  >
-                    <AddCircleOutlineIcon className={classes.addDescriptionButtonIcon} />
-                    {t('AddYetPhoto')}
-                  </Button>
-                ) : (
-                  <Button
-                    onClick={() => openFileSelector()}
-                    disabled={loading}
-                    className={classes.addFileButton}
-                  >
-                    <AddCircleOutlineIcon className={classes.addFileButtonIcon} />
-                    {t('AddPhoto')}
-                  </Button>
-                )
-              }
-            </>
-          ) : null
-        }
+        {!readOnly ? (
+          <>
+            {files.length > 0 ? (
+              <Button
+                onClick={() => openFileSelector()}
+                disabled={loading}
+                className={classes.addYetPhotoButton}
+              >
+                <AddCircleOutlineIcon className={classes.addDescriptionButtonIcon} />
+                {t('AddYetPhoto')}
+              </Button>
+            ) : (
+              <Button
+                onClick={() => openFileSelector()}
+                disabled={loading}
+                className={classes.addFileButton}
+              >
+                <AddCircleOutlineIcon className={classes.addFileButtonIcon} />
+                {t('AddPhoto')}
+              </Button>
+            )}
+          </>
+        ) : null}
 
-        {
-          readOnly ? (
-            <>
-              {
-                OBJECT_DATA.description ? (
-                  <>
-                    <Typography className={classes.blockTitle}>
-                      {t('Description')}
-                    </Typography>
-                    <Card>
-                      {
-                        isSM ? (
-                          <>
-                            <Typography
-                              className={classNames({
-                                [classes.readOnlyDescription]: true,
-                                [classes.smDescriptionWrapper]: true,
-                                [classes.smDescriptionWrapperOpen]: showMore
-                              })}
-                            >
-                              {OBJECT_DATA.description}
-                            </Typography>
-                            <Button
-                              variant="outlined"
-                              onClick={() => setShowMore(!showMore)}
-                              className={classes.showMoreButton}
-                            >
-                              {showMore ? t('Hide') : t('ShowMore')}
-                            </Button>
-                          </>
-                        ) : (
-                          <Typography className={classes.readOnlyDescription}>
-                            {OBJECT_DATA.description}
-                          </Typography>
-                        )
-                      }
-                    </Card>
-                  </>
-                ) : null
-              }
-            </>
-          ) : (
-            <>
-              <Typography className={classes.blockTitle}>
-                {t('Description')}
-              </Typography>
-              {
-                openTextEditor || description ? (
-                  <Typography className={classes.textFieldLabel}>
-                    {t('AdditionDescription')}
-                  </Typography>
-                ) : null
-              }
-
-              {
-                openTextEditor ? (
-                  <>
-                    <TextField
-                      value={description}
-                      rows={9}
-                      multiline={true}
-                      className={classes.descriptionInput}
-                      placeholder={t('DescriptionPlaceHolder')}
-                      onChange={(e) => setDescription(e.target.value)}
-                    />
-
-                    <div className={classes.textFieldActions}>
+        {readOnly ? (
+          <>
+            {objectData.description ? (
+              <>
+                <Typography className={classes.blockTitle}>{t('Description')}</Typography>
+                <Card>
+                  {isSM ? (
+                    <>
+                      <Typography
+                        className={classNames({
+                          [classes.readOnlyDescription]: true,
+                          [classes.smDescriptionWrapper]: true,
+                          [classes.smDescriptionWrapperOpen]: showMore
+                        })}
+                      >
+                        {objectData.description}
+                      </Typography>
                       <Button
                         variant="outlined"
-                        onClick={() => setOpenTextEditor(false)}
+                        onClick={() => setShowMore(!showMore)}
+                        className={classes.showMoreButton}
                       >
-                        {t('Cancel')}
+                        {showMore ? t('Hide') : t('ShowMore')}
                       </Button>
+                    </>
+                  ) : (
+                    <Typography className={classes.readOnlyDescription}>
+                      {objectData.description}
+                    </Typography>
+                  )}
+                </Card>
+              </>
+            ) : null}
+          </>
+        ) : (
+          <>
+            <Typography className={classes.blockTitle}>{t('Description')}</Typography>
+            {openTextEditor || description ? (
+              <Typography className={classes.textFieldLabel}>{t('AdditionDescription')}</Typography>
+            ) : null}
 
+            {openTextEditor ? (
+              <>
+                <TextField
+                  value={description}
+                  rows={9}
+                  multiline={true}
+                  className={classes.descriptionInput}
+                  placeholder={t('DescriptionPlaceHolder')}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+
+                <div className={classes.textFieldActions}>
+                  <Button variant="outlined" onClick={() => setOpenTextEditor(false)}>
+                    {t('Cancel')}
+                  </Button>
+
+                  <Button variant="contained" onClick={() => setOpenTextEditor(false)}>
+                    {t('Save')}
+                  </Button>
+                </div>
+              </>
+            ) : (
+              <>
+                {description ? (
+                  <>
+                    <div className={classes.disabledDescriptionWrapper}>
+                      <TextField
+                        value={description}
+                        rows={9}
+                        multiline={true}
+                        disabled={true}
+                        className={classNames({
+                          [classes.descriptionInput]: true,
+                          [classes.disabledDescriptionInput]: true
+                        })}
+                        placeholder={t('DescriptionPlaceHolder')}
+                      />
+                      <img className={classes.lockIcon} src={LockIcon} alt="arrow lock icon" />
+                    </div>
+
+                    <div className={classes.textFieldEditActions}>
                       <Button
                         variant="contained"
-                        onClick={() => setOpenTextEditor(false)}
+                        className={classes.editDescriptionButton}
+                        onClick={() => setOpenTextEditor(true)}
                       >
-                        {t('Save')}
+                        <BorderColorOutlinedIcon className={classes.addDescriptionButtonIcon} />
+                        {t('Edit')}
                       </Button>
                     </div>
                   </>
                 ) : (
                   <>
-                    {
-                      description ? (
-                        <>
-                          <div className={classes.disabledDescriptionWrapper}>
-                            <TextField
-                              value={description}
-                              rows={9}
-                              multiline={true}
-                              disabled={true}
-                              className={classNames({
-                                [classes.descriptionInput]: true,
-                                [classes.disabledDescriptionInput]: true
-                              })}
-                              placeholder={t('DescriptionPlaceHolder')}
-                            />
-                            <img
-                              className={classes.lockIcon}
-                              src={LockIcon}
-                              alt='arrow lock icon'
-                            />
-                          </div>
+                    <Button
+                      variant="contained"
+                      className={classes.addDescriptionButton}
+                      onClick={() => setOpenTextEditor(true)}
+                    >
+                      <AddCircleOutlineIcon className={classes.addDescriptionButtonIcon} />
+                      {t('AddDescriptionButton')}
+                    </Button>
 
-                          <div className={classes.textFieldEditActions}>
-                            <Button
-                              variant="contained"
-                              className={classes.editDescriptionButton}
-                              onClick={() => setOpenTextEditor(true)}
-                            >
-                              <BorderColorOutlinedIcon
-                                className={classes.addDescriptionButtonIcon}
-                              />
-                              {t('Edit')}
-                            </Button>
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          <Button
-                            variant="contained"
-                            className={classes.addDescriptionButton}
-                            onClick={() => setOpenTextEditor(true)}
-                          >
-                            <AddCircleOutlineIcon
-                              className={classes.addDescriptionButtonIcon}
-                            />
-                            {t('AddDescriptionButton')}
-                          </Button>
-
-                          <Typography className={classes.addDescriptionText}>
-                            {t('AddDescription')}
-                          </Typography>
-                        </>
-                      )
-                    }
-
+                    <Typography className={classes.addDescriptionText}>
+                      {t('AddDescription')}
+                    </Typography>
                   </>
-                )
-              }
-            </>
-          )
-        }
+                )}
+              </>
+            )}
+          </>
+        )}
 
-        <Typography className={classes.blockTitle}>
-          {t('AdditionInfo')}
-        </Typography>
+        <Typography className={classes.blockTitle}>{t('AdditionInfo')}</Typography>
 
         <div className={classes.detailsBlock}>
           <div className={classes.row}>
-            <Typography className={classes.detailsTitle}>
-              {t('RegNum')}
-            </Typography>
+            <Typography className={classes.detailsTitle}>{t('RegNum')}</Typography>
+            <Typography className={classes.detailsDescription}>{objectData.number}</Typography>
+          </div>
+
+          <div className={classes.row}>
+            <Typography className={classes.detailsTitle}>{t('Address')}</Typography>
+            <Typography className={classes.detailsDescription}>{objectData.address}</Typography>
+          </div>
+
+          <div className={classes.row}>
+            <Typography className={classes.detailsTitle}>{t('ObjectType')}</Typography>
+            <Typography className={classes.detailsDescription}>{objectData.type}</Typography>
+          </div>
+
+          <div className={classes.row}>
+            <Typography className={classes.detailsTitle}>{t('OwnLaw')}</Typography>
+            <Typography className={classes.detailsDescription}>{objectData.lawData}</Typography>
+          </div>
+
+          <div className={classes.row}>
+            <Typography className={classes.detailsTitle}>{t('GovReg')}</Typography>
+            <Typography className={classes.detailsDescription}>{objectData.document}</Typography>
+          </div>
+
+          <div className={classes.row}>
+            <Typography className={classes.detailsTitle}>{t('OwnForm')}</Typography>
+            <Typography className={classes.detailsDescription}>{objectData.ownForm}</Typography>
+          </div>
+
+          <div className={classes.row}>
+            <Typography className={classes.detailsTitle}>{t('ObjectState')}</Typography>
+            <Typography className={classes.detailsDescription}>{objectData.expDate}</Typography>
+          </div>
+
+          <div className={classes.row}>
+            <Typography className={classes.detailsTitle}>{t('GovRegistrator')}</Typography>
             <Typography className={classes.detailsDescription}>
-              {OBJECT_DATA.number}
+              {objectData.govRegistrator}
             </Typography>
           </div>
 
           <div className={classes.row}>
-            <Typography className={classes.detailsTitle}>
-              {t('Address')}
-            </Typography>
+            <Typography className={classes.detailsTitle}>{t('ObjectDescription')}</Typography>
             <Typography className={classes.detailsDescription}>
-              {OBJECT_DATA.address}
+              {objectData.objectDescription}
             </Typography>
           </div>
 
           <div className={classes.row}>
-            <Typography className={classes.detailsTitle}>
-              {t('ObjectType')}
-            </Typography>
-            <Typography className={classes.detailsDescription}>
-              {OBJECT_DATA.type}
-            </Typography>
+            <Typography className={classes.detailsTitle}>{t('TotalArea')}</Typography>
+            <Typography className={classes.detailsDescription}>{objectData.totalArea}</Typography>
           </div>
 
           <div className={classes.row}>
-            <Typography className={classes.detailsTitle}>
-              {t('OwnLaw')}
-            </Typography>
-            <Typography className={classes.detailsDescription}>
-              {OBJECT_DATA.lawData}
-            </Typography>
+            <Typography className={classes.detailsTitle}>{t('LivingArea')}</Typography>
+            <Typography className={classes.detailsDescription}>{objectData.livingArea}</Typography>
           </div>
 
           <div className={classes.row}>
-            <Typography className={classes.detailsTitle}>
-              {t('GovReg')}
-            </Typography>
-            <Typography className={classes.detailsDescription}>
-              {OBJECT_DATA.document}
-            </Typography>
-          </div>
-
-          <div className={classes.row}>
-            <Typography className={classes.detailsTitle}>
-              {t('OwnForm')}
-            </Typography>
-            <Typography className={classes.detailsDescription}>
-              {OBJECT_DATA.ownForm}
-            </Typography>
-          </div>
-
-          <div className={classes.row}>
-            <Typography className={classes.detailsTitle}>
-              {t('ObjectState')}
-            </Typography>
-            <Typography className={classes.detailsDescription}>
-              {OBJECT_DATA.expDate}
-            </Typography>
-          </div>
-
-          <div className={classes.row}>
-            <Typography className={classes.detailsTitle}>
-              {t('GovRegistrator')}
-            </Typography>
-            <Typography className={classes.detailsDescription}>
-              {OBJECT_DATA.govRegistrator}
-            </Typography>
-          </div>
-
-          <div className={classes.row}>
-            <Typography className={classes.detailsTitle}>
-              {t('ObjectDescription')}
-            </Typography>
-            <Typography className={classes.detailsDescription}>
-              {OBJECT_DATA.objectDescription}
-            </Typography>
-          </div>
-
-          <div className={classes.row}>
-            <Typography className={classes.detailsTitle}>
-              {t('TotalArea')}
-            </Typography>
-            <Typography className={classes.detailsDescription}>
-              {OBJECT_DATA.totalArea}
-            </Typography>
-          </div>
-
-          <div className={classes.row}>
-            <Typography className={classes.detailsTitle}>
-              {t('LivingArea')}
-            </Typography>
-            <Typography className={classes.detailsDescription}>
-              {OBJECT_DATA.livingArea}
-            </Typography>
-          </div>
-
-          <div className={classes.row}>
-            <Typography className={classes.detailsTitle}>
-              {t('Problems')}
-            </Typography>
-            <Typography className={classes.detailsDescription}>
-              {OBJECT_DATA.problems}
-            </Typography>
+            <Typography className={classes.detailsTitle}>{t('Problems')}</Typography>
+            <Typography className={classes.detailsDescription}>{objectData.problems}</Typography>
           </div>
         </div>
 
-        <Typography className={classes.blockTitle}>
-          {t('MapPoint')}
-        </Typography>
+        <Typography className={classes.blockTitle}>{t('MapPoint')}</Typography>
         <div className={classes.mapContainer}>
           <MapContainer
-            center={OBJECT_DATA.location}
+            center={objectData.location}
             zoom={13}
             style={{ height: '100%', width: '100%' }}
             attributionControl={false}
           >
-            <TileLayer
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            <Marker
-              position={OBJECT_DATA.location}
-              icon={markerIcon}
-            />
+            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+            <Marker position={objectData.location} icon={markerIcon} />
             <FullscreenControl />
           </MapContainer>
         </div>

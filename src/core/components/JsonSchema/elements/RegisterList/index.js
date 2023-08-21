@@ -22,7 +22,7 @@ const RegisterList = ({
   filters: filtersProps,
   defaultSort,
   emptyList,
-  dataMapping,
+  dataMapping
 }) => {
   const [list, setList] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
@@ -49,9 +49,7 @@ const RegisterList = ({
     return defaultFilters;
   });
   const [sort, setSort] = React.useState(defaultSort?.sort);
-  const [sortDirection, setSortDirection] = React.useState(
-    defaultSort?.direction
-  );
+  const [sortDirection, setSortDirection] = React.useState(defaultSort?.direction);
 
   const handleChangePagination = (page) => setOffset(page * limit);
 
@@ -62,7 +60,7 @@ const RegisterList = ({
       const getFilters = () => {
         const filters = {
           offset,
-          limit,
+          limit
         };
 
         Object.keys(requestFilters).forEach((key) => {
@@ -75,24 +73,19 @@ const RegisterList = ({
           filters[`sort[${sort}]`] = sortDirection;
         }
 
-        const filtered = Object.fromEntries(
-          Object.entries(filters).filter(([, v]) => v !== '')
-        );
+        const filtered = Object.fromEntries(Object.entries(filters).filter(([, v]) => v !== ''));
 
         return filtered;
       };
 
       if (!keyId) return null;
 
-      const result = await actions.requestRegisterKeyRecords(
-        keyId,
-        getFilters()
-      );
+      const result = await actions.requestRegisterKeyRecords(keyId, getFilters());
 
       const mapData = (result || []).map(({ data, updatedAt, createdAt }) => ({
         ...data,
         updatedAt,
-        createdAt,
+        createdAt
       }));
 
       setCount(result?.meta?.count);
@@ -103,7 +96,7 @@ const RegisterList = ({
     };
 
     fetchData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [actions, keyId, limit, offset, requestFilters, sort, sortDirection]);
 
   if (hidden) return null;
@@ -135,9 +128,7 @@ const RegisterList = ({
         />
       ))}
 
-      {!(list || []).length && emptyList && !loading ? (
-        <>{renderHTML(emptyList)}</>
-      ) : null}
+      {!(list || []).length && emptyList && !loading ? <>{renderHTML(emptyList)}</> : null}
 
       {!list || !(list || []).length ? null : (
         <Pagination
@@ -162,14 +153,14 @@ RegisterList.propTypes = {
   filters: PropTypes.object,
   defaultSort: PropTypes.object,
   emptyList: PropTypes.string,
-  dataMapping: PropTypes.string,
+  dataMapping: PropTypes.string
 };
 
 RegisterList.defaultProps = {
   hidden: false,
   listTemplate: {
     htmlBlock: '',
-    params: {},
+    params: {}
   },
   rootDocument: {},
   actions: {},
@@ -177,20 +168,17 @@ RegisterList.defaultProps = {
   filters: null,
   defaultSort: {
     sort: false,
-    direction: '',
+    direction: ''
   },
   emptyList: null,
-  dataMapping: null,
+  dataMapping: null
 };
 
 const mapDispatch = (dispatch) => ({
   actions: {
-    requestRegisterKeyRecords: bindActionCreators(
-      requestRegisterKeyRecords,
-      dispatch
-    ),
-    addMessage: bindActionCreators(addMessage, dispatch),
-  },
+    requestRegisterKeyRecords: bindActionCreators(requestRegisterKeyRecords, dispatch),
+    addMessage: bindActionCreators(addMessage, dispatch)
+  }
 });
 
 export default connect(null, mapDispatch)(RegisterList);

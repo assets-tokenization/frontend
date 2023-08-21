@@ -29,23 +29,22 @@ const useIdGovUaWidgetForm = ({ onSelectKey }) => {
     return () => {
       clearInterval(timer);
       document.body.removeChild(script);
-    }
+    };
   }, []);
 
   React.useEffect(() => {
     if (inited) {
       console.log('inited', inited);
-      setEuSign(new window.EndUser(
-        containerId,
-        `${containerId}-euSign`,
-        idGovUaWidget.signWidgetUrl
-      ));
+      setEuSign(
+        new window.EndUser(containerId, `${containerId}-euSign`, idGovUaWidget.signWidgetUrl)
+      );
     }
   }, [containerId, inited]);
 
   React.useEffect(() => {
     if (euSign) {
-      euSign.ReadPrivateKey()
+      euSign
+        .ReadPrivateKey()
         .then((a) => {
           console.log('a', a);
           setKeyReaded(true);
@@ -59,8 +58,8 @@ const useIdGovUaWidgetForm = ({ onSelectKey }) => {
 
   return {
     containerId,
-    euSign,
+    euSign
   };
-}
+};
 
 export default useIdGovUaWidgetForm;

@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 import makeStyles from '@mui/styles/makeStyles';
-import classNames from "classnames";
+import classNames from 'classnames';
 
 const styles = (theme) => ({
   card: {
@@ -23,19 +23,20 @@ const styles = (theme) => ({
 
 const useStyles = makeStyles(styles);
 
-const Card = ({
-  children,
-  fullWidth,
-  className
-}) => {
+const Card = ({ children, fullWidth, className }) => {
   const classes = useStyles();
 
   return (
     <>
-      <div className={classNames({
-        [classes.card]: true,
-        [classes.fullWidth]: fullWidth,
-      }, className)}>
+      <div
+        className={classNames(
+          {
+            [classes.card]: true,
+            [classes.fullWidth]: fullWidth
+          },
+          className
+        )}
+      >
         {children}
       </div>
     </>

@@ -17,10 +17,7 @@ import ExportToPdfButton from 'components/JsonSchema/elements/Spreadsheet/Export
 import ImportFromXlsButton from 'components/JsonSchema/elements/Spreadsheet/ImportFromXlsButton';
 import SpreadsheetErrors from 'components/JsonSchema/elements/Spreadsheet/SpreadsheetErrors';
 
-import {
-  input,
-  arrayToData,
-} from 'components/JsonSchema/elements/Spreadsheet/dataMapping';
+import { input, arrayToData } from 'components/JsonSchema/elements/Spreadsheet/dataMapping';
 
 import useUndo from 'hooks/useUndo';
 import diff from 'helpers/diff';
@@ -36,7 +33,7 @@ const errorMap = (path) => (error) => {
     ...error,
     path: normalizePath(error.path),
     relativePath: rowPath,
-    rowId: parseInt(rowPath[0], 10),
+    rowId: parseInt(rowPath[0], 10)
   };
 };
 
@@ -53,18 +50,18 @@ const errorFilter = (path) => (error) => {
 
 const useStyles = makeStyles(() => ({
   errored: {
-    color: '#000',
+    color: '#000'
   },
   grow: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   errorMessage: {
     marginLeft: 16,
-    color: '#f44336',
+    color: '#f44336'
   },
   paper: {
-    paddingTop: 5,
-  },
+    paddingTop: 5
+  }
 }));
 
 const SpreadsheetContainer = ({
@@ -110,12 +107,9 @@ const SpreadsheetContainer = ({
 
   if (hidden) return null;
 
-  const tableError =
-    error || (cellError && checkPath ? new Error(t('TableError')) : null);
+  const tableError = error || (cellError && checkPath ? new Error(t('TableError')) : null);
 
-  const errors =
-    rest.errors &&
-    rest.errors.filter(errorFilter(rest.path)).map(errorMap(rest.path));
+  const errors = rest.errors && rest.errors.filter(errorFilter(rest.path)).map(errorMap(rest.path));
 
   return (
     <>
@@ -126,14 +120,10 @@ const SpreadsheetContainer = ({
         // error={error || (cellError && checkPath ? new Error(t('TableError')) : null)}
         required={required}
         fullWidth={true}
-        actionButtons={(
+        actionButtons={
           <>
             <Tooltip title={t('ToggleFullscreen')}>
-              <IconButton
-                onClick={() => setOpen(true)}
-                color="inherit"
-                size="large"
-              >
+              <IconButton onClick={() => setOpen(true)} color="inherit" size="large">
                 <FullscreenIcon />
               </IconButton>
             </Tooltip>
@@ -144,9 +134,7 @@ const SpreadsheetContainer = ({
                 <ImportFromXlsButton
                   readOnly={readOnly || !active}
                   onImport={(arrayData) =>
-                    onChange(
-                      new ChangeEvent(arrayToData(arrayData, items), true, true)
-                    )
+                    onChange(new ChangeEvent(arrayToData(arrayData, items), true, true))
                   }
                 />
                 <ClearDataButton
@@ -182,7 +170,7 @@ const SpreadsheetContainer = ({
               </Typography>
             ) : null}
           </>
-        )}
+        }
         {...rest}
       >
         <SpreadsheetErrors

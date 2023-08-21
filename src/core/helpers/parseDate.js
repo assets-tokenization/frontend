@@ -10,5 +10,4 @@ const parseDate = (date, format) => {
   };
 };
 
-
 export default parseDate;

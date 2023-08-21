@@ -7,67 +7,65 @@ import FileViewerDialog from 'components/FileViewerDialog';
 import blobToBase64 from 'helpers/blobToBase64';
 
 const DirectPreview = ({ url }) => {
-    const [open, setOpen] = React.useState(false);
-    const [blob, setBlob] = React.useState(false);
-    const [fileType, setFileType] = React.useState(false);
-    const [downloading, setDownloading] = React.useState(false);
-    const t = useTranslate('FileDataTable');
+  const [open, setOpen] = React.useState(false);
+  const [blob, setBlob] = React.useState(false);
+  const [fileType, setFileType] = React.useState(false);
+  const [downloading, setDownloading] = React.useState(false);
+  const t = useTranslate('FileDataTable');
 
-    const handleClickOpen = () => {
-        setOpen(true);
+  const handleClickOpen = () => {
+    setOpen(true);
 
-        const fetchData = async () => {
-            setDownloading(true);
+    const fetchData = async () => {
+      setDownloading(true);
 
-            const response = await fetch(url);
+      const response = await fetch(url);
 
-            if (response?.status !== 200) {
-                setDownloading(false);
-                return;
-            }
+      if (response?.status !== 200) {
+        setDownloading(false);
+        return;
+      }
 
-            const responceToBlob = await response.blob();
+      const responceToBlob = await response.blob();
 
-            const decodedBlob = await blobToBase64(responceToBlob);
+      const decodedBlob = await blobToBase64(responceToBlob);
 
-            const extension = mime.extension(responceToBlob?.type);
+      const extension = mime.extension(responceToBlob?.type);
 
-            setFileType(extension);
+      setFileType(extension);
 
-            setBlob(decodedBlob);
+      setBlob(decodedBlob);
 
-            setDownloading(false);
-        };
-
-        fetchData();
+      setDownloading(false);
     };
 
-    const handleClose = () => setOpen(false);
+    fetchData();
+  };
 
-    if (!url) return null;
+  const handleClose = () => setOpen(false);
 
-    const fileSource = fileType === 'xlsx' ? blob : url;
+  if (!url) return null;
 
-    return <>
-        <Tooltip title={t('Preview')}>
-            <IconButton onClick={handleClickOpen} size="large">
-                {
-                    downloading
-                        ? <CircularProgress size={24} />
-                        : <VisibilityIcon size={24} />
-                }
-            </IconButton>
-        </Tooltip>
+  const fileSource = fileType === 'xlsx' ? blob : url;
 
-        <FileViewerDialog
-            darkTheme={false}
-            file={fileSource}
-            fileName={url}
-            open={open && fileType && blob}
-            extension={fileType}
-            onClose={handleClose}
-        />
-    </>;
+  return (
+    <>
+      <Tooltip title={t('Preview')}>
+        <IconButton onClick={handleClickOpen} size="large">
+          {downloading ? <CircularProgress size={24} /> : <VisibilityIcon size={24} />}
+        </IconButton>
+      </Tooltip>
+
+      <FileViewerDialog
+        darkTheme={false}
+        file={fileSource}
+        fileName={url}
+        open={open && fileType && blob}
+        extension={fileType}
+        onClose={handleClose}
+      />
+    </>
+  );
 };
 
 export default DirectPreview;

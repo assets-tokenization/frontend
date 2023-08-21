@@ -12,87 +12,111 @@ import PropertyList from 'components/JsonSchema/elements/Card/components/CardPre
 import HtmlTemplate from 'components/JsonSchema/elements/Card/components/CardPreview/HtmlTemplate';
 
 const withStyles = makeStyles({
-    root: {
-        minWidth: 158,
-        border: '3px solid #000000',
-        borderRadius: 0,
-        '& > button': {
-            opacity: .5
-        },
-        '&:hover > button': {
-            opacity: 1
-        }
+  root: {
+    minWidth: 158,
+    border: '3px solid #000000',
+    borderRadius: 0,
+    '& > button': {
+      opacity: 0.5
     },
-    error: {
-        border: '#f44336 1px solid'
-    },
-    editBtn: {
-        position: 'absolute',
-        top: 10,
-        right: 10
+    '&:hover > button': {
+      opacity: 1
     }
+  },
+  error: {
+    border: '#f44336 1px solid'
+  },
+  editBtn: {
+    position: 'absolute',
+    top: 10,
+    right: 10
+  }
 });
 
-const CardPreview = ({ hasError, schema, value, onChange, setRecoverData, rootDocument, readOnly, usedInTable, onCommit, containerRef }) => {
-    const t = useTranslate('Elements');
-    const classes = withStyles();
+const CardPreview = ({
+  hasError,
+  schema,
+  value,
+  onChange,
+  setRecoverData,
+  rootDocument,
+  readOnly,
+  usedInTable,
+  onCommit,
+  containerRef
+}) => {
+  const t = useTranslate('Elements');
+  const classes = withStyles();
 
-    const handeleOpen = React.useCallback(() => {
-        setRecoverData(rootDocument.data);
-        if (value) {
-            onChange.bind(null, 'open')(new ChangeEvent(true, true));
-        } else {
-            onChange(new ChangeEvent({ open: true }, true))
-        }
-    }, [setRecoverData, rootDocument, onChange, value]);
+  const handeleOpen = React.useCallback(() => {
+    setRecoverData(rootDocument.data);
+    if (value) {
+      onChange.bind(null, 'open')(new ChangeEvent(true, true));
+    } else {
+      onChange(new ChangeEvent({ open: true }, true));
+    }
+  }, [setRecoverData, rootDocument, onChange, value]);
 
-    const cardContent = React.useMemo(() => (
-        <Card
-            variant="outlined"
-            className={classNames(classes.root, {
-                [classes.error]: !!hasError
-            })}
-        >
-            <CardContent>
-                <List>
-                    {schema.htmlTemplate ? <HtmlTemplate
-                        data={value || {}}
-                        template={schema.htmlTemplate}
-                    /> : <PropertyList
-                        value={value || {}}
-                        schema={schema}
-                    />}
-                </List>
-            </CardContent>
-            {readOnly ? null : (
-                <Button
-                    onClick={handeleOpen}
-                    className={classes.editBtn}
-                    startIcon={<EditOutlinedIcon />}
-                >
-                    {schema.editText || t('Edit')}
-                </Button>
+  const cardContent = React.useMemo(
+    () => (
+      <Card
+        variant="outlined"
+        className={classNames(classes.root, {
+          [classes.error]: !!hasError
+        })}
+      >
+        <CardContent>
+          <List>
+            {schema.htmlTemplate ? (
+              <HtmlTemplate data={value || {}} template={schema.htmlTemplate} />
+            ) : (
+              <PropertyList value={value || {}} schema={schema} />
             )}
-        </Card>
-    ), [classes.editBtn, classes.error, classes.root, handeleOpen, hasError, readOnly, schema, t, value]);
+          </List>
+        </CardContent>
+        {readOnly ? null : (
+          <Button
+            onClick={handeleOpen}
+            className={classes.editBtn}
+            startIcon={<EditOutlinedIcon />}
+          >
+            {schema.editText || t('Edit')}
+          </Button>
+        )}
+      </Card>
+    ),
+    [
+      classes.editBtn,
+      classes.error,
+      classes.root,
+      handeleOpen,
+      hasError,
+      readOnly,
+      schema,
+      t,
+      value
+    ]
+  );
 
-    return usedInTable ? (
-        <Popover
-            open={true}
-            anchorEl={containerRef.current}
-            onClose={() => onCommit(value || {})}
-            anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'center',
-            }}
-            transformOrigin={{
-                vertical: 'top',
-                horizontal: 'center',
-            }}
-        >
-            {cardContent}
-        </Popover>
-    ) : cardContent;
-}
+  return usedInTable ? (
+    <Popover
+      open={true}
+      anchorEl={containerRef.current}
+      onClose={() => onCommit(value || {})}
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'center'
+      }}
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'center'
+      }}
+    >
+      {cardContent}
+    </Popover>
+  ) : (
+    cardContent
+  );
+};
 
 export default CardPreview;

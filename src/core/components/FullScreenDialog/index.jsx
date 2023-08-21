@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Dialog,
-  Toolbar,
-  Typography,
-  IconButton,
-  DialogContent,
-} from '@mui/material';
+import { Dialog, Toolbar, Typography, IconButton, DialogContent } from '@mui/material';
 import withStyles from '@mui/styles/withStyles';
 import CloseIcon from '@mui/icons-material/Close';
 import classNames from 'classnames';
@@ -14,24 +8,24 @@ const styles = {
   header: {
     padding: 0,
     backgroundColor: '#232323',
-    height: 32,
+    height: 32
   },
   title: {
     flexGrow: 1,
     color: '#E2E2E2',
-    padding: '0 10px',
+    padding: '0 10px'
   },
   button: {
-    color: '#E2E2E2!important',
+    color: '#E2E2E2!important'
   },
   dialog: {
     display: 'flex',
     '& .ace_editor': {
-      flex: 1,
-    },
+      flex: 1
+    }
   },
   content: {
-    padding: 0,
+    padding: 0
   },
   overflow: {
     overflow: 'hidden'
@@ -67,12 +61,10 @@ const FullScreenDialog = ({
       </IconButton>
     </Toolbar>
     <DialogContent
-      className={
-        classNames({
-          [classes.content]: true,
-          [classes.overflow]: disableScrollBody,
-        })
-      }
+      className={classNames({
+        [classes.content]: true,
+        [classes.overflow]: disableScrollBody
+      })}
     >
       {children}
     </DialogContent>

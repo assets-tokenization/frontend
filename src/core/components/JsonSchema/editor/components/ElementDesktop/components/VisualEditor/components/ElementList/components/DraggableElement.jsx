@@ -1,6 +1,6 @@
 import React from 'react';
 import { translate } from 'react-translate';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 import { DragPreviewImage, useDrag, useDrop } from 'react-dnd';
 import { Toolbar, Button } from '@mui/material';
 import withStyles from '@mui/styles/withStyles';
@@ -32,10 +32,10 @@ const styles = {
     }
   },
   label: {
-    justifyContent: 'flex-start',
+    justifyContent: 'flex-start'
   },
   icon: {
-    marginRight: 8,
+    marginRight: 8
   },
   editIcon: {
     position: 'absolute',
@@ -43,7 +43,7 @@ const styles = {
     opacity: 0,
     fill: '#D0BCFF',
     color: '#D0BCFF',
-    transition: 'opacity 0.25s ease-in-out',
+    transition: 'opacity 0.25s ease-in-out'
   },
   editIconVisible: {
     opacity: 1
@@ -80,8 +80,8 @@ const DraggableElement = ({
     accept: ['control', 'function', 'container'],
     collect(monitor) {
       return {
-        handlerId: monitor.getHandlerId(),
-      }
+        handlerId: monitor.getHandlerId()
+      };
     },
     hover(item, monitor) {
       if (!button.current) {
@@ -97,8 +97,7 @@ const DraggableElement = ({
 
       const hoverBoundingRect = button.current?.getBoundingClientRect();
 
-      const hoverMiddleY =
-        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
 
       const clientOffset = monitor.getClientOffset();
 
@@ -115,20 +114,20 @@ const DraggableElement = ({
       moveSnippet(dragIndex, hoverIndex);
 
       item.index = hoverIndex;
-    },
-  })
+    }
+  });
 
   const [{ isDragging }, drag, preview] = useDrag({
     item: {
       type: element?.type,
       defaultData: {
         ...element,
-        description: element?.name,
-      },
+        description: element?.name
+      }
     },
     collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
+      isDragging: monitor.isDragging()
+    })
   });
 
   const handleCLick = () => {
@@ -181,25 +180,15 @@ const DraggableElement = ({
         >
           {iconName ? <IconComponent className={classes.icon} /> : null}
           {highlightedSearch(element?.name)}
-          {
-            !visualEditor ? (
-              <>
-                {
-                  readOnly ? (
-                    <VisibilityIcon
-                      className={classes.editIcon}
-                    />
-                  ) : (
-                    <img
-                      src={EditIcon}
-                      alt="edit icon"
-                      className={classes.editIcon}
-                    />
-                  )
-                }
-              </>
-            ) : null
-          }
+          {!visualEditor ? (
+            <>
+              {readOnly ? (
+                <VisibilityIcon className={classes.editIcon} />
+              ) : (
+                <img src={EditIcon} alt="edit icon" className={classes.editIcon} />
+              )}
+            </>
+          ) : null}
         </Button>
       </Toolbar>
     </>

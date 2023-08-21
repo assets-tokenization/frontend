@@ -19,30 +19,28 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-const SignFilesLimit = ({
-  task,
-  template
-}) => {
+const SignFilesLimit = ({ task, template }) => {
   const [files, setFiles] = React.useState([]);
   const classes = useStyles();
   const t = useTranslate('SignFilesLimit');
 
   React.useEffect(() => {
     try {
-      const filesControl = findPathDeep(template?.jsonSchema?.properties, (value) => value === 'select.files');
+      const filesControl = findPathDeep(
+        template?.jsonSchema?.properties,
+        (value) => value === 'select.files'
+      );
       const controlPropsPath = filesControl.replace('.control', '').replace('.properties', '');
       const files = objectPath.get(task?.document?.data, controlPropsPath);
       setFiles(files);
-    } catch (e) { console.log(e); }
+    } catch (e) {
+      console.log(e);
+    }
   }, [task, template]);
- 
+
   if ((files || []).length <= filesLimit) return null;
 
-  return (
-    <div className={classes.wrapper}>
-      {t('SignFilesLimit')}
-    </div>
-  );
+  return <div className={classes.wrapper}>{t('SignFilesLimit')}</div>;
 };
 
 SignFilesLimit.propTypes = {
@@ -55,4 +53,4 @@ SignFilesLimit.defaultProps = {
   template: {}
 };
 
-export default  SignFilesLimit;
+export default SignFilesLimit;

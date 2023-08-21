@@ -7,137 +7,162 @@ import ElementGroupContainer from 'components/JsonSchema/components/ElementGroup
 import deepObjectFind from 'helpers/deepObjectFind';
 
 class RelatedSelectsComponent extends React.Component {
-    isVisible = (level) => {
-        if (level === 0) {
-            return true;
-        }
-
-        const { value, properties } = this.props;
-        const parentKey = Object.keys(properties)[level - 1];
-
-        return !!(value || {})[parentKey] && this.getOptions(level).length;
+  isVisible = (level) => {
+    if (level === 0) {
+      return true;
     }
 
-    getOptions = (level) => {
-        const { value, options, properties } = this.props;
-        const parentKey = Object.keys(properties)[level - 1];
+    const { value, properties } = this.props;
+    const parentKey = Object.keys(properties)[level - 1];
 
-        if (!parentKey) {
-            return options.map(option => ({ ...option, value: option.id, label: option.name }));
-        }
+    return !!(value || {})[parentKey] && this.getOptions(level).length;
+  };
 
-        const items = [].concat(value[parentKey]).filter(Boolean)
-            .map(({ id: parentItemId }) => deepObjectFind(options, option => option.id === parentItemId).items || []);
+  getOptions = (level) => {
+    const { value, options, properties } = this.props;
+    const parentKey = Object.keys(properties)[level - 1];
 
-        return [].concat(...items).map(option => ({ ...option, value: option.id, label: option.name }));
+    if (!parentKey) {
+      return options.map((option) => ({ ...option, value: option.id, label: option.name }));
     }
 
-    handleChange = propertyName => (value) => {
-        const { value: oldValue, onChange, properties, multiple } = this.props;
-        const propertyNames = Object.keys(properties);
-        const propertyIndex = propertyNames.indexOf(propertyName);
+    const items = []
+      .concat(value[parentKey])
+      .filter(Boolean)
+      .map(
+        ({ id: parentItemId }) =>
+          deepObjectFind(options, (option) => option.id === parentItemId).items || []
+      );
 
-        const newValue = { ...(oldValue || {}), [propertyName]: value };
-        propertyNames
-            .filter((child, index) => index > propertyIndex)
-            .forEach((child) => {
-                const childPropertyIndex = propertyNames.indexOf(child);
-                const parentPropertyName = propertyNames[childPropertyIndex - 1];
-                const parentPropertyChildren = [].concat(newValue[parentPropertyName]).filter(Boolean).map(({ items }) => items);
-                const parentPropertyChildIds = [].concat(...parentPropertyChildren).filter(Boolean).map(({ id }) => id);
+    return []
+      .concat(...items)
+      .map((option) => ({ ...option, value: option.id, label: option.name }));
+  };
 
-                const childValue = [].concat(newValue[child])
-                    .filter(Boolean)
-                    .filter(({ id }) => parentPropertyChildIds.includes(id));
+  handleChange = (propertyName) => (value) => {
+    const { value: oldValue, onChange, properties, multiple } = this.props;
+    const propertyNames = Object.keys(properties);
+    const propertyIndex = propertyNames.indexOf(propertyName);
 
-                newValue[child] = multiple ? childValue : childValue.shift();
-            });
+    const newValue = { ...(oldValue || {}), [propertyName]: value };
+    propertyNames
+      .filter((child, index) => index > propertyIndex)
+      .forEach((child) => {
+        const childPropertyIndex = propertyNames.indexOf(child);
+        const parentPropertyName = propertyNames[childPropertyIndex - 1];
+        const parentPropertyChildren = []
+          .concat(newValue[parentPropertyName])
+          .filter(Boolean)
+          .map(({ items }) => items);
+        const parentPropertyChildIds = []
+          .concat(...parentPropertyChildren)
+          .filter(Boolean)
+          .map(({ id }) => id);
 
-        onChange && onChange(newValue);
-    };
+        const childValue = []
+          .concat(newValue[child])
+          .filter(Boolean)
+          .filter(({ id }) => parentPropertyChildIds.includes(id));
 
-    renderProperty = (propertyName, level) => {
-        const { properties, required, errors, value, path, noMargin, ...rest } = this.props;
+        newValue[child] = multiple ? childValue : childValue.shift();
+      });
 
-        if (!this.isVisible(level)) {
-            return null;
-        }
+    onChange && onChange(newValue);
+  };
 
-        const property = properties[propertyName];
-        const { helperText, description } = property;
-        const options = this.getOptions(level);
-        const propertyValue = (value || {})[propertyName];
+  renderProperty = (propertyName, level) => {
+    const { properties, required, errors, value, path, noMargin, ...rest } = this.props;
 
-        return (
-            <ElementContainer
-                noMargin={noMargin}
-                sample={helperText}
-                key={propertyName}
-                required={Array.isArray(required) ? required.includes(propertyName) : required}
-                bottomSample={true}
-                error={errors.find(error => error.path === path.concat(propertyName).join('.'))}
-            >
-                <Select
-                    {...rest}
-                    id={path.concat(propertyName).join('-')}
-                    value={propertyValue}
-                    description={description}
-                    onChange={this.handleChange(propertyName)}
-                    options={options}
-                />
-            </ElementContainer>
-        );
+    if (!this.isVisible(level)) {
+      return null;
     }
 
-    render() {
-        const { description, sample, properties, error, required, outlined, hidden, width, maxWidth, ...rest } = this.props;
+    const property = properties[propertyName];
+    const { helperText, description } = property;
+    const options = this.getOptions(level);
+    const propertyValue = (value || {})[propertyName];
 
-        if (hidden) return null;
+    return (
+      <ElementContainer
+        noMargin={noMargin}
+        sample={helperText}
+        key={propertyName}
+        required={Array.isArray(required) ? required.includes(propertyName) : required}
+        bottomSample={true}
+        error={errors.find((error) => error.path === path.concat(propertyName).join('.'))}
+      >
+        <Select
+          {...rest}
+          id={path.concat(propertyName).join('-')}
+          value={propertyValue}
+          description={description}
+          onChange={this.handleChange(propertyName)}
+          options={options}
+        />
+      </ElementContainer>
+    );
+  };
 
-        return (
-            <ElementGroupContainer
-                variant="subtitle1"
-                outlined={outlined}
-                description={description}
-                sample={sample}
-                error={error}
-                required={required}
-                width={width}
-                maxWidth={maxWidth}
-                {...rest}
-            >
-                {Object.keys(properties).map(this.renderProperty)}
-            </ElementGroupContainer>
-        );
-    }
+  render() {
+    const {
+      description,
+      sample,
+      properties,
+      error,
+      required,
+      outlined,
+      hidden,
+      width,
+      maxWidth,
+      ...rest
+    } = this.props;
+
+    if (hidden) return null;
+
+    return (
+      <ElementGroupContainer
+        variant="subtitle1"
+        outlined={outlined}
+        description={description}
+        sample={sample}
+        error={error}
+        required={required}
+        width={width}
+        maxWidth={maxWidth}
+        {...rest}
+      >
+        {Object.keys(properties).map(this.renderProperty)}
+      </ElementGroupContainer>
+    );
+  }
 }
 
 RelatedSelectsComponent.propTypes = {
-    records: PropTypes.object.isRequired,
-    actions: PropTypes.object.isRequired,
-    properties: PropTypes.object,
-    description: PropTypes.string,
-    sample: PropTypes.string,
-    value: PropTypes.object,
-    errors: PropTypes.object,
-    multiple: PropTypes.bool,
-    onChange: PropTypes.func,
-    required: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
-    path: PropTypes.array,
-    outlined: PropTypes.bool
+  records: PropTypes.object.isRequired,
+  actions: PropTypes.object.isRequired,
+  properties: PropTypes.object,
+  description: PropTypes.string,
+  sample: PropTypes.string,
+  value: PropTypes.object,
+  errors: PropTypes.object,
+  multiple: PropTypes.bool,
+  onChange: PropTypes.func,
+  required: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
+  path: PropTypes.array,
+  outlined: PropTypes.bool
 };
 
 RelatedSelectsComponent.defaultProps = {
-    properties: {},
-    description: '',
-    sample: '',
-    value: {},
-    errors: {},
-    multiple: false,
-    onChange: () => null,
-    required: [],
-    path: [],
-    outlined: false
+  properties: {},
+  description: '',
+  sample: '',
+  value: {},
+  errors: {},
+  multiple: false,
+  onChange: () => null,
+  required: [],
+  path: [],
+  outlined: false
 };
 
 export default RelatedSelectsComponent;

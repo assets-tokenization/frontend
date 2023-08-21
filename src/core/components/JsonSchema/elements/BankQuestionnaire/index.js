@@ -27,9 +27,9 @@ const BankQuestionnaire = (props) => {
   React.useEffect(() => {
     const setExternalErrorMessage = (result, serviceErrorMessage) => {
       if (!serviceErrorMessage) return;
-  
+
       let evaluatedErrorMessage = evaluate(serviceErrorMessage, result);
-  
+
       if (evaluatedErrorMessage instanceof Error) {
         evaluatedErrorMessage = serviceErrorMessage;
       }
@@ -86,13 +86,13 @@ const BankQuestionnaire = (props) => {
     const fetchData = async () => {
       try {
         setPendingMessage(pendingMessage);
-  
+
         let filterValue = evaluate(filters, rootDocument.data);
-  
+
         const result = await requestExternalData({
           service: 'bank',
           method: 'init',
-          filters: filterValue instanceof Error ? {} : filterValue,
+          filters: filterValue instanceof Error ? {} : filterValue
         })(dispatch);
 
         setPendingMessage(null);
@@ -103,9 +103,9 @@ const BankQuestionnaire = (props) => {
         }
 
         const questionnaire = Object.values(result).find((item) => item.type === 'object');
-    
+
         const injectedTemplate = JSON.parse(JSON.stringify({ ...template }));
-  
+
         injectedTemplate.jsonSchema.properties[stepName] = {
           ...template.jsonSchema.properties[stepName],
           ...questionnaire,
@@ -114,18 +114,16 @@ const BankQuestionnaire = (props) => {
             ...questionnaire.properties
           }
         };
-  
+
         const diffs = diff(template, injectedTemplate);
-  
+
         if (!diffs) return;
 
         jsonSchemaInjection(injectedTemplate)(dispatch);
 
-        await dispatch(updateTaskDocumentValues(
-          taskId,
-          [stepName].concat('workflowId'),
-          result.workflowId
-        ));
+        await dispatch(
+          updateTaskDocumentValues(taskId, [stepName].concat('workflowId'), result.workflowId)
+        );
 
         handleStore();
       } catch (error) {
@@ -136,7 +134,21 @@ const BankQuestionnaire = (props) => {
     };
 
     fetchData();
-  }, [dispatch, actions, path, template, stepName, name, filters, rootDocument, serviceErrorMessage, pendingMessage, onChange, taskId, handleStore]);
+  }, [
+    dispatch,
+    actions,
+    path,
+    template,
+    stepName,
+    name,
+    filters,
+    rootDocument,
+    serviceErrorMessage,
+    pendingMessage,
+    onChange,
+    taskId,
+    handleStore
+  ]);
 
   return null;
 };
@@ -158,4 +170,3 @@ BankQuestionnaire.defaultProps = {
 };
 
 export default BankQuestionnaire;
-

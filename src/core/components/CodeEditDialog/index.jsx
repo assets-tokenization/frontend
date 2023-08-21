@@ -3,16 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { translate } from 'react-translate';
 import objectPath from 'object-path';
-import {
-  Dialog,
-  Toolbar,
-  Paper,
-  ListItem,
-  IconButton,
-  Typography,
-  Tabs,
-  Tab,
-} from '@mui/material';
+import { Dialog, Toolbar, Paper, ListItem, IconButton, Typography, Tabs, Tab } from '@mui/material';
 import withStyles from '@mui/styles/withStyles';
 import CloseIcon from '@mui/icons-material/Close';
 import CodeIcon from '@mui/icons-material/Code';
@@ -34,7 +25,9 @@ import 'ace-builds/src-noconflict/ext-searchbox';
 import 'ace-builds/src-noconflict/theme-twilight';
 import HTMLEditor from './editors/HTMLEditor';
 
-export const defaultHtml = (defaultHtmlValue) => (defaultHtmlValue ? `<!DOCTYPE html>
+export const defaultHtml = (defaultHtmlValue) =>
+  defaultHtmlValue
+    ? `<!DOCTYPE html>
 <html lang="uk">
   <head>
     <meta charset="UTF-8">
@@ -58,54 +51,55 @@ export const defaultHtml = (defaultHtmlValue) => (defaultHtmlValue ? `<!DOCTYPE 
   <body style="font-family: uaFontReg">
     
   </body>
-</html>` : '');
+</html>`
+    : '';
 
 const styles = (theme) => ({
   header: {
     padding: 0,
     backgroundColor: '#232323',
-    minHeight: 32,
+    minHeight: 32
   },
   title: {
     flexGrow: 1,
     color: '#E2E2E2',
-    padding: '0 10px',
+    padding: '0 10px'
   },
   button: {
-    color: '#E2E2E2!important',
+    color: '#E2E2E2!important'
   },
   dialog: {
     display: 'flex',
     '& .ace_editor': {
-      flex: 1,
-    },
+      flex: 1
+    }
   },
   paper: {
     position: 'fixed',
     background: '#fff',
     zIndex: 1000,
     maxHeight: 300,
-    overflow: 'auto',
+    overflow: 'auto'
   },
   editor: {
     flexGrow: 1,
-    overflow: 'hidden',
+    overflow: 'hidden'
   },
   tabs: {
     backgroundColor: '#232323',
-    margin: 0,
+    margin: 0
   },
   tab: {
-    color: '#fff',
+    color: '#fff'
   },
   codeButton: {
     position: 'absolute',
-    color: '#ffffff',
+    color: '#ffffff'
   },
   editorContainer: {
     width: '100%',
     height: '100%',
-    position: 'relative',
+    position: 'relative'
   },
   suggestText: {
     color: '#fff',
@@ -118,7 +112,7 @@ const styles = (theme) => ({
 });
 
 const editors = {
-  html: HTMLEditor,
+  html: HTMLEditor
 };
 
 const CodeEditDialog = (props) => {
@@ -154,7 +148,7 @@ const CodeEditDialog = (props) => {
     setSelection,
     cursorPosition,
     onFunctionChange,
-    saveEditorScrollTop,
+    saveEditorScrollTop
   } = useSelection(aceRef.current);
 
   const insertSuggestion = (suggested) => {
@@ -172,14 +166,12 @@ const CodeEditDialog = (props) => {
         caseSensitive: true,
         wholeWord: true,
         regExp: false,
-        preventScroll: true,
+        preventScroll: true
       };
 
       const range = editor.find(suggest, rangeProps);
 
-      range &&
-        range.start.row === row &&
-        editor.session.replace(range, suggested);
+      range && range.start.row === row && editor.session.replace(range, suggested);
     }
   };
 
@@ -245,7 +237,7 @@ const CodeEditDialog = (props) => {
 
     const styles = {
       top: row * 19 + 90,
-      left: column * 10 + 40,
+      left: column * 10 + 40
     };
 
     return (
@@ -256,9 +248,7 @@ const CodeEditDialog = (props) => {
             onClick={() => insertSuggestion(suggest)}
             className={classes.suggestText}
           >
-            <Typography>
-              {suggest}
-            </Typography>
+            <Typography>{suggest}</Typography>
           </ListItem>
         ))}
       </Paper>
@@ -293,41 +283,39 @@ const CodeEditDialog = (props) => {
   const editorContainer = (
     <div className={classes.editorContainer}>
       {renderEditorTabs()}
-      {
-        Editor && activeEditor === 1 ? (
-          <div className={classes.editor}>
-            <Editor value={setDefaultValue(value, mode)} onChange={onChange} />
-          </div>
-        ) : (
-          <AceEditor
-            {...rest}
-            readOnly={readOnly}
-            mode={mode}
-            onChange={onChange}
-            value={setDefaultValue(value, mode)}
-            ref={aceRef}
-            theme="twilight"
-            enableSnippets={true}
-            fontSize={14}
-            showPrintMargin={true}
-            showGutter={true}
-            highlightActiveLine={true}
-            wrapEnabled={true}
-            width="100%"
-            height="100%"
-            setOptions={{
-              enableBasicAutocompletion: true,
-              enableLiveAutocompletion: true,
-              enableSnippets: true,
-              showLineNumbers: true,
-              tabSize: 4,
-              highlightActiveLine: true
-            }}
-            onCursorChange={onCursorChangeHandler}
-            markers={markers}
-          />
-        )
-      }
+      {Editor && activeEditor === 1 ? (
+        <div className={classes.editor}>
+          <Editor value={setDefaultValue(value, mode)} onChange={onChange} />
+        </div>
+      ) : (
+        <AceEditor
+          {...rest}
+          readOnly={readOnly}
+          mode={mode}
+          onChange={onChange}
+          value={setDefaultValue(value, mode)}
+          ref={aceRef}
+          theme="twilight"
+          enableSnippets={true}
+          fontSize={14}
+          showPrintMargin={true}
+          showGutter={true}
+          highlightActiveLine={true}
+          wrapEnabled={true}
+          width="100%"
+          height="100%"
+          setOptions={{
+            enableBasicAutocompletion: true,
+            enableLiveAutocompletion: true,
+            enableSnippets: true,
+            showLineNumbers: true,
+            tabSize: 4,
+            highlightActiveLine: true
+          }}
+          onCursorChange={onCursorChangeHandler}
+          markers={markers}
+        />
+      )}
     </div>
   );
 
@@ -351,45 +339,43 @@ const CodeEditDialog = (props) => {
         </IconButton>
       </Toolbar>
 
-      {
-        functionEditorData ? (
-          <SplitPane minSize="50%">
-            {editorContainer}
-            <FunctionEditor
-              {...functionEditorData}
-              readOnly={readOnly}
-              onChange={onFunctionChange}
-              onClose={() => {
-                saveEditorScrollTop();
-                setFunctionEditorData();
-              }}
-            />
-          </SplitPane>
-        ) : editorContainer
-      }
+      {functionEditorData ? (
+        <SplitPane minSize="50%">
+          {editorContainer}
+          <FunctionEditor
+            {...functionEditorData}
+            readOnly={readOnly}
+            onChange={onFunctionChange}
+            onClose={() => {
+              saveEditorScrollTop();
+              setFunctionEditorData();
+            }}
+          />
+        </SplitPane>
+      ) : (
+        editorContainer
+      )}
 
       {renderSuggestion()}
 
-      {
-        functionBody ? (
-          <IconButton
-            className={classes.codeButton}
-            onClick={() => {
-              saveEditorScrollTop();
-              setFunctionEditorData({ functionRow, functionName, functionBody });
-            }}
-            style={
-              cursorPosition && {
-                top: cursorPosition.top + (Editor ? 40 : 0),
-                left: cursorPosition.left
-              }
+      {functionBody ? (
+        <IconButton
+          className={classes.codeButton}
+          onClick={() => {
+            saveEditorScrollTop();
+            setFunctionEditorData({ functionRow, functionName, functionBody });
+          }}
+          style={
+            cursorPosition && {
+              top: cursorPosition.top + (Editor ? 40 : 0),
+              left: cursorPosition.left
             }
-            size="large"
-          >
-            <CodeIcon />
-          </IconButton>
-        ) : null
-      }
+          }
+          size="large"
+        >
+          <CodeIcon />
+        </IconButton>
+      ) : null}
     </Dialog>
   );
 };

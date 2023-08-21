@@ -5,22 +5,14 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ConfirmDialog from 'components/ConfirmDialog';
 import { ChangeEvent } from 'components/JsonSchema';
 
-const ClearDataButton = ({
-  onChange,
-  actions = {},
-  disabled
-}) => {
+const ClearDataButton = ({ onChange, actions = {}, disabled }) => {
   const t = useTranslate('Elements');
   const [open, setOpen] = React.useState(false);
 
   return (
     <>
       <Tooltip title={t('ClearData')}>
-        <IconButton
-          onClick={() => setOpen(true)}
-          disabled={disabled}
-          size="large"
-        >
+        <IconButton onClick={() => setOpen(true)} disabled={disabled} size="large">
           <DeleteIcon />
         </IconButton>
       </Tooltip>

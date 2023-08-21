@@ -11,26 +11,26 @@ import useSuggestions from 'components/JsonSchema/editor/components/ElementDeskt
 
 const useStyles = makeStyles({
   root: {
-    flex: 1,
+    flex: 1
   },
   wrapper: {
     width: '100%',
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: '#141414',
+    backgroundColor: '#141414'
   },
   title: {
     padding: '10px 10px 10px 24px',
     '& > h2': {
       display: 'flex',
       alignItems: 'center',
-      color: '#ffffff',
-    },
+      color: '#ffffff'
+    }
   },
   closeBtn: {
-    color: '#ffffff',
-  },
+    color: '#ffffff'
+  }
 });
 
 const minifyOptions = {
@@ -46,7 +46,7 @@ const minifyOptions = {
   nameCache: null,
   safari10: false,
   toplevel: false,
-  output: { quote_style: 1 },
+  output: { quote_style: 1 }
 };
 
 const funcPrefix = 'const func=';
@@ -69,25 +69,18 @@ const FunctionEditor = ({
   const aceRef = React.useRef(null);
 
   const validationErrors = React.useMemo(
-    () =>
-      errors &&
-      errors.filter(({ type }) => !['info', 'warning'].includes(type)),
+    () => errors && errors.filter(({ type }) => !['info', 'warning'].includes(type)),
     [errors]
   );
 
-  const {
-    showSuggestionHandler,
-    Suggester
-  } = useSuggestions({
+  const { showSuggestionHandler, Suggester } = useSuggestions({
     aceRef,
     onSchemaChange,
     value: schemaValue
   });
 
   React.useEffect(() => {
-    setValue(
-      isHtmlEditor ? prettifyHtml(functionBody) : beautify(functionBody)
-    );
+    setValue(isHtmlEditor ? prettifyHtml(functionBody) : beautify(functionBody));
   }, [functionBody, isHtmlEditor]);
 
   const handleSave = async () => {
@@ -99,7 +92,7 @@ const FunctionEditor = ({
       onChange({
         functionRow,
         functionName,
-        functionBody: value.replace(/\n/gm, ''),
+        functionBody: value.replace(/\n/gm, '')
       });
 
       onClose();
@@ -119,7 +112,7 @@ const FunctionEditor = ({
       onChange({
         functionRow,
         functionName,
-        functionBody: minified,
+        functionBody: minified
       });
 
       onClose();
@@ -161,12 +154,10 @@ const FunctionEditor = ({
           showLineNumbers: true,
           tabSize: 4,
           useSoftTabs: true,
-          highlightActiveLine: true,
+          highlightActiveLine: true
         }}
       />
-      <Suggester
-        headerHeight={100}
-      />
+      <Suggester headerHeight={100} />
       {!readOnly ? (
         <DialogActions>
           <Button className={classes.closeBtn} onClick={onClose}>

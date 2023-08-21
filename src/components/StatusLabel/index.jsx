@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 import makeStyles from '@mui/styles/makeStyles';
-import classNames from "classnames";
+import classNames from 'classnames';
 
 const styles = (theme) => ({
   status: {
@@ -18,13 +18,13 @@ const styles = (theme) => ({
     [theme.breakpoints.down('sm')]: {
       fontSize: 10,
       lineHeight: '14px',
-      marginBottom: 10,
+      marginBottom: 10
     }
   },
   warning: {
     color: '#CA7900',
     backgroundColor: 'rgba(255, 229, 0, 0.20)',
-    border: '1px solid rgba(255, 229, 0, 0.40)',
+    border: '1px solid rgba(255, 229, 0, 0.40)'
   },
   archive: {
     color: '#9547F6',
@@ -35,11 +35,7 @@ const styles = (theme) => ({
 
 const useStyles = makeStyles(styles);
 
-const StatusLabel = ({
-  children,
-  pending,
-  finished
-}) => {
+const StatusLabel = ({ children, pending, finished }) => {
   const classes = useStyles();
 
   return (

@@ -10,12 +10,12 @@ import ElementList from './components/ElementList';
 const withStyles = makeStyles(() => ({
   root: {
     display: 'flex',
-    height: 'calc(100% - 48px)',
+    height: 'calc(100% - 48px)'
   },
   mainPane: {
     flex: 1,
-    borderRight: '#757575 1px solid',
-  },
+    borderRight: '#757575 1px solid'
+  }
 }));
 
 const VisualEditor = ({ newValue, editPath }) => {

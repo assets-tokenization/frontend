@@ -13,195 +13,197 @@ import { input, output } from 'components/JsonSchema/elements/Spreadsheet/dataMa
 
 import diff from 'helpers/diff';
 
-const errorMap = path => error => {
-    const rowPath = error.path.split('.').slice(path.length);
+const errorMap = (path) => (error) => {
+  const rowPath = error.path.split('.').slice(path.length);
 
-    return {
-        ...error,
-        relativePath: rowPath,
-        rowId: parseInt(rowPath[0], 10)
-    };
+  return {
+    ...error,
+    relativePath: rowPath,
+    rowId: parseInt(rowPath[0], 10)
+  };
 };
 
-const errorFilter = path => error => {
-    const errorPath = error.path.split('.');
-    const rootPath = errorPath.slice(0, path.length);
+const errorFilter = (path) => (error) => {
+  const errorPath = error.path.split('.');
+  const rootPath = errorPath.slice(0, path.length);
 
-    if (rootPath.length !== path.length) {
-        return false;
-    }
+  if (rootPath.length !== path.length) {
+    return false;
+  }
 
-    return !rootPath.filter((row, index) => row !== path[index]).length;
+  return !rootPath.filter((row, index) => row !== path[index]).length;
 };
 
 const useStyles = makeStyles(() => ({
-    errored: {
-        color: '#000'
-    },
-    grow: {
-        flexGrow: 1
-    },
-    errorMessage: {
-        marginLeft: 16,
-        color: '#f44336'
-    },
-    btnFullScreen: {
-        fontSize: 12
-    }
+  errored: {
+    color: '#000'
+  },
+  grow: {
+    flexGrow: 1
+  },
+  errorMessage: {
+    marginLeft: 16,
+    color: '#f44336'
+  },
+  btnFullScreen: {
+    fontSize: 12
+  }
 }));
 
 const DataTableContainer = ({
-    active,
-    sample,
-    description,
-    required,
-    error,
-    hidden,
-    value = [],
-    headers = [],
-    items = {},
-    onChange,
-    name,
-    originDocument,
-    readOnly,
-    hideReadOnlyActions,
-    htmlTemplate,
-    outsideEditScreen,
-    ...rest
+  active,
+  sample,
+  description,
+  required,
+  error,
+  hidden,
+  value = [],
+  headers = [],
+  items = {},
+  onChange,
+  name,
+  originDocument,
+  readOnly,
+  hideReadOnlyActions,
+  htmlTemplate,
+  outsideEditScreen,
+  ...rest
 }) => {
-    const t = useTranslate('Elements');
-    const classes = useStyles();
+  const t = useTranslate('Elements');
+  const classes = useStyles();
 
-    const [dataValue, setDataValue] = React.useState(value);
-    const [open, setOpen] = React.useState(false);
-    const [jumpTo, setJumpTo] = React.useState();
+  const [dataValue, setDataValue] = React.useState(value);
+  const [open, setOpen] = React.useState(false);
+  const [jumpTo, setJumpTo] = React.useState();
 
-    React.useEffect(() => {
-        if (diff(dataValue, value)) {
-            setDataValue(value);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [value]);
+  React.useEffect(() => {
+    if (diff(dataValue, value)) {
+      setDataValue(value);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
 
-    const data = input(dataValue, items);
-    const cellError = rest.errors && rest.errors[0];
-    const checkPath = cellError && cellError.path.split('.').shift() === name;
+  const data = input(dataValue, items);
+  const cellError = rest.errors && rest.errors[0];
+  const checkPath = cellError && cellError.path.split('.').shift() === name;
 
-    const setChanges = newValue => {
-        if (outsideEditScreen) {
-            onChange(newValue);
-        } else {
-            rest.actions.applyDocumentDiffs(diff(dataValue, newValue), [rest.stepName].concat(rest.path));
-        }
-    };
+  const setChanges = (newValue) => {
+    if (outsideEditScreen) {
+      onChange(newValue);
+    } else {
+      rest.actions.applyDocumentDiffs(diff(dataValue, newValue), [rest.stepName].concat(rest.path));
+    }
+  };
 
-    const handleCellsChange = (changes, additions) => !readOnly && output(val => {
+  const handleCellsChange = (changes, additions) =>
+    !readOnly &&
+    output(
+      (val) => {
         const newValue = val.data || val;
 
         if (diff(dataValue, newValue)) {
-            setDataValue([...newValue]);
-            setChanges(newValue);
+          setDataValue([...newValue]);
+          setChanges(newValue);
         }
-    }, dataValue, items)(changes, additions);
+      },
+      dataValue,
+      items
+    )(changes, additions);
 
-    const handleChange = ({ value, row, propName }) => {
-        const newValue = JSON.parse(JSON.stringify(dataValue));
+  const handleChange = ({ value, row, propName }) => {
+    const newValue = JSON.parse(JSON.stringify(dataValue));
 
-        if (!newValue[row]) {
-            newValue[row] = {};
-            rest.actions.applyDocumentDiffs(diff(dataValue, newValue), [rest.stepName].concat(rest.path));
-            dataValue[row] = {};
-            newValue[row][propName] = value.data || value;
-            rest.actions.applyDocumentDiffs(diff(dataValue, newValue), [rest.stepName].concat(rest.path));
-            return;
-        }
-
-        newValue[row][propName] = value.data || value;
-        setDataValue(newValue);
-        setChanges(newValue);
+    if (!newValue[row]) {
+      newValue[row] = {};
+      rest.actions.applyDocumentDiffs(diff(dataValue, newValue), [rest.stepName].concat(rest.path));
+      dataValue[row] = {};
+      newValue[row][propName] = value.data || value;
+      rest.actions.applyDocumentDiffs(diff(dataValue, newValue), [rest.stepName].concat(rest.path));
+      return;
     }
 
-    if (hidden) return null;
+    newValue[row][propName] = value.data || value;
+    setDataValue(newValue);
+    setChanges(newValue);
+  };
 
-    const tableError = error || (cellError && checkPath ? new Error(t('TableError')) : null);
-    const errors = rest.errors && rest.errors.filter(errorFilter(rest.path)).map(errorMap(rest.path));
+  if (hidden) return null;
 
-    return (
-        <>
-            <ElementGroupContainer
-                description={description}
-                sample={sample}
-                className={classes.errored}
-                required={required}
-                fullWidth={true}
-                actionButtons={(
-                    <>
-                        <Button
-                            onClick={() => setOpen(true)}
-                            color="inherit"
-                            startIcon={<FullscreenIcon />}
-                            classes={{
-                                label: classes.btnFullScreen
-                            }}
-                            disableRipple
-                            disableFocusRipple
-                        >
-                            {t('ToggleFullscreen')}
-                        </Button>
-                        
-                        {tableError ? (
-                            <Typography className={classes.errorMessage}>
-                                <EJVError error={tableError} />
-                            </Typography>
-                        ) : null}
-                    </>
-                )}
-                {...rest}
+  const tableError = error || (cellError && checkPath ? new Error(t('TableError')) : null);
+  const errors = rest.errors && rest.errors.filter(errorFilter(rest.path)).map(errorMap(rest.path));
+
+  return (
+    <>
+      <ElementGroupContainer
+        description={description}
+        sample={sample}
+        className={classes.errored}
+        required={required}
+        fullWidth={true}
+        actionButtons={
+          <>
+            <Button
+              onClick={() => setOpen(true)}
+              color="inherit"
+              startIcon={<FullscreenIcon />}
+              classes={{
+                label: classes.btnFullScreen
+              }}
+              disableRipple
+              disableFocusRipple
             >
-                <SpreadsheetErrors
-                    t={t}
-                    items={items}
-                    errors={errors}
-                    headers={headers}
-                    setJumpTo={setJumpTo}
-                />
-                <DataTable
-                    {...rest}
-                    name={name}
-                    items={items}
-                    headers={headers}
-                    height={600}
-                    data={data}
-                    value={dataValue}
-                    readOnly={readOnly}
-                    jumpTo={jumpTo}
-                    setJumpTo={setJumpTo}
-                    errors={errors}
-                    onChange={handleChange}
-                    onCellsChanged={handleCellsChange}
-                />
-            </ElementGroupContainer>
-            <FullScreenDialog
-                open={open}
-                title={description}
-                onClose={() => setOpen(false)}
-            >
-                <DataTable
-                    {...rest}
-                    name={name}
-                    items={items}
-                    headers={headers}
-                    height="100%"
-                    data={data}
-                    value={dataValue}
-                    readOnly={readOnly}
-                    errors={errors}
-                    onChange={handleChange}
-                    onCellsChanged={handleCellsChange}
-                />
-            </FullScreenDialog>
-        </>
-    );
+              {t('ToggleFullscreen')}
+            </Button>
+
+            {tableError ? (
+              <Typography className={classes.errorMessage}>
+                <EJVError error={tableError} />
+              </Typography>
+            ) : null}
+          </>
+        }
+        {...rest}
+      >
+        <SpreadsheetErrors
+          t={t}
+          items={items}
+          errors={errors}
+          headers={headers}
+          setJumpTo={setJumpTo}
+        />
+        <DataTable
+          {...rest}
+          name={name}
+          items={items}
+          headers={headers}
+          height={600}
+          data={data}
+          value={dataValue}
+          readOnly={readOnly}
+          jumpTo={jumpTo}
+          setJumpTo={setJumpTo}
+          errors={errors}
+          onChange={handleChange}
+          onCellsChanged={handleCellsChange}
+        />
+      </ElementGroupContainer>
+      <FullScreenDialog open={open} title={description} onClose={() => setOpen(false)}>
+        <DataTable
+          {...rest}
+          name={name}
+          items={items}
+          headers={headers}
+          height="100%"
+          data={data}
+          value={dataValue}
+          readOnly={readOnly}
+          errors={errors}
+          onChange={handleChange}
+          onCellsChanged={handleCellsChange}
+        />
+      </FullScreenDialog>
+    </>
+  );
 };
 
 export default DataTableContainer;

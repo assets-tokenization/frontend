@@ -1,34 +1,15 @@
-import React from "react";
-import classNames from "classnames";
-import {
-  Typography,
-  TextField,
-  Button,
-  FormControl,
-  FormHelperText,
-} from "@mui/material";
-import Fade from "@mui/material/Fade";
-import PageTitle from "components/PageTitle";
-import ListCard from "components/ListCard";
-import Stepper from "components/Stepper";
-import Card from "components/Card";
-import LoadingStep from "components/LoadingStep";
-import SuccessRegistration from "components/SuccessRegistration";
-import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-
-const data = [
-  {
-    title:
-      "Івано-Франківська обл., м. Івано-Франківськ, вул. Вʼячеслава Чорновола, 15",
-    number: "1209141981209",
-    tokenized: true,
-    type: 'Будинок',
-    totalArea: '6 сот',
-    livingArea: '140 м2',
-    selling: true,
-  },
-];
+import React from 'react';
+import classNames from 'classnames';
+import { Typography, TextField, Button, FormControl, FormHelperText } from '@mui/material';
+import Fade from '@mui/material/Fade';
+import PageTitle from 'components/PageTitle';
+import ListCard from 'components/ListCard';
+import Stepper from 'components/Stepper';
+import Card from 'components/Card';
+import LoadingStep from 'components/LoadingStep';
+import SuccessRegistration from 'components/SuccessRegistration';
+import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 const SellingStep = ({
   buyerData,
@@ -48,38 +29,32 @@ const SellingStep = ({
   setCreatingOffer,
   t,
   activeStep,
-  setActiveStep
+  setActiveStep,
+  objects
 }) => {
-
   const renderStep = React.useMemo(
     () => (
       <Fade in={true}>
         <div>
-          <PageTitle>
-            {t(creatingOffer ? "SellingTitle" : "NoSellingTitle")}
-          </PageTitle>
+          <PageTitle>{t(creatingOffer ? 'SellingTitle' : 'NoSellingTitle')}</PageTitle>
           {creatingOffer ? (
             <>
-              <Card
-                fullWidth={true}
-              >
+              <Card fullWidth={true}>
                 <Typography className={classes.briefInfoTitle}>
-                  {
-                    "Івано-Франківська обл., м. Івано-Франківськ, вул. Вʼячеслава Чорновола, 15"
-                  }
+                  {'Івано-Франківська обл., м. Івано-Франківськ, вул. Вʼячеслава Чорновола, 15'}
                 </Typography>
 
                 <div className={classes.cardDetails}>
                   <Typography className={classes.cardDetailsTitle}>
-                    {t("BuildType", { value: "Будинок" })}
+                    {t('BuildType', { value: 'Будинок' })}
                     {!isSM ? <span className={classes.dot} /> : null}
                   </Typography>
                   <Typography className={classes.cardDetailsTitle}>
-                    {t("BuildArea", { value: "6 сот" })}
+                    {t('BuildArea', { value: '6 сот' })}
                     <span className={classes.dot} />
                   </Typography>
                   <Typography className={classes.cardDetailsTitle}>
-                    {t("LivingArea", { value: "140 м2" })}
+                    {t('LivingArea', { value: '140 м2' })}
                   </Typography>
                 </div>
               </Card>
@@ -90,17 +65,17 @@ const SellingStep = ({
                     activeStep={activeStep}
                     steps={[
                       {
-                        label: t("Step1label"),
-                        description: t("Step1description"),
+                        label: t('Step1label'),
+                        description: t('Step1description')
                       },
                       {
-                        label: t("Step2label"),
-                        description: t("Step2description"),
+                        label: t('Step2label'),
+                        description: t('Step2description')
                       },
                       {
-                        label: t("Step3label"),
-                        description: t("Step3description"),
-                      },
+                        label: t('Step3label'),
+                        description: t('Step3description')
+                      }
                     ]}
                   />
                 </Card>
@@ -108,12 +83,10 @@ const SellingStep = ({
                 <Card>
                   {activeStep === 0 ? (
                     <div className={classes.cardContent}>
-                      <Typography className={classes.headline}>
-                        {t("UserIpnTitle")}
-                      </Typography>
+                      <Typography className={classes.headline}>{t('UserIpnTitle')}</Typography>
 
                       <Typography className={classes.subHeadline}>
-                        {t("UserIpnDescription")}
+                        {t('UserIpnDescription')}
                       </Typography>
 
                       {buyerData ? (
@@ -123,13 +96,13 @@ const SellingStep = ({
                           </Typography>
 
                           <Typography className={classes.rnokppShort}>
-                            {t("UserIpnShort")}
+                            {t('UserIpnShort')}
                           </Typography>
 
                           <Typography
                             className={classNames({
                               [classes.fieldHeadline]: true,
-                              [classes.fieldHeadlineSM]: true,
+                              [classes.fieldHeadlineSM]: true
                             })}
                           >
                             {buyerData.rkokpp}
@@ -143,7 +116,7 @@ const SellingStep = ({
                               }}
                             >
                               <ArrowBackOutlinedIcon />
-                              {t("Back")}
+                              {t('Back')}
                             </Button>
                             <Button
                               variant="contained"
@@ -151,16 +124,14 @@ const SellingStep = ({
                               className={classes.button}
                               onClick={() => setActiveStep(1)}
                             >
-                              {t("Continue")}
+                              {t('Continue')}
                               <ArrowForwardIcon />
                             </Button>
                           </div>
                         </>
                       ) : (
                         <>
-                          <Typography className={classes.fieldHeadline}>
-                            {t("UserIpn")}
-                          </Typography>
+                          <Typography className={classes.fieldHeadline}>{t('UserIpn')}</Typography>
 
                           <TextField
                             value={rnokpp}
@@ -169,22 +140,20 @@ const SellingStep = ({
                             maxLength={10}
                             variant="outlined"
                             margin="normal"
-                            placeholder={t("UserIpnPlaceHolder")}
+                            placeholder={t('UserIpnPlaceHolder')}
                             className={classes.textfield}
                             inputProps={{
-                              maxLength: 10,
+                              maxLength: 10
                             }}
                           />
 
                           {error ? (
                             <FormControl variant="standard" error={true}>
-                              <FormHelperText>
-                                {t("RequiredError")}
-                              </FormHelperText>
+                              <FormHelperText>{t('RequiredError')}</FormHelperText>
                             </FormControl>
                           ) : (
                             <Typography className={classes.fieldSample}>
-                              {t("UserIpnSample")}
+                              {t('UserIpnSample')}
                             </Typography>
                           )}
 
@@ -195,7 +164,7 @@ const SellingStep = ({
                                 setCreatingOffer(false);
                               }}
                             >
-                              {t("CancelProcessing")}
+                              {t('CancelProcessing')}
                             </Button>
                             <Button
                               variant="contained"
@@ -210,12 +179,12 @@ const SellingStep = ({
                                 setError(false);
 
                                 setBuyerData({
-                                  name: "Франко Іван Якович",
-                                  rkokpp: "1234567890",
+                                  name: 'Франко Іван Якович',
+                                  rkokpp: '1234567890'
                                 });
                               }}
                             >
-                              {t("Continue")}
+                              {t('Continue')}
                               <ArrowForwardIcon />
                             </Button>
                           </div>
@@ -227,17 +196,13 @@ const SellingStep = ({
                   {activeStep === 1 ? (
                     <>
                       <div className={classes.cardContent}>
-                        <Typography className={classes.headline}>
-                          {t("InsertSumTitle")}
-                        </Typography>
+                        <Typography className={classes.headline}>{t('InsertSumTitle')}</Typography>
 
                         <Typography className={classes.subHeadline}>
-                          {t("InsertSumDescription")}
+                          {t('InsertSumDescription')}
                         </Typography>
 
-                        <Typography className={classes.fieldHeadline}>
-                          {t("Price")}
-                        </Typography>
+                        <Typography className={classes.fieldHeadline}>{t('Price')}</Typography>
 
                         <TextField
                           value={price}
@@ -245,25 +210,23 @@ const SellingStep = ({
                           error={error}
                           variant="outlined"
                           margin="normal"
-                          placeholder={t("PricePlaceHolder")}
+                          placeholder={t('PricePlaceHolder')}
                           className={classes.textfield}
                           InputProps={{
-                            inputComponent: NumberFormatCustom,
+                            inputComponent: NumberFormatCustom
                           }}
                         />
 
                         {error ? (
                           <FormControl variant="standard" error={true}>
-                            <FormHelperText>
-                              {t("RequiredError")}
-                            </FormHelperText>
+                            <FormHelperText>{t('RequiredError')}</FormHelperText>
                           </FormControl>
                         ) : null}
 
                         <div
                           className={classNames({
                             [classes.actions]: true,
-                            [classes.alignLeft]: true,
+                            [classes.alignLeft]: true
                           })}
                         >
                           <Button
@@ -281,7 +244,7 @@ const SellingStep = ({
                               setActiveStep(2);
                             }}
                           >
-                            {t("Continue")}
+                            {t('Continue')}
                             <ArrowForwardIcon />
                           </Button>
                         </div>
@@ -291,26 +254,24 @@ const SellingStep = ({
 
                   {activeStep === 2 ? (
                     <LoadingStep
-                      title={t("SellingProcessingTitle")}
-                      description={t("SellingProcessingDescription")}
-                      actionText={t("CancelProcessing")}
+                      title={t('SellingProcessingTitle')}
+                      description={t('SellingProcessingDescription')}
+                      actionText={t('CancelProcessing')}
                       onClick={() => setActiveStep(3)}
                     />
                   ) : null}
 
                   {activeStep === 3 ? (
                     <SuccessRegistration
-                      title={t("SellingSuccessTitle")}
+                      title={t('SellingSuccessTitle')}
                       description={
                         <>
-                          {t("SellingSuccessDescription")}
-                          <span className={classes.price}>
-                            {formatPrice(price)} грн.{" "}
-                          </span>
-                          {t("SellingSuccessDescription2")}
+                          {t('SellingSuccessDescription')}
+                          <span className={classes.price}>{formatPrice(price)} грн. </span>
+                          {t('SellingSuccessDescription2')}
                         </>
                       }
-                      actionText={t("SuccessSelling")}
+                      actionText={t('SuccessSelling')}
                       redirectToHomeScreen={() => setCreatingOffer(false)}
                     />
                   ) : null}
@@ -319,25 +280,25 @@ const SellingStep = ({
             </>
           ) : (
             <>
-              {data.length ? (
+              {objects.length ? (
                 <>
-                  {data.map((item, index) => (
+                  {objects.map((item, index) => (
                     <ListCard
                       item={item}
                       key={index}
                       openDetails={toDetailsObject}
                       mainAction={(number) => {
-                        console.log("number", number);
+                        console.log('number', number);
                       }}
                       hideSecondaryAction={true}
-                      mainActionText={t("CancelSelling")}
+                      mainActionText={t('CancelSelling')}
                       sellingStatus={item?.selling}
                       detailsLink={`/market/${item.number}`}
                     />
                   ))}
                 </>
               ) : (
-                <div className={classes.noResults}>{t("NoSellingText")}</div>
+                <div className={classes.noResults}>{t('NoSellingText')}</div>
               )}
             </>
           )}
@@ -362,7 +323,8 @@ const SellingStep = ({
       setPrice,
       setCreatingOffer,
       NumberFormatCustom,
-      setError
+      setError,
+      objects
     ]
   );
 

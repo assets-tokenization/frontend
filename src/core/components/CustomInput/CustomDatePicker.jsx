@@ -24,23 +24,23 @@ const styles = (theme) => ({
       fontSize: 16,
       lineHeight: '18px',
       [theme.breakpoints.down('md')]: {
-        fontSize: 13,
-      },
-    },
+        fontSize: 13
+      }
+    }
   },
   deleteIconBtn: {
     width: 30,
-    height: 30,
+    height: 30
   },
   dateContainerWrapperDark: {
-    width: '100%',
+    width: '100%'
   },
   darkThemeRoot: {
     padding: 17,
-    ...theme.listBackground,
+    ...theme.listBackground
   },
   dateContainerDark: {
-    margin: 0,
+    margin: 0
   },
   darkThemeLabel: {
     width: '100%',
@@ -50,12 +50,12 @@ const styles = (theme) => ({
       borderRadius: '4px 4px 0px 0px',
       borderColor: 'transparent',
       '& span': {
-        display: 'none',
-      },
-    },
+        display: 'none'
+      }
+    }
   },
   underlineThemeLabel: {
-    paddingLeft: 7,
+    paddingLeft: 7
   },
   errorIcon: {
     '& svg': {
@@ -90,18 +90,24 @@ class CustomDatePicker extends Component {
     const dateText = date ? date.format(defaultFormat) : '';
     const dateTextFormatted = date ? date.format(incomingFormat) : '';
 
-    this.setState({
-      date,
-      dateText,
-    }, () => onChange(dateTextFormatted));
+    this.setState(
+      {
+        date,
+        dateText
+      },
+      () => onChange(dateTextFormatted)
+    );
   };
 
   handleDelete = () => {
     const { onChange } = this.props;
 
-    this.setState({
-      dateText: '',
-    }, () => onChange(''));
+    this.setState(
+      {
+        dateText: ''
+      },
+      () => onChange('')
+    );
   };
 
   validateDate = (value, update) => {
@@ -114,15 +120,9 @@ class CustomDatePicker extends Component {
     if ((required && !isValid) || (!required && value && !isValid)) {
       error = t('FormatError');
     } else if (isValid) {
-      if (
-        moment(value, defaultFormat).toDate() <
-        moment(minDate, defaultFormat).toDate()
-      ) {
+      if (moment(value, defaultFormat).toDate() < moment(minDate, defaultFormat).toDate()) {
         error = t('MinDateError', { date: minDate });
-      } else if (
-        moment(value, defaultFormat).toDate() >
-        moment(maxDate, defaultFormat).toDate()
-      ) {
+      } else if (moment(value, defaultFormat).toDate() > moment(maxDate, defaultFormat).toDate()) {
         error = t('MaxDateError', { date: maxDate });
       } else if (update) {
         this.onChange(moment(value, defaultFormat));
@@ -146,10 +146,8 @@ class CustomDatePicker extends Component {
 
     this.setState({
       date: moment(date || new Date(), incomingFormat),
-      minDate: minDate
-        ? this.getIncomingDate(minDate)
-        : defaultMinDate.format(defaultFormat),
-      maxDate: maxDate ? this.getIncomingDate(maxDate) : null,
+      minDate: minDate ? this.getIncomingDate(minDate) : defaultMinDate.format(defaultFormat),
+      maxDate: maxDate ? this.getIncomingDate(maxDate) : null
     });
 
     if (date.length > 0) {
@@ -197,7 +195,7 @@ class CustomDatePicker extends Component {
           placeholder: ''
         }}
         error={!!error}
-        {...(dateText && dateText.length)
+        {...(dateText && dateText.length
           ? {
               InputProps: {
                 endAdornment: (
@@ -215,8 +213,7 @@ class CustomDatePicker extends Component {
                 )
               }
             }
-          : {}
-        }
+          : {})}
       />
     );
   };
@@ -234,14 +231,12 @@ class CustomDatePicker extends Component {
       disableToolbar,
       setId,
       value,
-      error: errorProps,
+      error: errorProps
     } = this.props;
 
     const { date, dateText, error, minDate, maxDate, open } = this.state;
 
-    const pickerId = setId
-      ? setId(`date-picker ${id}`)
-      : setComponentsId('date-picker')(` ${id} `);
+    const pickerId = setId ? setId(`date-picker ${id}`) : setComponentsId('date-picker')(` ${id} `);
 
     const dateLimits = {};
 
@@ -256,7 +251,7 @@ class CustomDatePicker extends Component {
     return (
       <div
         className={classNames({
-          [classes.dateContainerWrapperDark]: darkTheme,
+          [classes.dateContainerWrapperDark]: darkTheme
         })}
       >
         <DesktopDatePicker
@@ -286,24 +281,22 @@ class CustomDatePicker extends Component {
             onChange: this.onInputChange,
             classes: {
               underline: classNames({
-                [classes.underlineThemeLabel]: darkTheme,
-              }),
-            },
+                [classes.underlineThemeLabel]: darkTheme
+              })
+            }
           }}
           // eslint-disable-next-line react/jsx-no-duplicate-props
-          inputProps={
-            {
-              readOnly: true,
-              tabindex: '0',
-              role: 'button',
-              'aria-label': this.checkLabelDate()
-            }
-          }
+          inputProps={{
+            readOnly: true,
+            tabindex: '0',
+            role: 'button',
+            'aria-label': this.checkLabelDate()
+          }}
           leftArrowButtonProps={{
-            'aria-label': t('BtnPrevMonth'),
+            'aria-label': t('BtnPrevMonth')
           }}
           rightArrowButtonProps={{
-            'aria-label': t('BtnNextMonth'),
+            'aria-label': t('BtnNextMonth')
           }}
           disableMaskedInput={true}
           disableHighlightToday={true}
@@ -325,21 +318,13 @@ CustomDatePicker.propTypes = {
   label: PropTypes.string,
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   helperText: PropTypes.string,
-  minDate: PropTypes.oneOfType([
-    PropTypes.instanceOf(Date),
-    PropTypes.string,
-    PropTypes.object,
-  ]),
-  maxDate: PropTypes.oneOfType([
-    PropTypes.instanceOf(Date),
-    PropTypes.string,
-    PropTypes.object,
-  ]),
+  minDate: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string, PropTypes.object]),
+  maxDate: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string, PropTypes.object]),
   margin: PropTypes.string,
   required: PropTypes.bool,
   fullWidth: PropTypes.bool,
   darkTheme: PropTypes.bool,
-  disableToolbar: PropTypes.bool,
+  disableToolbar: PropTypes.bool
 };
 
 CustomDatePicker.defaultProps = {
@@ -356,7 +341,7 @@ CustomDatePicker.defaultProps = {
   required: true,
   fullWidth: true,
   darkTheme: false,
-  disableToolbar: false,
+  disableToolbar: false
 };
 
 const styled = withStyles(styles)(CustomDatePicker);

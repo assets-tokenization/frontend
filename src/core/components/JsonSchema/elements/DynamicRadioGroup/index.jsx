@@ -44,7 +44,9 @@ class DynamicRadioGroup extends React.Component {
 
     if (key.displayName) return key.displayName;
 
-    if (labelKeys) { return (labelKeys || []).map((el) => el && key[el] && key[el]).join(' '); }
+    if (labelKeys) {
+      return (labelKeys || []).map((el) => el && key[el] && key[el]).join(' ');
+    }
 
     return this.renderTitle(key);
   };
@@ -53,7 +55,7 @@ class DynamicRadioGroup extends React.Component {
     if (!array) return [];
     const addId = array.map((item, index) => ({
       ...item,
-      id: item?.id || this.renderTitle(item).split(' ').join(`_${index}`).toLowerCase(),
+      id: item?.id || this.renderTitle(item).split(' ').join(`_${index}`).toLowerCase()
     }));
 
     const seen = {};
@@ -79,9 +81,7 @@ class DynamicRadioGroup extends React.Component {
   getControlData = () => {
     const { rootDocument, dataMapping } = this.props;
 
-    const data = this.uniq(
-      objectPath.get(rootDocument.data, this.getDataPath())
-    );
+    const data = this.uniq(objectPath.get(rootDocument.data, this.getDataPath()));
 
     if (!dataMapping) return data;
 
@@ -108,7 +108,7 @@ class DynamicRadioGroup extends React.Component {
 
         return {
           ...acc,
-          [param]: value,
+          [param]: value
         };
       }, {});
 
@@ -137,8 +137,7 @@ class DynamicRadioGroup extends React.Component {
   }
 
   render() {
-    const { classes, description, required, error, hidden, noMargin, path } =
-      this.props;
+    const { classes, description, required, error, hidden, noMargin, path } = this.props;
 
     if (hidden) return null;
 
@@ -172,7 +171,7 @@ DynamicRadioGroup.propTypes = {
   hidden: PropTypes.bool,
   labelKeys: PropTypes.array,
   noMargin: PropTypes.bool,
-  locked: PropTypes.bool,
+  locked: PropTypes.bool
 };
 
 DynamicRadioGroup.defaultProps = {
@@ -187,7 +186,7 @@ DynamicRadioGroup.defaultProps = {
   hidden: false,
   labelKeys: null,
   noMargin: false,
-  locked: false,
+  locked: false
 };
 
 export default withStyles(styles)(DynamicRadioGroup);

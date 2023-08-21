@@ -20,28 +20,18 @@ const toOption = (option) =>
   option && {
     ...option,
     label: option && option.stringified,
-    value: option && option.id,
+    value: option && option.id
   };
 
 class RelatedKeyRegister extends React.Component {
   async componentDidMount() {
-    const {
-      records,
-      actions,
-      value,
-      demo,
-      originDocument,
-      cleanWhenHidden,
-      hidden,
-      excludeList,
-    } = this.props;
+    const { records, actions, value, demo, originDocument, cleanWhenHidden, hidden, excludeList } =
+      this.props;
     const keyIds = this.getKeyIds();
 
     let keyRecords;
     if (!demo && !(originDocument && originDocument.isFinal)) {
-      const params = excludeList
-        ? `excludeList=${JSON.stringify(excludeList)}`
-        : false;
+      const params = excludeList ? `excludeList=${JSON.stringify(excludeList)}` : false;
       keyRecords =
         records[keyIds] ||
         (await processList.hasOrSet(
@@ -67,7 +57,7 @@ class RelatedKeyRegister extends React.Component {
         new ChangeEvent(
           {
             ...(value || {}),
-            propertiesHasOptions: this.propertiesHasOptions(value, keyRecords),
+            propertiesHasOptions: this.propertiesHasOptions(value, keyRecords)
           },
           true
         )
@@ -79,9 +69,7 @@ class RelatedKeyRegister extends React.Component {
     const recordsPath = Object.values(properties)
       .map(({ keyId }) => keyId)
       .join(',');
-    const params = excludeList
-      ? `excludeList=${JSON.stringify(excludeList)}`
-      : false;
+    const params = excludeList ? `excludeList=${JSON.stringify(excludeList)}` : false;
     const path = `${recordsPath}${params ? `,${params}` : ''}`;
     return path;
   };
@@ -102,19 +90,12 @@ class RelatedKeyRegister extends React.Component {
     if (propertyIndex) {
       const parentPropertyName = Object.keys(properties)[propertyIndex - 1];
       const parentValues = [].concat(value[parentPropertyName]).filter(Boolean);
-      const parentRelationIds = parentValues.map(
-        ({ isRelationId }) => isRelationId
-      );
-      options = options.filter(({ isRelationLink }) =>
-        parentRelationIds.includes(isRelationLink)
-      );
+      const parentRelationIds = parentValues.map(({ isRelationId }) => isRelationId);
+      options = options.filter(({ isRelationLink }) => parentRelationIds.includes(isRelationLink));
     }
 
     return (
-      options &&
-      options
-        .sort((a, b) => a.stringified.localeCompare(b.stringified))
-        .map(toOption)
+      options && options.sort((a, b) => a.stringified.localeCompare(b.stringified)).map(toOption)
     );
   };
 
@@ -146,19 +127,13 @@ class RelatedKeyRegister extends React.Component {
       .forEach((child) => {
         const childPropertyIndex = propertyNames.indexOf(child);
         const parentPropertyName = propertyNames[childPropertyIndex - 1];
-        const parentPropertyValues = []
-          .concat(newValue[parentPropertyName])
-          .filter(Boolean);
-        const parentRelationIds = parentPropertyValues.map(
-          ({ isRelationId }) => isRelationId
-        );
+        const parentPropertyValues = [].concat(newValue[parentPropertyName]).filter(Boolean);
+        const parentRelationIds = parentPropertyValues.map(({ isRelationId }) => isRelationId);
 
         const childValue = []
           .concat(newValue[child])
           .filter(Boolean)
-          .filter(({ isRelationLink }) =>
-            parentRelationIds.includes(isRelationLink)
-          );
+          .filter(({ isRelationLink }) => parentRelationIds.includes(isRelationLink));
 
         const { multiple: childMultiple } = properties[child];
         newValue[child] = childMultiple ? childValue : childValue.shift();
@@ -166,7 +141,7 @@ class RelatedKeyRegister extends React.Component {
 
     const val = {
       ...newValue,
-      propertiesHasOptions: this.propertiesHasOptions(newValue),
+      propertiesHasOptions: this.propertiesHasOptions(newValue)
     };
 
     onChange && onChange(new ChangeEvent(val, true));
@@ -179,11 +154,7 @@ class RelatedKeyRegister extends React.Component {
       const options = this.getOptions(propertyName, newValue, keyRecords);
       return {
         ...acc,
-        [propertyName]: !!(
-          this.hasParentValue(propertyName, newValue) &&
-          options &&
-          options.length
-        ),
+        [propertyName]: !!(this.hasParentValue(propertyName, newValue) && options && options.length)
       };
     }, {});
   };
@@ -215,13 +186,7 @@ class RelatedKeyRegister extends React.Component {
 
     if (typeof hidden === 'boolean') return hidden;
 
-    const isHiddenEval = evaluate(
-      hidden,
-      rootDocument.data,
-      value,
-      parentValue,
-      userInfo
-    );
+    const isHiddenEval = evaluate(hidden, rootDocument.data, value, parentValue, userInfo);
 
     if (isHiddenEval instanceof Error) return false;
 
@@ -239,19 +204,16 @@ class RelatedKeyRegister extends React.Component {
       readOnly,
       useOwnContainer,
       renderEmptyProperties,
-      active,
+      active
     } = this.props;
 
     const options = this.getOptions(propertyName, value || {});
 
-    const error = errors.find(
-      (err) => err.path === path.concat(propertyName).join('.')
-    );
+    const error = errors.find((err) => err.path === path.concat(propertyName).join('.'));
 
     if (
       !renderEmptyProperties &&
-      (!this.hasParentValue(propertyName, value || {}) ||
-        (options && !options.length))
+      (!this.hasParentValue(propertyName, value || {}) || (options && !options.length))
     ) {
       return null;
     }
@@ -271,10 +233,7 @@ class RelatedKeyRegister extends React.Component {
         bottomSample={true}
         error={error}
         noMargin={noMargin}
-        required={
-          Array.isArray(schema.required) &&
-          schema.required.includes(propertyName)
-        }
+        required={Array.isArray(schema.required) && schema.required.includes(propertyName)}
       >
         <Select
           id={path.concat(propertyName).join('-')}
@@ -330,9 +289,7 @@ class RelatedKeyRegister extends React.Component {
         {...rest}
       >
         {Object.keys(properties).map(this.renderProperty)}
-        {equilPath(triggerExternalPath, [stepName].concat(path))
-          ? externalReaderMessage
-          : null}
+        {equilPath(triggerExternalPath, [stepName].concat(path)) ? externalReaderMessage : null}
       </ElementGroupContainer>
     );
   }
@@ -378,24 +335,18 @@ RelatedKeyRegister.defaultProps = {
   useOwnContainer: defaultProps.useOwnContainer,
   renderEmptyProperties: false,
   excludeList: null,
-  active: true,
+  active: true
 };
 
-const mapStateToPops = ({
-  registry: { relatedRecords },
-  auth: { info: userInfo },
-}) => ({
+const mapStateToPops = ({ registry: { relatedRecords }, auth: { info: userInfo } }) => ({
   records: relatedRecords,
-  userInfo,
+  userInfo
 });
 
 const mapDispatchToProps = (dispatch) => ({
   actions: {
-    requestRegisterRelatedKeyRecords: bindActionCreators(
-      requestRegisterRelatedKeyRecords,
-      dispatch
-    ),
-  },
+    requestRegisterRelatedKeyRecords: bindActionCreators(requestRegisterRelatedKeyRecords, dispatch)
+  }
 });
 
 export default connect(mapStateToPops, mapDispatchToProps)(RelatedKeyRegister);

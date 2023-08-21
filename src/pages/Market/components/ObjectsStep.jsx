@@ -1,31 +1,13 @@
-import React from "react";
-import classNames from "classnames";
-import { Typography, Button, Tabs, Tab } from "@mui/material";
-import Fade from "@mui/material/Fade";
-import PageTitle from "components/PageTitle";
-import ListCard from "components/ListCard";
-
-const data = [
-  {
-    title:
-      "Івано-Франківська обл., м. Івано-Франківськ, вул. Вʼячеслава Чорновола, 15",
-    number: "1209141981209",
-    tokenized: true,
-    type: 'Будинок',
-    totalArea: '6 сот',
-    livingArea: '140 м2',
-  },
-  {
-    title:
-      "Івано-Франківська обл., м. Івано-Франківськ, вул. Симона Петлюри, 666",
-    number: "3209121419812",
-    tokenized: true,
-    type: 'Будинок',
-    totalArea: '66 сот',
-    livingArea: '40 м2',
-    finished: true,
-  },
-];
+import React from 'react';
+import classNames from 'classnames';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Fade from '@mui/material/Fade';
+import PageTitle from 'components/PageTitle';
+import ListCard from 'components/ListCard';
+import ProgressLine from 'components/Preloader/ProgressLine';
 
 const ObjectsStep = ({
   t,
@@ -36,14 +18,16 @@ const ObjectsStep = ({
   setTab,
   setPage,
   setCreatingOffer,
+  objects,
+  loading
 }) => {
   const renderStep = React.useMemo(
     () => (
       <Fade in={true}>
         <div>
-          <PageTitle>
-            {t("Title")}
-          </PageTitle>
+          <PageTitle>{t('Title')}</PageTitle>
+
+          <ProgressLine loading={loading} />
 
           <Tabs
             value={tab}
@@ -52,60 +36,59 @@ const ObjectsStep = ({
             textColor="primary"
             className={classes.tabsWrapper}
             classes={{
-              root: classes.tabsRoot,
+              root: classes.tabsRoot
             }}
           >
             <Tab
-              label={t("ObjectsTab")}
+              label={t('ObjectsTab')}
               className={classNames(classes.tab, classes.tabButton)}
               classes={{
                 root: classes.tab,
-                selected: classes.tabSelected,
+                selected: classes.tabSelected
               }}
             />
             <Tab
-              label={t("ArchiveTab")}
+              label={t('ArchiveTab')}
               className={classNames(classes.tab, classes.tabButton)}
               classes={{
                 root: classes.tab,
-                selected: classes.tabSelected,
+                selected: classes.tabSelected
               }}
             />
           </Tabs>
 
-
-          {data.length ? (
+          {!loading ? (
             <>
-              {
-                data
-                .filter((item) => tab === 0 ? !item?.finished : item?.finished)
-                .map((item, index) => (
-                  <ListCard
-                    item={item}
-                    key={index}
-                    finished={item?.finished}
-                    openDetails={toDetailsObject}
-                    mainAction={(number) => {
-                      setCreatingOffer(number);
-                      setPage("Selling");
-                    }}
-                    secondaryActionText={t("MoveToMyObjects")}
-                    mainActionText={t("CreateOrder")}
-                    detailsLink={`/market/${item.number}`}
-                  />
-                ))
-              }
+              {objects.length ? (
+                <>
+                  {objects
+                    .filter((item) => (tab === 0 ? !item?.finished : item?.finished))
+                    .map((item, index) => (
+                      <ListCard
+                        item={item}
+                        key={index}
+                        finished={item?.finished}
+                        openDetails={toDetailsObject}
+                        mainAction={(number) => {
+                          setCreatingOffer(number);
+                          setPage('Selling');
+                        }}
+                        secondaryActionText={t('MoveToMyObjects')}
+                        mainActionText={t('CreateOrder')}
+                        detailsLink={`/market/${item.number}`}
+                      />
+                    ))}
+                </>
+              ) : (
+                <>
+                  <Typography className={classes.emptyStateText}>{t('EmptyState')}</Typography>
+                  <Button variant="contained" onClick={toMyObjects}>
+                    {t('NavigateText')}
+                  </Button>
+                </>
+              )}
             </>
-          ) : (
-            <>
-              <Typography className={classes.emptyStateText}>
-                {t("EmptyState")}
-              </Typography>
-              <Button variant="contained" onClick={toMyObjects}>
-                {t("NavigateText")}
-              </Button>
-            </>
-          )}
+          ) : null}
         </div>
       </Fade>
     ),
@@ -118,6 +101,8 @@ const ObjectsStep = ({
       setTab,
       setPage,
       setCreatingOffer,
+      loading,
+      objects
     ]
   );
 

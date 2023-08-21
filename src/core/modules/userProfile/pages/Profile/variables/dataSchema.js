@@ -2,4 +2,4 @@
 // method validateProfile
 // /src/application/modules/tasks/pages/Task/index.jsx
 
-export default (data) => (data);
+export default (data) => data;

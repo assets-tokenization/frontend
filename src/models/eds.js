@@ -1,33 +1,33 @@
-import serverList from "./../variables/CAs";
+import serverList from './../variables/CAs';
 
 const eds = {
   state: {
     encryptedKey: null,
     serverList: serverList.map((option) => ({
       ...option,
-      name: option.issuerCNs.shift(),
+      name: option.issuerCNs.shift()
     })),
     kmTypes: [],
     inited: false,
-    error: null,
+    error: null
   },
   reducers: {
     setEncryptedKey(state, encryptedKey) {
       return {
         ...state,
-        encryptedKey,
+        encryptedKey
       };
     },
     clearTypes: (state) => ({
       ...state,
-      kmTypes: [],
+      kmTypes: []
     }),
     addKmType: (state, { type, index }) => {
       const { kmTypes } = state;
       kmTypes[index] = { name: type, index, devices: [] };
       return {
         ...state,
-        kmTypes,
+        kmTypes
       };
     },
     addKmDevice: (state, { device, typeIndex, deviceIndex }) => ({
@@ -38,28 +38,28 @@ const eds = {
               ...type,
               devices: (type.devices || []).concat({
                 index: deviceIndex,
-                name: device,
-              }),
+                name: device
+              })
             }
           : type
-      ),
+      )
     }),
     libraryInitSuccess: (state) => ({
       ...state,
-      inited: true,
+      inited: true
     }),
     libraryInitFailed: (state, error) => ({
       ...state,
       inited: true,
-      error,
-    }),
+      error
+    })
   },
   effects: (dispatch) => ({
     // setEncryptedKey: (payload) => {
     //     console.log('dispatch.eds', dispatch.eds);
     //     dispatch.eds.setEncryptedKey(payload);
     // }
-  }),
+  })
 };
 
 export default eds;

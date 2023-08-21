@@ -22,9 +22,7 @@ const Time = ({ classes, format, date }) => {
   if (date) {
     return (
       <Tooltip title={moment(date).fromNow()}>
-        <span className={classes.text}>
-          {moment(date).format(format)}
-        </span>
+        <span className={classes.text}>{moment(date).format(format)}</span>
       </Tooltip>
     );
   }

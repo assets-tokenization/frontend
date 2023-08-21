@@ -24,7 +24,7 @@ import 'ace-builds/src-noconflict/theme-twilight';
 const useStyles = makeStyles(() => ({
   root: {
     height: '100%',
-    display: 'flex',
+    display: 'flex'
   },
   wrapper: {
     flex: 1,
@@ -50,18 +50,13 @@ const defaultSchema = (t) => ({
   checkActive: '(documentData) => { return true; }',
   finalScreen: {
     title: t('finalScreenTitle'),
-    subtitle: t('finalScreenSubtitle'),
+    subtitle: t('finalScreenSubtitle')
   },
   calcTriggers: [],
-  properties: {},
+  properties: {}
 });
 
-const CodeEditor = ({
-  newValue,
-  onSchemaChange,
-  onValidate,
-  handleSave
-}) => {
+const CodeEditor = ({ newValue, onSchemaChange, onValidate, handleSave }) => {
   const t = useTranslate('Elements');
   const classes = useStyles();
   const [markers, setMarkers] = React.useState([]);
@@ -82,13 +77,10 @@ const CodeEditor = ({
     setSelection,
     cursorPosition,
     onFunctionChange,
-    saveEditorScrollTop,
+    saveEditorScrollTop
   } = useSelection(aceRef.current);
 
-  const {
-    showSuggestionHandler,
-    Suggester
-  } = useSuggestions({
+  const { showSuggestionHandler, Suggester } = useSuggestions({
     aceRef,
     onSchemaChange,
     value,
@@ -127,7 +119,7 @@ const CodeEditor = ({
             return parsedCode;
           }
           return JSON.parse(parsedCode);
-        }
+        };
         const code = getCode();
 
         if (!code) return;
@@ -138,9 +130,7 @@ const CodeEditor = ({
 
         let insertData = `"${controlName}": ${replacedNewLine}`;
 
-        const prevSymbol = editor.session.getLine(position.row)[
-          position.column - 1
-        ];
+        const prevSymbol = editor.session.getLine(position.row)[position.column - 1];
 
         const nextSymbol = editor.session.getLine(position.row)[position.column];
 
@@ -148,7 +138,7 @@ const CodeEditor = ({
         if (nextSymbol === '"') insertData = insertData + ',';
         if (prevSymbol === ',') insertData = insertData + ',';
         if (nextSymbol === undefined) insertData = insertData + ',';
-    
+
         editor.session.insert(position, insertData.replace(/,,/g, ','));
       };
 
@@ -182,15 +172,15 @@ const CodeEditor = ({
             } else if (typeof prevValue === 'object') {
               objectPath.set(schemaValue, key, {
                 ...prevValue,
-                ...newValue,
+                ...newValue
               });
             }
           }
         });
-        
+
         editor.session.setValue(JSON.stringify(schemaValue, null, 4));
       };
-            
+
       insertCode();
 
       insertTriggers();
@@ -198,14 +188,12 @@ const CodeEditor = ({
       insertAddition();
 
       const droppedState = editor.session.getValue();
-  
+
       try {
         const parsed = JSON.parse(droppedState);
         editor.session.setValue(JSON.stringify(parsed, null, 4));
         onSchemaChange(parsed);
-        folds.forEach(({ start }) =>
-          editor.session.$toggleFoldWidget(start.row, {})
-        );
+        folds.forEach(({ start }) => editor.session.$toggleFoldWidget(start.row, {}));
       } catch (e) {
         console.log('parse error', e);
       }
@@ -227,72 +215,64 @@ const CodeEditor = ({
       const { editor } = aceRef.current;
       setFolds(Array.from(editor.session.$foldData) || []);
       setNewElement(item);
-    },
+    }
   });
 
   useJson5Validator(aceRef, [value]);
 
   const editorContainer = (
     <div className={classes.editorContainer}>
-        <AceEditor
-          ref={aceRef}
-          mode="json5"
-          theme="twilight"
-          fontSize={14}
-          width="100%"
-          height="100%"
-          showPrintMargin={true}
-          showGutter={true}
-          highlightActiveLine={true}
-          wrapEnabled={true}
-          value={value}
-          onValidate={onValidate}
-          onChange={
-            (changed) => {
-              setValue(changed);
-              onSchemaChange(changed);
+      <AceEditor
+        ref={aceRef}
+        mode="json5"
+        theme="twilight"
+        fontSize={14}
+        width="100%"
+        height="100%"
+        showPrintMargin={true}
+        showGutter={true}
+        highlightActiveLine={true}
+        wrapEnabled={true}
+        value={value}
+        onValidate={onValidate}
+        onChange={(changed) => {
+          setValue(changed);
+          onSchemaChange(changed);
+        }}
+        onCursorChange={onCursorChangeHandler}
+        setOptions={{
+          enableBasicAutocompletion: true,
+          enableLiveAutocompletion: true,
+          enableSnippets: true,
+          showLineNumbers: true,
+          tabSize: 4,
+          useSoftTabs: true,
+          highlightActiveLine: true
+        }}
+        markers={markers}
+      />
+      {functionBody ? (
+        <IconButton
+          size="large"
+          className={classes.button}
+          onClick={() => {
+            saveEditorScrollTop();
+            setFunctionEditorData({
+              functionRow,
+              functionName,
+              functionBody
+            });
+          }}
+          style={
+            cursorPosition && {
+              top: cursorPosition.top - 42,
+              left: cursorPosition.left + 42
             }
           }
-          onCursorChange={onCursorChangeHandler}
-          setOptions={
-            {
-              enableBasicAutocompletion: true,
-              enableLiveAutocompletion: true,
-              enableSnippets: true,
-              showLineNumbers: true,
-              tabSize: 4,
-              useSoftTabs: true,
-              highlightActiveLine: true
-            }
-          }
-          markers={markers}
-        />
-      {
-        functionBody ? (
-          <IconButton
-            size="large"
-            className={classes.button}
-            onClick={
-              () => {
-                saveEditorScrollTop();
-                setFunctionEditorData({
-                  functionRow,
-                  functionName,
-                  functionBody
-                });
-              }
-            }
-            style={
-              cursorPosition && {
-                top: cursorPosition.top - 42,
-                left: cursorPosition.left + 42
-              }
-            }
-          >
-            <CodeIcon />
-          </IconButton>
-        ) : null
-      }
+        >
+          <CodeIcon />
+        </IconButton>
+      ) : null}
       <Suggester />
     </div>
   );
@@ -301,24 +281,24 @@ const CodeEditor = ({
     <div className={classes.root}>
       <SnippetList />
       <div className={classes.wrapper} ref={drop}>
-        {
-          functionEditorData ? (
-            <SplitPane minSize="50%">
-              {editorContainer}
-              <FunctionEditor
-                {...functionEditorData}
-                schemaValue={value}
-                classes={classes}
-                onChange={onFunctionChange}
-                onSchemaChange={onSchemaChange}
-                onClose={() => {
-                  saveEditorScrollTop();
-                  setFunctionEditorData();
-                }}
-              />
-            </SplitPane>
-          ) : editorContainer
-        }
+        {functionEditorData ? (
+          <SplitPane minSize="50%">
+            {editorContainer}
+            <FunctionEditor
+              {...functionEditorData}
+              schemaValue={value}
+              classes={classes}
+              onChange={onFunctionChange}
+              onSchemaChange={onSchemaChange}
+              onClose={() => {
+                saveEditorScrollTop();
+                setFunctionEditorData();
+              }}
+            />
+          </SplitPane>
+        ) : (
+          editorContainer
+        )}
         <ElementIdDialog
           open={!!newElement}
           variant="outlined"

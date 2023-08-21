@@ -8,43 +8,52 @@ import Preloader from 'components/Preloader';
 
 import config from 'config';
 
-const PrivateRoute = ({ location, redirect, component: Component, userInfo, userUnits, access, uiFilter, uiFilters, ...rest }) => {
-    if (access && !checkAccess(access, userInfo, userUnits)) {
-        history.replace('/');
-        return <Preloader flex={true} />;
+const PrivateRoute = ({
+  location,
+  redirect,
+  component: Component,
+  userInfo,
+  userUnits,
+  access,
+  uiFilter,
+  uiFilters,
+  ...rest
+}) => {
+  if (access && !checkAccess(access, userInfo, userUnits)) {
+    history.replace('/');
+    return <Preloader flex={true} />;
+  }
+
+  if (uiFilter && config.useUIFilters) {
+    if (!uiFilters) {
+      return <Preloader flex={true} />;
     }
 
-    if (uiFilter && config.useUIFilters) {
-        if (!uiFilters) {
-            return <Preloader flex={true} />;
-        }
-
-        if (!(uiFilters || []).find(({ filter }) => filter === uiFilter)) {
-            history.replace('/messages');
-            return <Preloader flex={true} />;
-        }
+    if (!(uiFilters || []).find(({ filter }) => filter === uiFilter)) {
+      history.replace('/messages');
+      return <Preloader flex={true} />;
     }
+  }
 
-    const RouteComponent = redirect ? Redirect : Route;
+  const RouteComponent = redirect ? Redirect : Route;
 
-    return (
-        <RouteComponent
-            {...rest}
-            render={(props) => {
-                const { match: { params } } = props;
+  return (
+    <RouteComponent
+      {...rest}
+      render={(props) => {
+        const {
+          match: { params }
+        } = props;
 
-                return <Component {...props} {...rest} {...params} />;
-            }}
-        />
-    );
+        return <Component {...props} {...rest} {...params} />;
+      }}
+    />
+  );
 };
 
 const translated = translate('PageTitles')(PrivateRoute);
-export default connect(({
-    app: { uiFilters = [] } = {},
-    auth: { userUnits, info }
-}) => ({
-    userUnits: userUnits || [],
-    userInfo: info,
-    uiFilters
+export default connect(({ app: { uiFilters = [] } = {}, auth: { userUnits, info } }) => ({
+  userUnits: userUnits || [],
+  userInfo: info,
+  uiFilters
 }))(translated);

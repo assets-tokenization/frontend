@@ -1,1 +1,1 @@
-export default str => decodeURIComponent(escape(window.atob(str)));
+export default (str) => decodeURIComponent(escape(window.atob(str)));

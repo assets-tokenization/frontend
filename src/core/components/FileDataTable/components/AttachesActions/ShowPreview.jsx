@@ -7,24 +7,14 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import 'assets/css/pg.viewer.css';
 
 const ShowPreview = (props) => {
-  const {
-    item,
-    itemId,
-    fileStorage,
-    handleDownloadFile,
-    darkTheme,
-    t,
-    previewIcon
-  } = props;
+  const { item, itemId, fileStorage, handleDownloadFile, darkTheme, t, previewIcon } = props;
 
   const [showPreview, setShowPreview] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
 
   const getFile = () => {
     if (itemId) return fileStorage[itemId];
-    return (
-      (fileStorage || {})[item.id] || (fileStorage || {})[item.downloadToken]
-    );
+    return (fileStorage || {})[item.id] || (fileStorage || {})[item.downloadToken];
   };
 
   const showPreviewDialog = async () => {
@@ -50,7 +40,7 @@ const ShowPreview = (props) => {
   const icon = loading ? (
     <CircularProgress size={24} />
   ) : (
-    previewIcon || (item.previewIcon || <VisibilityIcon />)
+    previewIcon || item.previewIcon || <VisibilityIcon />
   );
 
   const error = file instanceof Error ? file : null;
@@ -58,11 +48,7 @@ const ShowPreview = (props) => {
   return (
     <>
       <Tooltip title={t('ShowPreview')}>
-        <IconButton
-          onClick={showPreviewDialog}
-          id="show-preview-btn"
-          size="large"
-        >
+        <IconButton onClick={showPreviewDialog} id="show-preview-btn" size="large">
           {icon}
         </IconButton>
       </Tooltip>
@@ -85,12 +71,12 @@ ShowPreview.propTypes = {
   itemId: PropTypes.string.isRequired,
   fileStorage: PropTypes.object.isRequired,
   darkTheme: PropTypes.bool,
-  previewIcon: PropTypes.node,
+  previewIcon: PropTypes.node
 };
 
 ShowPreview.defaultProps = {
   darkTheme: false,
-  previewIcon: null,
+  previewIcon: null
 };
 
 export default translate('WorkflowPage')(ShowPreview);

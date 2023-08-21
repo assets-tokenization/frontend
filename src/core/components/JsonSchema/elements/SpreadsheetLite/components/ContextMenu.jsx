@@ -16,6 +16,6 @@ const ContextMenu = createContextMenuComponent((item) => {
   if (item.type === 'DELETE_ROW') {
     return <>{t('DELETE_ROW')}</>;
   }
-})
+});
 
-export default ContextMenu
+export default ContextMenu;

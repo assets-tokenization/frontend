@@ -1,22 +1,22 @@
 /* eslint-disable no-prototype-builtins */
 /* eslint-disable no-template-curly-in-string */
 
-import React from "react";
-import cleanDeep from "clean-deep";
-import PropTypes from "prop-types";
-import { translate } from "react-translate";
-import objectPath from "object-path";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import ExtReaderMessages from "modules/tasks/pages/Task/screens/EditScreen/components/ExtReaderMessages";
+import React from 'react';
+import cleanDeep from 'clean-deep';
+import PropTypes from 'prop-types';
+import { translate } from 'react-translate';
+import objectPath from 'object-path';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import ExtReaderMessages from 'modules/tasks/pages/Task/screens/EditScreen/components/ExtReaderMessages';
 
-import diff from "helpers/diff";
-import evaluate from "helpers/evaluate";
-import waiter from "helpers/waitForAction";
-import asyncFilter from "helpers/asyncFilter";
+import diff from 'helpers/diff';
+import evaluate from 'helpers/evaluate';
+import waiter from 'helpers/waitForAction';
+import asyncFilter from 'helpers/asyncFilter';
 
-import { setPopupData } from "actions/debugTools";
-import { externalReaderCheckData } from "application/actions/task";
+import { setPopupData } from 'actions/debugTools';
+import { externalReaderCheckData } from 'application/actions/task';
 
 import {
   Button,
@@ -25,132 +25,132 @@ import {
   DialogActions,
   FormControl,
   Typography,
-  DialogContent,
-} from "@mui/material";
+  DialogContent
+} from '@mui/material';
 
-import withStyles from "@mui/styles/withStyles";
+import withStyles from '@mui/styles/withStyles';
 
 import {
   SchemaForm,
   handleChangeAdapter,
   validateData,
   handleActionTriggers,
-  handleTriggers,
-} from "components/JsonSchema";
+  handleTriggers
+} from 'components/JsonSchema';
 
-import ProgressLine from "components/Preloader/ProgressLine";
-import CloseIcon from "assets/img/ic_close_big.svg";
+import ProgressLine from 'components/Preloader/ProgressLine';
+import CloseIcon from 'assets/img/ic_close_big.svg';
 
-import addParent from "helpers/addParentField";
-import queueFactory from "helpers/queueFactory";
+import addParent from 'helpers/addParentField';
+import queueFactory from 'helpers/queueFactory';
 
-import * as api from "services/api";
+import * as api from 'services/api';
 
 const STORE_VALUES_INTERVAL = 2000;
 
 const styles = (theme) => ({
   contentRoot: {
-    overflowY: "visible",
-    [theme.breakpoints.down("md")]: {
+    overflowY: 'visible',
+    [theme.breakpoints.down('md')]: {
       paddingLeft: 16,
-      paddingRight: 16,
-    },
+      paddingRight: 16
+    }
   },
   paperWidthSm: {
     padding: 56,
     paddingBottom: 80,
     maxWidth: 800,
     minWidth: 800,
-    maxHeight: "unset",
-    [theme.breakpoints.down("lg")]: {
+    maxHeight: 'unset',
+    [theme.breakpoints.down('lg')]: {
       padding: 5,
-      margin: "40px auto!important",
-      width: "95%",
-      maxWidth: "unset",
-      minWidth: "unset",
-      paddingTop: 35,
-    },
+      margin: '40px auto!important',
+      width: '95%',
+      maxWidth: 'unset',
+      minWidth: 'unset',
+      paddingTop: 35
+    }
   },
   paperScrollBody: {
-    [theme.breakpoints.down("md")]: {
-      maxWidth: "calc(100% - 32px)!important",
+    [theme.breakpoints.down('md')]: {
+      maxWidth: 'calc(100% - 32px)!important',
       paddingLeft: 0,
       paddingRight: 0,
       paddingBottom: 0,
-      paddingTop: 40,
-    },
+      paddingTop: 40
+    }
   },
   dialogActions: {
-    justifyContent: "start",
+    justifyContent: 'start',
     marginTop: 20,
     paddingLeft: 24,
     margin: 0,
-    [theme.breakpoints.down("lg")]: {
-      marginBottom: 20,
+    [theme.breakpoints.down('lg')]: {
+      marginBottom: 20
     },
-    [theme.breakpoints.down("md")]: {
+    [theme.breakpoints.down('md')]: {
       marginBottom: 16,
       padding: 0,
-      paddingLeft: 16,
-    },
+      paddingLeft: 16
+    }
   },
   closeIcon: {
-    position: "absolute",
+    position: 'absolute',
     top: 42,
     right: 42,
     fontSize: 50,
     padding: 6,
     minWidth: 40,
-    [theme.breakpoints.down("lg")]: {
+    [theme.breakpoints.down('lg')]: {
       top: 7,
-      right: 10,
-    },
+      right: 10
+    }
   },
   closeIconImg: {
     width: 37,
     height: 37,
-    [theme.breakpoints.down("lg")]: {
+    [theme.breakpoints.down('lg')]: {
       width: 25,
-      height: 25,
-    },
+      height: 25
+    }
   },
   actionButton: {
     margin: 0,
-    marginRight: 15,
+    marginRight: 15
   },
   treeSelectData: {
-    display: "inline-block",
-    padding: "10px 17px",
+    display: 'inline-block',
+    padding: '10px 17px',
     borderRadius: 50,
-    backgroundColor: "#F1F1F1",
-    marginBottom: 15,
+    backgroundColor: '#F1F1F1',
+    marginBottom: 15
   },
   dialogTitleRoot: {
     marginBottom: 20,
     paddingRight: 80,
-    fontSize: "2.125rem",
-    lineHeight: "1.17",
-    [theme.breakpoints.down("lg")]: {
+    fontSize: '2.125rem',
+    lineHeight: '1.17',
+    [theme.breakpoints.down('lg')]: {
       padding: 0,
       margin: 0,
       paddingLeft: 24,
-      fontSize: 26,
+      fontSize: 26
     },
-    [theme.breakpoints.down("md")]: {
+    [theme.breakpoints.down('md')]: {
       paddingLeft: 16,
-      paddingRight: 16,
-    },
+      paddingRight: 16
+    }
   },
   dialogDescRoot: {
-    [theme.breakpoints.down("md")]: {
+    [theme.breakpoints.down('md')]: {
       paddingLeft: 16,
       paddingRight: 16,
       paddingBottom: 2,
-      fontSize: 14,
-    },
+      fontSize: 14
+    }
   },
   btnPadding: {
-    padding: "14px 36px",
+    padding: '14px 36px'
   },
   poper: {
     fontSize: 16,
@@ -158,13 +158,13 @@ const styles = (theme) => ({
     marginTop: 20,
     padding: 16,
     maxWidth: 640,
-    background: "rgb(255, 244, 215)",
+    background: 'rgb(255, 244, 215)'
   },
   noHoverBtn: {
     marginRight: 15,
-    padding: "6px 8px",
-    borderRadius: 4,
-  },
+    padding: '6px 8px',
+    borderRadius: 4
+  }
 });
 
 class DialogWrapper extends React.Component {
@@ -179,7 +179,7 @@ class DialogWrapper extends React.Component {
       externalPending: [],
       loading: false,
       closing: false,
-      triggerExternalPath: false,
+      triggerExternalPath: false
     };
 
     this.queue = queueFactory.get(taskId);
@@ -213,12 +213,12 @@ class DialogWrapper extends React.Component {
       ...this.state,
       ...this.getPopupProps(),
       data: this.getData(),
-      schema,
+      schema
     });
   };
 
   handleChangeWrapper = (...args) => {
-    const queue = queueFactory.get(this.getPath().concat("popup").join());
+    const queue = queueFactory.get(this.getPath().concat('popup').join());
     queue.push(async () => this.handleChange(args));
   };
 
@@ -240,8 +240,7 @@ class DialogWrapper extends React.Component {
             return resolve();
           }
           const isDeleting =
-            changes === null ||
-            (typeof changes === "object" && Object.keys(changes).length === 0);
+            changes === null || (typeof changes === 'object' && Object.keys(changes).length === 0);
 
           if (isDeleting) {
             addParent(dataPath, newRootDocument);
@@ -276,9 +275,7 @@ class DialogWrapper extends React.Component {
               waiter.addAction(
                 taskId,
                 () => {
-                  actions.setValues(
-                    this.removeEmptyFields(newRootDocument.data)
-                  );
+                  actions.setValues(this.removeEmptyFields(newRootDocument.data));
                 },
                 STORE_VALUES_INTERVAL
               );
@@ -306,8 +303,8 @@ class DialogWrapper extends React.Component {
       actions,
       schema: { triggersOnDelete = [] },
       template: {
-        jsonSchema: { calcTriggers = [] },
-      },
+        jsonSchema: { calcTriggers = [] }
+      }
     } = this.props;
 
     const onClose = props?.onClose;
@@ -316,24 +313,18 @@ class DialogWrapper extends React.Component {
 
     if (!calcTriggers.length) return;
 
-    const popupTriggers = (onClose ? triggersOnDelete : calcTriggers).filter(
-      ({ source }) => {
-        const exists = []
-          .concat(source)
-          .filter(Boolean)
-          .filter(
-            (item) =>
-              item.replace("${index}", pathIndex?.index) ===
-              this.getPath().join(".")
-          );
-        return exists.length;
-      }
-    );
+    const popupTriggers = (onClose ? triggersOnDelete : calcTriggers).filter(({ source }) => {
+      const exists = []
+        .concat(source)
+        .filter(Boolean)
+        .filter((item) => item.replace('${index}', pathIndex?.index) === this.getPath().join('.'));
+      return exists.length;
+    });
 
     const newData = await handleTriggers(
       rootDocument.data,
       popupTriggers,
-      this.getPath().join("."),
+      this.getPath().join('.'),
       newValue,
       rootDocument.data[stepName],
       rootDocument.data,
@@ -347,15 +338,15 @@ class DialogWrapper extends React.Component {
     const {
       popupActions,
       template: {
-        jsonSchema: { calcTriggers = [] },
-      },
+        jsonSchema: { calcTriggers = [] }
+      }
     } = this.props;
 
     if (!calcTriggers.length) {
       return data;
     }
 
-    const dataPath = path.split(".");
+    const dataPath = path.split('.');
     const actionTriggers = calcTriggers.filter(({ action }) => !!action);
 
     const parentPath = dataPath.slice(0, dataPath.length - 1);
@@ -363,11 +354,11 @@ class DialogWrapper extends React.Component {
 
     const documentData = await handleActionTriggers(actionTriggers, {
       documentData: data,
-      dataPath: dataPath.join("."),
+      dataPath: dataPath.join('.'),
       value: changes,
       parentData,
       stepData: data[dataPath[0]],
-      actions: { requestExternalData: popupActions.requestExternalData },
+      actions: { requestExternalData: popupActions.requestExternalData }
     });
 
     return documentData;
@@ -380,24 +371,20 @@ class DialogWrapper extends React.Component {
 
     newArgs.pop();
 
-    const controlSchema = objectPath.get(
-      schema.properties,
-      newArgs.join(".properties.")
-    );
+    const controlSchema = objectPath.get(schema.properties, newArgs.join('.properties.'));
 
     return controlSchema?.cleanWhenHidden;
   };
 
   getPopupProps = () => {
     const { rootDocument } = this.state;
-    const { schema, stepName, path, useOwnData, template, rootValue } =
-      this.props;
+    const { schema, stepName, path, useOwnData, template, rootValue } = this.props;
 
     let pageSchema = schema;
 
     if (template && template.jsonSchema && !useOwnData && !rootValue) {
       const {
-        jsonSchema: { properties },
+        jsonSchema: { properties }
       } = template;
       pageSchema = properties[stepName];
     }
@@ -415,7 +402,7 @@ class DialogWrapper extends React.Component {
     const recursiveObj = (obj) => {
       (Object.keys(obj) || []).forEach((key) => {
         if (obj[key] === null) delete obj[key];
-        if (typeof obj[key] === "object") recursiveObj(obj[key]);
+        if (typeof obj[key] === 'object') recursiveObj(obj[key]);
       });
       return obj;
     };
@@ -429,20 +416,20 @@ class DialogWrapper extends React.Component {
       loading: true,
       closing: true,
       externalMessage: [],
-      externalPending: [],
+      externalPending: []
     });
 
     await deleteItemAction();
 
     await this.handlePopupTriggers({
-      onClose: true,
+      onClose: true
     });
 
     handleClose(true);
 
     this.setState({
       loading: false,
-      closing: false,
+      closing: false
     });
   };
 
@@ -457,7 +444,7 @@ class DialogWrapper extends React.Component {
       externalMessage: [],
       externalPending: [],
       loading: false,
-      closing: false,
+      closing: false
     });
 
     handleClose();
@@ -467,9 +454,9 @@ class DialogWrapper extends React.Component {
     const { pathIndex } = this.props;
 
     return path
-      .replace(/.properties/g, "")
-      .replace(/.items/g, "")
-      .replace(/\${index}/g, pathIndex ? pathIndex.index : "");
+      .replace(/.properties/g, '')
+      .replace(/.items/g, '')
+      .replace(/\${index}/g, pathIndex ? pathIndex.index : '');
   };
 
   triggerExternalReader = async (args) => {
@@ -479,7 +466,7 @@ class DialogWrapper extends React.Component {
 
     const changes = args.pop();
 
-    const controlSchema = objectPath.get(schema.properties, args.join("."));
+    const controlSchema = objectPath.get(schema.properties, args.join('.'));
 
     if (!controlSchema) return false;
 
@@ -499,7 +486,7 @@ class DialogWrapper extends React.Component {
     if (externalChecking && asyncCheck.length) {
       if (!messagingOnStep) {
         this.setState({
-          triggerExternalPath: [stepName].concat(path).concat(args),
+          triggerExternalPath: [stepName].concat(path).concat(args)
         });
       }
       await waiter.run(taskId);
@@ -520,26 +507,23 @@ class DialogWrapper extends React.Component {
 
     if (externalMessage.length) {
       this.setState({
-        externalMessage: externalMessage.concat(evaluatedErrorMessage),
+        externalMessage: externalMessage.concat(evaluatedErrorMessage)
       });
     } else {
       this.setState({
-        externalMessage: [evaluatedErrorMessage],
+        externalMessage: [evaluatedErrorMessage]
       });
     }
   };
 
   externalReaderCheckActions = async (asyncCheck) => {
-    const { t, stepName, rootDocument, popupActions, pathIndex, actions } =
-      this.props;
-    const checkIsChecking = (asyncCheck || []).map(
-      ({ isChecking }) => isChecking
-    );
+    const { t, stepName, rootDocument, popupActions, pathIndex, actions } = this.props;
+    const checkIsChecking = (asyncCheck || []).map(({ isChecking }) => isChecking);
 
     const isCheckingArray = (checkIsChecking || []).map((isCheckingFunc) => {
       const { path } = this.props;
       const documentData = (rootDocument && rootDocument.data) || {};
-      const concatPath = [stepName].concat(path).join(".");
+      const concatPath = [stepName].concat(path).join('.');
       const checking = evaluate(
         isCheckingFunc,
         objectPath.get(documentData, concatPath),
@@ -550,9 +534,7 @@ class DialogWrapper extends React.Component {
       return true;
     });
 
-    if (
-      isCheckingArray.filter((el) => el === false).length === asyncCheck.length
-    ) {
+    if (isCheckingArray.filter((el) => el === false).length === asyncCheck.length) {
       return;
     }
 
@@ -568,37 +550,30 @@ class DialogWrapper extends React.Component {
         method,
         path,
         checkValid,
-        serviceErrorMessage = t("externalReaderError"),
+        serviceErrorMessage = t('externalReaderError')
       } = control;
 
-      const controlIndex = asyncCheck?.findIndex(
-        (item) => item?.path === path
-      );
+      const controlIndex = asyncCheck?.findIndex((item) => item?.path === path);
 
       if (isCheckingArray[controlIndex] === false) return;
 
       const body = {
         service,
         method,
-        path,
+        path
       };
 
       if (pathIndex) {
         body.index = pathIndex.index;
       }
 
-      const result = await popupActions.externalReaderCheckData(
-        rootDocument.id,
-        body
-      );
+      const result = await popupActions.externalReaderCheckData(rootDocument.id, body);
 
-      const isIgnoreErrorsFunc = asyncCheck.find(
-        (item) => item.path === path
-      )?.ignoreError;
+      const isIgnoreErrorsFunc = asyncCheck.find((item) => item.path === path)?.ignoreError;
 
       if (isIgnoreErrorsFunc) {
         const documentData = (rootDocument && rootDocument.data) || {};
-        const concatPath = [stepName].concat(path).join(".");
+        const concatPath = [stepName].concat(path).join('.');
         let ignore = evaluate(
           isIgnoreErrorsFunc,
           result || result.data || {},
@@ -635,7 +610,7 @@ class DialogWrapper extends React.Component {
         if (errors.length) {
           const { externalMessage } = this.state;
           this.setState({
-            externalMessage: externalMessage.concat(errors),
+            externalMessage: externalMessage.concat(errors)
           });
         }
         await actions.forceReload();
@@ -645,7 +620,7 @@ class DialogWrapper extends React.Component {
 
   getExternalReaders = () =>
     (Object.values(this.props || {}) || []).filter(Boolean).filter((prop) => {
-      if (typeof prop === "object" && prop.control === "externalReaderCheck") {
+      if (typeof prop === 'object' && prop.control === 'externalReaderCheck') {
         return true;
       }
 
@@ -657,7 +632,7 @@ class DialogWrapper extends React.Component {
 
     this.setState({
       loading: true,
-      externalMessage: [],
+      externalMessage: []
     });
 
     await actions.handleStore();
@@ -669,8 +644,7 @@ class DialogWrapper extends React.Component {
 
   handleSave = async () => {
     const { rootDocument } = this.state;
-    const { taskId, actions, handleClose, path, useOwnData, forceSaving } =
-      this.props;
+    const { taskId, actions, handleClose, path, useOwnData, forceSaving } = this.props;
     const { pageSchema, pageData } = this.getPopupProps();
 
     const asyncCheck = this.getExternalReaders();
@@ -678,7 +652,7 @@ class DialogWrapper extends React.Component {
     const rootDocumentData = cleanDeep(rootDocument.data, {
       emptyArrays: false,
       emptyObjects: false,
-      emptyStrings: false,
+      emptyStrings: false
     });
 
     let errors = validateData(
@@ -691,16 +665,14 @@ class DialogWrapper extends React.Component {
     if (useOwnData) {
       errors = errors.map(({ path: errorPath, ...error }) => ({
         ...error,
-        path: [].concat(path, errorPath).join("."),
+        path: [].concat(path, errorPath).join('.')
       }));
     } else {
-      errors = errors.filter(
-        ({ path: errorPath }) => errorPath.indexOf(path.join(".")) === 0
-      );
+      errors = errors.filter(({ path: errorPath }) => errorPath.indexOf(path.join('.')) === 0);
     }
 
     if (errors && errors.length) {
-      console.log("popup.validation.errors", errors);
+      console.log('popup.validation.errors', errors);
     }
 
     this.setState({ errors });
@@ -743,9 +715,7 @@ class DialogWrapper extends React.Component {
 
   getPath = () => {
     const { stepName, path } = this.props;
-    return [stepName]
-      .concat(path)
-      .filter((p) => p !== null && p !== undefined && p !== "");
+    return [stepName].concat(path).filter((p) => p !== null && p !== undefined && p !== '');
   };
 
   render = () => {
@@ -775,17 +745,11 @@ class DialogWrapper extends React.Component {
       deleteText,
       fullScreen,
       fileStorage,
-      active,
+      active
     } = this.props;
 
-    const {
-      rootDocument,
-      errors,
-      loading,
-      externalMessage,
-      externalPending,
-      triggerExternalPath,
-    } = this.state;
+    const { rootDocument, errors, loading, externalMessage, externalPending, triggerExternalPath } =
+      this.state;
 
     const value = this.getData();
 
@@ -794,7 +758,7 @@ class DialogWrapper extends React.Component {
         <Dialog
           open={open}
           onClose={(event, reason) => {
-            if (reason === "backdropClick") {
+            if (reason === 'backdropClick') {
               return false;
             }
 
@@ -806,27 +770,19 @@ class DialogWrapper extends React.Component {
           classes={{
             root: classes.dialogRoot,
             paperWidthSm: classes.paperWidthSm,
-            paperScrollBody: classes.paperScrollBody,
+            paperScrollBody: classes.paperScrollBody
           }}
         >
           {!forceSaving ? (
             <Button onClick={this.handleClose} className={classes.closeIcon}>
-              <img
-                src={CloseIcon}
-                alt={t("CloseModal")}
-                className={classes.closeIconImg}
-              />
+              <img src={CloseIcon} alt={t('CloseModal')} className={classes.closeIconImg} />
             </Button>
           ) : null}
           {dialogTitle ? (
-            <DialogTitle classes={{ root: classes.dialogTitleRoot }}>
-              {dialogTitle}
-            </DialogTitle>
+            <DialogTitle classes={{ root: classes.dialogTitleRoot }}>{dialogTitle}</DialogTitle>
           ) : null}
           {description ? (
-            <DialogTitle classes={{ root: classes.dialogDescRoot }}>
-              {description}
-            </DialogTitle>
+            <DialogTitle classes={{ root: classes.dialogDescRoot }}>{description}</DialogTitle>
           ) : null}
           <DialogContent classes={{ root: classes.contentRoot }}>
             <SchemaForm
@@ -838,11 +794,7 @@ class DialogWrapper extends React.Component {
               activeStep={activeStep}
               fileStorage={fileStorage}
               documents={{ rootDocument, originDocument }}
-              rootDocument={
-                useOwnData
-                  ? { data: value || {}, id: rootDocument.id }
-                  : rootDocument
-              }
+              rootDocument={useOwnData ? { data: value || {}, id: rootDocument.id } : rootDocument}
               originDocument={
                 useOwnData
                   ? { data: this.getOriginData() || {}, id: originDocument.id }
@@ -851,7 +803,7 @@ class DialogWrapper extends React.Component {
               template={template}
               stepName={stepName}
               errors={errors}
-              schema={{ type: "object", properties }}
+              schema={{ type: 'object', properties }}
               isPopup={true}
               useOwnData={useOwnData}
               path={path}
@@ -902,7 +854,7 @@ class DialogWrapper extends React.Component {
                   disabled={loading}
                   className={classes.noHoverBtn}
                 >
-                  {deleteText || t("Delete")}
+                  {deleteText || t('Delete')}
                 </Button>
               ) : null}
               <Button
@@ -913,10 +865,10 @@ class DialogWrapper extends React.Component {
                 disabled={loading}
                 className={classes.actionButton}
                 classes={{
-                  label: classes.btnpadding,
+                  label: classes.btnpadding
                 }}
               >
-                {saveText || t("Edit")}
+                {saveText || t('Edit')}
               </Button>
             </DialogActions>
           ) : null}
@@ -953,7 +905,7 @@ DialogWrapper.propTypes = {
   allowDelete: PropTypes.bool,
   deleteText: PropTypes.string,
   saveLocalDataOnInit: PropTypes.bool,
-  active: PropTypes.bool,
+  active: PropTypes.bool
 };
 
 DialogWrapper.defaultProps = {
@@ -975,26 +927,18 @@ DialogWrapper.defaultProps = {
   allowDelete: true,
   deleteText: null,
   saveLocalDataOnInit: false,
-  active: true,
+  active: true
 };
 
 const mapDispatchToProps = (dispatch) => ({
   popupActions: {
     setPopupData: bindActionCreators(setPopupData, dispatch),
-    externalReaderCheckData: bindActionCreators(
-      externalReaderCheckData,
-      dispatch
-    ),
+    externalReaderCheckData: bindActionCreators(externalReaderCheckData, dispatch),
     requestExternalData: (requestData) =>
-      api.post(
-        "external_reader",
-        requestData,
-        "REQUEST_EXTERNAL_DATA",
-        dispatch
-      ),
-  },
+      api.post('external_reader', requestData, 'REQUEST_EXTERNAL_DATA', dispatch)
+  }
 });
 
 const styled = withStyles(styles)(DialogWrapper);
-const translated = translate("Elements")(styled);
+const translated = translate('Elements')(styled);
 export default connect(null, mapDispatchToProps)(translated);

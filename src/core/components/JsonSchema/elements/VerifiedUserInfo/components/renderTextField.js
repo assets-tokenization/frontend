@@ -2,14 +2,7 @@ import React from 'react';
 import { useTranslate } from 'react-translate';
 import { SchemaForm } from 'components/JsonSchema';
 
-const RenderTextField = ({
-  name,
-  noMargin = false,
-  fields,
-  errors,
-  value,
-  handleUpdateField
-}) => {
+const RenderTextField = ({ name, noMargin = false, fields, errors, value, handleUpdateField }) => {
   const t = useTranslate('VerifiedUserInfo');
 
   return (

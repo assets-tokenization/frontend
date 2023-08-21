@@ -22,8 +22,7 @@ const findPath = (ob, key) => {
         }
         path.pop();
       }
-    }
-    else {
+    } else {
       for (const k in obj) {
         path.push(k);
         const result = keyExists(obj[k], key);

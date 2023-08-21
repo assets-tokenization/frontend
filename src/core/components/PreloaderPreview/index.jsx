@@ -6,21 +6,21 @@ import Preloader from 'components/Preloader';
 
 const styles = {};
 
-const PreloaderPreview = ({classes}) => (
-    <div className={classes.previewWrap}>
-        <div className={classes.previewScrollBox}>
-            <div className={classes.previewBox}>
-                <div className={classes.previewFrame}>
-                    <Preloader />
-                </div>
-            </div>
+const PreloaderPreview = ({ classes }) => (
+  <div className={classes.previewWrap}>
+    <div className={classes.previewScrollBox}>
+      <div className={classes.previewBox}>
+        <div className={classes.previewFrame}>
+          <Preloader />
         </div>
-        <div className={classes.previewActions} />
+      </div>
     </div>
+    <div className={classes.previewActions} />
+  </div>
 );
 
 PreloaderPreview.propTypes = {
-    classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(PreloaderPreview);

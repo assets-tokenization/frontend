@@ -5,28 +5,28 @@ import DownloadAll from './DownloadAllButton';
 import DeleteAll from './DeleteAllButton';
 
 const FileDataTableToolbar = (props) => {
-    const { rowsSelected, actions } = props;
+  const { rowsSelected, actions } = props;
 
-    if (!(rowsSelected || []).length) {
-        return null;
-    }
+  if (!(rowsSelected || []).length) {
+    return null;
+  }
 
-    return (
-        <Fragment>
-            <DownloadAll {...props} />
-            {actions.handleDeleteFile ? <DeleteAll {...props} /> : null}
-        </Fragment>
-    );
+  return (
+    <Fragment>
+      <DownloadAll {...props} />
+      {actions.handleDeleteFile ? <DeleteAll {...props} /> : null}
+    </Fragment>
+  );
 };
 
 FileDataTableToolbar.propTypes = {
-    rowsSelected: PropTypes.array,
-    actions: PropTypes.object
+  rowsSelected: PropTypes.array,
+  actions: PropTypes.object
 };
 
 FileDataTableToolbar.defaultProps = {
-    rowsSelected: [],
-    actions: {}
+  rowsSelected: [],
+  actions: {}
 };
 
 export default FileDataTableToolbar;

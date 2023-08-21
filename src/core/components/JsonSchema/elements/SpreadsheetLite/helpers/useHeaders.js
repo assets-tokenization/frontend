@@ -7,15 +7,15 @@ import capitalizeFirstLetter from 'helpers/capitalizeFirstLetter';
 
 export const useStyles = makeStyles(() => ({
   alignLeft: {
-    textAlign: 'left',
+    textAlign: 'left'
   },
   alignCenter: {
     textAlign: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   alignRight: {
     textAlign: 'right',
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-end'
   }
 }));
 
@@ -44,7 +44,7 @@ const useHeaders = (headers) => {
     rootContainer.insertBefore(dsgAdditionalHeaders, rootContainer.firstChild);
 
     const widths = [];
-    dsgRowHeader.childNodes.forEach(node => {
+    dsgRowHeader.childNodes.forEach((node) => {
       widths.push(node.offsetWidth);
     });
 
@@ -74,11 +74,17 @@ const useHeaders = (headers) => {
         headerItemElement.classList.add('dsg-cell-header');
         headerItemElement.classList.add('dsg-additional-header-item');
         if (headerItem.headerAlign) {
-          headerItemElement.classList.add(classes[`align${capitalizeFirstLetter(headerItem.headerAlign)}`]);
+          headerItemElement.classList.add(
+            classes[`align${capitalizeFirstLetter(headerItem.headerAlign)}`]
+          );
         }
 
-        const firstColumn = header.slice(0, headerItemIndex).reduce((acc, { colspan }) => acc + (colspan || 1), 0);
-        const headerItemWidth = widths.slice(firstColumn + 1, firstColumn + (headerItem.colspan || 1) + 1).reduce((acc, width) => acc + width, 0);
+        const firstColumn = header
+          .slice(0, headerItemIndex)
+          .reduce((acc, { colspan }) => acc + (colspan || 1), 0);
+        const headerItemWidth = widths
+          .slice(firstColumn + 1, firstColumn + (headerItem.colspan || 1) + 1)
+          .reduce((acc, width) => acc + width, 0);
         headerItemElement.style.width = headerItemWidth + 'px';
 
         const headerItemContentElement = document.createElement('div');
@@ -95,10 +101,9 @@ const useHeaders = (headers) => {
         dsgAdditionalHeadersSlider.style.marginLeft = `${-event.target.scrollLeft}px`;
       });
     });
-
   }, [className, classes, headers]);
 
   return className;
-}
+};
 
 export default useHeaders;

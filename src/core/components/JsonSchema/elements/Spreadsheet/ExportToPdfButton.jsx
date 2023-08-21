@@ -8,23 +8,23 @@ import { IconButton, Tooltip } from '@mui/material';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 
 const ExportToPdfButton = ({ t, value, htmlTemplate }) => {
-    if (!htmlTemplate || !value || !value.length) {
-        return null;
-    }
+  if (!htmlTemplate || !value || !value.length) {
+    return null;
+  }
 
-    const generateReport = () => {
-        const html = Handlebars.compile(htmlTemplate)({ rows: value });
+  const generateReport = () => {
+    const html = Handlebars.compile(htmlTemplate)({ rows: value });
 
-        print(html);
-    };
+    print(html);
+  };
 
-    return (
-        <Tooltip title={t('ExportDataToPdf')}>
-            <IconButton onClick={generateReport} size="large">
-                <PictureAsPdfIcon />
-            </IconButton>
-        </Tooltip>
-    );
+  return (
+    <Tooltip title={t('ExportDataToPdf')}>
+      <IconButton onClick={generateReport} size="large">
+        <PictureAsPdfIcon />
+      </IconButton>
+    </Tooltip>
+  );
 };
 
 export default translate('Elements')(ExportToPdfButton);

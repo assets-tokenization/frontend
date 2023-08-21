@@ -5,44 +5,37 @@ import RecordsTreeControl from './components/recordsTree';
 import SeparatedRegister from './components/separatedRegisters';
 
 const Address = (props) => {
-    const {
-        recordsTree,
-        template,
-        stepName,
-        schema,
-        withNamedObjects
-    } = props;
+  const { recordsTree, template, stepName, schema, withNamedObjects } = props;
 
-    if (recordsTree === null) {
-        return <RecordsTreeControl {...props} />;
-    }
+  if (recordsTree === null) {
+    return <RecordsTreeControl {...props} />;
+  }
 
-    return (
-        <SeparatedRegister
-            recordsTree={recordsTree}
-            template={template}
-            stepName={stepName}
-            schema={schema}
-            withNamedObjects={withNamedObjects}
-        />
-    );
+  return (
+    <SeparatedRegister
+      recordsTree={recordsTree}
+      template={template}
+      stepName={stepName}
+      schema={schema}
+      withNamedObjects={withNamedObjects}
+    />
+  );
 };
 
 Address.propTypes = {
-    recordsTree: PropTypes.bool,
-    template: PropTypes.object,
-    stepName: PropTypes.string,
-    schema: PropTypes.object,
-    withNamedObjects: PropTypes.bool
+  recordsTree: PropTypes.bool,
+  template: PropTypes.object,
+  stepName: PropTypes.string,
+  schema: PropTypes.object,
+  withNamedObjects: PropTypes.bool
 };
 
 Address.defaultProps = {
-    template: {},
-    stepName: '',
-    schema: {},
-    withNamedObjects: null,
-    recordsTree: null
-
+  template: {},
+  stepName: '',
+  schema: {},
+  withNamedObjects: null,
+  recordsTree: null
 };
 
 export default Address;

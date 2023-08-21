@@ -56,7 +56,7 @@ const ExternalReaderMocks = ({ t, classes, actions }) => {
     if (event.target.checked) {
       newSelectedReaders = [...selectedReaders, reader];
     } else {
-      newSelectedReaders = selectedReaders.filter((item) => item !== reader)
+      newSelectedReaders = selectedReaders.filter((item) => item !== reader);
     }
 
     if (existingItem) {
@@ -66,53 +66,48 @@ const ExternalReaderMocks = ({ t, classes, actions }) => {
     setSelectedReaders(newSelectedReaders);
   };
 
-  const filteredReaders = readers
-    .filter((reader) => reader.includes(search));
+  const filteredReaders = readers.filter((reader) => reader.includes(search));
 
   return (
     <div className={classes.root}>
-      {
-        error ? (
-          <Typography>{t('MockInitError')}</Typography>
-        ) : (
-          <>
-            <StringElement
-              value={search}
-              fullWidth={true}
-              required={true}
-              onChange={setSearch}
-              placeholder={t('SearchMock')}
-            />
-      
-            <FormGroup>
-              {filteredReaders.map((reader) => (
-                <FormControlLabel
-                  key={reader}
-                  control={<Checkbox />}
-                  label={reader}
-                  checked={selectedReaders.includes(reader)}
-                  onChange={(event) => onChange(event, reader)}
-                />
-              ))}
-            </FormGroup>
-          </>
-        )
-      }
+      {error ? (
+        <Typography>{t('MockInitError')}</Typography>
+      ) : (
+        <>
+          <StringElement
+            value={search}
+            fullWidth={true}
+            required={true}
+            onChange={setSearch}
+            placeholder={t('SearchMock')}
+          />
+
+          <FormGroup>
+            {filteredReaders.map((reader) => (
+              <FormControlLabel
+                key={reader}
+                control={<Checkbox />}
+                label={reader}
+                checked={selectedReaders.includes(reader)}
+                onChange={(event) => onChange(event, reader)}
+              />
+            ))}
+          </FormGroup>
+        </>
+      )}
     </div>
   );
 };
 
-const mapStateToProps = ({
-  debugTools: { checkHiddenFuncs, customInterface },
-}) => ({
+const mapStateToProps = ({ debugTools: { checkHiddenFuncs, customInterface } }) => ({
   checkHiddenFuncs,
-  customInterface,
+  customInterface
 });
 
 const mapDispatchToProps = (dispatch) => ({
   actions: {
-    getMocksKeysByUser: bindActionCreators(getMocksKeysByUser, dispatch),
-  },
+    getMocksKeysByUser: bindActionCreators(getMocksKeysByUser, dispatch)
+  }
 });
 
 const styled = withStyles(styles)(ExternalReaderMocks);

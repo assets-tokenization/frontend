@@ -42,7 +42,7 @@ const withStyles = makeStyles({
 
 const CollapseButton = ({ open, onClick, title }) => {
   const classes = withStyles();
-  
+
   return (
     <Toolbar disableGutters={true}>
       <Button fullWidth={true} classes={classes} onClick={onClick}>
@@ -50,12 +50,10 @@ const CollapseButton = ({ open, onClick, title }) => {
           <img
             src={ChevronIcon}
             alt="chevron icon"
-            className={
-              classNames({
-                [classes.icon]: true,
-                [classes.closed]: !open
-              })
-            }
+            className={classNames({
+              [classes.icon]: true,
+              [classes.closed]: !open
+            })}
           />
         </div>
         {open ? title : null}

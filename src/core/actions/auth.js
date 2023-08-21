@@ -39,231 +39,244 @@ const { backendUrl } = config;
 const LOGOUT_LINK = backendUrl + '/redirect/logout';
 
 export const logout = (redirect = false) => {
-    storage.removeItem('token');
-    storage.removeItem('debug-user-id');
-    storage.removeItem('code');
-    storage.removeItem('residentData');
-    storage.removeItem('enabled_mocks');
-    storage.setItem('backUrl', window.location.pathname + (window.location.search || ''));
-    deleteCookie('lang');
+  storage.removeItem('token');
+  storage.removeItem('debug-user-id');
+  storage.removeItem('code');
+  storage.removeItem('residentData');
+  storage.removeItem('enabled_mocks');
+  storage.setItem('backUrl', window.location.pathname + (window.location.search || ''));
+  deleteCookie('lang');
 
-    let signature = storage.getItem('cabState');
+  let signature = storage.getItem('cabState');
 
-    if (!signature) {
-        const signa = generatePassword(20, false);
-        storage.setItem('cabState', signa);
-        signature = storage.getItem('cabState');
-    }
+  if (!signature) {
+    const signa = generatePassword(20, false);
+    storage.setItem('cabState', signa);
+    signature = storage.getItem('cabState');
+  }
 
-    if (redirect) {
-        window.location.href = LOGOUT_LINK + `/?state=${signature}`;
-        return { type: 'LOGOUT_DEEP' };
-    }
+  if (redirect) {
+    window.location.href = LOGOUT_LINK + `/?state=${signature}`;
+    return { type: 'LOGOUT_DEEP' };
+  }
 
-    return { type: 'LOGOUT' };
+  return { type: 'LOGOUT' };
 };
 
 export const isLoggedInCompletely = () => {
-    const { auth } = store.getState() || {};
-    return !!storage.getItem('token') && auth && auth.token && auth.info;
+  const { auth } = store.getState() || {};
+  return !!storage.getItem('token') && auth && auth.token && auth.info;
 };
 
 export const getToken = () => storage.getItem('token');
 
 export const getQueryLangParam = () => {
-    const searchString = window.location.search;
-    const chosenLanguage = getCookie('lang');
+  const searchString = window.location.search;
+  const chosenLanguage = getCookie('lang');
 
-    if (chosenLanguage) return chosenLanguage;
+  if (chosenLanguage) return chosenLanguage;
 
-    if (!searchString) return null;
+  if (!searchString) return null;
 
-    const params = qs.parse(window.location.search, { ignoreQueryPrefix: true });
+  const params = qs.parse(window.location.search, { ignoreQueryPrefix: true });
 
-    const langExists = (Object.keys(params || {}) || []).includes('lang');
+  const langExists = (Object.keys(params || {}) || []).includes('lang');
 
-    if (!langExists) return null;
+  if (!langExists) return null;
 
-    if (langExists) {
-        setCookie('lang', params.lang, 1);
-        return params.lang;
-    }
+  if (langExists) {
+    setCookie('lang', params.lang, 1);
+    return params.lang;
+  }
 
-    deleteCookie('lang');
+  deleteCookie('lang');
 
-    return null;
+  return null;
 };
 
 export const requestUserInfo = () => (dispatch) => {
-    if (!storage.getItem('token')) {
-        throw new Error('401 unauthorized');
-    }
+  if (!storage.getItem('token')) {
+    throw new Error('401 unauthorized');
+  }
 
-    const lang = getQueryLangParam();
+  const lang = getQueryLangParam();
 
-    const queryString = lang ? '?lang=eng' : '';
-    
-    return api
-        .get(`${AUTH_URL}/me${queryString}`, REQUEST_USER_INFO, dispatch)
-        .then((auth) => {
-            Sentry.configureScope((scope) => {
-                scope.setUser(auth);
-                scope.setExtra('userCert', objectPath.get(auth, 'services.eds.data.pem'));
-            });
-            return auth;
-        });
-}
+  const queryString = lang ? '?lang=eng' : '';
 
-export const requestUnits = () => dispatch => api
-    .get('units', REQUEST_UNITS, dispatch)
-    .catch((error) => {
-        Sentry.captureException(error);
-        return error;
+  return api.get(`${AUTH_URL}/me${queryString}`, REQUEST_USER_INFO, dispatch).then((auth) => {
+    Sentry.configureScope((scope) => {
+      scope.setUser(auth);
+      scope.setExtra('userCert', objectPath.get(auth, 'services.eds.data.pem'));
     });
+    return auth;
+  });
+};
 
-export const requestAllUnits = () => dispatch => api
-    .get('units/all', REQUEST_UNITS, dispatch)
-    .catch((error) => {
-        Sentry.captureException(error);
-        return error;
-    });
+export const requestUnits = () => (dispatch) =>
+  api.get('units', REQUEST_UNITS, dispatch).catch((error) => {
+    Sentry.captureException(error);
+    return error;
+  });
+
+export const requestAllUnits = () => (dispatch) =>
+  api.get('units/all', REQUEST_UNITS, dispatch).catch((error) => {
+    Sentry.captureException(error);
+    return error;
+  });
 
 export const requestTestCode = () => () => {
-    const { testAuth, testAuth: { body, url } } = config;
-    const headers = new Headers(testAuth.headers);
+  const {
+    testAuth,
+    testAuth: { body, url }
+  } = config;
+  const headers = new Headers(testAuth.headers);
 
-    return fetch(url, { method: 'POST', mode: 'cors', headers, body: JSON.stringify(body) })
-        .then(async (response) => {
-            const result = await response.json();
-            const { data: { code } } = result;
-            return code;
-        });
+  return fetch(url, { method: 'POST', mode: 'cors', headers, body: JSON.stringify(body) }).then(
+    async (response) => {
+      const result = await response.json();
+      const {
+        data: { code }
+      } = result;
+      return code;
+    }
+  );
 };
 
-export const loginByCode = (code, state) => dispatch => api
-    .post(`${AUTH_URL}/login`, { code, state }, REQUEST_AUTH, dispatch)
-    .catch((error) => {
-        Sentry.captureException(error);
-        return error;
-    });
+export const loginByCode = (code, state) => (dispatch) =>
+  api.post(`${AUTH_URL}/login`, { code, state }, REQUEST_AUTH, dispatch).catch((error) => {
+    Sentry.captureException(error);
+    return error;
+  });
 
 export const requestAuth = (code, state) => async (dispatch) => {
-    const existedToken = storage.getItem('token');
+  const existedToken = storage.getItem('token');
 
-    if (!code && !existedToken) {
-        //  return logout(true);
-        throw new Error('401 unauthorized');
+  if (!code && !existedToken) {
+    //  return logout(true);
+    throw new Error('401 unauthorized');
+  }
+
+  if (code && state) {
+    storage.removeItem('debug-user-id');
+    const loginResult = await loginByCode(code, state)(dispatch);
+
+    if (loginResult instanceof Error || !loginResult || !loginResult.token) {
+      storage.removeItem('token');
+      dispatch({ type: TOKEN_ERROR, payload: true });
+      return loginResult;
     }
 
-    if (code && state) {
-        storage.removeItem('debug-user-id');
-        const loginResult = await loginByCode(code, state)(dispatch);
+    const { token } = loginResult;
+    storage.setItem('token', token);
+    dispatch({ type: AUTH_SET_TOKEN, payload: token });
+  }
 
-        if (loginResult instanceof Error || !loginResult || !loginResult.token) {
-            storage.removeItem('token');
-            dispatch({ type: TOKEN_ERROR, payload: true });
-            return loginResult;
-        }
+  if (!storage.getItem('token')) {
+    throw new Error('401 unauthorized');
+  }
 
-        const { token } = loginResult;
-        storage.setItem('token', token);
-        dispatch({ type: AUTH_SET_TOKEN, payload: token });
-    }
-
-    if (!storage.getItem('token')) {
-        throw new Error('401 unauthorized');
-    }
-
-    return requestUserInfo()(dispatch);
+  return requestUserInfo()(dispatch);
 };
 
-export const updateUserInfo = userInfo => (dispatch) => {
-    return api.put(USERS_URL, userInfo, UPDATE_USER_INFO, dispatch);
+export const updateUserInfo = (userInfo) => (dispatch) => {
+  return api.put(USERS_URL, userInfo, UPDATE_USER_INFO, dispatch);
 };
 
 export const isLoggedIn = () => !!storage.getItem('token');
 
 export const isRole = (check) => {
-    const { auth: { info } } = store.getState() || {};
-    if (!info) {
-        return false;
-    }
-    const { courtIdUserScopes } = info;
-    return courtIdUserScopes.includes(check);
+  const {
+    auth: { info }
+  } = store.getState() || {};
+  if (!info) {
+    return false;
+  }
+  const { courtIdUserScopes } = info;
+  return courtIdUserScopes.includes(check);
 };
 
-export const getUserSuggestions = searchString => (dispatch) => {
-    return api.post(`${USERS_URL}/search`, { searchString }, REQUEST_USER_SUGGESTIONS, dispatch).then(result => result.users);
+export const getUserSuggestions = (searchString) => (dispatch) => {
+  return api
+    .post(`${USERS_URL}/search`, { searchString }, REQUEST_USER_SUGGESTIONS, dispatch)
+    .then((result) => result.users);
 };
 
 export const requestAuthMode = () => (dispatch) => {
-    return api.get(`${USERS_URL}/two_factor_auth`, REQUEST_AUTH_MODE, dispatch);
+  return api.get(`${USERS_URL}/two_factor_auth`, REQUEST_AUTH_MODE, dispatch);
 };
 
-export const checkPhoneExists = phone => dispatch => api
+export const checkPhoneExists = (phone) => (dispatch) =>
+  api
     .get(`${USERS_URL}/phone/already_used?phone=${phone}`, CHECK_PHONE_EXISTS, dispatch)
     .catch((error) => {
-        // dispatch(addError(new Error('FailSendingSMS')));
-        Sentry.captureException(error);
-        return error;
+      // dispatch(addError(new Error('FailSendingSMS')));
+      Sentry.captureException(error);
+      return error;
     });
 
-export const setAuthMode = mode => (dispatch) => {
-    return api.post(`${USERS_URL}/two_factor_auth`, mode, REQUEST_AUTH_MODE, dispatch);
+export const setAuthMode = (mode) => (dispatch) => {
+  return api.post(`${USERS_URL}/two_factor_auth`, mode, REQUEST_AUTH_MODE, dispatch);
 };
 
-export const sendSMSCode = phone => dispatch => api
+export const sendSMSCode = (phone) => (dispatch) =>
+  api
     .post(`${USERS_URL}/phone/send_sms_for_phone_verification`, { phone }, SEND_SMS_CODE, dispatch)
     .catch((error) => {
-        // dispatch(addError(new Error('FailSendingSMS')));
-        Sentry.captureException(error);
-        return error;
+      // dispatch(addError(new Error('FailSendingSMS')));
+      Sentry.captureException(error);
+      return error;
     });
 
-export const verifySMSCode = (phone, code) => dispatch => api
+export const verifySMSCode = (phone, code) => (dispatch) =>
+  api
     .post(`${USERS_URL}/phone/verify`, { phone, code }, VERIFY_SMS_CODE, dispatch)
     .catch((error) => {
-        // dispatch(addError(new Error('FailVerifyingSMS')));
-        Sentry.captureException(error);
-        return error;
+      // dispatch(addError(new Error('FailVerifyingSMS')));
+      Sentry.captureException(error);
+      return error;
     });
 
-export const sendEmailCode = email => dispatch => api
-    .put(`${USERS_URL}/email/change`, { email }, SEND_EMAIL_CODE, dispatch)
-    .catch((error) => {
-        // dispatch(addError(new Error('FailSendingEmail')));
-        Sentry.captureException(error);
-        return error;
-    });
+export const sendEmailCode = (email) => (dispatch) =>
+  api.put(`${USERS_URL}/email/change`, { email }, SEND_EMAIL_CODE, dispatch).catch((error) => {
+    // dispatch(addError(new Error('FailSendingEmail')));
+    Sentry.captureException(error);
+    return error;
+  });
 
-export const checkEmail = email => dispatch => api
-    .post(`${USERS_URL}/email/check`, { email }, CHECK_EMAIL, dispatch)
-    .catch((error) => {
-        // dispatch(addError(new Error('FailSendingEmail')));
-        Sentry.captureException(error);
-        return error;
-    });
+export const checkEmail = (email) => (dispatch) =>
+  api.post(`${USERS_URL}/email/check`, { email }, CHECK_EMAIL, dispatch).catch((error) => {
+    // dispatch(addError(new Error('FailSendingEmail')));
+    Sentry.captureException(error);
+    return error;
+  });
 
-export const verifyEmailCode = (email, code) => dispatch => api
+export const verifyEmailCode = (email, code) => (dispatch) =>
+  api
     .post(`${USERS_URL}/email/confirm`, { email, code }, VERIFY_EMAIL_CODE, dispatch)
     .catch((error) => {
-        // dispatch(addError(new Error('FailVerifyingEmail')));
-        Sentry.captureException(error);
-        return error;
+      // dispatch(addError(new Error('FailVerifyingEmail')));
+      Sentry.captureException(error);
+      return error;
     });
 
-export const onlyVerifyEmailCode = (email, code) => dispatch => api
-    .post(`${USERS_URL}/email/check_email_confirmation_code`, { email, code }, VERIFY_EMAIL_CODE, dispatch)
+export const onlyVerifyEmailCode = (email, code) => (dispatch) =>
+  api
+    .post(
+      `${USERS_URL}/email/check_email_confirmation_code`,
+      { email, code },
+      VERIFY_EMAIL_CODE,
+      dispatch
+    )
     .catch((error) => {
-        // dispatch(addError(new Error('FailVerifyingEmail')));
-        Sentry.captureException(error);
-        return error;
+      // dispatch(addError(new Error('FailVerifyingEmail')));
+      Sentry.captureException(error);
+      return error;
     });
 
-export const searchUser = data => (dispatch) => {
-    return api.post(`${USERS_URL}/search`, data, SEARCH_USER, dispatch);
+export const searchUser = (data) => (dispatch) => {
+  return api.post(`${USERS_URL}/search`, data, SEARCH_USER, dispatch);
 };
 
 export const toggleDebugMode = () => ({
-    type: TOGGLE_DEBUG_MODE
+  type: TOGGLE_DEBUG_MODE
 });

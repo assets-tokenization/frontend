@@ -14,7 +14,7 @@ import ErrorsBlock from './components/ErrorsBlock';
 
 const errorMap = (error) => {
   const regex = /\d+/g;
-    
+
   const numbersArray = error.path.match(regex);
 
   if (!numbersArray) return error;
@@ -33,17 +33,12 @@ export const SpreadsheetLite = (props) => {
     value,
     hidden,
     readOnly,
-    schema: {
-      description,
-      items,
-      headers,
-      allowAddRows
-    } = {},
+    schema: { description, items, headers, allowAddRows } = {},
     height = 400,
     onChange,
     actions,
     errors,
-    maxItems = null,
+    maxItems = null
   } = props;
   const t = useTranslate('Elements');
 
@@ -51,7 +46,7 @@ export const SpreadsheetLite = (props) => {
 
   const columns = useColumns(items?.properties, items?.required, path, readOnly);
 
-  const { undo, redo, hasNext, hasPrevious } = useUndo(value, newValue => {
+  const { undo, redo, hasNext, hasPrevious } = useUndo(value, (newValue) => {
     onChange(newValue);
   });
 
@@ -62,7 +57,7 @@ export const SpreadsheetLite = (props) => {
     if (value) return;
 
     onChange(new ChangeEvent([{}], true));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
   const maxItemsReached = React.useMemo(() => {
@@ -71,24 +66,33 @@ export const SpreadsheetLite = (props) => {
     return value?.length >= maxItems;
   }, [maxItems, value]);
 
-  const handleChange = React.useCallback(changes => {
-    if (readOnly || maxItemsReached) {
-      setOpen(maxItemsReached);
-      return;
-    }
-    onChange(changes);
-  }, [onChange, readOnly, maxItemsReached]);
+  const handleChange = React.useCallback(
+    (changes) => {
+      if (readOnly || maxItemsReached) {
+        setOpen(maxItemsReached);
+        return;
+      }
+      onChange(changes);
+    },
+    [onChange, readOnly, maxItemsReached]
+  );
 
-  const onImport = React.useCallback((arrayData) => {
-    if (maxItems && arrayData.length > maxItems) {
-      arrayData = arrayData.slice(0, maxItems);
-      setOpen(maxItemsReached);
-    }
+  const onImport = React.useCallback(
+    (arrayData) => {
+      if (maxItems && arrayData.length > maxItems) {
+        arrayData = arrayData.slice(0, maxItems);
+        setOpen(maxItemsReached);
+      }
 
-    onChange(new ChangeEvent(arrayToData(arrayData, items), true, true));
-  }, [onChange, maxItems, items, maxItemsReached]);
+      onChange(new ChangeEvent(arrayToData(arrayData, items), true, true));
+    },
+    [onChange, maxItems, items, maxItemsReached]
+  );
 
-  const filteredColumns = React.useMemo(() => columns.filter(({ id }) => selectedColumns.includes(id)), [columns, selectedColumns]);
+  const filteredColumns = React.useMemo(
+    () => columns.filter(({ id }) => selectedColumns.includes(id)),
+    [columns, selectedColumns]
+  );
 
   const errorMapped = React.useMemo(() => errors && errors.map(errorMap), [errors]);
 
@@ -113,10 +117,7 @@ export const SpreadsheetLite = (props) => {
         errors={errorMapped}
       />
 
-      <ErrorsBlock
-        errors={errorMapped}
-        items={items}
-      />
+      <ErrorsBlock errors={errorMapped} items={items} />
 
       <DataSheetGridHeaded
         headers={headers}
@@ -163,6 +164,6 @@ export const SpreadsheetLite = (props) => {
       />
     </>
   );
-}
+};
 
 export default SpreadsheetLite;

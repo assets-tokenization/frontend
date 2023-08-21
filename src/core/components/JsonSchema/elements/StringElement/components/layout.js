@@ -3,13 +3,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  FormLabel,
-  FormControl,
-  InputAdornment,
-  IconButton,
-  Tooltip,
-} from '@mui/material';
+import { FormLabel, FormControl, InputAdornment, IconButton, Tooltip } from '@mui/material';
 import withStyles from '@mui/styles/withStyles';
 import { translate } from 'react-translate';
 import TextField from '@mui/material/TextField';
@@ -25,10 +19,7 @@ import FormControlMessage from 'components/JsonSchema/components/FormControlMess
 import uuid from 'uuid-random';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ClearIcon from '@mui/icons-material/Clear';
-import {
-  getTextWidth,
-  getFont,
-} from 'components/Select/components/ListboxComponent';
+import { getTextWidth, getFont } from 'components/Select/components/ListboxComponent';
 
 const UPPERCASE_INFLUENCE = 20;
 
@@ -40,107 +31,107 @@ const style = (theme) => ({
       marginBottom: 10,
       minWidth: '40px!important',
       '&>div>label': {
-        paddingRight: 20,
-      },
-    },
+        paddingRight: 20
+      }
+    }
   },
   noMargin: {
-    margin: 0,
+    margin: 0
   },
   menuItem: {
     [theme.breakpoints.down('md')]: {
-      lineHeight: '18px',
-    },
+      lineHeight: '18px'
+    }
   },
   textField: {
     '& p': {
-      whiteSpace: 'normal',
+      whiteSpace: 'normal'
     },
     '& label': {
       '&.MuiInputLabel-shrink': {
         maxWidth: 'calc(100% + 40px)',
         [theme.breakpoints.down('md')]: {
-          maxWidth: '100%',
-        },
-      },
-    },
+          maxWidth: '100%'
+        }
+      }
+    }
   },
   fullDecsription: {
     '& label': {
       '&.MuiInputLabel-shrink': {
         maxWidth: 'calc(100% + 200px)',
         [theme.breakpoints.down('md')]: {
-          maxWidth: (window.innerWidth - 40) * 1.35,
-        },
-      },
-    },
+          maxWidth: (window.innerWidth - 40) * 1.35
+        }
+      }
+    }
   },
   formControlDisabled: {
     '& label': {
-      color: 'rgba(0, 0, 0, 0.38)',
-    },
+      color: 'rgba(0, 0, 0, 0.38)'
+    }
   },
   startAdornment: {
     '& p': {
       whiteSpace: 'nowrap',
       [theme.breakpoints.down('md')]: {
-        fontSize: 13,
-      },
-    },
+        fontSize: 13
+      }
+    }
   },
   placeHolderRoot: {
     fontSize: 16,
-    lineHeight: '20px',
+    lineHeight: '20px'
   },
   placeHolderRootSelect: {
-    paddingRight: 15,
+    paddingRight: 15
   },
   select: {
     '&.MuiSelect-select': {
-      paddingRight: 40,
+      paddingRight: 40
     },
     '&:focus': {
-      background: 'transparent',
+      background: 'transparent'
     },
     [theme.breakpoints.down('md')]: {
       lineHeight: '18px',
       minHeight: 22,
       display: 'flex',
-      alignItems: 'center',
-    },
+      alignItems: 'center'
+    }
   },
   multiline: {
     '& label': {
       background: '#fafafa',
       top: -5,
-      padding: '0 5px',
-    },
+      padding: '0 5px'
+    }
   },
   chevronIcon: {
     transform: 'rotate(-90deg)',
     padding: 0,
-    marginRight: 0,
+    marginRight: 0
   },
   darkThemeLabel: {
     '& fieldset': {
-      borderColor: 'transparent',
+      borderColor: 'transparent'
     },
     '& legend': {
-      maxWidth: 0.01,
+      maxWidth: 0.01
     },
     '& label': {
       color: '#fff',
       top: 0,
       padding: 0,
-      backgroundColor: 'transparent',
-    },
+      backgroundColor: 'transparent'
+    }
   },
   darkThemeInput: {
     backgroundColor: '#2e2e2e',
-    borderRadius: '4px 4px 0px 0px',
+    borderRadius: '4px 4px 0px 0px'
   },
   darkThemeSelect: {
-    backgroundColor: '#2e2e2e',
+    backgroundColor: '#2e2e2e'
   },
   darkThemePaper: {
     background:
@@ -153,12 +144,12 @@ const style = (theme) => ({
       paddingTop: 10,
       paddingBottom: 10,
       '&:hover': {
-        background: 'rgba(255, 255, 255, 0.12)',
-      },
-    },
+        background: 'rgba(255, 255, 255, 0.12)'
+      }
+    }
   },
   darkThemeChevronIcon: {
-    fill: 'rgba(255, 255, 255, 0.7)',
+    fill: 'rgba(255, 255, 255, 0.7)'
   },
   clearIcon: {
     position: 'absolute',
@@ -166,8 +157,8 @@ const style = (theme) => ({
     padding: 2,
     '& svg': {
       fontSize: 20,
-      fill: 'rgba(0, 0, 0, 0.54)',
-    },
+      fill: 'rgba(0, 0, 0, 0.54)'
+    }
   },
   formLabel: {
     fontSize: 13,
@@ -239,11 +230,11 @@ const Layout = ({
     setInputValue(value);
     if (multiline) {
       const textField = ref.current;
-      const textarea = textField?.querySelector("textarea:last-of-type");
+      const textarea = textField?.querySelector('textarea:last-of-type');
       if (textField && textarea) {
-        const hasAriaLabelledBy = textarea.hasAttribute("aria-labelledby");
+        const hasAriaLabelledBy = textarea.hasAttribute('aria-labelledby');
         if (!hasAriaLabelledBy) {
-          textarea.setAttribute("aria-labelledby", id);
+          textarea.setAttribute('aria-labelledby', id);
         }
       }
     }
@@ -263,12 +254,12 @@ const Layout = ({
     ...InputProps,
     classes: {
       root: classNames({
-        [classes.darkThemeInput]: darkTheme,
+        [classes.darkThemeInput]: darkTheme
       }),
       input: classNames({
-        [classes.darkThemeInput]: darkTheme,
-      }),
-    },
+        [classes.darkThemeInput]: darkTheme
+      })
+    }
   };
 
   if (!multiline && mask.length) {
@@ -286,15 +277,10 @@ const Layout = ({
       InputPropsOptions.startAdornment = (
         <InputAdornment
           {...startAdornment.props}
-          className={classNames(
-            classes.startAdornment,
-            startAdornment?.props?.className
-          )}
+          className={classNames(classes.startAdornment, startAdornment?.props?.className)}
           position="start"
         >
-          {startAdornment?.props?.children
-            ? startAdornment?.props?.children
-            : null}
+          {startAdornment?.props?.children ? startAdornment?.props?.children : null}
         </InputAdornment>
       );
     }
@@ -320,9 +306,7 @@ const Layout = ({
 
   if (message) {
     InputPropsOptions.endAdornment = (
-      <FormControlMessage message={message}>
-        {InputPropsOptions.endAdornment}
-      </FormControlMessage>
+      <FormControlMessage message={message}>{InputPropsOptions.endAdornment}</FormControlMessage>
     );
   }
 
@@ -348,22 +332,20 @@ const Layout = ({
   const renderTextField = () => {
     return (
       <>
-        {
-          isMobile ? (
-            <FormLabel
-              component="legend"
-              classes={{
-                root: classes.formLabel,
-              }}
-            >
-              <FieldLabel
-                description={description}
-                required={required}
-                notRequiredLabel={notRequiredLabel}
-              />
-            </FormLabel>
-          ) : null
-        }
+        {isMobile ? (
+          <FormLabel
+            component="legend"
+            classes={{
+              root: classes.formLabel
+            }}
+          >
+            <FieldLabel
+              description={description}
+              required={required}
+              notRequiredLabel={notRequiredLabel}
+            />
+          </FormLabel>
+        ) : null}
         {isMobile ? chipsValue : null}
         <TextField
           {...rest}
@@ -374,13 +356,13 @@ const Layout = ({
               [classes.textField]: true,
               [classes.formControlDisabled]: readOnly,
               [classes.fullDecsription]: !inlineDisplay,
-              [classes.multiline]: multiline && (focused || !!value),
+              [classes.multiline]: multiline && (focused || !!value)
             },
             wrapperClass
           )}
           select={select || !!options}
           label={
-              description && !isMobile ? (
+            description && !isMobile ? (
               <FieldLabel
                 description={description}
                 required={required}
@@ -400,9 +382,7 @@ const Layout = ({
             }
           }}
           disabled={readOnly}
-          helperText={
-            sampleElement && errorText ? errorText : sampleElement || errorText
-          }
+          helperText={sampleElement && errorText ? errorText : sampleElement || errorText}
           error={!!error}
           multiline={multiline}
           InputProps={InputPropsOptions}
@@ -410,10 +390,8 @@ const Layout = ({
             maxLength,
             mask,
             formatChars,
-            ...(!multiline
-              ? { style: { height: 'auto', 'text-overflow': 'ellipsis' } }
-              : {}),
-              'aria-labelledby': id,
+            ...(!multiline ? { style: { height: 'auto', 'text-overflow': 'ellipsis' } } : {}),
+            'aria-labelledby': id
           }}
           InputLabelProps={{
             shrink: !!value || focused || startAdornment,
@@ -421,36 +399,36 @@ const Layout = ({
             classes: {
               root: classNames({
                 [classes.placeHolderRoot]: true,
-                [classes.placeHolderRootSelect]: options,
-              }),
-            },
+                [classes.placeHolderRootSelect]: options
+              })
+            }
           }}
           SelectProps={{
             classes: {
               select: classNames({
                 [classes.select]: true,
-                [classes.darkThemeSelect]: darkTheme,
-              }),
+                [classes.darkThemeSelect]: darkTheme
+              })
             },
             inputProps: {
               id: randomLabelId,
               title: description,
-              'aria-labelledby': id,
+              'aria-labelledby': id
             },
             MenuProps: {
               MenuListProps: {
                 style: {
                   maxWidth: '640px',
                   maxHeight: '400px',
-                  overflowY: 'auto',
+                  overflowY: 'auto'
                 },
-                'aria-labelledby': id,
+                'aria-labelledby': id
               },
               classes: {
                 paper: classNames({
-                  [classes.darkThemePaper]: darkTheme,
-                }),
-              },
+                  [classes.darkThemePaper]: darkTheme
+                })
+              }
             },
             IconComponent: (props) => (
               <>
@@ -469,7 +447,7 @@ const Layout = ({
                 <IconButton
                   {...props}
                   classes={{
-                    root: classes.chevronIcon,
+                    root: classes.chevronIcon
                   }}
                   aria-label={t('Select')}
                   disabled={readOnly}
@@ -478,12 +456,12 @@ const Layout = ({
                   <ChevronLeftIcon
                     alt={t('Select')}
                     className={classNames({
-                      [classes.darkThemeChevronIcon]: darkTheme,
+                      [classes.darkThemeChevronIcon]: darkTheme
                     })}
                   />
                 </IconButton>
               </>
-            ),
+            )
           }}
           id={path.join('-')}
           value={inputValue}
@@ -497,8 +475,8 @@ const Layout = ({
               handleChange({
                 target: {
                   ...target,
-                  value: useTrim ? inputValue.trim() : inputValue,
-                },
+                  value: useTrim ? inputValue.trim() : inputValue
+                }
               });
             }
             setFocused(false);
@@ -536,7 +514,7 @@ const Layout = ({
       className={classNames(className && className, {
         [classes.formControl]: true,
         [classes.noMargin]: !!noMargin,
-        [classes.darkThemeLabel]: darkTheme,
+        [classes.darkThemeLabel]: darkTheme
       })}
       style={{ width: formWidth, maxWidth }}
       onMouseOver={onMouseOver}
@@ -550,9 +528,7 @@ const Layout = ({
         renderTextField()
       )}
 
-      {equilPath(triggerExternalPath, [stepName].concat(path))
-        ? externalReaderMessage
-        : null}
+      {equilPath(triggerExternalPath, [stepName].concat(path)) ? externalReaderMessage : null}
     </FormControl>
   );
 };

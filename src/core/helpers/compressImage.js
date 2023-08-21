@@ -1,9 +1,6 @@
 import Compressor from 'compressorjs';
 
-async function compressImage({
-  attach,
-  outputQuality
-}) {
+async function compressImage({ attach, outputQuality }) {
   return new Promise((resolve) => {
     // eslint-disable-next-line no-new
     new Compressor(attach, {
@@ -13,7 +10,7 @@ async function compressImage({
       },
       error: (err) => {
         console.error(err.message);
-      },
+      }
     });
   });
 }

@@ -16,5 +16,5 @@ export default {
   Curator: <Curator />,
   CustomInterfaceCheck: <CustomInterfaceCheck />,
   HashToInternal: <HashToInternal />,
-  VerifyHash: <VerifyHash />,
+  VerifyHash: <VerifyHash />
 };

@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-  CircularProgress,
-} from '@mui/material';
+import { List, ListItem, ListItemText, ListItemIcon, CircularProgress } from '@mui/material';
 import withStyles from '@mui/styles/withStyles';
 import FileName from 'components/Attach/FileName';
 import renderHTML from 'helpers/renderHTML';
@@ -18,38 +12,30 @@ const styles = (theme) => ({
     background: 'transparent',
     [theme.breakpoints.down('md')]: {
       padding: 0,
-      maxWidth: 'calc(100% - 16px)',
-    },
+      maxWidth: 'calc(100% - 16px)'
+    }
   },
   listItem: {
-    padding: 0,
+    padding: 0
   },
   listItemText: {
     padding: 0,
     margin: 0,
     [theme.breakpoints.down('md')]: {
-      padding: 0,
-    },
+      padding: 0
+    }
   },
   iconWrapp: {
     marginRight: 10,
-    minWidth: 'unset',
+    minWidth: 'unset'
   },
   listItemTextPrimary: {
     minWidth: 150,
-    wordBreak: 'break-word',
-  },
+    wordBreak: 'break-word'
+  }
 });
 
-const FileNameColumn = ({
-  classes,
-  item,
-  name,
-  customName,
-  whiteSpace,
-  meta,
-  cutLine,
-}) => (
+const FileNameColumn = ({ classes, item, name, customName, whiteSpace, meta, cutLine }) => (
   <List className={classes.list}>
     <ListItem className={classes.listItem}>
       {item instanceof File ? (

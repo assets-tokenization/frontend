@@ -1,1 +1,1 @@
-export default ({docType, docTypeCourts}) => ({docType, docTypeCourts});
+export default ({ docType, docTypeCourts }) => ({ docType, docTypeCourts });

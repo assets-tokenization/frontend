@@ -1,3 +1,3 @@
 import capitalizeFirstLetter from 'helpers/capitalizeFirstLetter';
 
-export default str => str.split('_').map(capitalizeFirstLetter).join('');
+export default (str) => str.split('_').map(capitalizeFirstLetter).join('');

@@ -1,12 +1,12 @@
-const EDS_CLEAR_TYPES = "eds/clearTypes";
-const EDS_ADD_KM_TYPE = "eds/addKmType";
-const EDS_ADD_KM_DEVICE = "eds/addKmDevice";
-const EDS_LIBRARY_INIT_FAILED = "eds/libraryInitFailed";
-const EDS_INITED = "eds/libraryInitSuccess";
+const EDS_CLEAR_TYPES = 'eds/clearTypes';
+const EDS_ADD_KM_TYPE = 'eds/addKmType';
+const EDS_ADD_KM_DEVICE = 'eds/addKmDevice';
+const EDS_LIBRARY_INIT_FAILED = 'eds/libraryInitFailed';
+const EDS_INITED = 'eds/libraryInitSuccess';
 
 const initialState = {
   kmTypes: [],
-  inited: false,
+  inited: false
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -23,7 +23,7 @@ const rootReducer = (state = initialState, action) => {
       const { device, typeIndex, deviceIndex } = action.payload;
       kmTypes[typeIndex].devices[deviceIndex] = {
         index: deviceIndex,
-        name: device,
+        name: device
       };
       return { ...state, kmTypes };
     }

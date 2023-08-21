@@ -12,149 +12,136 @@ import { uploadFile } from 'application/actions/files';
 import SelectFileArea from './SelectFiles/components/SelectFileArea';
 
 const File = ({
-    t,
-    value = {},
-    actions,
-    hidden,
-    path,
-    name,
-    sample,
-    maxSize,
-    accept,
-    readOnly,
-    onChange
+  t,
+  value = {},
+  actions,
+  hidden,
+  path,
+  name,
+  sample,
+  maxSize,
+  accept,
+  readOnly,
+  onChange
 }) => {
-    const [open, setOpen] = React.useState(false);
-    const [busy, setBusy] = React.useState(false);
-    const [error, setError] = React.useState();
-    const [openErrorDialog, setOpenErrorDialog] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
+  const [busy, setBusy] = React.useState(false);
+  const [error, setError] = React.useState();
+  const [openErrorDialog, setOpenErrorDialog] = React.useState(false);
 
-    if (hidden) return null;
+  if (hidden) return null;
 
-    const files = [].concat(value)
-        .filter(Boolean)
-        .filter(file => Object.keys(file).length > 0);
+  const files = []
+    .concat(value)
+    .filter(Boolean)
+    .filter((file) => Object.keys(file).length > 0);
 
-    const onSelectFiles = async (acceptedFiles) => {
-        if (!acceptedFiles.length) {
-            setError(new Error(t('FileSizeLimitReached')));
-            setOpenErrorDialog(true);
-            return;
-        }
+  const onSelectFiles = async (acceptedFiles) => {
+    if (!acceptedFiles.length) {
+      setError(new Error(t('FileSizeLimitReached')));
+      setOpenErrorDialog(true);
+      return;
+    }
 
-        const acceptedFile = acceptedFiles.shift();
+    const acceptedFile = acceptedFiles.shift();
 
-        setBusy(true);
+    setBusy(true);
 
-        try {
-            const uploadResult = await actions.uploadFile(acceptedFile);
+    try {
+      const uploadResult = await actions.uploadFile(acceptedFile);
 
-            const uploadedFile = {
-                name: acceptedFile.name,
-                type: acceptedFile.type,
-                link: uploadResult.url
-            };
+      const uploadedFile = {
+        name: acceptedFile.name,
+        type: acceptedFile.type,
+        link: uploadResult.url
+      };
 
-            onChange(uploadedFile);
-            setOpen(false);
-        } catch (e) {
-            // error handler
-        }
+      onChange(uploadedFile);
+      setOpen(false);
+    } catch (e) {
+      // error handler
+    }
 
-        setBusy(false);
-    };
+    setBusy(false);
+  };
 
-    return (
-        <>
-            {
-                readOnly ? null : (
-                    <Toolbar disableGutters={true}>
-                        <Button
-                            color="primary"
-                            variant="contained"
-                            onClick={() => setOpen(true)}
-                            disabled={readOnly}
-                        >
-                            {t(value.name ? 'UploadAnotherFile' : 'UploadFiles')}
-                        </Button>
-                    </Toolbar>
-                )
-            }
+  return (
+    <>
+      {readOnly ? null : (
+        <Toolbar disableGutters={true}>
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={() => setOpen(true)}
+            disabled={readOnly}
+          >
+            {t(value.name ? 'UploadAnotherFile' : 'UploadFiles')}
+          </Button>
+        </Toolbar>
+      )}
 
-            <FileDataTable
-                data={files}
-                fileControl={true}
-                directDownload={true}
-                handleDeleteFile={readOnly ? null : () => onChange({})}
-                controls={
-                    {
-                        pagination: false,
-                        toolbar: false,
-                        search: false,
-                        header: true,
-                        refresh: false,
-                        switchView: true,
-                        customizateColumns: false
-                    }
-                }
+      <FileDataTable
+        data={files}
+        fileControl={true}
+        directDownload={true}
+        handleDeleteFile={readOnly ? null : () => onChange({})}
+        controls={{
+          pagination: false,
+          toolbar: false,
+          search: false,
+          header: true,
+          refresh: false,
+          switchView: true,
+          customizateColumns: false
+        }}
+      />
+
+      <Dialog open={open} onClose={() => setOpen(false)} fullWidth={true} maxWidth="md">
+        <DialogTitle>{t('UploadFiles')}</DialogTitle>
+        <DialogContent>
+          {busy ? (
+            <Preloader />
+          ) : (
+            <SelectFileArea
+              path={path}
+              name={name}
+              sample={sample}
+              maxSize={maxSize}
+              accept={accept}
+              multiple={false}
+              readOnly={readOnly}
+              onSelect={onSelectFiles}
             />
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button disabled={busy} onClick={() => setOpen(false)}>
+            {t('Close')}
+          </Button>
+        </DialogActions>
+      </Dialog>
 
-            <Dialog
-                open={open}
-                onClose={() => setOpen(false)}
-                fullWidth={true}
-                maxWidth="md"
-            >
-                <DialogTitle>{t('UploadFiles')}</DialogTitle>
-                <DialogContent>
-                    {
-                        busy
-                        ? <Preloader />
-                        : (
-                            <SelectFileArea
-                                path={path}
-                                name={name}
-                                sample={sample}
-                                maxSize={maxSize}
-                                accept={accept}
-                                multiple={false}
-                                readOnly={readOnly}
-                                onSelect={onSelectFiles}
-                            />
-                        )
-                    }
-                </DialogContent>
-                <DialogActions>
-                    <Button
-                        disabled={busy}
-                        onClick={() => setOpen(false)}
-                    >
-                        {t('Close')}
-                    </Button>
-                </DialogActions>
-            </Dialog>
-
-            <ConfirmDialog
-                open={openErrorDialog}
-                title={t('Error')}
-                description={error && error.message}
-                handleClose={() => setOpenErrorDialog(false)}
-            />
-        </>
-    );
+      <ConfirmDialog
+        open={openErrorDialog}
+        title={t('Error')}
+        description={error && error.message}
+        handleClose={() => setOpenErrorDialog(false)}
+      />
+    </>
+  );
 };
 
 File.propTypes = {
-    value: PropTypes.object.isRequired
+  value: PropTypes.object.isRequired
 };
 
 const mapStateToProps = () => ({});
 
-const mapDispatchToProps = dispatch => ({
-    actions: {
-        addError: bindActionCreators(addError, dispatch),
-        uploadFile: bindActionCreators(uploadFile, dispatch)
-    }
+const mapDispatchToProps = (dispatch) => ({
+  actions: {
+    addError: bindActionCreators(addError, dispatch),
+    uploadFile: bindActionCreators(uploadFile, dispatch)
+  }
 });
 
 const translated = translate('Elements')(File);

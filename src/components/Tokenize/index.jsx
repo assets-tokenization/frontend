@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import { useTranslate } from 'react-translate';
 import makeStyles from '@mui/styles/makeStyles';
 import {
@@ -9,16 +9,16 @@ import {
   DialogActions,
   Button,
   IconButton
-} from "@mui/material";
+} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import classNames from "classnames";
+import classNames from 'classnames';
 import CheckIcon from 'assets/images/Check_icon.svg';
-import LoadingStep from "components/LoadingStep";
+import LoadingStep from 'components/LoadingStep';
 
 const styles = (theme) => ({
   divider: {
     height: 1,
-    backgroundColor: 'rgba(233, 235, 241, 1)',
+    backgroundColor: 'rgba(233, 235, 241, 1)'
   },
   dialogTitle: {
     padding: '7px 16px',
@@ -36,7 +36,7 @@ const styles = (theme) => ({
       fontSize: 16,
       lineHeight: '24px',
       fontWeight: 600,
-      paddingRight: 0,
+      paddingRight: 0
     }
   },
   dialogContent: {
@@ -49,7 +49,7 @@ const styles = (theme) => ({
     [theme.breakpoints.down('sm')]: {
       fontSize: 14,
       lineHeight: '21px',
-      fontWeight: 600,
+      fontWeight: 600
     }
   },
   dialogContentCenter: {
@@ -67,7 +67,7 @@ const styles = (theme) => ({
       '& button': {
         width: '100%',
         marginLeft: '0!important',
-        marginBottom: 10,
+        marginBottom: 10
       }
     }
   },
@@ -117,7 +117,7 @@ const styles = (theme) => ({
     [theme.breakpoints.down('sm')]: {
       marginBottom: 0,
       width: 56,
-      height: 56,
+      height: 56
     }
   },
   dialogTitleSuccess: {
@@ -140,11 +140,7 @@ const styles = (theme) => ({
 
 const useStyles = makeStyles(styles);
 
-const Tokenize = ({
-  tokenize,
-  setTokenize,
-  onSuccess
-}) => {
+const Tokenize = ({ tokenize, setTokenize, onSuccess }) => {
   const [step, setStep] = React.useState('intro');
   const t = useTranslate('TokenizeScreen');
   const classes = useStyles();
@@ -159,135 +155,104 @@ const Tokenize = ({
     onSuccess(tokenize);
   };
   return (
-    <Dialog
-      open={!!tokenize}
-    >
-      {
-        step === 'intro' ? (
-          <>
-            <DialogTitle
+    <Dialog open={!!tokenize}>
+      {step === 'intro' ? (
+        <>
+          <DialogTitle
+            classes={{
+              root: classes.dialogTitle
+            }}
+          >
+            {t('Title')}
+            <IconButton onClick={handleClose}>
+              <CloseIcon />
+            </IconButton>
+          </DialogTitle>
+          <DialogContent
+            classes={{
+              root: classes.dialogContent
+            }}
+          >
+            <DialogContentText
               classes={{
-                root: classes.dialogTitle
+                root: classNames({
+                  [classes.dialogContentText]: true,
+                  [classes.removeMargin]: true
+                })
               }}
             >
-              {t('Title')}
-              <IconButton
-                onClick={handleClose}
-              >
-                <CloseIcon />
-              </IconButton>
-            </DialogTitle>
-            <DialogContent
+              {t('TokenizeText')}
+            </DialogContentText>
+          </DialogContent>
+
+          <div className={classes.divider} />
+
+          <DialogActions
+            classes={{
+              root: classes.dialogActions
+            }}
+          >
+            <Button variant="contained" onClick={() => setStep('processing')}>
+              {t('Tokenize')}
+            </Button>
+
+            <Button onClick={handleClose}>{t('Cancel')}</Button>
+          </DialogActions>
+        </>
+      ) : null}
+
+      {step === 'processing' ? (
+        <LoadingStep
+          title={t('TokenizeProcessingTitle')}
+          description={t('TokenizeProcessingDescription')}
+          actionText={t('CancelProcessing')}
+          onClick={() => setStep('success')}
+        />
+      ) : null}
+
+      {step === 'success' ? (
+        <>
+          <DialogTitle
+            classes={{
+              root: classNames(classes.dialogTitleSuccess)
+            }}
+          >
+            <IconButton onClick={handleClose}>
+              <CloseIcon className={classes.closeIcon} />
+            </IconButton>
+          </DialogTitle>
+
+          <img src={CheckIcon} alt="headline_logo" className={classes.successLogo} />
+
+          <DialogContent
+            classes={{
+              root: classNames(classes.dialogContent, classes.dialogContentCenter)
+            }}
+          >
+            <DialogContentText
               classes={{
-                root: classes.dialogContent
+                root: classes.dialogContentTitle
               }}
             >
-              <DialogContentText
-                classes={{
-                  root: classNames({
-                    [classes.dialogContentText]: true,
-                    [classes.removeMargin]: true
-                  })
-                }}
-              >
-                {t("TokenizeText")}
-              </DialogContentText>
-            </DialogContent>
-
-            <div className={classes.divider} />
-
-            <DialogActions
+              {t('SuccessTitle')}
+            </DialogContentText>
+            <DialogContentText
               classes={{
-                root: classes.dialogActions
+                root: classes.dialogContentText
               }}
             >
-              <Button
-                variant="contained"
-                onClick={() => setStep('processing')}
-              >
-                {t("Tokenize")}
-              </Button>
-
-              <Button
-                onClick={handleClose}
-              >
-                {t("Cancel")}
-              </Button>
-            </DialogActions>
-          </>
-        ) : null
-      }
-
-      {
-        step === 'processing' ? (
-          <LoadingStep
-            title={t("TokenizeProcessingTitle")}
-            description={t("TokenizeProcessingDescription")}
-            actionText={t('CancelProcessing')}
-            onClick={() => setStep('success')}
-          />
-        ) : null
-      }
-
-      {
-        step === 'success' ? (
-          <>
-            <DialogTitle
-              classes={{
-                root: classNames(
-                  classes.dialogTitleSuccess
-                )
-              }}
+              {t('SuccessDescription')}
+            </DialogContentText>
+            <Button
+              variant="contained"
+              className={classes.dialogProcessingButton}
+              onClick={handleSuccess}
             >
-              <IconButton
-                onClick={handleClose}
-              >
-                <CloseIcon
-                  className={classes.closeIcon}
-                />
-              </IconButton>
-            </DialogTitle>
-
-            <img
-              src={CheckIcon}
-              alt="headline_logo"
-              className={classes.successLogo}
-            />
-
-            <DialogContent
-              classes={{
-                root: classNames(
-                  classes.dialogContent,
-                  classes.dialogContentCenter
-                )
-              }}
-            >
-              <DialogContentText
-                classes={{
-                  root: classes.dialogContentTitle
-                }}
-              >
-                {t("SuccessTitle")}
-              </DialogContentText>
-              <DialogContentText
-                classes={{
-                  root: classes.dialogContentText
-                }}
-              >
-                {t("SuccessDescription")}
-              </DialogContentText>
-              <Button
-                variant="contained"
-                className={classes.dialogProcessingButton}
-                onClick={handleSuccess}
-              >
-                {t('EditObject')}
-              </Button>
-            </DialogContent>
-          </>
-        ) : null
-      }
-
+              {t('EditObject')}
+            </Button>
+          </DialogContent>
+        </>
+      ) : null}
     </Dialog>
   );
 };

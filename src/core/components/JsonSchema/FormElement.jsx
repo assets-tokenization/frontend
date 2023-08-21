@@ -7,18 +7,18 @@ import formElements from 'components/JsonSchema/elements';
 import emptyValues from './emptyValues';
 
 class FormElement extends React.Component {
-    componentDidMount() {
-        const { value, onChange } = this.props;
-        if (value === null && this.isRequired() && onChange) {
-            onChange(this.getDefaultValue());
-        }
+  componentDidMount() {
+    const { value, onChange } = this.props;
+    if (value === null && this.isRequired() && onChange) {
+      onChange(this.getDefaultValue());
     }
+  }
 
-    getDefaultValue = () => {
-        const { schema } = this.props;
+  getDefaultValue = () => {
+    const { schema } = this.props;
 
-        return schema.defaultValue || emptyValues[schema.type || 'object'];
-    };
+    return schema.defaultValue || emptyValues[schema.type || 'object'];
+  };
 }
 
 export default FormElement;

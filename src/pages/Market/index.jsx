@@ -1,18 +1,21 @@
-import React from "react";
+import React from 'react';
 import { useTranslate } from 'react-translate';
-import classNames from "classnames";
+import classNames from 'classnames';
+import { useDispatch } from 'react-redux';
 import { NumericFormat } from 'react-number-format';
 import makeStyles from '@mui/styles/makeStyles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import Header from "components/Header";
-import LazyLoad from "assets/images/lazy_load_market.png";
-import SidebarMenu from "components/SidebarMenu";
-import ObjectScreen from "pages/ObjectScreen";
-import Preloader from "components/Preloader";
-import ObjectsStep from "./components/ObjectsStep";
-import SellingStep from "./components/SellingStep";
-import MessagesStep from "./components/MessagesStep";
-import PurchasesStep from "./components/PurchasesStep";
+import Header from 'components/Header';
+import LazyLoad from 'assets/images/lazy_load_market.png';
+import SidebarMenu from 'components/SidebarMenu';
+import ObjectScreen from 'pages/ObjectScreen';
+import Preloader from 'components/Preloader';
+import ObjectsStep from './components/ObjectsStep';
+import SellingStep from './components/SellingStep';
+import MessagesStep from './components/MessagesStep';
+import PurchasesStep from './components/PurchasesStep';
+import { getObjects, getMessages } from 'actions';
+import { Typography } from '@mui/material';
 
 const styles = (theme) => ({
   wrapper: {
@@ -34,14 +37,14 @@ const styles = (theme) => ({
     width: '100%',
     height: '100%',
     objectFit: 'cover',
-    objectPosition: 'center',
+    objectPosition: 'center'
   },
   '@keyframes fadeIn': {
     '0%': {
-      opacity: 1,
+      opacity: 1
     },
     '50%': {
-      opacity: 0,
+      opacity: 0
     },
     '100%': {
       opacity: 1
@@ -62,13 +65,13 @@ const styles = (theme) => ({
     lineHeight: '24px',
     [theme.breakpoints.down('sm')]: {
       fontSize: 14,
-      lineHeight: '21px',
+      lineHeight: '21px'
     }
   },
   briefInfoTitle: {
     fontSize: 16,
     fontWeight: 600,
-    lineHeight: '24px',
+    lineHeight: '24px'
   },
   cardDetails: {
     display: 'flex',
@@ -88,7 +91,7 @@ const styles = (theme) => ({
     [theme.breakpoints.down('sm')]: {
       fontSize: 11,
       lineHeight: '16px',
-      fontWeight: 400,
+      fontWeight: 400
     }
   },
   dot: {
@@ -97,7 +100,7 @@ const styles = (theme) => ({
     height: 4,
     borderRadius: '50%',
     backgroundColor: 'rgba(217, 217, 217, 1)',
-    margin: '0 8px',
+    margin: '0 8px'
   },
   cardsWrapper: {
     display: 'flex',
@@ -118,11 +121,11 @@ const styles = (theme) => ({
       },
       '& > div:last-child': {
         paddingBottom: 16
-      },
+      }
     }
   },
   price: {
-    color: '#4AA42F' 
+    color: '#4AA42F'
   },
   headline: {
     fontSize: 18,
@@ -137,7 +140,7 @@ const styles = (theme) => ({
     marginBottom: 32,
     color: '#595959',
     [theme.breakpoints.down('sm')]: {
-      marginBottom: 24,
+      marginBottom: 24
     }
   },
   fieldHeadline: {
@@ -147,7 +150,7 @@ const styles = (theme) => ({
     marginBottom: 8,
     [theme.breakpoints.down('sm')]: {
       fontSize: 11,
-      lineHeight: '16px',
+      lineHeight: '16px'
     }
   },
   fieldSample: {
@@ -156,7 +159,7 @@ const styles = (theme) => ({
     color: '#595959'
   },
   textfield: {
-    width: '100%',
+    width: '100%'
   },
   cardContent: {
     width: 328,
@@ -202,13 +205,13 @@ const styles = (theme) => ({
     fontSize: 16,
     fontWeight: 500,
     lineHeight: '24px',
-    marginBottom: 16,
+    marginBottom: 16
   },
   fieldHeadlineSM: {
     [theme.breakpoints.down('sm')]: {
       fontSize: 14,
       fontWeight: 400,
-      lineHeight: '20px',
+      lineHeight: '20px'
     }
   },
   alignLeft: {
@@ -226,7 +229,7 @@ const styles = (theme) => ({
     maxWidth: 618,
     [theme.breakpoints.down('sm')]: {
       fontSize: 14,
-      lineHeight: '21px',
+      lineHeight: '21px'
     }
   },
   messagesDate: {
@@ -237,7 +240,7 @@ const styles = (theme) => ({
     color: '#595959',
     [theme.breakpoints.down('sm')]: {
       fontSize: 11,
-      lineHeight: '16px',
+      lineHeight: '16px'
     }
   },
   messagesTitle: {
@@ -247,7 +250,7 @@ const styles = (theme) => ({
     marginBottom: 16,
     [theme.breakpoints.down('sm')]: {
       fontSize: 14,
-      lineHeight: '21px',
+      lineHeight: '21px'
     }
   },
   messagesText: {
@@ -258,7 +261,7 @@ const styles = (theme) => ({
     color: '#595959',
     [theme.breakpoints.down('sm')]: {
       fontSize: 14,
-      lineHeight: '21px',
+      lineHeight: '21px'
     }
   },
   alignCenter: {
@@ -276,13 +279,13 @@ const styles = (theme) => ({
       overflow: 'hidden',
       whiteSpace: 'nowrap',
       textOverflow: 'ellipsis',
-      margin: 0,
-    },
+      margin: 0
+    }
   },
   containerXs: {
     [theme.breakpoints.down('md')]: {
-      justifyContent: 'space-between',
-    },
+      justifyContent: 'space-between'
+    }
   },
   tabsWrapper: {
     marginBottom: 32,
@@ -290,32 +293,32 @@ const styles = (theme) => ({
     maxWidth: 843,
     [theme.breakpoints.down('md')]: {
       padding: '0px 8px'
-    },
+    }
   },
   tabSelected: {
-    backgroundColor: 'rgba(34, 89, 228, 0.05)',
+    backgroundColor: 'rgba(34, 89, 228, 0.05)'
   },
   mb32: {
     marginBottom: 32,
     [theme.breakpoints.down('md')]: {
-      marginBottom: 24,
+      marginBottom: 24
     }
   },
   mb16Sm: {
     [theme.breakpoints.down('md')]: {
-      marginBottom: 16,
+      marginBottom: 16
     }
   },
   maxWidth: {
     maxWidth: 465
   },
   ml16: {
-    marginLeft: 16,
+    marginLeft: 16
   },
   mr16: {
     marginRight: 16,
     [theme.breakpoints.down('sm')]: {
-      marginRight: 0,
+      marginRight: 0
     }
   },
   relative: {
@@ -342,7 +345,7 @@ const styles = (theme) => ({
         justifyContent: 'center'
       },
       '& > button:last-child': {
-        marginBottom: 8,
+        marginBottom: 8
       }
     }
   },
@@ -350,7 +353,7 @@ const styles = (theme) => ({
     '& input': {
       overflow: 'hidden',
       whiteSpace: 'nowrap',
-      textOverflow: 'ellipsis',
+      textOverflow: 'ellipsis'
     }
   },
   messagesCard: {
@@ -358,7 +361,7 @@ const styles = (theme) => ({
   },
   actionIcon: {
     marginLeft: 10
-  },
+  }
 });
 
 const useStyles = makeStyles(styles);
@@ -368,29 +371,26 @@ const NumberFormatCustom = ({ ref, onChange, format, ...props }) => (
     {...props}
     getInputRef={ref}
     format={format}
-    onValueChange={
-      values => {
-        onChange({
-          target: {
-            value: values.value
-          }
-        });
-      }
-    }
+    onValueChange={(values) => {
+      onChange({
+        target: {
+          value: values.value
+        }
+      });
+    }}
     thousandSeparator={' '}
   />
 );
-
 const MarketScreen = ({
   history,
   match: {
-    params: {
-      objectId
-    }
+    params: { objectId }
   }
 }) => {
   const [loading, setLoading] = React.useState(false);
   const [page, setPage] = React.useState('Objects');
+  const [objects, setData] = React.useState([]);
+  const [messages, setMessages] = React.useState([]);
   const [rnokpp, setRnokpp] = React.useState('');
   const [buyerData, setBuyerData] = React.useState(null);
   const [price, setPrice] = React.useState('');
@@ -400,14 +400,54 @@ const MarketScreen = ({
   const [activeSellingStep, setActiveSellingStep] = React.useState(0);
   const [activeBuyStep, setActiveBuyStep] = React.useState(0);
   const [tab, setTab] = React.useState(0);
+  const [errorMessage, setErrorMessage] = React.useState(null);
+  const dispatch = useDispatch();
 
   const t = useTranslate('MarketScreen');
   const classes = useStyles();
-  const isSM = useMediaQuery(theme => theme.breakpoints.down('sm'));
+  const isSM = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
-  const toDetailsObject = React.useCallback((number) => {
-    history.push(`/market/${number}`);
-  }, [history]);
+  React.useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+
+      const result = await getObjects()(dispatch);
+      const resultMessages = await getMessages()(dispatch);
+
+      if (result instanceof Error || resultMessages instanceof Error) {
+        setLoading(false);
+        setErrorMessage(result?.message || resultMessages?.message);
+        return;
+      }
+
+      setMessages(resultMessages);
+
+      setData(result);
+
+      setLoading(false);
+    };
+
+    fetchData();
+  }, [dispatch]);
+
+  const objectsList = React.useMemo(() => {
+    return objects.filter((item) => !item?.selling && !item?.purchase);
+  }, [objects]);
+
+  const sellingList = React.useMemo(() => {
+    return objects.filter((item) => item?.selling);
+  }, [objects]);
+
+  const purchaseList = React.useMemo(() => {
+    return objects.filter((item) => item?.purchase);
+  }, [objects]);
+
+  const toDetailsObject = React.useCallback(
+    (number) => {
+      history.push(`/market/${number}`);
+    },
+    [history]
+  );
 
   const toMyObjects = React.useCallback(() => {
     history.push('/home');
@@ -433,13 +473,7 @@ const MarketScreen = ({
   if (loading) {
     if (isSM) return <Preloader />;
 
-    return (
-      <img
-        src={LazyLoad}
-        alt="lazy load table preview"
-        className={classes.lazyLoad}
-      />
-    );
+    return <img src={LazyLoad} alt="lazy load table preview" className={classes.lazyLoad} />;
   }
 
   const handleChangePage = (data) => {
@@ -455,13 +489,17 @@ const MarketScreen = ({
     window.scrollTo(0, 0);
   };
 
+  if (errorMessage) {
+    return (
+      <>
+        <Typography>{errorMessage}</Typography>
+      </>
+    );
+  }
+
   return (
     <div className={classes.layout}>
-      <SidebarMenu
-        onChange={handleChangePage}
-        page={page}
-        history={history}
-      />
+      <SidebarMenu onChange={handleChangePage} page={page} history={history} messages={messages} />
 
       <div className={classes.rightSide}>
         <Header
@@ -474,91 +512,79 @@ const MarketScreen = ({
         />
 
         <div
-          className={
-            classNames({
-              [classes.wrapper]: true,
-              [classes.objectWrapper]: objectId
-            })
-          }
+          className={classNames({
+            [classes.wrapper]: true,
+            [classes.objectWrapper]: objectId
+          })}
         >
-          {
-            objectId ? (
-              <ObjectScreen
-                hideHeader={true}
-                readOnly={true}
-                history={history}
-                handleClickBack={() => history.push('/market')}
-              />
-            ) : (
-              <>
-                {
-                  page === 'Objects' ? (
-                    <ObjectsStep
-                      tab={tab}
-                      setTab={setTab}
-                      t={t}
-                      toDetailsObject={toDetailsObject}
-                      toMyObjects={toMyObjects}
-                      classes={classes}
-                      setPage={setPage}
-                      setCreatingOffer={setCreatingOffer}
-                    />
-                  ) : null
-                }
+          {objectId ? (
+            <ObjectScreen
+              hideHeader={true}
+              readOnly={true}
+              history={history}
+              handleClickBack={() => history.push('/market')}
+            />
+          ) : (
+            <>
+              {page === 'Objects' ? (
+                <ObjectsStep
+                  tab={tab}
+                  setTab={setTab}
+                  t={t}
+                  toDetailsObject={toDetailsObject}
+                  toMyObjects={toMyObjects}
+                  classes={classes}
+                  setPage={setPage}
+                  setCreatingOffer={setCreatingOffer}
+                  objects={objectsList}
+                  loading={loading}
+                />
+              ) : null}
 
-                {
-                  page === 'Selling' ? (
-                    <SellingStep
-                      buyerData={buyerData}
-                      classes={classes}
-                      isSM={isSM}
-                      rnokpp={rnokpp}
-                      error={error}
-                      price={price}
-                      formatPrice={formatPrice}
-                      creatingOffer={creatingOffer}
-                      toDetailsObject={toDetailsObject}
-                      setBuyerData={setBuyerData}
-                      setRnokpp={setRnokpp}
-                      setPrice={setPrice}
-                      NumberFormatCustom={NumberFormatCustom}
-                      setError={setError}
-                      setCreatingOffer={setCreatingOffer}
-                      t={t}
-                      activeStep={activeSellingStep}
-                      setActiveStep={setActiveSellingStep}
-                    />
-                  ) : null
-                }
+              {page === 'Selling' ? (
+                <SellingStep
+                  buyerData={buyerData}
+                  classes={classes}
+                  isSM={isSM}
+                  rnokpp={rnokpp}
+                  error={error}
+                  price={price}
+                  formatPrice={formatPrice}
+                  creatingOffer={creatingOffer}
+                  toDetailsObject={toDetailsObject}
+                  setBuyerData={setBuyerData}
+                  setRnokpp={setRnokpp}
+                  setPrice={setPrice}
+                  NumberFormatCustom={NumberFormatCustom}
+                  setError={setError}
+                  setCreatingOffer={setCreatingOffer}
+                  t={t}
+                  activeStep={activeSellingStep}
+                  setActiveStep={setActiveSellingStep}
+                  objects={sellingList}
+                />
+              ) : null}
 
-                {
-                  page === 'Purchases' ? (
-                    <PurchasesStep
-                      t={t}
-                      classes={classes}
-                      toDetailsObject={toDetailsObject}
-                      purchase={purchase}
-                      setPurchase={setPurchase}
-                      isSM={isSM}
-                      NumberFormatCustom={NumberFormatCustom}
-                      activeStep={activeBuyStep}
-                      setActiveStep={setActiveBuyStep}
-                    />
-                  ): null
-                }
+              {page === 'Purchases' ? (
+                <PurchasesStep
+                  t={t}
+                  classes={classes}
+                  toDetailsObject={toDetailsObject}
+                  purchase={purchase}
+                  setPurchase={setPurchase}
+                  isSM={isSM}
+                  NumberFormatCustom={NumberFormatCustom}
+                  activeStep={activeBuyStep}
+                  setActiveStep={setActiveBuyStep}
+                  objects={purchaseList}
+                />
+              ) : null}
 
-                {
-                  page === 'Messages' ? (
-                    <MessagesStep
-                      t={t}
-                      classes={classes}
-                      toPurchase={toPurchase}
-                    />
-                  ) : null
-                }
-              </>
-            )
-          }
+              {page === 'Messages' ? (
+                <MessagesStep t={t} classes={classes} toPurchase={toPurchase} messages={messages} />
+              ) : null}
+            </>
+          )}
         </div>
       </div>
     </div>

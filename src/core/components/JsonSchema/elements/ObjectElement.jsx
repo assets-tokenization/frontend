@@ -3,34 +3,45 @@ import PropTypes from 'prop-types';
 
 import SchemaForm from '../SchemaForm';
 
-const ObjectElement = ({ properties, required, schema, readOnly, value, onChange, path, type, ...rest }) => Object.keys(properties || {}).map(key => (
+const ObjectElement = ({
+  properties,
+  required,
+  schema,
+  readOnly,
+  value,
+  onChange,
+  path,
+  type,
+  ...rest
+}) =>
+  Object.keys(properties || {}).map((key) => (
     <SchemaForm
-        {...rest}
-        {...properties[key]}
-        schema={properties[key]}
-        path={path.concat(key)}
-        required={(schema.required || []).includes(key)}
-        key={key}
-        name={key}
-        readOnly={readOnly || properties[key].readOnly}
-        value={(value || {})[key]}
-        parentValue={value}
-        onChange={onChange.bind(null, key)}
+      {...rest}
+      {...properties[key]}
+      schema={properties[key]}
+      path={path.concat(key)}
+      required={(schema.required || []).includes(key)}
+      key={key}
+      name={key}
+      readOnly={readOnly || properties[key].readOnly}
+      value={(value || {})[key]}
+      parentValue={value}
+      onChange={onChange.bind(null, key)}
     />
-));
+  ));
 
 ObjectElement.propTypes = {
-    errors: PropTypes.array,
-    value: PropTypes.object,
-    path: PropTypes.array,
-    onChange: PropTypes.func
+  errors: PropTypes.array,
+  value: PropTypes.object,
+  path: PropTypes.array,
+  onChange: PropTypes.func
 };
 
 ObjectElement.defaultProps = {
-    errors: [],
-    value: {},
-    path: [],
-    onChange: () => null
+  errors: [],
+  value: {},
+  path: [],
+  onChange: () => null
 };
 
 export default ObjectElement;

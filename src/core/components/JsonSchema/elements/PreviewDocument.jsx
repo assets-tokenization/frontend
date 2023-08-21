@@ -9,8 +9,8 @@ import FileDataTable from 'components/FileDataTable';
 
 const styles = {
   blockDisplay: {
-    display: 'block',
-  },
+    display: 'block'
+  }
 };
 
 class PreviewDocument extends React.Component {
@@ -43,14 +43,7 @@ class PreviewDocument extends React.Component {
   }
 
   getData = async () => {
-    const {
-      demo,
-      onlyMainFile,
-      previewActions,
-      rootDocument,
-      steps,
-      activeStep,
-    } = this.props;
+    const { demo, onlyMainFile, previewActions, rootDocument, steps, activeStep } = this.props;
 
     const workflowFiles = await previewActions.getDocumentWorkflowFiles(
       rootDocument.id,
@@ -80,7 +73,7 @@ class PreviewDocument extends React.Component {
       fileStorage,
       hidden,
       printAction,
-      labels,
+      labels
     } = this.props;
     const { files, loading } = this.state;
 
@@ -108,13 +101,13 @@ class PreviewDocument extends React.Component {
 
 PreviewDocument.propTypes = {
   actions: PropTypes.object,
-  printAction: PropTypes.bool,
+  printAction: PropTypes.bool
   // workflowFiles: PropTypes.object
 };
 
 PreviewDocument.defaultProps = {
   actions: {},
-  printAction: false,
+  printAction: false
   //  workflowFiles: {}
 };
 
@@ -122,11 +115,8 @@ PreviewDocument.defaultProps = {
 
 const mapDispatchToProps = (dispatch) => ({
   previewActions: {
-    getDocumentWorkflowFiles: bindActionCreators(
-      getDocumentWorkflowFiles,
-      dispatch
-    ),
-  },
+    getDocumentWorkflowFiles: bindActionCreators(getDocumentWorkflowFiles, dispatch)
+  }
 });
 
 const styled = withStyles(styles)(PreviewDocument);

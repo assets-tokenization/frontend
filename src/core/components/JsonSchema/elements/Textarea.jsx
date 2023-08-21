@@ -11,7 +11,7 @@ import {
   DialogActions,
   Typography,
   DialogContent,
-  DialogTitle,
+  DialogTitle
 } from '@mui/material';
 import withStyles from '@mui/styles/withStyles';
 import { quillFormats } from './quill/settings';
@@ -22,11 +22,11 @@ const style = {
   hint: {
     marginBottom: 8,
     color: 'rgba(0, 0, 0, 0.8)',
-    lineHeight: '1.5em',
+    lineHeight: '1.5em'
   },
   link: {
     color: '#1b69b6',
-    cursor: 'pointer',
+    cursor: 'pointer'
   },
   quill: {
     minHeight: 200,
@@ -35,29 +35,29 @@ const style = {
       background: '#aaaaaa',
       height: 'calc(100% - 42px)',
       position: 'absolute',
-      width: '100%',
+      width: '100%'
     },
     '& .ql-editor': {
       margin: 'auto',
-      background: '#ffffff',
-    },
+      background: '#ffffff'
+    }
   },
   quillErrored: {
     '& .ql-toolbar, .ql-container': {
-      borderColor: '#f44336',
-    },
+      borderColor: '#f44336'
+    }
   },
   elementHead: {
     display: 'flex',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   textArea: {
-    marginBottom: 40,
+    marginBottom: 40
   },
   textAreaDescription: {
-    color: '#000000',
-  },
+    color: '#000000'
+  }
 };
 
 class Textarea extends React.Component {
@@ -145,17 +145,17 @@ class Textarea extends React.Component {
         align="right"
         color={limitReached ? 'error' : 'initial'}
         style={{
-          margin: '8px 0 4px',
+          margin: '8px 0 4px'
         }}
         tabIndex="0"
         aria-label={t('SYMBOLS_COUNT', {
           num: replaceTags.length,
-          max: htmlMaxLength ? `${t('FROM')} ${htmlMaxLength}` : '',
+          max: htmlMaxLength ? `${t('FROM')} ${htmlMaxLength}` : ''
         })}
       >
         {t('SYMBOLS_COUNT', {
           num: replaceTags.length,
-          max: htmlMaxLength ? `${t('FROM')} ${htmlMaxLength}` : '',
+          max: htmlMaxLength ? `${t('FROM')} ${htmlMaxLength}` : ''
         })}
       </Typography>
     );
@@ -163,7 +163,7 @@ class Textarea extends React.Component {
 
   setId = () => {
     const { path } = this.props;
-    return (path || []).join(".").replace(/\./gi, '-');
+    return (path || []).join('.').replace(/\./gi, '-');
   };
 
   customToolbar() {
@@ -189,33 +189,14 @@ class Textarea extends React.Component {
           </select>
         </div>
         <div className="ql-formats">
-          <button
-            className="ql-bold"
-            aria-label={t('EditorBtnLabelBold')}
-          />
-          <button
-            className="ql-italic"
-            aria-label={t('EditorBtnLabelItalic')}
-          />
-          <button
-            className="ql-underline"
-            aria-label={t('EditorBtnLabelUnderline')}
-          />
-          <button
-            className="ql-strike"
-            aria-label={t('EditorBtnLabelStrike')}
-          />
-          <button
-            className="ql-link"
-            aria-label={t('EditorBtnLabelLink')}
-          />
+          <button className="ql-bold" aria-label={t('EditorBtnLabelBold')} />
+          <button className="ql-italic" aria-label={t('EditorBtnLabelItalic')} />
+          <button className="ql-underline" aria-label={t('EditorBtnLabelUnderline')} />
+          <button className="ql-strike" aria-label={t('EditorBtnLabelStrike')} />
+          <button className="ql-link" aria-label={t('EditorBtnLabelLink')} />
         </div>
         <div className="ql-formats">
-          <button
-            className="ql-align"
-            value=""
-            aria-label={t('EditorBtnLabelAlignTextLeft')}
-          />
+          <button className="ql-align" value="" aria-label={t('EditorBtnLabelAlignTextLeft')} />
           <button
             className="ql-align"
             value="center"
@@ -228,35 +209,15 @@ class Textarea extends React.Component {
           />
         </div>
         <div className="ql-formats">
-          <button
-            className="ql-list"
-            value="ordered"
-            aria-label={t('EditorBtnLabelOlList')}
-          />
-          <button
-            className="ql-list"
-            value="bullet"
-            aria-label={t('EditorBtnLabelUlList')}
-          />
+          <button className="ql-list" value="ordered" aria-label={t('EditorBtnLabelOlList')} />
+          <button className="ql-list" value="bullet" aria-label={t('EditorBtnLabelUlList')} />
         </div>
         <div className="ql-formats">
-          <button
-            className="ql-indent"
-            value="-1"
-            aria-label={t('EditorBtnLabelRemoveIndent')}
-          />
-          <button
-            className="ql-indent"
-            value="+1"
-            aria-label={t('EditorBtnLabelAddIndent')}
-          />
+          <button className="ql-indent" value="-1" aria-label={t('EditorBtnLabelRemoveIndent')} />
+          <button className="ql-indent" value="+1" aria-label={t('EditorBtnLabelAddIndent')} />
         </div>
         <div className="ql-formats">
-          <select
-            className="ql-color"
-            aria-label={t('EditorBtnLabelColor')}
-            role="button"
-          />
+          <select className="ql-color" aria-label={t('EditorBtnLabelColor')} role="button" />
           <select
             className="ql-background"
             aria-label={t('EditorBtnLabelBackground')}
@@ -264,10 +225,7 @@ class Textarea extends React.Component {
           />
         </div>
         <div className="ql-formats">
-          <button
-            className="ql-clean"
-            aria-label={t('EditorBtnLabelClean')}
-          />
+          <button className="ql-clean" aria-label={t('EditorBtnLabelClean')} />
         </div>
       </div>
     );
@@ -279,7 +237,7 @@ class Textarea extends React.Component {
 
     const id = this.setId();
     const quillModulesCustom = {
-      toolbar: { container: `#toolbar-custom-${id}` },
+      toolbar: { container: `#toolbar-custom-${id}` }
     };
 
     return (
@@ -290,13 +248,11 @@ class Textarea extends React.Component {
           modules={quillModulesCustom}
           formats={quillFormats}
           value={value || ''}
-          className={[classes.quill, error && classes.quillErrored]
-            .filter(Boolean)
-            .join(' ')}
+          className={[classes.quill, error && classes.quillErrored].filter(Boolean).join(' ')}
           onChange={this.handleTextChange}
           id={path.join('-')}
           style={{
-            height: height || 'unset',
+            height: height || 'unset'
           }}
         />
       </div>
@@ -317,7 +273,7 @@ class Textarea extends React.Component {
       hidden,
       width,
       maxWidth,
-      noMargin,
+      noMargin
     } = this.props;
 
     if (hidden) return null;
@@ -330,7 +286,7 @@ class Textarea extends React.Component {
         noMargin={noMargin}
         error={error}
         bottomError={true}
-        sample={(
+        sample={
           <div className={classes.elementHead}>
             <span>
               {sample}
@@ -348,7 +304,7 @@ class Textarea extends React.Component {
             </span>
             {this.renderCounter()}
           </div>
-        )}
+        }
         errors={errors}
         width={width}
         maxWidth={maxWidth}
@@ -370,7 +326,7 @@ Textarea.propTypes = {
   t: PropTypes.func.isRequired,
   hint: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  height: PropTypes.number,
+  height: PropTypes.number
 };
 
 Textarea.defaultProps = {
@@ -381,7 +337,7 @@ Textarea.defaultProps = {
   path: [],
   value: '',
   hint: '',
-  height: null,
+  height: null
 };
 
 const styled = withStyles(style)(Textarea);
