@@ -23,7 +23,7 @@ import Card from 'components/Card';
 import PageTitle from 'components/PageTitle';
 import StatusLabel from 'components/StatusLabel';
 import Preloader from 'components/Preloader';
-import { getDetails } from 'actions';
+import { getDetails, saveDetails } from 'actions';
 import SliderArrow from 'assets/images/sliderArrow.svg';
 import FullscreenIcon from 'assets/images/fullscreen_icon.svg';
 import CloseIcon from 'assets/images/closeIcon.svg';
@@ -517,6 +517,18 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
 
   const handleBack = handleClickBack || (() => history.push('/'));
 
+  const handleSaveDescription = () => {
+    setOpenTextEditor(false);
+
+    saveDetails({
+      data: {
+        ...objectData,
+        description
+      },
+      id_user: 1
+    })(dispatch);
+  };
+
   const SampleNextArrow = React.useCallback(
     (props) => {
       const { className, onClick } = props;
@@ -815,7 +827,7 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
                     {t('Cancel')}
                   </Button>
 
-                  <Button variant="contained" onClick={() => setOpenTextEditor(false)}>
+                  <Button variant="contained" onClick={() => handleSaveDescription()}>
                     {t('Save')}
                   </Button>
                 </div>

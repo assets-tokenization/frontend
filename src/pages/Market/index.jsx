@@ -10,6 +10,7 @@ import LazyLoad from 'assets/images/lazy_load_market.png';
 import SidebarMenu from 'components/SidebarMenu';
 import ObjectScreen from 'pages/ObjectScreen';
 import Preloader from 'components/Preloader';
+import EmptyState from 'components/EmptyState';
 import ObjectsStep from './components/ObjectsStep';
 import SellingStep from './components/SellingStep';
 import MessagesStep from './components/MessagesStep';
@@ -402,6 +403,7 @@ const MarketScreen = ({
   const [tab, setTab] = React.useState(0);
   const [errorMessage, setErrorMessage] = React.useState(null);
   const dispatch = useDispatch();
+  const userId = 1;
 
   const t = useTranslate('MarketScreen');
   const classes = useStyles();
@@ -409,22 +411,27 @@ const MarketScreen = ({
 
   React.useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
+      try {
+        setLoading(true);
 
-      const result = await getObjects()(dispatch);
-      const resultMessages = await getMessages()(dispatch);
-
-      if (result instanceof Error || resultMessages instanceof Error) {
+        const result = await getObjects(userId)(dispatch);
+        const resultMessages = await getMessages()(dispatch);
+  
+        if (result instanceof Error || resultMessages instanceof Error) {
+          setLoading(false);
+          setErrorMessage(result?.message || resultMessages?.message);
+          return;
+        }
+  
+        setMessages(resultMessages);
+  
+        setData(result);
+  
         setLoading(false);
-        setErrorMessage(result?.message || resultMessages?.message);
-        return;
+      } catch (e) {
+        setErrorMessage(e?.message);
+        setLoading(false);
       }
-
-      setMessages(resultMessages);
-
-      setData(result);
-
-      setLoading(false);
     };
 
     fetchData();
@@ -489,14 +496,6 @@ const MarketScreen = ({
     window.scrollTo(0, 0);
   };
 
-  if (errorMessage) {
-    return (
-      <>
-        <Typography>{errorMessage}</Typography>
-      </>
-    );
-  }
-
   return (
     <div className={classes.layout}>
       <SidebarMenu onChange={handleChangePage} page={page} history={history} messages={messages} />
@@ -511,81 +510,93 @@ const MarketScreen = ({
           history={history}
         />
 
-        <div
-          className={classNames({
-            [classes.wrapper]: true,
-            [classes.objectWrapper]: objectId
-          })}
-        >
-          {objectId ? (
-            <ObjectScreen
-              hideHeader={true}
-              readOnly={true}
-              history={history}
-              handleClickBack={() => history.push('/market')}
-            />
+        {
+          errorMessage ? (
+            <div
+              className={classNames({
+                [classes.wrapper]: true,
+              })}
+            >
+              <EmptyState error={true}>{errorMessage}</EmptyState>
+            </div>
           ) : (
-            <>
-              {page === 'Objects' ? (
-                <ObjectsStep
-                  tab={tab}
-                  setTab={setTab}
-                  t={t}
-                  toDetailsObject={toDetailsObject}
-                  toMyObjects={toMyObjects}
-                  classes={classes}
-                  setPage={setPage}
-                  setCreatingOffer={setCreatingOffer}
-                  objects={objectsList}
-                  loading={loading}
+            <div
+              className={classNames({
+                [classes.wrapper]: true,
+                [classes.objectWrapper]: objectId
+              })}
+            >
+              {objectId ? (
+                <ObjectScreen
+                  hideHeader={true}
+                  readOnly={true}
+                  history={history}
+                  handleClickBack={() => history.push('/market')}
                 />
-              ) : null}
-
-              {page === 'Selling' ? (
-                <SellingStep
-                  buyerData={buyerData}
-                  classes={classes}
-                  isSM={isSM}
-                  rnokpp={rnokpp}
-                  error={error}
-                  price={price}
-                  formatPrice={formatPrice}
-                  creatingOffer={creatingOffer}
-                  toDetailsObject={toDetailsObject}
-                  setBuyerData={setBuyerData}
-                  setRnokpp={setRnokpp}
-                  setPrice={setPrice}
-                  NumberFormatCustom={NumberFormatCustom}
-                  setError={setError}
-                  setCreatingOffer={setCreatingOffer}
-                  t={t}
-                  activeStep={activeSellingStep}
-                  setActiveStep={setActiveSellingStep}
-                  objects={sellingList}
-                />
-              ) : null}
-
-              {page === 'Purchases' ? (
-                <PurchasesStep
-                  t={t}
-                  classes={classes}
-                  toDetailsObject={toDetailsObject}
-                  purchase={purchase}
-                  setPurchase={setPurchase}
-                  isSM={isSM}
-                  NumberFormatCustom={NumberFormatCustom}
-                  activeStep={activeBuyStep}
-                  setActiveStep={setActiveBuyStep}
-                  objects={purchaseList}
-                />
-              ) : null}
-
-              {page === 'Messages' ? (
-                <MessagesStep t={t} classes={classes} toPurchase={toPurchase} messages={messages} />
-              ) : null}
-            </>
-          )}
-        </div>
+              ) : (
+                <>
+                  {page === 'Objects' ? (
+                    <ObjectsStep
+                      tab={tab}
+                      setTab={setTab}
+                      t={t}
+                      toDetailsObject={toDetailsObject}
+                      toMyObjects={toMyObjects}
+                      classes={classes}
+                      setPage={setPage}
+                      setCreatingOffer={setCreatingOffer}
+                      objects={objectsList}
+                      loading={loading}
+                    />
+                  ) : null}
+    
+                  {page === 'Selling' ? (
+                    <SellingStep
+                      buyerData={buyerData}
+                      classes={classes}
+                      isSM={isSM}
+                      rnokpp={rnokpp}
+                      error={error}
+                      price={price}
+                      formatPrice={formatPrice}
+                      creatingOffer={creatingOffer}
+                      toDetailsObject={toDetailsObject}
+                      setBuyerData={setBuyerData}
+                      setRnokpp={setRnokpp}
+                      setPrice={setPrice}
+                      NumberFormatCustom={NumberFormatCustom}
+                      setError={setError}
+                      setCreatingOffer={setCreatingOffer}
+                      t={t}
+                      activeStep={activeSellingStep}
+                      setActiveStep={setActiveSellingStep}
+                      objects={sellingList}
+                    />
+                  ) : null}
+    
+                  {page === 'Purchases' ? (
+                    <PurchasesStep
+                      t={t}
+                      classes={classes}
+                      toDetailsObject={toDetailsObject}
+                      purchase={purchase}
+                      setPurchase={setPurchase}
+                      isSM={isSM}
+                      NumberFormatCustom={NumberFormatCustom}
+                      activeStep={activeBuyStep}
+                      setActiveStep={setActiveBuyStep}
+                      objects={purchaseList}
+                    />
+                  ) : null}
+    
+                  {page === 'Messages' ? (
+                    <MessagesStep t={t} classes={classes} toPurchase={toPurchase} messages={messages} />
+                  ) : null}
+                </>
+              )}
+            </div>
+          )
+        }
       </div>
     </div>
   );

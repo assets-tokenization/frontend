@@ -32,7 +32,7 @@ const styles = (theme) => ({
 
 const useStyles = makeStyles(styles);
 
-const EmptyState = ({ children, onClick, actionText }) => {
+const EmptyState = ({ children, onClick, actionText, error }) => {
   const classes = useStyles();
   const t = useTranslate('Header');
 
@@ -42,9 +42,13 @@ const EmptyState = ({ children, onClick, actionText }) => {
         🤷‍♂️
       </span>
       <Typography className={classes.headline}>{children}</Typography>
-      <Button onClick={onClick} variant="contained">
-        {actionText || t('GoToP2P')}
-      </Button>
+      {
+        error ? null : (
+          <Button onClick={onClick} variant="contained">
+            {actionText || t('GoToP2P')}
+          </Button>
+        )
+      }
     </>
   );
 };
