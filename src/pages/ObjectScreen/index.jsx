@@ -617,7 +617,7 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
     [classes]
   );
 
-  if (loadingData || !objectData) {
+  if (loadingData) {
     return <Preloader />;
   }
 
@@ -636,9 +636,9 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
                 {t('ToList')}
               </Button>
 
-              <PageTitle>{objectData.title}</PageTitle>
+              <PageTitle>{objectData?.title}</PageTitle>
 
-              {objectData.tokenized ? (
+              {objectData?.tokenized ? (
                 <div className={classes.statusWrapper}>
                   <StatusLabel>{t('Tokenized')}</StatusLabel>
                 </div>
@@ -784,7 +784,7 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
 
               {readOnly ? (
                 <>
-                  {objectData.description ? (
+                  {objectData?.description ? (
                     <>
                       <Typography className={classes.blockTitle}>{t('Description')}</Typography>
                       <Card>
@@ -797,7 +797,7 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
                                 [classes.smDescriptionWrapperOpen]: showMore
                               })}
                             >
-                              {objectData.description}
+                              {objectData?.description}
                             </Typography>
                             <Button
                               variant="outlined"
@@ -809,7 +809,7 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
                           </>
                         ) : (
                           <Typography className={classes.readOnlyDescription}>
-                            {objectData.description}
+                            {objectData?.description}
                           </Typography>
                         )}
                       </Card>
@@ -900,79 +900,79 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
               <div className={classes.detailsBlock}>
                 <div className={classes.row}>
                   <Typography className={classes.detailsTitle}>{t('RegNum')}</Typography>
-                  <Typography className={classes.detailsDescription}>{objectData.number}</Typography>
+                  <Typography className={classes.detailsDescription}>{objectData?.number}</Typography>
                 </div>
 
                 <div className={classes.row}>
                   <Typography className={classes.detailsTitle}>{t('Address')}</Typography>
-                  <Typography className={classes.detailsDescription}>{objectData.address}</Typography>
+                  <Typography className={classes.detailsDescription}>{objectData?.address}</Typography>
                 </div>
 
                 <div className={classes.row}>
                   <Typography className={classes.detailsTitle}>{t('ObjectType')}</Typography>
-                  <Typography className={classes.detailsDescription}>{objectData.type}</Typography>
+                  <Typography className={classes.detailsDescription}>{objectData?.type}</Typography>
                 </div>
 
                 <div className={classes.row}>
                   <Typography className={classes.detailsTitle}>{t('OwnLaw')}</Typography>
-                  <Typography className={classes.detailsDescription}>{objectData.lawData}</Typography>
+                  <Typography className={classes.detailsDescription}>{objectData?.lawData}</Typography>
                 </div>
 
                 <div className={classes.row}>
                   <Typography className={classes.detailsTitle}>{t('GovReg')}</Typography>
-                  <Typography className={classes.detailsDescription}>{objectData.document}</Typography>
+                  <Typography className={classes.detailsDescription}>{objectData?.document}</Typography>
                 </div>
 
                 <div className={classes.row}>
                   <Typography className={classes.detailsTitle}>{t('OwnForm')}</Typography>
-                  <Typography className={classes.detailsDescription}>{objectData.ownForm}</Typography>
+                  <Typography className={classes.detailsDescription}>{objectData?.ownForm}</Typography>
                 </div>
 
                 <div className={classes.row}>
                   <Typography className={classes.detailsTitle}>{t('ObjectState')}</Typography>
-                  <Typography className={classes.detailsDescription}>{objectData.expDate}</Typography>
+                  <Typography className={classes.detailsDescription}>{objectData?.expDate}</Typography>
                 </div>
 
                 <div className={classes.row}>
                   <Typography className={classes.detailsTitle}>{t('GovRegistrator')}</Typography>
                   <Typography className={classes.detailsDescription}>
-                    {objectData.govRegistrator}
+                    {objectData?.govRegistrator}
                   </Typography>
                 </div>
 
                 <div className={classes.row}>
                   <Typography className={classes.detailsTitle}>{t('ObjectDescription')}</Typography>
                   <Typography className={classes.detailsDescription}>
-                    {objectData.objectDescription}
+                    {objectData?.objectDescription}
                   </Typography>
                 </div>
 
                 <div className={classes.row}>
                   <Typography className={classes.detailsTitle}>{t('TotalArea')}</Typography>
-                  <Typography className={classes.detailsDescription}>{objectData.totalArea}</Typography>
+                  <Typography className={classes.detailsDescription}>{objectData?.totalArea}</Typography>
                 </div>
 
                 <div className={classes.row}>
                   <Typography className={classes.detailsTitle}>{t('LivingArea')}</Typography>
-                  <Typography className={classes.detailsDescription}>{objectData.livingArea}</Typography>
+                  <Typography className={classes.detailsDescription}>{objectData?.livingArea}</Typography>
                 </div>
 
                 <div className={classes.row}>
                   <Typography className={classes.detailsTitle}>{t('Problems')}</Typography>
-                  <Typography className={classes.detailsDescription}>{objectData.problems}</Typography>
+                  <Typography className={classes.detailsDescription}>{objectData?.problems}</Typography>
                 </div>
               </div>
 
               <Typography className={classes.blockTitle}>{t('MapPoint')}</Typography>
               <div className={classes.mapContainer}>
                 <MapContainer
-                  center={objectData.location}
+                  center={objectData?.location}
                   zoom={13}
                   style={{ height: '100%', width: '100%' }}
                   attributionControl={false}
                 >
                   <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                  <Marker position={objectData.location} icon={markerIcon} />
+                  <Marker position={objectData?.location} icon={markerIcon} />
                   <FullscreenControl />
                 </MapContainer>
               </div>
