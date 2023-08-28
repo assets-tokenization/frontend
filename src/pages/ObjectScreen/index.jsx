@@ -530,9 +530,9 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
     saveDetails({
       data: {
         ...objectData,
+        id_user: 1,
         description
       },
-      id_user: 1
     })(dispatch);
   };
 
