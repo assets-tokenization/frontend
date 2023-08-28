@@ -2,7 +2,6 @@
   "name": "frontend",
   "version": "0.1.1",
   "private": true,
-  "proxy": "http://95.216.140.202/v1",
   "dependencies": {
     "@emotion/react": "11.11.1",
     "@emotion/styled": "11.11.0",
@@ -16,6 +15,7 @@
     "connected-react-router": "6.9.3",
     "file-saver": "2.0.2",
     "history": "4.10.1",
+    "http-proxy-middleware": "^2.0.6",
     "leaflet": "^1.9.4",
     "mobile-detect": "1.4.5",
     "moment": "2.29.4",

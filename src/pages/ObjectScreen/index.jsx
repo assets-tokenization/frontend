@@ -516,16 +516,7 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
     maxFileSize: 50,
     onFilesSuccessfulySelected: ({ filesContent }) => {
       const filesArray = [...files, ...filesContent];
-
       setFiles(filesArray);
-
-      saveDetails({
-        data: {
-          ...objectData,
-          id_user: 1,
-          photos: filesArray
-        },
-      })(dispatch);
     }
   });
   const classes = useStyles();
