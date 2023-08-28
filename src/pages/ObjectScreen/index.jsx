@@ -477,6 +477,7 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
 
         if (result instanceof Error) {
           setLoading(false);
+          setError(result.message);
           return;
         }
 
@@ -514,7 +515,17 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
     limitFilesConfig: { max: 1 },
     maxFileSize: 50,
     onFilesSuccessfulySelected: ({ filesContent }) => {
-      setFiles([...files, ...filesContent]);
+      const filesArray = [...files, ...filesContent];
+
+      setFiles(filesArray);
+
+      saveDetails({
+        data: {
+          ...objectData,
+          id_user: 1,
+          photos: filesArray
+        },
+      })(dispatch);
     }
   });
   const classes = useStyles();
