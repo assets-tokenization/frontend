@@ -742,11 +742,11 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
                       }}
                       onMouseEnter={() => setHoveredPhotoIndex(index)}
                       onMouseLeave={() => setHoveredPhotoIndex(null)}
-                      onClick={() => isMobile && handleOpenDeleteDialog(index)}
+                      onClick={() => !readOnly && isMobile && handleOpenDeleteDialog(index)}
                     />
                     <div
                         className={classNames({
-                          [classes.imageOverlay]: !isMobile && hoveredPhotoIndex === index
+                          [classes.imageOverlay]: !readOnly && !isMobile && hoveredPhotoIndex === index
                         })}
                       onMouseEnter={() => setHoveredPhotoIndex(index)}
                       onMouseLeave={() => setHoveredPhotoIndex(null)}
@@ -769,7 +769,7 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
                         className={classes.fullscreenIcon}
                       />
                     </IconButton>
-                    {!isMobile && hoveredPhotoIndex === index && (
+                    {!readOnly && !isMobile && hoveredPhotoIndex === index && (
                       <IconButton
                         className={classes.deleteIcon}
                         onMouseEnter={() => setHoveredPhotoIndex(index)}
