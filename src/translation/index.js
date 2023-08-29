@@ -160,7 +160,8 @@ const translation = {
     Edit: 'Редагувати',
     photo: 'Фото {{index}} з {{total}}',
     ShowMore: 'Повний опис',
-    Hide: 'Приховати'
+    Hide: 'Приховати',
+    DeletePhoto: 'Видалити фото'
   },
   MarketScreen: {
     BuildType: 'Тип нерухомості: {{value}}',
