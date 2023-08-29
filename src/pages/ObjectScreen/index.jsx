@@ -4,20 +4,23 @@ import classNames from 'classnames';
 import Slider from 'react-slick';
 import { useDispatch } from 'react-redux';
 import { useFilePicker } from 'use-file-picker';
+import MobileDetect from 'mobile-detect';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import L from 'leaflet';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import { FullscreenControl } from 'react-leaflet-fullscreen';
-import makeStyles from '@mui/styles/makeStyles';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import IconButton from '@mui/material/IconButton';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import Dialog from '@mui/material/Dialog';
-import Slide from '@mui/material/Slide';
+import { makeStyles } from '@mui/styles';
+import {
+  Button,
+  Dialog,
+  Typography,
+  TextField,
+  Slide,
+  IconButton,
+  useMediaQuery
+} from '@mui/material';
 import Header from 'components/Header';
 import Card from 'components/Card';
 import PageTitle from 'components/PageTitle';
@@ -31,6 +34,7 @@ import CloseIcon from 'assets/images/closeIcon.svg';
 import arrowRight from 'assets/images/arrowRight.svg';
 import arrowLeft from 'assets/images/arrowLeft.svg';
 import LockIcon from 'assets/images/lock_icon.svg';
+import deleteIcon from 'assets/images/deleteIcon.svg';
 import LocationOnIcon from 'assets/images/pin.svg';
 import 'leaflet/dist/leaflet.css';
 import 'react-leaflet-fullscreen/styles.css';
@@ -47,6 +51,8 @@ const markerIcon = new L.Icon({
   popupAnchor: [-0, -0],
   iconSize: [32, 45]
 });
+
+const md = new MobileDetect(window.navigator.userAgent);
 
 const styles = (theme) => ({
   wrapper: {
@@ -329,6 +335,15 @@ const styles = (theme) => ({
       height: 32
     }
   },
+  deleteIcon: {
+    position: 'absolute',
+    top: '45%',
+    right: '45%',
+    width: 32,
+    height: 32,
+    zIndex: 1,
+    cursor: 'pointer'
+  },
   fullscreenIcon: {
     width: 40,
     height: 40,
@@ -385,6 +400,19 @@ const styles = (theme) => ({
     [theme.breakpoints.down('sm')]: {
       height: 180
     }
+  },
+  imageOverlay: {
+    content: "",
+    position: "absolute",
+    height: 400,
+    borderRadius: 4,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: 'rgba(0, 0, 0, 0.4)',
+    display: 'none',
+    zIndex: 1
   },
   dialogSliderImage: {
     height: '100vh',
@@ -449,6 +477,31 @@ const styles = (theme) => ({
     alignItems: 'center',
     borderRadius: 2,
     background: '#FFF'
+  },
+  deleteDialog: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: 'rgba(0, 0, 0, 0.5)',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'end',
+    alignItems: 'center',
+    zIndex: 1,
+    paddingBottom: '100px'
+  },
+  deletePhotoButton: { 
+    color: 'red', 
+    background: 'white', 
+    marginBottom: '10px', 
+    width: '304px' 
+  },
+  cancelPhotoButton: { 
+    color: 'rgba(34, 89, 228, 1)', 
+    background: 'white', 
+    width: '304px' 
   }
 });
 
@@ -463,10 +516,14 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
   const [openSlider, setOpenSLider] = React.useState(false);
   const [showMore, setShowMore] = React.useState(false);
   const [error, setError] = React.useState(false);
-  const mainSlider = React.useRef(null);
-  const secondarySlider = React.useRef(null);
-  const dialogSlider = React.useRef(null);
+  const [deleteDialog, setDeleteDialog] = React.useState(false);
+  const [photoIndexToDelete, setPhotoIndexToDelete] = React.useState(null);
+  const [hoveredPhotoIndex, setHoveredPhotoIndex] = React.useState(null);
+  const [mainSlider, setMainSlider] = React.useState(null);
+  const [secondarySlider, setSecondarySlider] = React.useState(null);
+  const [dialogSlider, setDialogSlider] = React.useState(null);
   const dispatch = useDispatch();
+  const isMobile = !!md.mobile();
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -619,6 +676,23 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
     [classes]
   );
 
+  const handleCloseDeleteDialog = () => {
+    setPhotoIndexToDelete(null);
+    setDeleteDialog(false);
+  };
+
+  const handleOpenDeleteDialog = (index) => {
+    setPhotoIndexToDelete(index);
+    setDeleteDialog(true);
+  };
+
+  const handleDeletePhoto = (index) => {
+    const updatedFiles = [...files];
+    updatedFiles.splice(index, 1);
+    setFiles(updatedFiles);
+    handleCloseDeleteDialog();
+  };
+
   if (loadingData) {
     return <Preloader />;
   }
@@ -652,8 +726,8 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
                 speed={500}
                 slidesToShow={1}
                 slidesToScroll={1}
-                ref={mainSlider}
-                asNavFor={secondarySlider?.current}
+                ref={(slider) => setMainSlider(slider)}
+                asNavFor={secondarySlider}
                 nextArrow={<SampleNextArrow />}
                 prevArrow={<SamplePrevArrow />}
               >
@@ -663,6 +737,17 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
                       className={classes.sliderImage}
                       style={{
                         backgroundImage: `url(${file.content})`
+                      }}
+                      onMouseEnter={() => setHoveredPhotoIndex(index)}
+                      onMouseLeave={() => setHoveredPhotoIndex(null)}
+                      onClick={() => isMobile && handleOpenDeleteDialog(index)}
+                    />
+                    <div
+                      className={classes.imageOverlay}
+                      onMouseEnter={() => setHoveredPhotoIndex(index)}
+                      onMouseLeave={() => setHoveredPhotoIndex(null)}
+                      style={{
+                        display: !isMobile && hoveredPhotoIndex === index ? 'block' : 'none'
                       }}
                     />
                     <div className={classes.currentPageStatus}>
@@ -683,6 +768,18 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
                         className={classes.fullscreenIcon}
                       />
                     </IconButton>
+                    {!isMobile && hoveredPhotoIndex === index && (
+                      <IconButton
+                        className={classes.deleteIcon}
+                        onMouseEnter={() => setHoveredPhotoIndex(index)}
+                        onClick={() => handleDeletePhoto(index)}
+                      >
+                        <img
+                          src={deleteIcon}
+                          alt={'delete icon'}
+                        />
+                      </IconButton>
+                    )}
                   </div>
                 ))}
               </Slider>
@@ -696,8 +793,8 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
                   arrows={false}
                   swipeToSlide={true}
                   focusOnSelect={true}
-                  ref={secondarySlider}
-                  asNavFor={mainSlider?.current}
+                  ref={(slider) => setSecondarySlider(slider)}
+                  asNavFor={mainSlider}
                   className="secondary-slider"
                 >
                   {files.map((file, index) => (
@@ -715,6 +812,17 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
                   ))}
                 </Slider>
               ) : null}
+
+              {deleteDialog && (
+                <div onClick={handleCloseDeleteDialog} className={classes.deleteDialog}>
+                  <Button onClick={() => handleDeletePhoto(photoIndexToDelete)} className={classes.deletePhotoButton}>
+                    {t('DeletePhoto')}
+                  </Button>
+                  <Button onClick={handleCloseDeleteDialog} className={classes.cancelPhotoButton}>
+                    {t('Cancel')}
+                  </Button>
+                </div>
+              )}
 
               <Dialog
                 fullScreen
@@ -741,7 +849,7 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
                     slidesToScroll={1}
                     nextArrow={<SampleDialogNextArrow />}
                     prevArrow={<SampleDialogPrevArrow />}
-                    ref={dialogSlider}
+                    ref={slider => setDialogSlider(slider)}
                   >
                     {files.map((file, index) => (
                       <div key={index}>
