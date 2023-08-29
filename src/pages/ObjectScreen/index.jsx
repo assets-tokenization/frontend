@@ -411,8 +411,10 @@ const styles = (theme) => ({
     right: 0,
     bottom: 0,
     background: 'rgba(0, 0, 0, 0.4)',
-    display: 'none',
-    zIndex: 1
+    display: 'block',
+    zIndex: 1,
+    transition: '0.3s linear',
+    transform: 'scale(1.01)'
   },
   dialogSliderImage: {
     height: '100vh',
@@ -743,12 +745,11 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
                       onClick={() => isMobile && handleOpenDeleteDialog(index)}
                     />
                     <div
-                      className={classes.imageOverlay}
+                        className={classNames({
+                          [classes.imageOverlay]: !isMobile && hoveredPhotoIndex === index
+                        })}
                       onMouseEnter={() => setHoveredPhotoIndex(index)}
                       onMouseLeave={() => setHoveredPhotoIndex(null)}
-                      style={{
-                        display: !isMobile && hoveredPhotoIndex === index ? 'block' : 'none'
-                      }}
                     />
                     <div className={classes.currentPageStatus}>
                       {t('photo', {
