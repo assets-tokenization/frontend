@@ -16,7 +16,6 @@ import SellingStep from './components/SellingStep';
 import MessagesStep from './components/MessagesStep';
 import PurchasesStep from './components/PurchasesStep';
 import { getObjects, getMessages } from 'actions';
-import { Typography } from '@mui/material';
 
 const styles = (theme) => ({
   wrapper: {
