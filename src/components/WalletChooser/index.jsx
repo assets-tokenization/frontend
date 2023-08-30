@@ -3,12 +3,15 @@ import { useTranslate } from 'react-translate';
 import makeStyles from '@mui/styles/makeStyles';
 import {
   Typography,
-  Button,
   FormControl,
   FormControlLabel,
   Radio,
   RadioGroup
 } from '@mui/material';
+import MuiAlert from '@mui/material/Alert';
+import Grow from '@mui/material/Grow';
+import Button from '@mui/material/Button';
+import Snackbar from '@mui/material/Snackbar';
 import { ReactComponent as ArrowForwardIcon } from 'assets/images/arrowForwardWhite.svg';
 import ArrowBackIcon from 'assets/images/arrowBackBlueIcon.svg';
 import classNames from 'classnames';
@@ -126,11 +129,42 @@ const WALLETS = [
 
 const DEFAULT_WALLET = WALLETS[0].name;
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 const WalletChooser = ({ setActiveStep }) => {
   const [value, setValue] = React.useState(DEFAULT_WALLET);
+  const [error, setError] = React.useState(false);
 
   const handleChange = (event) => {
     setValue(event.target.value);
+    setError('a')
+  };
+
+  const handleWalletLogin = async () => {
+    switch (value) {
+      case 'MetaMask':
+        await window.ethereum.request({ method: 'eth_requestAccounts' })
+          .then((wallet) => {
+            console.log('wallet', wallet);
+            setActiveStep(2);
+          })
+          .catch((err) => {
+            if (err.code === 4001) {
+              setError('Please connect to MetaMask.');
+            } else {
+              setError(err.message);
+            }
+          });
+        break;
+      case 'walletConnect':
+        break;
+      case 'Coinbase Wallet':
+        break;
+      default:
+        break;
+    }
   };
 
   const t = useTranslate('LoginScreen');
@@ -208,11 +242,26 @@ const WalletChooser = ({ setActiveStep }) => {
           {t('Back')}
         </Button>
 
-        <Button size="large" color="primary" variant="contained" onClick={() => setActiveStep(2)}>
+        <Button size="large" color="primary" variant="contained" onClick={handleWalletLogin}>
           {t('Continue')}
           <ArrowForwardIcon className={classes.actionIcon} />
         </Button>
       </div>
+
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right'
+        }}
+        TransitionComponent={(props) => (
+          <Grow {...props} />
+        )}
+        open={!!error}
+        onClose={() => setError(false)}
+        key={error}
+      >
+        <Alert severity="error">{error}</Alert>
+      </Snackbar>
     </>
   );
 };
