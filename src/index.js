@@ -10,7 +10,6 @@ import store from 'store';
 import 'assets/index.css';
 import reportWebVitals from './reportWebVitals';
 
-// eslint-disable-next-line react/no-deprecated
 ReactDOM.render(
   <StyledEngineProvider injectFirst>
     <ThemeProvider theme={createTheme(theme)}>
