@@ -422,9 +422,9 @@ const MarketScreen = ({
           return;
         }
   
-        setMessages(resultMessages);
+        setMessages(resultMessages.data);
   
-        setData(result);
+        setData(result.data);
   
         setLoading(false);
       } catch (e) {
@@ -437,14 +437,17 @@ const MarketScreen = ({
   }, [dispatch]);
 
   const objectsList = React.useMemo(() => {
+    if (!objects.length) return [];
     return objects.filter((item) => !item?.selling && !item?.purchase);
   }, [objects]);
 
   const sellingList = React.useMemo(() => {
+    if (!objects.length) return [];
     return objects.filter((item) => item?.selling);
   }, [objects]);
 
   const purchaseList = React.useMemo(() => {
+    if (!objects.length) return [];
     return objects.filter((item) => item?.purchase);
   }, [objects]);
 

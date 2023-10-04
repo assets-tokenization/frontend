@@ -532,7 +532,8 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
       try {
         setLoading(true);
 
-        const result = await getDetails()(dispatch);
+        const resultDetails = await getDetails()(dispatch);
+        const result = resultDetails?.data;
 
         if (result instanceof Error) {
           setLoading(false);
