@@ -10,6 +10,7 @@ import EDSForm from 'components/EDSForm';
 import WalletChooser from 'components/WalletChooser';
 import SuccessRegistration from 'components/SuccessRegistration';
 import LoginIcon from '@mui/icons-material/Login';
+import { requestSignData, checkSignDataUnic } from 'actions/eds';
 
 const styles = (theme) => ({
   wrapper: {
@@ -208,15 +209,56 @@ const LoginScreen = ({ history }) => {
     setActiveStep(step);
   };
 
-  const onSelectKey = (data) => {
-    localStorage.setItem('token', 'token');
+  const getEncodeCert = async (signer, index) => {
+    const certif = await signer.execute('EnumOwnCertificates', index);
 
+    if (certif === null) {
+        throw new Error('Сертифікат шифрування відсутній. Зверніться до вашого АЦСК');
+    }
+
+    if (certif.keyUsage === 'Протоколи розподілу ключів') {
+        return certif;
+    }
+
+    return getEncodeCert(signer, index + 1);
+};
+
+  const signDataAndLogin = async (cert, signer, resetPrivateKey) => {
+
+    const { ray } = await requestSignData();
+    const signature = await signer.execute('SignData', ray, true);
+
+    const signData = { ray: signature };
+
+    const result = await checkSignDataUnic(signData);
+
+    if (result instanceof Error) {
+      await getAuth();
+      throw new Error(t(result.message, { details: result.details }));
+    }
+    
     if (method === 'auth') {
+      localStorage.setItem('token', result);
+    
       history.replace('/home');
       return;
     }
 
     handleChangeStep(1);
+  };
+
+  const handleSelectKey = (cert, signer, resetPrivateKey) => {
+      let iteration = 0;
+
+      const execute = () => signDataAndLogin(cert, signer, resetPrivateKey).catch((e) => {
+          iteration += 1;
+          if (iteration <= 3) {
+              return execute();
+          }
+          throw e;
+      });
+
+      return execute();
   };
 
   const redirectToHomeScreen = () => {
@@ -282,7 +324,7 @@ const LoginScreen = ({ history }) => {
                   <Typography className={classes.formTitle}>{t('LoginFormTitle')}</Typography>
 
                   <div className={classes.formWrapper}>
-                    <EDSForm onSelectKey={onSelectKey} showServerList={true} />
+                    <EDSForm onSelectKey={handleSelectKey} showServerList={true} />
                   </div>
                 </>
               ) : null}
@@ -336,7 +378,7 @@ const LoginScreen = ({ history }) => {
                   <Typography className={classes.formTitle}>{t('LoginFormTitle')}</Typography>
 
                   <div className={classes.formWrapper}>
-                    <EDSForm onSelectKey={onSelectKey} showServerList={true} />
+                    <EDSForm onSelectKey={handleSelectKey} showServerList={true} />
                   </div>
                 </>
               ) : null}

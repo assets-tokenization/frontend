@@ -2,7 +2,7 @@
   "application": {
     "environment": "development"
   },
-  "backendUrl": "/v1",
+  "backendUrl": "http://95.216.140.202/v1",
   "authLink": "https://cabinet-api-bpmn-diia-stg.kitsoft.kiev.ua/redirect/auth",
   "idAuthLink": "https://id-bpmn-diia-stg.kitsoft.kiev.ua/authorise",
   "eds": {

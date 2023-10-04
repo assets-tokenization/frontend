@@ -104,7 +104,7 @@ const HomeScreen = ({ history }) => {
           return;
         }
   
-        setData(result);
+        setData(result.data);
   
         setLoading(false);
           
