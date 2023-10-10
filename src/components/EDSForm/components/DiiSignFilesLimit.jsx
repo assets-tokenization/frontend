@@ -30,7 +30,7 @@ const SignFilesLimit = ({ task, template }) => {
         template?.jsonSchema?.properties,
         (value) => value === 'select.files'
       );
-      const controlPropsPath = filesControl.replace('.control', '').replace('.properties', '');
+      const controlPropsPath = filesControl?.replace('.control', '')?.replace('.properties', '');
       const files = objectPath.get(task?.document?.data, controlPropsPath);
       setFiles(files);
     } catch (e) {

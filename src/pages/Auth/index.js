@@ -2,7 +2,7 @@ import React from 'react';
 import Preloader from 'components/Preloader';
 import { useDispatch } from 'react-redux';
 import { getProfileData } from 'actions/profile';
-import ServiceMessage from 'components/Auth/ServiceMessage';
+import ServiceMessage from 'components/ServiceMessage';
 import Login from 'pages/Login';
 
 const Auth = ({ children }) => {
