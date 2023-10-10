@@ -202,9 +202,7 @@ const styles = (theme) => ({
 
 const useStyles = makeStyles(styles);
 
-const LoginScreen = ({
-  onSuccess
-}) => {
+const LoginScreen = ({ onSuccess }) => {
   const t = useTranslate('LoginScreen');
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
@@ -220,11 +218,11 @@ const LoginScreen = ({
     const certificate = await signer.execute('EnumOwnCertificates', index);
 
     if (certificate === null) {
-        throw new Error('Сертифікат шифрування відсутній. Зверніться до вашого АЦСК');
+      throw new Error('Сертифікат шифрування відсутній. Зверніться до вашого АЦСК');
     }
 
     if (certificate.keyUsage === 'Протоколи розподілу ключів') {
-        return certificate;
+      return certificate;
     }
 
     return getEncodeCert(signer, index + 1);
@@ -250,7 +248,7 @@ const LoginScreen = ({
       history.replace('/');
 
       await getProfileData()(dispatch);
-      
+
       onSuccess();
       return;
     }
@@ -261,13 +259,14 @@ const LoginScreen = ({
   const handleSelectKey = (cert, signer, resetPrivateKey) => {
     let iteration = 0;
 
-    const execute = () => signDataAndLogin(cert, signer, resetPrivateKey).catch((e) => {
-      iteration += 1;
-      if (iteration <= 3) {
-        return execute();
-      }
-      throw e;
-    });
+    const execute = () =>
+      signDataAndLogin(cert, signer, resetPrivateKey).catch((e) => {
+        iteration += 1;
+        if (iteration <= 3) {
+          return execute();
+        }
+        throw e;
+      });
 
     return execute();
   };

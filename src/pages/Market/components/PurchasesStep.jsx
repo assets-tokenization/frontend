@@ -23,7 +23,7 @@ const PurchasesStep = ({
   setActiveStep,
   objects
 }) => {
-  const wallet = React.useMemo(() => useSelector(state => state?.profile?.userInfo?.wallet), []);
+  const wallet = React.useMemo(() => useSelector((state) => state?.profile?.userInfo?.wallet), []);
 
   const renderStep = React.useMemo(
     () => (

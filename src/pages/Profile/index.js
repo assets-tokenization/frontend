@@ -71,7 +71,7 @@ const styles = (theme) => ({
     justifyContent: 'end',
     marginTop: 10,
     '& > button': {
-      marginLeft: 20,
+      marginLeft: 20
     }
   },
   textfield: {
@@ -88,8 +88,8 @@ const useStyles = makeStyles(styles);
 
 const ProfileScreen = ({ history }) => {
   const t = useTranslate('Profile');
-  const [wallet, setWallet] = React.useState
-    (useSelector(state => state?.profile?.userInfo?.wallet)
+  const [wallet, setWallet] = React.useState(
+    useSelector((state) => state?.profile?.userInfo?.wallet)
   );
   const [error, setError] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
@@ -110,7 +110,7 @@ const ProfileScreen = ({ history }) => {
     if (loading) {
       return;
     }
-  
+
     setLoading(true);
 
     const result = await updateProfileData({
@@ -123,7 +123,7 @@ const ProfileScreen = ({ history }) => {
       setError(result.message);
       return;
     }
-    
+
     handleRedirectBack();
   };
 
@@ -159,16 +159,9 @@ const ProfileScreen = ({ history }) => {
         <ProgressLine loading={loading} />
 
         <div className={classes.actions}>
-          <Button
-            onClick={handleCancel}
-          >
-            {t('Cancel')}
-          </Button>
+          <Button onClick={handleCancel}>{t('Cancel')}</Button>
 
-          <Button
-            variant="contained"
-            onClick={handleSave}
-          >
+          <Button variant="contained" onClick={handleSave}>
             {t('Save')}
           </Button>
         </div>

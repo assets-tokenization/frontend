@@ -22,7 +22,7 @@ const Auth = ({ children }) => {
         setLoading(false);
         setError(e.message);
       }
-    }
+    };
 
     fetchData();
   }, [dispatch]);

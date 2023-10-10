@@ -2,13 +2,7 @@ import * as React from 'react';
 import { useTranslate } from 'react-translate';
 import { useDispatch } from 'react-redux';
 import makeStyles from '@mui/styles/makeStyles';
-import {
-  Typography,
-  FormControl,
-  FormControlLabel,
-  Radio,
-  RadioGroup
-} from '@mui/material';
+import { Typography, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 import MuiAlert from '@mui/material/Alert';
 import Grow from '@mui/material/Grow';
 import Button from '@mui/material/Button';
@@ -143,7 +137,7 @@ const WalletChooser = ({ setActiveStep }) => {
 
   const handleChange = (event) => {
     setValue(event.target.value);
-    setError('a')
+    setError('a');
   };
 
   const handleWalletLogin = async () => {
@@ -266,9 +260,7 @@ const WalletChooser = ({ setActiveStep }) => {
           vertical: 'top',
           horizontal: 'right'
         }}
-        TransitionComponent={(props) => (
-          <Grow {...props} />
-        )}
+        TransitionComponent={(props) => <Grow {...props} />}
         open={!!error}
         onClose={() => setError(false)}
         key={error}
