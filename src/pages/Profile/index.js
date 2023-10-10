@@ -10,7 +10,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import ProgressLine from 'components/Preloader/ProgressLine';
 import headline_logo from 'assets/images/headline_logo.svg';
 import classNames from 'classnames';
-import { updateProfileData, getProfileData } from 'actions/profile';
+import { updateProfileData } from 'actions/profile';
 
 const styles = (theme) => ({
   wrapper: {
@@ -88,7 +88,9 @@ const useStyles = makeStyles(styles);
 
 const ProfileScreen = ({ history }) => {
   const t = useTranslate('Profile');
-  const [wallet, setWallet] = React.useState(useSelector(state => state?.profile?.userInfo?.wallet));
+  const [wallet, setWallet] = React.useState
+    (useSelector(state => state?.profile?.userInfo?.wallet)
+  );
   const [error, setError] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
 
@@ -96,24 +98,8 @@ const ProfileScreen = ({ history }) => {
 
   const classes = useStyles();
 
-  React.useEffect(() => {
-    const fetchData = async () => {
-      if (!wallet) {
-        setLoading(true);
-        await getProfileData()(dispatch);
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
   const handleRedirectBack = () => {
-    if (history.goBack) {
-      history.goBack();
-    } else {
-      history.replace('/');
-    }
+    history.replace('/');
   };
 
   const handleCancel = () => {
@@ -121,15 +107,15 @@ const ProfileScreen = ({ history }) => {
   };
 
   const handleSave = async () => {
-    if (loading) return;
+    if (loading) {
+      return;
+    }
   
     setLoading(true);
 
     const result = await updateProfileData({
       wallet
     })(dispatch);
-
-    await getProfileData()(dispatch);
 
     setLoading(false);
 

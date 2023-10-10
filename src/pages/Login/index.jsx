@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslate } from 'react-translate';
+import { useDispatch } from 'react-redux';
 import { Button, Typography } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import Fade from '@mui/material/Fade';
@@ -13,6 +14,7 @@ import LoginIcon from '@mui/icons-material/Login';
 import { requestSignData, checkSignDataUniq } from 'actions/eds';
 import storage from 'helpers/storage';
 import { history } from 'store';
+import { getProfileData } from 'actions/profile';
 
 const styles = (theme) => ({
   wrapper: {
@@ -207,6 +209,7 @@ const LoginScreen = ({
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
   const [method, setMethod] = React.useState(null);
+  const dispatch = useDispatch();
 
   const handleChangeStep = (step) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -245,6 +248,9 @@ const LoginScreen = ({
 
     if (method === 'auth') {
       history.replace('/');
+
+      await getProfileData()(dispatch);
+      
       onSuccess();
       return;
     }

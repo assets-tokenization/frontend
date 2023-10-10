@@ -129,7 +129,7 @@ async function createRequest(request, action, dispatch, payload, options) {
 
     const responseBody = await getResponseBody(response, options);
 
-    const errors = [].concat(responseBody.error, responseBody.errors).filter(Boolean);
+    const errors = [].concat(responseBody.error, responseBody.errors, responseBody.err).filter(Boolean);
 
     if (response.status === 401) {
       if (!st) {

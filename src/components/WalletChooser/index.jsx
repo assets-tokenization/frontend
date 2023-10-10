@@ -19,7 +19,7 @@ import classNames from 'classnames';
 import MetaMaskIcon from 'assets/images/logos_metamask-icon.svg';
 import WalletConnectIcon from 'assets/images/simple-icons_walletconnect.svg';
 import CoinbaseWalletIcon from 'assets/images/coinbase.svg';
-import { updateProfileData, getProfileData } from 'actions/profile';
+import { updateProfileData } from 'actions/profile';
 
 const styles = (theme) => ({
   wrapper: {
@@ -155,8 +155,6 @@ const WalletChooser = ({ setActiveStep }) => {
             const result = await updateProfileData({
               wallet: wallet[0]
             })(dispatch);
-
-            await getProfileData()(dispatch);
 
             if (result instanceof Error) {
               setError(result.message);
