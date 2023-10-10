@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useTranslate } from 'react-translate';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { Button, Typography, TextField } from '@mui/material';
 import Snackbar from '@mui/material/Snackbar';
 import Grow from '@mui/material/Grow';
@@ -77,6 +78,9 @@ const styles = (theme) => ({
   textfield: {
     width: '100%',
     marginBottom: 32
+  },
+  error: {
+    marginBottom: 10
   }
 });
 
@@ -86,30 +90,38 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 const useStyles = makeStyles(styles);
 
-const ProfileScreen = ({ history }) => {
+const ProfileScreen = () => {
   const t = useTranslate('Profile');
   const [wallet, setWallet] = React.useState(
     useSelector((state) => state?.profile?.userInfo?.wallet)
   );
   const [error, setError] = React.useState(false);
+  const [validationError, setValidationError] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
 
   const dispatch = useDispatch();
-
+  const history = useHistory();
   const classes = useStyles();
 
-  const handleRedirectBack = () => {
+  const handleRedirectBack = useCallback(() => {
     history.replace('/');
-  };
+  }, [history]);
 
-  const handleCancel = () => {
+  const handleCancel = useCallback(() => {
     handleRedirectBack();
-  };
+  }, [handleRedirectBack]);
 
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
     if (loading) {
       return;
     }
+
+    if (!wallet) {
+      setValidationError(t('WalletAddressRequired'));
+      return;
+    }
+
+    setValidationError(false);
 
     setLoading(true);
 
@@ -125,16 +137,28 @@ const ProfileScreen = ({ history }) => {
     }
 
     handleRedirectBack();
-  };
+  }, [
+    loading,
+    wallet,
+    t,
+    setValidationError,
+    setLoading,
+    updateProfileData,
+    dispatch,
+    handleRedirectBack
+  ]);
 
-  const handleChangeWallet = (event) => {
-    setWallet(event.target.value);
-  };
+  const handleChangeWallet = useCallback(
+    (event) => {
+      setWallet(event.target.value);
+    },
+    [setWallet]
+  );
 
   return (
     <div className={classes.wrapper}>
       <div className={classes.headline}>
-        <img src={headline_logo} alt="headline_logo" className={classes.logo} />
+        <img src={headline_logo} alt="headline logo" className={classes.logo} />
 
         <Typography className={classes.title}>{t('Title')}</Typography>
       </div>
@@ -151,10 +175,18 @@ const ProfileScreen = ({ history }) => {
           margin="normal"
           label={t('WalletAddress')}
           onChange={handleChangeWallet}
+          error={!!validationError}
           className={classNames({
-            [classes.textfield]: true
+            [classes.textfield]: true,
+            [classes.error]: !!validationError
           })}
         />
+
+        {!!validationError && (
+          <Typography color="error" variant="caption">
+            {validationError}
+          </Typography>
+        )}
 
         <ProgressLine loading={loading} />
 

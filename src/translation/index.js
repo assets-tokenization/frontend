@@ -244,7 +244,8 @@ const translation = {
     Title: 'Профіль',
     WalletAddress: 'Адреса гаманця',
     Save: 'Зберегти',
-    Cancel: 'Скасувати'
+    Cancel: 'Скасувати',
+    WalletAddressRequired: 'Обовʼязково введіть адресу гаманця'
   }
 };
 
