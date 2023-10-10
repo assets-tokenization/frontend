@@ -459,7 +459,7 @@ const MarketScreen = ({
   );
 
   const toMyObjects = React.useCallback(() => {
-    history.push('/home');
+    history.replace('/');
   }, [history]);
 
   const toPurchase = React.useCallback((number) => {

@@ -13,7 +13,6 @@ import Tokenize from 'components/Tokenize';
 import LazyLoad from 'assets/images/lazy_load.png';
 import Preloader from 'components/Preloader';
 import { getRealEstate } from 'actions';
-import { useSelector } from 'react-redux';
 
 const styles = (theme) => ({
   warningBlock: {
@@ -84,14 +83,11 @@ const HomeScreen = ({ history }) => {
   const [data, setData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(false);
-
   const [tokenize, setTokenize] = React.useState(false);
+
   const t = useTranslate('HomeScreen');
   const classes = useStyles();
   const dispatch = useDispatch();
-
-  const test = useSelector(state => state);
-  console.log('HomeScreen', test);
 
   const tokenizeProcess = (id) => setTokenize(id);
 

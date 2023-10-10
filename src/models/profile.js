@@ -1,16 +1,12 @@
-
 const profile = {
   state: {
-    TEST: null,
+    userInfo: null
   },
   reducers: {
-    'profile/GET_PROFILE_DATA': (state) => {
-      console.log('GET_PROFILE_DATA');
-      return {
-        ...state,
-        inited: true
-      }
-    }
+    GET_PROFILE_DATA_SUCCESS: (state, userInfo) => ({
+      ...state,
+      userInfo
+    })
   }
 };
 

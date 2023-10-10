@@ -1,7 +1,6 @@
 import React from 'react';
 import Preloader from 'components/Preloader';
 import { useDispatch } from 'react-redux';
-import { history } from 'store';
 import { getProfileData } from 'actions/profile';
 import ServiceMessage from 'components/Auth/ServiceMessage';
 import Login from 'pages/Login';
@@ -19,8 +18,6 @@ const Auth = ({ children }) => {
         await getProfileData()(dispatch);
 
         setLoading(false);
-
-        history.push('/home');
       } catch (e) {
         setLoading(false);
         setError(e.message);
@@ -31,7 +28,7 @@ const Auth = ({ children }) => {
   }, [dispatch]);
 
   if (error) {
-    if (['401 unauthorized', '403 forbidden'].includes(error)) {
+    if (['401 unauthorized'].includes(error)) {
       return <Login onSuccess={setError} />;
     }
     return <ServiceMessage error={new Error(error)} />;

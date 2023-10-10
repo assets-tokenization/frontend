@@ -244,7 +244,7 @@ const LoginScreen = ({
     storage.setItem('token', token);
 
     if (method === 'auth') {
-      history.replace('/home');
+      history.replace('/');
       onSuccess();
       return;
     }
@@ -267,7 +267,7 @@ const LoginScreen = ({
   };
 
   const redirectToHomeScreen = () => {
-    history.replace('/home');
+    history.replace('/');
     onSuccess();
   };
 

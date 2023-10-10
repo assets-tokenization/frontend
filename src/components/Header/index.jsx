@@ -13,6 +13,8 @@ import MenuList from '@mui/material/MenuList';
 import headline_logo from 'assets/images/headline_logo.svg';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import storage from 'helpers/storage';
+import getUserShortName from 'helpers/getUserShortName';
+import { history } from 'store';
 
 const styles = (theme) => ({
   headline: {
@@ -87,8 +89,9 @@ const styles = (theme) => ({
 
 const useStyles = makeStyles(styles);
 
-const Header = ({ navigateClick, navigateText, title, hideLogo, hideSMbutton, history }) => {
+const Header = ({ navigateClick, navigateText, title, hideLogo, hideSMbutton }) => {
   const [open, setOpen] = React.useState(false);
+  const [token] = React.useState(storage.getItem('token'));
   const anchorRef = React.useRef(null);
 
   const t = useTranslate('Header');
@@ -135,6 +138,35 @@ const Header = ({ navigateClick, navigateText, title, hideLogo, hideSMbutton, hi
 
   const isSM = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
+  const getUserName = (token) => {
+    try {
+      const jwtDecode = () => {
+        var base64Url = token.split('.')[1];
+        var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+    
+        return JSON.parse(jsonPayload);
+      };
+    
+      const decodedToken = jwtDecode(token);
+  
+      const names = decodedToken.signer.commonName.split(' ');
+      const firstName = names[0];
+      const lastName = names[1];
+      const middleName = names[2];
+  
+      return getUserShortName({
+        first_name: firstName,
+        last_name: lastName,
+        middle_name: middleName
+      });
+    } catch (e) {
+      return '';
+    }
+  };
+
   return (
     <div className={classes.header}>
       {hideLogo ? (
@@ -172,7 +204,7 @@ const Header = ({ navigateClick, navigateText, title, hideLogo, hideSMbutton, hi
           >
             <AccountCircleOutlinedIcon />
           </IconButton>
-          {!isSM ? t('useName') : null}
+          {!isSM ? getUserName(token) : null}
         </Typography>
 
         <Popper

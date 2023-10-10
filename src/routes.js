@@ -15,8 +15,8 @@ const Routes = () => (
       <Route path="/market/:objectId" component={MarketScreen} />
       <Route path="/market" component={MarketScreen} />
       <Route path="/details/:objectId" component={ObjectScreen} />
-      <Route path="/home" component={Home} />
       <Route path="/profile" component={Profile} />
+      <Route path="/" component={Home} />
       <Route path="*" element={Page404} />
     </Switch>
   </Router>

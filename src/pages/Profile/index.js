@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslate } from 'react-translate';
 import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Button, Typography, TextField } from '@mui/material';
 import Snackbar from '@mui/material/Snackbar';
 import Grow from '@mui/material/Grow';
@@ -9,7 +10,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import ProgressLine from 'components/Preloader/ProgressLine';
 import headline_logo from 'assets/images/headline_logo.svg';
 import classNames from 'classnames';
-import { updateProfileData } from 'actions/profile';
+import { updateProfileData, getProfileData } from 'actions/profile';
 
 const styles = (theme) => ({
   wrapper: {
@@ -87,7 +88,7 @@ const useStyles = makeStyles(styles);
 
 const ProfileScreen = ({ history }) => {
   const t = useTranslate('Profile');
-  const [wallet, setWallet] = React.useState('1234');
+  const [wallet, setWallet] = React.useState(useSelector(state => state?.profile?.userInfo?.wallet));
   const [error, setError] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
 
@@ -95,18 +96,40 @@ const ProfileScreen = ({ history }) => {
 
   const classes = useStyles();
 
+  React.useEffect(() => {
+    const fetchData = async () => {
+      if (!wallet) {
+        setLoading(true);
+        await getProfileData()(dispatch);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleRedirectBack = () => {
+    if (history.goBack) {
+      history.goBack();
+    } else {
+      history.replace('/');
+    }
+  };
+
   const handleCancel = () => {
-    history.push('/');
+    handleRedirectBack();
   };
 
   const handleSave = async () => {
+    if (loading) return;
+  
     setLoading(true);
 
     const result = await updateProfileData({
-      data: {
-        wallet
-      }
+      wallet
     })(dispatch);
+
+    await getProfileData()(dispatch);
 
     setLoading(false);
 
@@ -114,8 +137,8 @@ const ProfileScreen = ({ history }) => {
       setError(result.message);
       return;
     }
-
-    history.push('/');
+    
+    handleRedirectBack();
   };
 
   const handleChangeWallet = (event) => {

@@ -1,5 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
+import { useSelector } from 'react-redux';
 import Fade from '@mui/material/Fade';
 import { Typography, TextField, Button } from '@mui/material';
 import PageTitle from 'components/PageTitle';
@@ -22,6 +23,8 @@ const PurchasesStep = ({
   setActiveStep,
   objects
 }) => {
+  const wallet = React.useMemo(() => useSelector(state => state?.profile?.userInfo?.wallet), []);
+
   const renderStep = React.useMemo(
     () => (
       <Fade in={true}>
@@ -88,7 +91,7 @@ const PurchasesStep = ({
                         })}
                       >
                         <TextField
-                          value={'0xB4A5e5Be862aA5552c363085A092c3FB58d52f59'}
+                          value={wallet}
                           variant="outlined"
                           margin="normal"
                           placeholder={t('PricePlaceHolder')}
@@ -225,7 +228,8 @@ const PurchasesStep = ({
       NumberFormatCustom,
       activeStep,
       setActiveStep,
-      objects
+      objects,
+      wallet
     ]
   );
 
