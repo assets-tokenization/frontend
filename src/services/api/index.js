@@ -61,8 +61,8 @@ async function createRequest(request, action, dispatch, payload, options) {
     ...conf,
     cache: 'reload',
     headers: {
-      ...conf.headers
-      // token: storage.getItem('token')
+      ...conf.headers,
+      token: storage.getItem('token')
     }
   };
 

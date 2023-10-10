@@ -10,7 +10,9 @@ import EDSForm from 'components/EDSForm';
 import WalletChooser from 'components/WalletChooser';
 import SuccessRegistration from 'components/SuccessRegistration';
 import LoginIcon from '@mui/icons-material/Login';
-import { requestSignData, checkSignDataUnic } from 'actions/eds';
+import { requestSignData, checkSignDataUniq } from 'actions/eds';
+import storage from 'helpers/storage';
+import { history } from 'store';
 
 const styles = (theme) => ({
   wrapper: {
@@ -198,7 +200,9 @@ const styles = (theme) => ({
 
 const useStyles = makeStyles(styles);
 
-const LoginScreen = ({ history }) => {
+const LoginScreen = ({
+  onSuccess
+}) => {
   const t = useTranslate('LoginScreen');
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
@@ -210,37 +214,38 @@ const LoginScreen = ({ history }) => {
   };
 
   const getEncodeCert = async (signer, index) => {
-    const certif = await signer.execute('EnumOwnCertificates', index);
+    const certificate = await signer.execute('EnumOwnCertificates', index);
 
-    if (certif === null) {
+    if (certificate === null) {
         throw new Error('Сертифікат шифрування відсутній. Зверніться до вашого АЦСК');
     }
 
-    if (certif.keyUsage === 'Протоколи розподілу ключів') {
-        return certif;
+    if (certificate.keyUsage === 'Протоколи розподілу ключів') {
+        return certificate;
     }
 
     return getEncodeCert(signer, index + 1);
-};
+  };
 
-  const signDataAndLogin = async (cert, signer, resetPrivateKey) => {
-
+  const signDataAndLogin = async (cert, signer) => {
     const { ray } = await requestSignData();
     const signature = await signer.execute('SignData', ray, true);
 
     const signData = { ray: signature };
 
-    const result = await checkSignDataUnic(signData);
+    const result = await checkSignDataUniq(signData);
 
     if (result instanceof Error) {
-      await getAuth();
       throw new Error(t(result.message, { details: result.details }));
     }
-    
+
+    const token = result?.data?.token;
+
+    storage.setItem('token', token);
+
     if (method === 'auth') {
-      localStorage.setItem('token', result);
-    
       history.replace('/home');
+      onSuccess();
       return;
     }
 
@@ -248,21 +253,22 @@ const LoginScreen = ({ history }) => {
   };
 
   const handleSelectKey = (cert, signer, resetPrivateKey) => {
-      let iteration = 0;
+    let iteration = 0;
 
-      const execute = () => signDataAndLogin(cert, signer, resetPrivateKey).catch((e) => {
-          iteration += 1;
-          if (iteration <= 3) {
-              return execute();
-          }
-          throw e;
-      });
+    const execute = () => signDataAndLogin(cert, signer, resetPrivateKey).catch((e) => {
+      iteration += 1;
+      if (iteration <= 3) {
+        return execute();
+      }
+      throw e;
+    });
 
-      return execute();
+    return execute();
   };
 
   const redirectToHomeScreen = () => {
     history.replace('/home');
+    onSuccess();
   };
 
   return (

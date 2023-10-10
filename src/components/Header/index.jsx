@@ -12,6 +12,7 @@ import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 import headline_logo from 'assets/images/headline_logo.svg';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import storage from 'helpers/storage';
 
 const styles = (theme) => ({
   headline: {
@@ -104,19 +105,22 @@ const Header = ({ navigateClick, navigateText, title, hideLogo, hideSMbutton, hi
     setOpen(false);
   };
 
-  function handleListKeyDown(event) {
+  const handleListKeyDown = (event) => {
     if (event.key === 'Tab') {
       event.preventDefault();
       setOpen(false);
     } else if (event.key === 'Escape') {
       setOpen(false);
     }
-  }
+  };
 
-  const handleLogout = (event) => {
-    localStorage.removeItem('token');
-    handleClose(event);
-    history.replace('/');
+  const handleLogout = () => {
+    storage.removeItem('token');
+    window.location.reload();
+  };
+
+  const handleRedirectProfile = () => {
+    history.replace('/profile');
   };
 
   const prevOpen = React.useRef(open);
@@ -194,6 +198,7 @@ const Header = ({ navigateClick, navigateText, title, hideLogo, hideSMbutton, hi
                     aria-labelledby="composition-button"
                     onKeyDown={handleListKeyDown}
                   >
+                    <MenuItem onClick={handleRedirectProfile}>{t('Profile')}</MenuItem>
                     <MenuItem onClick={handleLogout}>{t('Logout')}</MenuItem>
                   </MenuList>
                 </ClickAwayListener>
