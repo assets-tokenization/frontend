@@ -14,6 +14,7 @@ import headline_logo from 'assets/images/headline_logo.svg';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import storage from 'helpers/storage';
 import getUserShortName from 'helpers/getUserShortName';
+import jwtDecode from 'helpers/jwtDecode';
 import { history } from 'store';
 
 const styles = (theme) => ({
@@ -140,27 +141,13 @@ const Header = ({ navigateClick, navigateText, title, hideLogo, hideSMbutton }) 
 
   const getUserName = (token) => {
     try {
-      const jwtDecode = () => {
-        const base64Url = token.split('.')[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const jsonPayload = decodeURIComponent(
-          window
-            .atob(base64)
-            .split('')
-            .map(function (c) {
-              return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-            })
-            .join('')
-        );
-
-        return JSON.parse(jsonPayload);
-      };
-
       const decodedToken = jwtDecode(token);
 
+      if (!decodedToken) return '';
+
       const names = decodedToken.signer.commonName.split(' ');
-      const firstName = names[0];
-      const lastName = names[1];
+      const firstName = names[1];
+      const lastName = names[0];
       const middleName = names[2];
 
       return getUserShortName({

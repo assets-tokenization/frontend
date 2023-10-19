@@ -23,7 +23,7 @@ const PurchasesStep = ({
   setActiveStep,
   objects
 }) => {
-  const wallet = React.useMemo(() => useSelector((state) => state?.profile?.userInfo?.wallet), []);
+  const wallet = useSelector((state) => state?.profile?.userInfo?.wallet);
 
   const renderStep = React.useMemo(
     () => (
@@ -82,7 +82,9 @@ const PurchasesStep = ({
                         {t('ObjectPaymentTitle')}
                       </Typography>
 
-                      <Typography className={classes.fieldHeadline}>{t('WalletTitle')}</Typography>
+                      <Typography className={classes.fieldHeadline}>
+                        {t('WalletTitle')}
+                      </Typography>
 
                       <div
                         className={classNames({
