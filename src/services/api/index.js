@@ -156,6 +156,10 @@ async function createRequest(request, action, dispatch, payload, options) {
       throw new Error('404 not found');
     }
 
+    if (response.status === 502) {
+      throw new Error('502 Bad Gateway');
+    }
+
     if (errors.length) {
       const errorMessage = errors.shift();
       const error = new Error(errorMessage.message || errorMessage.msg || errorMessage);

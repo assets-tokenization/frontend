@@ -206,6 +206,7 @@ const Header = ({ navigateClick, navigateText, title, hideLogo, hideSMbutton }) 
             aria-controls={open ? 'composition-menu' : undefined}
             aria-expanded={open ? 'true' : undefined}
             aria-haspopup="true"
+            aria-label="menu of current user"
             onClick={handleToggle}
           >
             <AccountCircleOutlinedIcon />
