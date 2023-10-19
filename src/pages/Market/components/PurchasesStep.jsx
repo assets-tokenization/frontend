@@ -82,7 +82,9 @@ const PurchasesStep = ({
                         {t('ObjectPaymentTitle')}
                       </Typography>
 
-                      <Typography className={classes.fieldHeadline}>{t('WalletTitle')}</Typography>
+                      <Typography className={classes.fieldHeadline}>
+                        {t('WalletTitle')}
+                      </Typography>
 
                       <div
                         className={classNames({

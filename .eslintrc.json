@@ -4,9 +4,6 @@
     "es6": true,
     "node": true
   },
-  "globals": {
-    "EUSCClient": true
-  },
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
@@ -21,8 +18,5 @@
     "sourceType": "module"
   },
   "plugins": ["react"],
-  "rules": {
-    "react/prop-types": "warn",
-    "no-unsafe-optional-chaining": 0
-  }
+  "rules": {}
 }
