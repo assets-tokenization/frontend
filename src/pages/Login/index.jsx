@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslate } from 'react-translate';
+import { useDispatch } from 'react-redux';
 import { Button, Typography } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import Fade from '@mui/material/Fade';
@@ -10,6 +11,10 @@ import EDSForm from 'components/EDSForm';
 import WalletChooser from 'components/WalletChooser';
 import SuccessRegistration from 'components/SuccessRegistration';
 import LoginIcon from '@mui/icons-material/Login';
+import { requestSignData, checkSignDataUniq } from 'actions/eds';
+import storage from 'helpers/storage';
+import { history } from 'store';
+import { getProfileData } from 'actions/profile';
 
 const styles = (theme) => ({
   wrapper: {
@@ -197,30 +202,78 @@ const styles = (theme) => ({
 
 const useStyles = makeStyles(styles);
 
-const LoginScreen = ({ history }) => {
+const LoginScreen = ({ onSuccess }) => {
   const t = useTranslate('LoginScreen');
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
   const [method, setMethod] = React.useState(null);
+  const dispatch = useDispatch();
 
   const handleChangeStep = (step) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     setActiveStep(step);
   };
 
-  const onSelectKey = (data) => {
-    localStorage.setItem('token', 'token');
+  const getEncodeCert = async (signer, index) => {
+    const certificate = await signer.execute('EnumOwnCertificates', index);
+
+    if (certificate === null) {
+      throw new Error('Сертифікат шифрування відсутній. Зверніться до вашого АЦСК');
+    }
+
+    if (certificate.keyUsage === 'Протоколи розподілу ключів') {
+      return certificate;
+    }
+
+    return getEncodeCert(signer, index + 1);
+  };
+
+  const signDataAndLogin = async (cert, signer) => {
+    const { ray } = await requestSignData();
+    const signature = await signer.execute('SignData', ray, true);
+
+    const signData = { ray: signature };
+
+    const result = await checkSignDataUniq(signData);
+
+    if (result instanceof Error) {
+      throw new Error(t(result.message, { details: result.details }));
+    }
+
+    const token = result?.data?.token;
+
+    storage.setItem('token', token);
 
     if (method === 'auth') {
-      history.replace('/home');
+      history.replace('/');
+
+      await getProfileData()(dispatch);
+
+      onSuccess();
       return;
     }
 
     handleChangeStep(1);
   };
 
+  const handleSelectKey = (cert, signer, resetPrivateKey) => {
+    let iteration = 0;
+
+    const execute = () =>
+      signDataAndLogin(cert, signer, resetPrivateKey).catch((e) => {
+        iteration += 1;
+        if (iteration <= 3) {
+          return execute();
+        }
+        throw e;
+      });
+
+    return execute();
+  };
+
   const redirectToHomeScreen = () => {
-    history.replace('/home');
+    history.replace('/');
+    onSuccess();
   };
 
   return (
@@ -282,7 +335,7 @@ const LoginScreen = ({ history }) => {
                   <Typography className={classes.formTitle}>{t('LoginFormTitle')}</Typography>
 
                   <div className={classes.formWrapper}>
-                    <EDSForm onSelectKey={onSelectKey} showServerList={true} />
+                    <EDSForm onSelectKey={handleSelectKey} showServerList={true} />
                   </div>
                 </>
               ) : null}
@@ -336,7 +389,7 @@ const LoginScreen = ({ history }) => {
                   <Typography className={classes.formTitle}>{t('LoginFormTitle')}</Typography>
 
                   <div className={classes.formWrapper}>
-                    <EDSForm onSelectKey={onSelectKey} showServerList={true} />
+                    <EDSForm onSelectKey={handleSelectKey} showServerList={true} />
                   </div>
                 </>
               ) : null}

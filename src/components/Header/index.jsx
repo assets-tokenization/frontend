@@ -12,6 +12,10 @@ import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 import headline_logo from 'assets/images/headline_logo.svg';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import storage from 'helpers/storage';
+import getUserShortName from 'helpers/getUserShortName';
+import jwtDecode from 'helpers/jwtDecode';
+import { history } from 'store';
 
 const styles = (theme) => ({
   headline: {
@@ -86,8 +90,9 @@ const styles = (theme) => ({
 
 const useStyles = makeStyles(styles);
 
-const Header = ({ navigateClick, navigateText, title, hideLogo, hideSMbutton, history }) => {
+const Header = ({ navigateClick, navigateText, title, hideLogo, hideSMbutton }) => {
   const [open, setOpen] = React.useState(false);
+  const [token] = React.useState(storage.getItem('token'));
   const anchorRef = React.useRef(null);
 
   const t = useTranslate('Header');
@@ -104,19 +109,22 @@ const Header = ({ navigateClick, navigateText, title, hideLogo, hideSMbutton, hi
     setOpen(false);
   };
 
-  function handleListKeyDown(event) {
+  const handleListKeyDown = (event) => {
     if (event.key === 'Tab') {
       event.preventDefault();
       setOpen(false);
     } else if (event.key === 'Escape') {
       setOpen(false);
     }
-  }
+  };
 
-  const handleLogout = (event) => {
-    localStorage.removeItem('token');
-    handleClose(event);
-    history.replace('/');
+  const handleLogout = () => {
+    storage.removeItem('token');
+    window.location.reload();
+  };
+
+  const handleRedirectProfile = () => {
+    history.replace('/profile');
   };
 
   const prevOpen = React.useRef(open);
@@ -130,6 +138,27 @@ const Header = ({ navigateClick, navigateText, title, hideLogo, hideSMbutton, hi
   }, [open]);
 
   const isSM = useMediaQuery((theme) => theme.breakpoints.down('sm'));
+
+  const getUserName = (token) => {
+    try {
+      const decodedToken = jwtDecode(token);
+
+      if (!decodedToken) return '';
+
+      const names = decodedToken.signer.commonName.split(' ');
+      const firstName = names[1];
+      const lastName = names[0];
+      const middleName = names[2];
+
+      return getUserShortName({
+        first_name: firstName,
+        last_name: lastName,
+        middle_name: middleName
+      });
+    } catch (e) {
+      return '';
+    }
+  };
 
   return (
     <div className={classes.header}>
@@ -164,11 +193,12 @@ const Header = ({ navigateClick, navigateText, title, hideLogo, hideSMbutton, hi
             aria-controls={open ? 'composition-menu' : undefined}
             aria-expanded={open ? 'true' : undefined}
             aria-haspopup="true"
+            aria-label="menu of current user"
             onClick={handleToggle}
           >
             <AccountCircleOutlinedIcon />
           </IconButton>
-          {!isSM ? t('useName') : null}
+          {!isSM ? getUserName(token) : null}
         </Typography>
 
         <Popper
@@ -194,6 +224,7 @@ const Header = ({ navigateClick, navigateText, title, hideLogo, hideSMbutton, hi
                     aria-labelledby="composition-button"
                     onKeyDown={handleListKeyDown}
                   >
+                    <MenuItem onClick={handleRedirectProfile}>{t('Profile')}</MenuItem>
                     <MenuItem onClick={handleLogout}>{t('Logout')}</MenuItem>
                   </MenuList>
                 </ClickAwayListener>

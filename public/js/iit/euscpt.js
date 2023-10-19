@@ -278,6 +278,8 @@ var EU_XADES_SIGN_LEVEL_B_LTA = 32;
 var EU_PADES_SIGN_LEVEL_UNKNOWN = 0;
 var EU_PADES_SIGN_LEVEL_B_B = 1;
 var EU_PADES_SIGN_LEVEL_B_T = 4;
+var EU_PADES_SIGN_LEVEL_B_LT = 16;
+var EU_PADES_SIGN_LEVEL_B_LTA = 32;
 
 //=============================================================================
 
@@ -2588,6 +2590,54 @@ EndUserTSLSettings.prototype.SetTransferableObject = function(obj) {
 
 EndUserTSLSettings.prototype.GetTransferableObject = function() {
 	return ObjectToTransferableObject(this, {}, EndUserTSLSettingsFields);
+};
+
+//=============================================================================
+
+var EndUserASiCSignerFields =  {
+	'signatureReference': 'string',
+	'attrsHash': 'array',
+	'asicData': 'array'
+};
+
+//-----------------------------------------------------------------------------
+
+var EndUserASiCSigner = function(signatureReference, attrsHash, asicData) {
+	SetClassID('EndUserASiCSigner', '1.0.1', this);
+
+	this.signatureReference = signatureReference;
+	this.attrsHash = attrsHash;
+	this.asicData = asicData;
+};
+
+//-----------------------------------------------------------------------------
+
+EndUserASiCSigner.prototype.GetSignatureReference = function() {
+	return this.signatureReference;
+};
+
+//-----------------------------------------------------------------------------
+
+EndUserASiCSigner.prototype.GetAttrsHash = function() {
+	return this.attrsHash;
+};
+
+//-----------------------------------------------------------------------------
+
+EndUserASiCSigner.prototype.GetASiCData = function() {
+	return this.asicData;
+};
+
+//-----------------------------------------------------------------------------
+
+EndUserASiCSigner.prototype.SetTransferableObject = function(obj) {
+	TransferableObjectToClass(this, obj, EndUserASiCSignerFields);
+};
+
+//-----------------------------------------------------------------------------
+
+EndUserASiCSigner.prototype.GetTransferableObject = function() {
+	return ObjectToTransferableObject(this, {}, EndUserASiCSignerFields);
 };
 
 //=============================================================================

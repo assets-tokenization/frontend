@@ -88,12 +88,14 @@ function EUPointerConstructor(size, isArray, moduleFreeFunc, context) {
 	this.toBoolean = function() {
 		return (this.toNumber() != EU_FALSE);
 	};
-	this.toString = function(checkEmpty) {
+	this.toString = function(checkEmpty, encoder) {
 		var string = null;
 		try {
 			var strPtr = this.toPtr();
 			if (strPtr | 0) {
-				string = CP1251PointerToUTF8(strPtr);
+				string = encoder ? 
+						encoder.decodePointer(strPtr) : 
+						CP1251PointerToUTF8(strPtr);
 				if (context != null)
 					Module._EUCtxFreeMemory(context|0, strPtr);
 				else
@@ -605,13 +607,15 @@ function EUSignCPModuleInitialize() {
 //-----------------------------------------------------------------------------
 
 /* These constants are specified by compiler and cannot be changed */
+var EU_LIBRARY_SERVICE_MEMORY_MB = 1;
 var EU_MEMORY_GROWING_STEP_MB = 16;
-var EU_MAX_LIBRARY_STACK_MB = EU_MEMORY_GROWING_STEP_MB * 4;
+var EU_MAX_LIBRARY_STACK_MB = EU_MEMORY_GROWING_STEP_MB * 8;
 var EU_TOTAL_MEMORY_MB = EU_MAX_LIBRARY_STACK_MB + EU_MAX_DATA_SIZE_MB * 8;
-if (EU_MAX_DATA_SIZE_MB > EU_MAX_LIBRARY_STACK_MB) {
+if (EU_MAX_DATA_SIZE_MB > (EU_MAX_LIBRARY_STACK_MB - 
+		EU_LIBRARY_SERVICE_MEMORY_MB)) {
 	throw 'The EU_MAX_DATA_SIZE_MB (' + EU_MAX_DATA_SIZE_MB + 
 		' MB) constant is too big. Please set it less then ' + 
-		EU_MAX_LIBRARY_STACK_MB + ' MB';
+		(EU_MAX_LIBRARY_STACK_MB - EU_LIBRARY_SERVICE_MEMORY_MB)+ ' MB';
 }
 
 if (EU_TOTAL_MEMORY_MB < EU_MAX_LIBRARY_STACK_MB)
@@ -704,9 +708,9 @@ var Module = {
 
 var EUSignCP = NewClass({
 	"Vendor": "JSC IIT",
-	"ClassVersion": "1.3.67",
+	"ClassVersion": "1.3.68",
 	"ClassName": "EUSignCP",
-	"BaseLibraryVersion": "1.3.1.151",
+	"BaseLibraryVersion": "1.3.1.161",
 	"errorLangCode": EU_DEFAULT_LANG,
 	"privKeyOwnerInfo": null,
 	"isFileSyncAPISupported": false,
@@ -7325,7 +7329,139 @@ function() {
 		}
 
 		return intPtr.toBoolean();
-	},	
+	},
+	ASiCCreateEmptySign: function(asicType, signType, 
+		references, asBase64String) {
+		var refNames = [];
+		var refData = [];
+		var refDataSize = 0;
+		for (var i = 0; i < references.length; i++) {
+			refNames.push(references[i].GetName());
+			refData.push(references[i].GetData());
+			refDataSize += references[i].GetData().length;
+		}
+
+		this.CheckMaxDataSize(refDataSize);
+		
+		var refNamesString = intArrayFromStrings(
+			refNames, this.fieldsEncoder);
+		var refDataArray = new EUArrayFromArrayOfArray(refData);
+
+		var pPtr = EUPointerArray();
+		var error;
+
+		try {
+			error = Module.ccall('EUASiCCreateEmptySign',
+				'number',
+				['number', 'number',
+					'array', 'number', 'number', 
+					'number', 'number'],
+				[asicType, signType, 
+					refNamesString, refDataArray.arraysPtr, 
+					refDataArray.arraysLengthPtr,
+					pPtr.ptr, pPtr.lengthPtr]);
+		} catch (e) {
+			error = EU_ERROR_UNKNOWN;
+		}
+		
+		if (error != EU_ERROR_NONE) {
+			pPtr.free();
+			this.RaiseError(error);
+		}
+
+		if (asBase64String)
+			return this.Base64Encode(pPtr.toArray());
+		else 
+			return pPtr.toArray();
+	},
+	ASiCCreateSignerBegin: function(
+		signAlgo, asicType, signType,
+		referencesNames, asicData) {
+		this.CheckMaxDataSize(asicData);
+
+		if ((typeof asicData) == 'string')
+			asicData = this.Base64Decode(asicData);
+
+		var refNamesString = referencesNames != null ? 
+			intArrayFromStrings(referencesNames, this.fieldsEncoder) : 
+			0;
+
+		var pSignRefPtr = EUPointer();
+		var pAttrsHashPtr = EUPointerArray();
+		var pASiCDataPtr = EUPointerArray();
+		var error;
+
+		try {
+			error = Module.ccall('EUASiCCreateSignerBegin',
+				'number',
+				['number', 'number', 'number',
+					refNamesString ? 'array' : 'number',
+					'array', 'number', 
+					'number', 
+					'number', 'number',
+					'number', 'number'],
+				[signAlgo, asicType, signType,
+					refNamesString,
+					asicData, asicData.length,
+					pSignRefPtr.ptr, 
+					pAttrsHashPtr.ptr, pAttrsHashPtr.lengthPtr,
+					pASiCDataPtr.ptr, pASiCDataPtr.lengthPtr]);
+		} catch (e) {
+			error = EU_ERROR_UNKNOWN;
+		}
+		
+		if (error != EU_ERROR_NONE) {
+			pSignRefPtr.free();
+			pAttrsHashPtr.free();
+			pASiCDataPtr.free();
+			this.RaiseError(error);
+		}
+
+		return new EndUserASiCSigner(
+			pSignRefPtr.toString(false, this.fieldsEncoder), 
+			pAttrsHashPtr.toArray(), pASiCDataPtr.toArray());
+	},
+	ASiCCreateSignerEnd: function(
+		asicType, signType, signLevel,
+		signatureReference, signature, 
+		asicData, asBase64String) {
+		this.CheckMaxDataSize(signature);
+		this.CheckMaxDataSize(asicData);
+
+		if ((typeof signature) == 'string')
+			signature = this.Base64Decode(signature);
+		if ((typeof asicData) == 'string')
+			asicData = this.Base64Decode(asicData);
+
+		var pPtr = EUPointerArray();
+		var error;
+
+		try {
+			error = Module.ccall('EUASiCCreateSignerEnd',
+				'number',
+				['number', 'number', 'number',
+					'array', 'array', 'number', 
+					'array', 'number',
+					'number', 'number'],
+				[asicType, signType, signLevel,
+					this.fieldsEncoder.encode(signatureReference),
+					signature, signature.length,
+					asicData, asicData.length,
+					pPtr.ptr, pPtr.lengthPtr]);
+		} catch (e) {
+			error = EU_ERROR_UNKNOWN;
+		}
+		
+		if (error != EU_ERROR_NONE) {
+			pPtr.free();
+			this.RaiseError(error);
+		}
+
+		if (asBase64String)
+			return this.Base64Encode(pPtr.toArray());
+		else 
+			return pPtr.toArray();
+	},
 	PDFGetSignType: function(signIndex, signedPDFData) {
 		this.CheckMaxDataSize(signedPDFData);
 

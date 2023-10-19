@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { TranslatorProvider } from 'react-translate';
 import { ThemeProvider, StyledEngineProvider, createTheme } from '@mui/material/styles';
+import Auth from 'pages/Auth';
 import Routes from 'routes';
 import translation from 'translation';
 import theme from 'theme';
@@ -15,7 +16,9 @@ ReactDOM.render(
     <ThemeProvider theme={createTheme(theme)}>
       <TranslatorProvider translations={translation}>
         <Provider store={store}>
-          <Routes />
+          <Auth>
+            <Routes />
+          </Auth>
         </Provider>
       </TranslatorProvider>
     </ThemeProvider>

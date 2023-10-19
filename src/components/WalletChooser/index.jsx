@@ -1,13 +1,8 @@
 import * as React from 'react';
 import { useTranslate } from 'react-translate';
+import { useDispatch } from 'react-redux';
 import makeStyles from '@mui/styles/makeStyles';
-import {
-  Typography,
-  FormControl,
-  FormControlLabel,
-  Radio,
-  RadioGroup
-} from '@mui/material';
+import { Typography, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 import MuiAlert from '@mui/material/Alert';
 import Grow from '@mui/material/Grow';
 import Button from '@mui/material/Button';
@@ -18,6 +13,7 @@ import classNames from 'classnames';
 import MetaMaskIcon from 'assets/images/logos_metamask-icon.svg';
 import WalletConnectIcon from 'assets/images/simple-icons_walletconnect.svg';
 import CoinbaseWalletIcon from 'assets/images/coinbase.svg';
+import { updateProfileData } from 'actions/profile';
 
 const styles = (theme) => ({
   wrapper: {
@@ -137,17 +133,27 @@ const WalletChooser = ({ setActiveStep }) => {
   const [value, setValue] = React.useState(DEFAULT_WALLET);
   const [error, setError] = React.useState(false);
 
+  const dispatch = useDispatch();
+
   const handleChange = (event) => {
     setValue(event.target.value);
-    setError('a')
+    setError('a');
   };
 
   const handleWalletLogin = async () => {
     switch (value) {
       case 'MetaMask':
-        await window.ethereum.request({ method: 'eth_requestAccounts' })
-          .then((wallet) => {
-            console.log('wallet', wallet);
+        await window.ethereum
+          .request({ method: 'eth_requestAccounts' })
+          .then(async (wallet) => {
+            const result = await updateProfileData({
+              wallet: wallet[0]
+            })(dispatch);
+
+            if (result instanceof Error) {
+              setError(result.message);
+              return;
+            }
             setActiveStep(2);
           })
           .catch((err) => {
@@ -199,6 +205,7 @@ const WalletChooser = ({ setActiveStep }) => {
                     }}
                     disabled={disabled}
                     value={name}
+                    key={name}
                     control={<Radio />}
                     label={
                       <>
@@ -253,9 +260,7 @@ const WalletChooser = ({ setActiveStep }) => {
           vertical: 'top',
           horizontal: 'right'
         }}
-        TransitionComponent={(props) => (
-          <Grow {...props} />
-        )}
+        TransitionComponent={(props) => <Grow {...props} />}
         open={!!error}
         onClose={() => setError(false)}
         key={error}

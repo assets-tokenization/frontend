@@ -42,13 +42,11 @@ const EmptyState = ({ children, onClick, actionText, error }) => {
         🤷‍♂️
       </span>
       <Typography className={classes.headline}>{children}</Typography>
-      {
-        error ? null : (
-          <Button onClick={onClick} variant="contained">
-            {actionText || t('GoToP2P')}
-          </Button>
-        )
-      }
+      {error ? null : (
+        <Button onClick={onClick} variant="contained">
+          {actionText || t('GoToP2P')}
+        </Button>
+      )}
     </>
   );
 };

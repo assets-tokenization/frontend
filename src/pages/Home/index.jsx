@@ -83,8 +83,8 @@ const HomeScreen = ({ history }) => {
   const [data, setData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(false);
-
   const [tokenize, setTokenize] = React.useState(false);
+
   const t = useTranslate('HomeScreen');
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -97,17 +97,16 @@ const HomeScreen = ({ history }) => {
         setLoading(true);
 
         const result = await getRealEstate()(dispatch);
-  
+
         if (result instanceof Error) {
           setError(true);
           setLoading(false);
           return;
         }
-  
-        setData(result);
-  
+
+        setData(result.data);
+
         setLoading(false);
-          
       } catch (e) {
         setError(e.message);
         setLoading(false);
@@ -138,40 +137,38 @@ const HomeScreen = ({ history }) => {
       <div className={classes.wrapper}>
         <PageTitle>{t('Title')}</PageTitle>
 
-        {
-          error ? (
-            <EmptyState error={true}>{error}</EmptyState>
-          ) : (
-            <>
-              <div className={classes.warningBlock}>
-                <ErrorOutlineOutlinedIcon className={classes.icon} />
-                <Typography className={classes.warningText}>{t('WarningText')}</Typography>
-              </div>
+        {error ? (
+          <EmptyState error={true}>{error}</EmptyState>
+        ) : (
+          <>
+            <div className={classes.warningBlock}>
+              <ErrorOutlineOutlinedIcon className={classes.icon} />
+              <Typography className={classes.warningText}>{t('WarningText')}</Typography>
+            </div>
 
-              {data.length ? (
-                <>
-                  <Typography className={classes.searchResult}>
-                    {t('SearchCount', {
-                      count: data.length
-                    })}
-                  </Typography>
-                  {data.map((item, index) => (
-                    <ListCard
-                      item={item}
-                      key={index}
-                      tokenizeProcess={tokenizeProcess}
-                      openDetails={toDetailsObject}
-                    />
-                  ))}
-                </>
-              ) : (
-                <EmptyState>{t('EmptyState')}</EmptyState>
-              )}
+            {data.length ? (
+              <>
+                <Typography className={classes.searchResult}>
+                  {t('SearchCount', {
+                    count: data.length
+                  })}
+                </Typography>
+                {data.map((item, index) => (
+                  <ListCard
+                    item={item}
+                    key={index}
+                    tokenizeProcess={tokenizeProcess}
+                    openDetails={toDetailsObject}
+                  />
+                ))}
+              </>
+            ) : (
+              <EmptyState>{t('EmptyState')}</EmptyState>
+            )}
 
-              <Tokenize tokenize={tokenize} setTokenize={setTokenize} onSuccess={toDetailsObject} />
-            </>
-          )
-        }
+            <Tokenize tokenize={tokenize} setTokenize={setTokenize} onSuccess={toDetailsObject} />
+          </>
+        )}
       </div>
     </>
   );

@@ -30,7 +30,9 @@ const translation = {
     Title: 'Блокчейн реєстр',
     GoToP2P: 'Перейти в P2P платформу',
     useName: 'Тарас Шевченко',
-    Logout: 'Вийти'
+    Logout: 'Вийти',
+    Logout: 'Вийти',
+    Profile: 'Профіль'
   },
   HomeScreen: {
     Title: 'Ваше нерухоме майно та земля',
@@ -237,6 +239,13 @@ const translation = {
     Purchases: 'Покупка',
     Messages: 'Повідомлення',
     ToHome: 'Моє майно'
+  },
+  Profile: {
+    Title: 'Профіль',
+    WalletAddress: 'Адреса гаманця',
+    Save: 'Зберегти',
+    Cancel: 'Скасувати',
+    WalletAddressRequired: 'Обовʼязково введіть адресу гаманця'
   }
 };
 

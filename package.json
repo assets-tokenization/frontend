@@ -1,7 +1,28 @@
 {
   "name": "frontend",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "private": true,
+  "proxy": "https://95.216.140.202",
+  "scripts": {
+    "build": "sh -ac '. ./.env; react-scripts build'",
+    "eject": "sh -ac '. ./.env; react-scripts eject'",
+    "format": "prettier --write 'src/**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix",
+    "start": "sh -ac '. ./.env; react-scripts start'",
+    "test": "sh -ac '. ./.env; react-scripts test'"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ],
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
   "dependencies": {
     "@emotion/react": "11.11.1",
     "@emotion/styled": "11.11.0",
@@ -13,13 +34,17 @@
     "@sentry/browser": "5.15.4",
     "classnames": "2.2.6",
     "connected-react-router": "6.9.3",
+    "eslint": "^8.47.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-react": "^7.33.2",
     "file-saver": "2.0.2",
     "history": "4.10.1",
-    "http-proxy-middleware": "^2.0.6",
     "leaflet": "^1.9.4",
     "mobile-detect": "1.4.5",
     "moment": "2.29.4",
     "password-generator": "2.2.3",
+    "prettier": "^3.0.2",
     "promise-timeout": "1.3.0",
     "qrcode.react": "3.1.0",
     "react": "17.0.0",
@@ -65,32 +90,5 @@
     "semver": "7.5.4",
     "tough-cookie": "4.1.3",
     "yargs-parser": "18.1.1"
-  },
-  "scripts": {
-    "start": "sh -ac '. ./.env; react-scripts start'",
-    "build": "sh -ac '. ./.env; react-scripts build'",
-    "test": "sh -ac '. ./.env; react-scripts test'",
-    "eject": "sh -ac '. ./.env; react-scripts eject'",
-    "lint": "eslint .",
-    "lint:fix": "eslint --fix",
-    "format": "prettier --write 'src/**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not op_mini all"
-  ],
-  "devDependencies": {
-    "eslint": "^8.47.0",
-    "eslint-config-prettier": "^9.0.0",
-    "eslint-plugin-prettier": "^5.0.0",
-    "eslint-plugin-react": "^7.33.2",
-    "prettier": "^3.0.2"
   }
 }

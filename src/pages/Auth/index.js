@@ -1,20 +1,44 @@
 import React from 'react';
 import Preloader from 'components/Preloader';
+import { useDispatch } from 'react-redux';
+import { getProfileData } from 'actions/profile';
+import ServiceMessage from 'components/ServiceMessage';
+import Login from 'pages/Login';
 
-const Auth = ({ history }) => {
+const Auth = ({ children }) => {
+  const dispatch = useDispatch();
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState(null);
+
   React.useEffect(() => {
-    setTimeout(() => {
-      const token = localStorage.getItem('token');
+    const fetchData = async () => {
+      try {
+        setLoading(true);
 
-      if (token) {
-        history.push('/home');
-      } else {
-        history.push('/login');
+        await getProfileData()(dispatch);
+
+        setLoading(false);
+      } catch (e) {
+        setLoading(false);
+        setError(e.message);
       }
-    }, 1000);
-  }, [history]);
+    };
 
-  return <Preloader />;
+    fetchData();
+  }, [dispatch]);
+
+  if (error) {
+    if (['401 unauthorized'].includes(error)) {
+      return <Login onSuccess={setError} />;
+    }
+    return <ServiceMessage error={new Error(error)} />;
+  }
+
+  if (loading) {
+    return <Preloader />;
+  }
+
+  return children;
 };
 
 export default Auth;
