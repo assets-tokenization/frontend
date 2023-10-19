@@ -1,6 +1,7 @@
 import React from 'react';
 import makeStyles from '@mui/styles/makeStyles';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
 
 const styles = (theme) => ({
   card: {
@@ -41,6 +42,12 @@ const Card = ({ children, fullWidth, className }) => {
       </div>
     </>
   );
+};
+
+Card.propTypes = {
+  children: PropTypes.node.isRequired,
+  fullWidth: PropTypes.bool,
+  className: PropTypes.string
 };
 
 export default Card;

@@ -1,7 +1,6 @@
 import * as api from 'services/api';
 
-export const getObjects = () => (dispatch) =>
-  api.get('objects', 'GET_OBJECTS', dispatch);
+export const getObjects = () => (dispatch) => api.get('objects', 'GET_OBJECTS', dispatch);
 
 export const getRealEstate = () => (dispatch) =>
   api.get('my_real_estate', 'GET_REAL_ESTATE', dispatch);
