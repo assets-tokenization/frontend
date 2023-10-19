@@ -11,7 +11,7 @@ const jwtDecode = (token) => {
         })
         .join('')
     );
-  
+
     return JSON.parse(jsonPayload);
   } catch (e) {
     return null;

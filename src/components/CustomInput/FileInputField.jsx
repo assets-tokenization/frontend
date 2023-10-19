@@ -199,7 +199,14 @@ class FileInputField extends Component {
 }
 
 FileInputField.propTypes = {
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired,
+  classes: PropTypes.object.isRequired,
+  accept: PropTypes.string,
+  value: PropTypes.object,
+  error: PropTypes.object,
+  helperText: PropTypes.string,
+  disabled: PropTypes.bool
 };
 
 FileInputField.defaultProps = {};

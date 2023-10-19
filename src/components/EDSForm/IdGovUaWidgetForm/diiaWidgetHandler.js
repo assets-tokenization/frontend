@@ -15,7 +15,6 @@ class DiiaWidgetHandler {
   }
 
   SignData(data, internal = true) {
-    debugger;
     return this.euSign.SignData(
       data,
       !internal,
