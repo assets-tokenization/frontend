@@ -7,10 +7,6 @@ import {
 } from 'config';
 import store from 'store';
 
-const redirectUserToMetaMask = () => {
-  window.open(`dapp://${window.location.host}/?&lang=en&openWallet=true`);
-};
-
 export const deployContract = (body) => (dispatch) =>
   api.post('deploycontract', body, 'contract/DEPLOY_CONTRACT', dispatch);
 
@@ -19,7 +15,8 @@ export const getAbi = () => (dispatch) =>
 
 export const addToP2PPlatformAction = async ({
   CONTRACT_ADDRESS,
-  ABI
+  ABI,
+  OWNER
 }) => {
   const web3 = createAlchemyWeb3(API_URL);
 
@@ -27,14 +24,10 @@ export const addToP2PPlatformAction = async ({
 
   const contract = new web3.eth.Contract(ABI, CONTRACT_ADDRESS);
 
-  const result = await contract.methods.AddP2pPplatform(PLATFORM_TOKEN).send({
+  const result = await contract.methods.AllowP2Pplatform(PLATFORM_TOKEN).send({
     from: address,
-    gas: 0
+    owner: OWNER
   });
-
-  if (!window.ethereum) {
-    redirectUserToMetaMask();
-  }
 
   return result;
 };

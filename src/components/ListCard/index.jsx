@@ -214,13 +214,14 @@ const ListCard = ({
         }
       })(dispatch);
   
-      const { contract: CONTRACT_ADDRESS } = result;
+      const { contract: CONTRACT_ADDRESS, owner: OWNER } = result;
   
       const ABI = (await getAbi()(dispatch)).data;
 
       const tx = await addToP2PPlatformAction({
         CONTRACT_ADDRESS,
-        ABI
+        ABI,
+        OWNER
       });
 
       console.log('tx', tx);
