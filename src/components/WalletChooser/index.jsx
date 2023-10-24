@@ -3,10 +3,8 @@ import { useTranslate } from 'react-translate';
 import { useDispatch } from 'react-redux';
 import makeStyles from '@mui/styles/makeStyles';
 import { Typography, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
-import MuiAlert from '@mui/material/Alert';
-import Grow from '@mui/material/Grow';
 import Button from '@mui/material/Button';
-import Snackbar from '@mui/material/Snackbar';
+import SnackBarWrapper from 'components/Snackbar';
 import { ReactComponent as ArrowForwardIcon } from 'assets/images/arrowForwardWhite.svg';
 import ArrowBackIcon from 'assets/images/arrowBackBlueIcon.svg';
 import classNames from 'classnames';
@@ -124,10 +122,6 @@ const WALLETS = [
 ];
 
 const DEFAULT_WALLET = WALLETS[0].name;
-
-const Alert = React.forwardRef(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
 
 const WalletChooser = ({ setActiveStep }) => {
   const [value, setValue] = React.useState(DEFAULT_WALLET);
@@ -255,18 +249,10 @@ const WalletChooser = ({ setActiveStep }) => {
         </Button>
       </div>
 
-      <Snackbar
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'right'
-        }}
-        TransitionComponent={(props) => <Grow {...props} />}
-        open={!!error}
-        onClose={() => setError(false)}
-        key={error}
-      >
-        <Alert severity="error">{error}</Alert>
-      </Snackbar>
+      <SnackBarWrapper
+        onClose={() => setError(false)} 
+        error={error}
+      />
     </>
   );
 };

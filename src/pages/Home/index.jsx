@@ -89,7 +89,7 @@ const HomeScreen = ({ history }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const tokenizeProcess = (id) => setTokenize(id);
+  const tokenizeProcess = (objectData) => setTokenize(objectData);
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -166,7 +166,11 @@ const HomeScreen = ({ history }) => {
               <EmptyState>{t('EmptyState')}</EmptyState>
             )}
 
-            <Tokenize tokenize={tokenize} setTokenize={setTokenize} onSuccess={toDetailsObject} />
+            <Tokenize
+              tokenize={tokenize}
+              setTokenize={setTokenize}
+              onSuccess={toDetailsObject}
+            />
           </>
         )}
       </div>

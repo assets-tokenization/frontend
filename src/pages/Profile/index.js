@@ -4,11 +4,9 @@ import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Button, Typography, TextField } from '@mui/material';
-import Snackbar from '@mui/material/Snackbar';
-import Grow from '@mui/material/Grow';
-import MuiAlert from '@mui/material/Alert';
 import makeStyles from '@mui/styles/makeStyles';
 import ProgressLine from 'components/Preloader/ProgressLine';
+import SnackBarWrapper from 'components/Snackbar';
 import headline_logo from 'assets/images/headline_logo.svg';
 import classNames from 'classnames';
 import { updateProfileData } from 'actions/profile';
@@ -82,10 +80,6 @@ const styles = (theme) => ({
   error: {
     marginBottom: 10
   }
-});
-
-const Alert = React.forwardRef(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
 const useStyles = makeStyles(styles);
@@ -199,18 +193,10 @@ const ProfileScreen = () => {
         </div>
       </div>
 
-      <Snackbar
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'right'
-        }}
-        TransitionComponent={(props) => <Grow {...props} />}
-        open={!!error}
+      <SnackBarWrapper
         onClose={() => setError(false)}
-        key={error}
-      >
-        <Alert severity="error">{error}</Alert>
-      </Snackbar>
+        error={error}
+      />
     </div>
   );
 };

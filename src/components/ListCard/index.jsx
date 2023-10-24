@@ -1,10 +1,13 @@
 import React from 'react';
 import { useTranslate } from 'react-translate';
+import { useDispatch } from 'react-redux';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
-import { Typography, Button } from '@mui/material';
+import { Typography, Button, CircularProgress } from '@mui/material';
 import { ReactComponent as ArrowForwardIcon } from 'assets/images/arrowForwardBlue.svg';
 import StatusLabel from 'components/StatusLabel';
+import SnackBarWrapper from 'components/Snackbar';
+import { deployContract, getAbi, addToP2PPlatformAction } from 'actions/contracts';
 
 const styles = (theme) => ({
   card: {
@@ -157,12 +160,17 @@ const styles = (theme) => ({
     fontWeight: 400,
     lineHeight: '30px',
     marginBottom: 8
+  },
+  circularProgress: {
+    color: '#fff',
+    marginRight: 8
   }
 });
 
 const useStyles = makeStyles(styles);
 
 const ListCard = ({
+  item,
   item: { title, number, tokenized, type, totalArea, livingArea },
   tokenizeProcess,
   sellingStatus,
@@ -176,7 +184,10 @@ const ListCard = ({
   detailsLink
 }) => {
   const t = useTranslate('HomeScreen');
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const isSM = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
@@ -185,6 +196,39 @@ const ListCard = ({
       mainAction(event);
     } else {
       tokenizeProcess(event);
+    }
+  };
+
+  const addToP2PPlatform = async () => {
+    if (loading) return;
+
+    try {
+      setLoading(true);
+
+      const result = await deployContract({
+        data: {
+          name_contract: 'name_contract 2',
+          symbol: 'symbol 2',
+          id_real_estate: 'id_real_estate 2',
+          description: 'description 2'
+        }
+      })(dispatch);
+  
+      const { contract: CONTRACT_ADDRESS } = result;
+  
+      const ABI = (await getAbi()(dispatch)).data;
+
+      const tx = await addToP2PPlatformAction({
+        CONTRACT_ADDRESS,
+        ABI
+      });
+
+      console.log('tx', tx);
+  
+      setLoading(false);
+    } catch (error) {
+      setError(error.message);
+      setLoading(false);
     }
   };
 
@@ -246,7 +290,19 @@ const ListCard = ({
                 >
                   {secondaryActionText || t('DeToken')}
                 </Button>
-                <Button variant="contained" className={classes.toTokenButton} onClick={mainAction}>
+                <Button
+                  variant="contained"
+                  className={classes.toTokenButton} 
+                  onClick={addToP2PPlatform}
+                  >
+                  {
+                    loading ? (
+                      <CircularProgress
+                        size={16}
+                        className={classes.circularProgress}
+                      />
+                    ) : null
+                  }
                   {mainActionText || t('ToP2P')}
                 </Button>
               </div>
@@ -254,7 +310,7 @@ const ListCard = ({
               <Button
                 variant="contained"
                 className={classes.toTokenButton}
-                onClick={() => handleTokenize(number)}
+                onClick={() => handleTokenize(item)}
               >
                 {mainActionText || t('ToToken')}
               </Button>
@@ -262,6 +318,11 @@ const ListCard = ({
           </>
         ) : null}
       </div>
+
+      <SnackBarWrapper
+        onClose={() => setError(false)} 
+        error={error}
+      />
     </div>
   );
 };

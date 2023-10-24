@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslate } from 'react-translate';
+import { useDispatch } from 'react-redux';
 import makeStyles from '@mui/styles/makeStyles';
 import {
   Dialog,
@@ -14,6 +15,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import classNames from 'classnames';
 import CheckIcon from 'assets/images/Check_icon.svg';
 import LoadingStep from 'components/LoadingStep';
+import SnackBarWrapper from 'components/Snackbar';
+import { deployContract, getAbi } from 'actions/contracts';
 
 const styles = (theme) => ({
   divider: {
@@ -142,7 +145,9 @@ const useStyles = makeStyles(styles);
 
 const Tokenize = ({ tokenize, setTokenize, onSuccess }) => {
   const [step, setStep] = React.useState('intro');
+  const [error, setError] = React.useState(null);
   const t = useTranslate('TokenizeScreen');
+  const dispatch = useDispatch();
   const classes = useStyles();
 
   const handleClose = () => {
@@ -154,6 +159,33 @@ const Tokenize = ({ tokenize, setTokenize, onSuccess }) => {
     handleClose();
     onSuccess(tokenize);
   };
+
+  const deployContractAction = async () => {
+    try {
+      setStep('processing');
+
+      const result = await deployContract({
+        data: {
+          name_contract: tokenize?.name_contract || 'test',
+          symbol: tokenize?.symbol || 'test',
+          id_real_estate: tokenize?.id_real_estate || "test",
+          description: tokenize?.description || "test"
+        }
+      })(dispatch);
+
+      const { contract: contractAddress, owner } = result;
+
+      const contractABI = await getAbi()(dispatch);
+
+      console.log('contractABI', contractABI, contractAddress, owner);
+
+      setStep('success');
+    } catch (error) {
+      setError(error?.message);
+      setStep('intro');
+    }
+  };
+
   return (
     <Dialog open={!!tokenize}>
       {step === 'intro' ? (
@@ -192,7 +224,7 @@ const Tokenize = ({ tokenize, setTokenize, onSuccess }) => {
               root: classes.dialogActions
             }}
           >
-            <Button variant="contained" onClick={() => setStep('processing')}>
+            <Button variant="contained" onClick={deployContractAction}>
               {t('Tokenize')}
             </Button>
 
@@ -253,6 +285,11 @@ const Tokenize = ({ tokenize, setTokenize, onSuccess }) => {
           </DialogContent>
         </>
       ) : null}
+
+      <SnackBarWrapper
+        onClose={() => setError(false)} 
+        error={error}
+      />
     </Dialog>
   );
 };
