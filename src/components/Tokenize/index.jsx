@@ -9,14 +9,19 @@ import {
   DialogContentText,
   DialogActions,
   Button,
-  IconButton
+  IconButton,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormControl,
+  CircularProgress
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import classNames from 'classnames';
 import CheckIcon from 'assets/images/Check_icon.svg';
 import LoadingStep from 'components/LoadingStep';
 import SnackBarWrapper from 'components/Snackbar';
-import { deployContract, getAbi } from 'actions/contracts';
+import { deployContract, getAbi, tokenizeAction, getPlatforms } from 'actions/contracts';
 
 const styles = (theme) => ({
   divider: {
@@ -138,6 +143,10 @@ const styles = (theme) => ({
       width: 24,
       height: 24
     }
+  },
+  circularProgress: {
+    color: '#fff',
+    marginRight: 8
   }
 });
 
@@ -146,6 +155,9 @@ const useStyles = makeStyles(styles);
 const Tokenize = ({ tokenize, setTokenize, onSuccess }) => {
   const [step, setStep] = React.useState('intro');
   const [error, setError] = React.useState(null);
+  const [platforms, setPlatforms] = React.useState([]);
+  const [platform, setPlatform] = React.useState(null);
+  const [loading, setLoading] = React.useState(false);
   const t = useTranslate('TokenizeScreen');
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -160,26 +172,45 @@ const Tokenize = ({ tokenize, setTokenize, onSuccess }) => {
     onSuccess(tokenize);
   };
 
-  const deployContractAction = async () => {
+  const handleGetPlatforms = async () => {
+    setLoading(true);
+
+    const platforms = await getPlatforms()(dispatch);
+
+    setPlatforms(platforms);
+
+    setLoading(false);
+
+    setStep('selectPlatform');
+  };
+
+  const handleTokenize = async () => {
     try {
       setStep('processing');
 
       const result = await deployContract({
         data: {
-          name_contract: tokenize?.name_contract || 'test',
-          symbol: tokenize?.symbol || 'test',
-          id_real_estate: tokenize?.id_real_estate || "test",
-          description: tokenize?.description || "test"
+          name_contract: 'name_contract 3',
+          symbol: 'symbol 3',
+          id_real_estate: 'id_real_estate 3',
+          description: 'description 3'
         }
       })(dispatch);
+  
+      const { contract } = result;
+  
+      const abi = (await getAbi()(dispatch)).data;
 
-      const { contract: contractAddress, owner } = result;
+      const tx = await tokenizeAction({
+        contract,
+        abi,
+        platform
+      });
 
-      const contractABI = await getAbi()(dispatch);
-
-      console.log('contractABI', contractABI, contractAddress, owner);
+      console.log('tx', tx);
 
       setStep('success');
+      
     } catch (error) {
       setError(error?.message);
       setStep('intro');
@@ -224,10 +255,80 @@ const Tokenize = ({ tokenize, setTokenize, onSuccess }) => {
               root: classes.dialogActions
             }}
           >
-            <Button variant="contained" onClick={deployContractAction}>
+            <Button variant="contained" onClick={handleGetPlatforms}>
+              {
+                loading ? (
+                  <CircularProgress
+                    size={16}
+                    className={classes.circularProgress}
+                  />
+                ) : null
+              }
               {t('Tokenize')}
             </Button>
 
+            <Button onClick={handleClose}>{t('Cancel')}</Button>
+          </DialogActions>
+        </>
+      ) : null}
+
+      {step === 'selectPlatform' ? (
+        <>
+          <DialogTitle
+            classes={{
+              root: classes.dialogTitle
+            }}
+          >
+            {t('SelectPlatformTitle')}
+            <IconButton onClick={handleClose}>
+              <CloseIcon />
+            </IconButton>
+          </DialogTitle>
+          <DialogContent
+            classes={{
+              root: classes.dialogContent
+            }}
+          >
+            <DialogContentText
+              classes={{
+                root: classNames({
+                  [classes.dialogContentText]: true,
+                  [classes.removeMargin]: true
+                })
+              }}
+            >
+              {t('SelectPlatformText')}
+            </DialogContentText>
+
+            <FormControl component="fieldset">
+              <RadioGroup
+                aria-label="platform"
+                name="platform"
+                value={platform}
+                onChange={(e) => setPlatform(e.target.value)}
+              >
+                {platforms.map(({ name, address }) => (
+                  <FormControlLabel
+                    key={name}
+                    value={address}
+                    control={<Radio />}
+                    label={name}
+                  />
+                ))}
+              </RadioGroup>
+            </FormControl>
+          </DialogContent>
+
+          <div className={classes.divider} />
+
+          <DialogActions
+            classes={{
+              root: classes.dialogActions
+            }}
+          >
+            <Button variant="contained" onClick={handleTokenize}>
+              {t('Continue')}
+            </Button>
             <Button onClick={handleClose}>{t('Cancel')}</Button>
           </DialogActions>
         </>
