@@ -6,9 +6,9 @@ export const getObjects = () => (dispatch) =>
 export const getRealEstate = () => (dispatch) =>
   api.get('my_real_estate', 'GET_REAL_ESTATE', dispatch);
 
-export const getDetails = () => (dispatch) => api.get('details', 'GET_DETAILS', dispatch);
+export const getDetails = (id) => (dispatch) => api.get(`details/${id}`, 'GET_DETAILS', dispatch);
 
-export const saveDetails = (data) => (dispatch) =>
-  api.post('object', data, 'GET_DETAILS', dispatch);
+export const saveDetails = (id, data) => (dispatch) =>
+  api.put(`details/${id}`, data, 'GET_DETAILS', dispatch);
 
 export const getMessages = () => (dispatch) => api.get('messages', 'GET_MESSAGES', dispatch);

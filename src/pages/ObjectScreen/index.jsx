@@ -27,6 +27,7 @@ import PageTitle from 'components/PageTitle';
 import StatusLabel from 'components/StatusLabel';
 import Preloader from 'components/Preloader';
 import EmptyState from 'components/EmptyState';
+import SnackBarWrapper from 'components/Snackbar';
 import { getDetails, saveDetails } from 'actions';
 import SliderArrow from 'assets/images/sliderArrow.svg';
 import FullscreenIcon from 'assets/images/fullscreen_icon.svg';
@@ -518,6 +519,7 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
   const [openSlider, setOpenSLider] = React.useState(false);
   const [showMore, setShowMore] = React.useState(false);
   const [error, setError] = React.useState(false);
+  const [updateError, setUpdateError] = React.useState(false);
   const [deleteDialog, setDeleteDialog] = React.useState(false);
   const [photoIndexToDelete, setPhotoIndexToDelete] = React.useState(null);
   const [hoveredPhotoIndex, setHoveredPhotoIndex] = React.useState(null);
@@ -525,14 +527,19 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
   const [secondarySlider, setSecondarySlider] = React.useState(null);
   const [dialogSlider, setDialogSlider] = React.useState(null);
   const dispatch = useDispatch();
+  const classes = useStyles();
+  const t = useTranslate('ObjectScreen');
+
   const isMobile = !!md.mobile();
+
+  const idFromUrl = React.useMemo(() => history?.location?.pathname.split('/').pop(), [history]);
 
   React.useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
 
-        const resultDetails = await getDetails()(dispatch);
+        const resultDetails = await getDetails(idFromUrl)(dispatch);
         const result = resultDetails?.data;
 
         if (result instanceof Error) {
@@ -545,7 +552,7 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
 
         setDescription(result.description);
 
-        setFiles(result.photos);
+        setFiles(result.photos || []);
 
         setLoading(false);
       } catch (e) {
@@ -555,7 +562,7 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
     };
 
     fetchData();
-  }, [dispatch]);
+  }, [dispatch, idFromUrl]);
 
   const isSM = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
@@ -579,24 +586,34 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
       setFiles(filesArray);
     }
   });
-  const classes = useStyles();
-  const t = useTranslate('ObjectScreen');
 
   const toMarket = () => history.push('/market');
 
   const handleBack = handleClickBack || (() => history.push('/'));
 
-  const handleSaveDescription = () => {
-    setOpenTextEditor(false);
+  const handleSaveDescription = React.useCallback(
+    () => {
+      try {
+        setOpenTextEditor(false);
 
-    saveDetails({
-      data: {
-        ...objectData,
-        id_user: 1,
-        description
+        const result = saveDetails(idFromUrl, {
+          data: {
+            ...objectData,
+            id_user: 1,
+            description
+          }
+        })(dispatch);
+
+        if (result instanceof Error) {
+          setUpdateError(result.message);
+          return;
+        }
+      } catch (e) {
+        setUpdateError(e.message);
       }
-    })(dispatch);
-  };
+    },
+    [idFromUrl, objectData, description, dispatch]
+  );
 
   const SampleNextArrow = React.useCallback(
     (props) => {
@@ -1108,6 +1125,11 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
           </>
         )}
       </div>
+
+      <SnackBarWrapper
+        onClose={() => setError(false)} 
+        error={updateError}
+      />
     </>
   );
 };

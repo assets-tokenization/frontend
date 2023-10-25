@@ -169,7 +169,7 @@ const Tokenize = ({ tokenize, setTokenize, onSuccess }) => {
 
   const handleSuccess = () => {
     handleClose();
-    onSuccess(tokenize);
+    onSuccess(tokenize.id);
   };
 
   const handleGetPlatforms = async () => {
@@ -178,6 +178,8 @@ const Tokenize = ({ tokenize, setTokenize, onSuccess }) => {
     const platforms = await getPlatforms()(dispatch);
 
     setPlatforms(platforms);
+
+    setPlatform(platforms[0].address);
 
     setLoading(false);
 
@@ -192,7 +194,7 @@ const Tokenize = ({ tokenize, setTokenize, onSuccess }) => {
         data: {
           name_contract: 'name_contract 3',
           symbol: 'symbol 3',
-          id_real_estate: 'id_real_estate 3',
+          id_real_estate: tokenize?.id_real_estate,
           description: 'description 3'
         }
       })(dispatch);

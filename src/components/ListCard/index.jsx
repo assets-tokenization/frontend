@@ -169,7 +169,7 @@ const useStyles = makeStyles(styles);
 
 const ListCard = ({
   item,
-  item: { title, number, tokenized, type, totalArea, livingArea },
+  item: { title, number, tokenized, type, totalArea, livingArea, id },
   tokenizeProcess,
   sellingStatus,
   openDetails,
@@ -228,7 +228,7 @@ const ListCard = ({
 
       {isSM ? (
         <Typography className={classes.cardTitle}>
-          <a href={`${detailsLink || 'details'}/${number}`}>{title}</a>
+          <a href={`${detailsLink || 'details'}/${id}`}>{title}</a>
         </Typography>
       ) : (
         <Typography className={classes.cardTitle}>{title}</Typography>
@@ -252,7 +252,7 @@ const ListCard = ({
 
       <div className={classes.actions}>
         {!isSM ? (
-          <Button className={classes.detailsButton} onClick={() => openDetails(number)}>
+          <Button className={classes.detailsButton} onClick={() => openDetails(id)}>
             {t('ObjectDetails')}
             <ArrowForwardIcon className={classes.actionIcon} />
           </Button>
