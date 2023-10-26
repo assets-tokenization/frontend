@@ -453,7 +453,7 @@ const ListCard = ({
 
       if (metamaskState !== 'connected') {
         setLoading(false);
-        setError(metamaskState);
+        setError(t(metamaskState));
         return;
       }
 
