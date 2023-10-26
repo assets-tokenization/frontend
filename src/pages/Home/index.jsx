@@ -104,7 +104,7 @@ const HomeScreen = ({ history }) => {
           return;
         }
 
-        setData(result.data);
+        setData(result.data.filter(({ is_selected_p2p }) => !is_selected_p2p));
 
         setLoading(false);
       } catch (e) {
@@ -118,17 +118,17 @@ const HomeScreen = ({ history }) => {
 
   const isSM = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
+  const toDetailsObject = (id) => {
+    history.push(`/details/${id}`);
+  };
+
+  const toMarket = () => history.push('/market');
+
   if (loading) {
     if (isSM) return <Preloader />;
 
     return <img src={LazyLoad} alt="lazy load table preview" className={classes.lazyLoad} />;
   }
-
-  const toDetailsObject = (number) => {
-    history.push(`/details/${number}`);
-  };
-
-  const toMarket = () => history.push('/market');
 
   return (
     <>
@@ -143,7 +143,9 @@ const HomeScreen = ({ history }) => {
           <>
             <div className={classes.warningBlock}>
               <ErrorOutlineOutlinedIcon className={classes.icon} />
-              <Typography className={classes.warningText}>{t('WarningText')}</Typography>
+              <Typography className={classes.warningText}>
+                {t('WarningText')}
+              </Typography>
             </div>
 
             {data.length ? (
@@ -163,7 +165,9 @@ const HomeScreen = ({ history }) => {
                 ))}
               </>
             ) : (
-              <EmptyState>{t('EmptyState')}</EmptyState>
+              <EmptyState onClick={toMarket}>
+                {t('EmptyState')}
+              </EmptyState>
             )}
 
             <Tokenize

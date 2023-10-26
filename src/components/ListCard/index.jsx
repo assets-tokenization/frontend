@@ -1,11 +1,13 @@
 import React from 'react';
 import { useTranslate } from 'react-translate';
+import { useDispatch } from 'react-redux';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import { Typography, Button, CircularProgress } from '@mui/material';
 import { ReactComponent as ArrowForwardIcon } from 'assets/images/arrowForwardBlue.svg';
 import StatusLabel from 'components/StatusLabel';
 import SnackBarWrapper from 'components/Snackbar';
+import { deployContract, getAbi, tokenizeAction, getPlatforms, saveP2PSelectedState } from 'actions/contracts';
 
 const styles = (theme) => ({
   card: {
@@ -185,6 +187,7 @@ const ListCard = ({
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(false);
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const isSM = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
@@ -202,7 +205,8 @@ const ListCard = ({
     try {
       setLoading(true);
 
-  
+      await saveP2PSelectedState(`${id}?state=true`)(dispatch);
+
       setLoading(false);
     } catch (error) {
       setError(error.message);

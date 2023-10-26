@@ -21,7 +21,7 @@ import classNames from 'classnames';
 import CheckIcon from 'assets/images/Check_icon.svg';
 import LoadingStep from 'components/LoadingStep';
 import SnackBarWrapper from 'components/Snackbar';
-import { deployContract, getAbi, tokenizeAction, getPlatforms } from 'actions/contracts';
+import { deployContract, getAbi, tokenizeAction, getPlatforms, saveP2PSelectedState } from 'actions/contracts';
 
 const styles = (theme) => ({
   divider: {
@@ -210,6 +210,8 @@ const Tokenize = ({ tokenize, setTokenize, onSuccess }) => {
       });
 
       console.log('tx', tx);
+
+      await saveP2PSelectedState(`${tokenize.id}?state=true`)(dispatch);
 
       setStep('success');
       

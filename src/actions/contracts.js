@@ -12,6 +12,9 @@ export const deployContract = (body) => (dispatch) =>
 export const getAbi = () => (dispatch) =>
   api.get('abi', 'contract/GET_ABI', dispatch);
 
+export const saveP2PSelectedState = (id) => (dispatch) =>
+  api.post(`p2p_selected/${id}`, {}, 'contract/SAVE_P2P_STATE', dispatch);
+
 export const tokenizeAction = async ({
   contract: contractAddress,
   abi,
