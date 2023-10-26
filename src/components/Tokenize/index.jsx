@@ -16,7 +16,7 @@ import classNames from 'classnames';
 import CheckIcon from 'assets/images/Check_icon.svg';
 import LoadingStep from 'components/LoadingStep';
 import SnackBarWrapper from 'components/Snackbar';
-import { deployContract, getAbi } from 'actions/contracts';
+import { deployContract, getAbi, saveContractData } from 'actions/contracts';
 
 const styles = (theme) => ({
   divider: {
@@ -171,23 +171,33 @@ const Tokenize = ({ tokenize, setTokenize, openDetails, updateList }) => {
     try {
       setStep('processing');
 
-      await deployContract({
+      const { title, number, id_real_estate, description } = tokenize;
+
+      const result = await deployContract({
         data: {
-          name_contract: 'name_contract 3',
-          symbol: 'symbol 3',
-          id_real_estate: tokenize?.id_real_estate,
-          description: 'description 3'
+          name_contract: title,
+          symbol: number,
+          id_real_estate: id_real_estate,
+          description: description
         }
       })(dispatch);
   
-      await getAbi()(dispatch);
+      const { contract } = result;
+  
+      const abi = (await getAbi()(dispatch)).data;
+
+      saveContractData({
+        contract,
+        abi,
+        id_real_estate
+      })(dispatch);
 
       setStep('success');
     } catch (error) {
       setError(error?.message);
       setStep('intro');
     }
-  }, [dispatch, tokenize?.id_real_estate]);
+  }, [dispatch, tokenize]);
 
   return (
     <Dialog open={!!tokenize}>

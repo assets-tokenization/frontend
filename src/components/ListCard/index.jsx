@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslate } from 'react-translate';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
@@ -23,7 +23,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import StatusLabel from 'components/StatusLabel';
 import SnackBarWrapper from 'components/Snackbar';
 import { ReactComponent as ArrowForwardIcon } from 'assets/images/arrowForwardBlue.svg';
-import { deployContract, getAbi, tokenizeAction, getPlatforms, saveP2PSelectedState, denyP2Platform } from 'actions/contracts';
+import { deployContract, getAbi, tokenizeAction, getPlatforms, saveP2PSelectedState, denyP2Platform, saveContractData } from 'actions/contracts';
 
 const styles = (theme) => ({
   card: {
@@ -313,7 +313,17 @@ const useStyles = makeStyles(styles);
 
 const ListCard = ({
   item,
-  item: { title, number, tokenized, type, totalArea, livingArea, id, id_real_estate },
+  item: {
+    title,
+    number,
+    tokenized,
+    type,
+    totalArea,
+    livingArea,
+    id,
+    id_real_estate,
+    description
+  },
   tokenizeProcess,
   sellingStatus,
   openDetails,
@@ -337,6 +347,7 @@ const ListCard = ({
   const dispatch = useDispatch();
 
   const isSM = useMediaQuery((theme) => theme.breakpoints.down('sm'));
+  const savedContracts = useSelector((state) => state?.contract?.contracts);
 
   const handleTokenize = React.useCallback((event) => {
     if (mainAction) {
@@ -363,12 +374,21 @@ const ListCard = ({
   }, [dispatch]);
 
   const getContractData = React.useCallback(async () => {
+    if (savedContracts[id_real_estate]) {
+      const { contract, abi } = savedContracts[id_real_estate];
+
+      return {
+        contract,
+        abi
+      };
+    }
+
     const result = await deployContract({
       data: {
-        name_contract: 'name_contract 3',
-        symbol: 'symbol 3',
+        name_contract: title,
+        symbol: number,
         id_real_estate: id_real_estate,
-        description: 'description 3'
+        description: description
       }
     })(dispatch);
 
@@ -376,11 +396,17 @@ const ListCard = ({
 
     const abi = (await getAbi()(dispatch)).data;
 
+    saveContractData({
+      contract,
+      abi,
+      id_real_estate
+    })(dispatch);
+  
     return {
       contract,
       abi
     };
-  }, [dispatch, id_real_estate]);
+  }, [dispatch, item, savedContracts]);
 
   const addToP2PPlatform = React.useCallback(async () => {
     if (loading) return;

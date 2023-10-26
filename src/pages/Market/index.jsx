@@ -407,7 +407,6 @@ const MarketScreen = ({
   const [updating, setUpdating] = React.useState(false);
 
   const dispatch = useDispatch();
-  const userId = 1;
 
   const t = useTranslate('MarketScreen');
   const classes = useStyles();
@@ -421,7 +420,7 @@ const MarketScreen = ({
         setLoading(true);
       }
 
-      const result = await getObjects(userId)(dispatch);
+      const result = await getObjects()(dispatch);
       const resultMessages = await getMessages()(dispatch);
 
       if (result instanceof Error || resultMessages instanceof Error) {

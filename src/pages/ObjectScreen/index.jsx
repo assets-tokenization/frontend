@@ -600,7 +600,6 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
         const result = await saveDetails(idFromUrl, {
           data: {
             ...objectData,
-            id_user: 1,
             description
           }
         })(dispatch);
