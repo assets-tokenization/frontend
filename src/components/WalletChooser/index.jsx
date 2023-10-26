@@ -12,6 +12,7 @@ import MetaMaskIcon from 'assets/images/logos_metamask-icon.svg';
 import WalletConnectIcon from 'assets/images/simple-icons_walletconnect.svg';
 import CoinbaseWalletIcon from 'assets/images/coinbase.svg';
 import { updateProfileData } from 'actions/profile';
+import { checkMetaMaskState } from 'actions/contracts';
 
 const styles = (theme) => ({
   wrapper: {
@@ -124,6 +125,8 @@ const WALLETS = [
 const DEFAULT_WALLET = WALLETS[0].name;
 
 const WalletChooser = ({ setActiveStep }) => {
+  const t = useTranslate('LoginScreen');
+  const classes = useStyles();
   const [value, setValue] = React.useState(DEFAULT_WALLET);
   const [error, setError] = React.useState(false);
 
@@ -131,12 +134,19 @@ const WalletChooser = ({ setActiveStep }) => {
 
   const handleChange = (event) => {
     setValue(event.target.value);
-    setError('a');
+    setError(false);
   };
 
   const handleWalletLogin = async () => {
     switch (value) {
       case 'MetaMask':
+        const metamaskState = await checkMetaMaskState();
+
+        if (metamaskState !== 'connected') {
+          setError(t(metamaskState));
+          return;
+        }
+
         await window.ethereum
           .request({ method: 'eth_requestAccounts' })
           .then(async (wallet) => {
@@ -166,9 +176,6 @@ const WalletChooser = ({ setActiveStep }) => {
         break;
     }
   };
-
-  const t = useTranslate('LoginScreen');
-  const classes = useStyles();
 
   return (
     <>

@@ -24,7 +24,9 @@ const translation = {
     ChoseMethod: 'Авторизуйтесь в реєстрі або пройдіть реєстрацію якщо ви тут вперше',
     AuthAction: 'Авторизуватись',
     RegisterAction: 'Зареєструватись',
-    or: 'або'
+    or: 'або',
+    noMetaMask: 'Для подовження необхідно встановити MetaMask',
+    noAccount: 'Для подовження необхідно авторизуватись в MetaMask'
   },
   Header: {
     Title: 'Блокчейн реєстр',
@@ -56,7 +58,9 @@ const translation = {
     Continue: 'Продовжити',
     Cancel: 'Скасувати',
     AddPlatformSuccess: 'Успішно додано до платформи',
-    RemovePlatformSuccess: 'Успішно видалено від платформи та переміщено в моє майно',
+    RemovePlatformSuccess: 'Успішно видалено з платформи та переміщено в моє майно',
+    noMetaMask: 'Для подовження необхідно встановити MetaMask',
+    noAccount: 'Для подовження необхідно авторизуватись в MetaMask',
   },
   TokenizeScreen: {
     Title: 'Токенізація обʼєкта',
@@ -72,7 +76,9 @@ const translation = {
     SuccessTitle: 'Обʼєкт успішно токенізовано',
     SuccessDescription:
       'Обʼєкт отримав відповідну позначку і ви можете його переглянути в загальному списку. Тепер його можна відредагувати і виставити на продаж в P2P платформі.',
-    Continue: 'Продовжити'
+    Continue: 'Продовжити',
+    noMetaMask: 'Для подовження необхідно встановити MetaMask',
+    noAccount: 'Для подовження необхідно авторизуватись в MetaMask',
   },
   SignForm: {
     DownloadKeySm: 'Завантажити ключ',

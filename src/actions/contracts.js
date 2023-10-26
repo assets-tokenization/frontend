@@ -21,11 +21,28 @@ export const saveContractData = (data) => (dispatch) =>
     payload: data
   });
 
+export const checkMetaMaskState = async () => {
+  if (typeof window.ethereum === 'undefined') {
+    return 'noMetaMask';
+  }
+
+  const isAuthorized = (await window.ethereum.request({ method: 'eth_accounts' })).length > 0;
+
+  if (!isAuthorized) {
+    return 'noAccount';
+  }
+
+  return 'connected';
+};
+
 export const tokenizeAction = async ({
   contract: contractAddress,
   abi,
   platform
 }) => {
+
+  await window.ethereum.request({ method: 'eth_accounts' });
+
   const web3 = createAlchemyWeb3(API_URL);
 
   const address = store.getState().profile.userInfo.wallet;
@@ -43,6 +60,8 @@ export const denyP2Platform = async ({
   contract: contractAddress,
   abi
 }) => {
+  await window.ethereum.request({ method: 'eth_accounts' });
+
   const web3 = createAlchemyWeb3(API_URL);
 
   const address = store.getState().profile.userInfo.wallet;

@@ -16,7 +16,7 @@ import classNames from 'classnames';
 import CheckIcon from 'assets/images/Check_icon.svg';
 import LoadingStep from 'components/LoadingStep';
 import SnackBarWrapper from 'components/Snackbar';
-import { deployContract, getAbi, saveContractData } from 'actions/contracts';
+import { deployContract, getAbi, saveContractData, checkMetaMaskState } from 'actions/contracts';
 
 const styles = (theme) => ({
   divider: {
@@ -170,6 +170,14 @@ const Tokenize = ({ tokenize, setTokenize, openDetails, updateList }) => {
   const handleTokenize = React.useCallback(async () => {
     try {
       setStep('processing');
+
+      const metamaskState = await checkMetaMaskState();
+
+      if (metamaskState !== 'connected') {
+        setStep('intro');
+        setError(t(metamaskState));
+        return;
+      }
 
       const { title, number, id_real_estate, description } = tokenize;
 

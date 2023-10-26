@@ -23,7 +23,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import StatusLabel from 'components/StatusLabel';
 import SnackBarWrapper from 'components/Snackbar';
 import { ReactComponent as ArrowForwardIcon } from 'assets/images/arrowForwardBlue.svg';
-import { deployContract, getAbi, tokenizeAction, getPlatforms, saveP2PSelectedState, denyP2Platform, saveContractData } from 'actions/contracts';
+import { deployContract, getAbi, tokenizeAction, getPlatforms, saveP2PSelectedState, denyP2Platform, saveContractData, checkMetaMaskState } from 'actions/contracts';
 
 const styles = (theme) => ({
   card: {
@@ -414,6 +414,14 @@ const ListCard = ({
     try {
       setLoading(true);
 
+      const metamaskState = await checkMetaMaskState();
+
+      if (metamaskState !== 'connected') {
+        setLoading(false);
+        setError(t(metamaskState));
+        return;
+      }
+
       const { contract, abi } = await getContractData();
 
       await tokenizeAction({
@@ -440,6 +448,14 @@ const ListCard = ({
 
     try {
       setLoadingRemoving(true);
+
+      const metamaskState = await checkMetaMaskState();
+
+      if (metamaskState !== 'connected') {
+        setLoading(false);
+        setError(metamaskState);
+        return;
+      }
 
       const { contract, abi } = await getContractData();
 
