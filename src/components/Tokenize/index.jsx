@@ -9,19 +9,14 @@ import {
   DialogContentText,
   DialogActions,
   Button,
-  IconButton,
-  Radio,
-  RadioGroup,
-  FormControlLabel,
-  FormControl,
-  CircularProgress
+  IconButton
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import classNames from 'classnames';
 import CheckIcon from 'assets/images/Check_icon.svg';
 import LoadingStep from 'components/LoadingStep';
 import SnackBarWrapper from 'components/Snackbar';
-import { deployContract, getAbi, tokenizeAction, getPlatforms, saveP2PSelectedState } from 'actions/contracts';
+import { deployContract, getAbi } from 'actions/contracts';
 
 const styles = (theme) => ({
   divider: {
@@ -152,45 +147,31 @@ const styles = (theme) => ({
 
 const useStyles = makeStyles(styles);
 
-const Tokenize = ({ tokenize, setTokenize, onSuccess }) => {
+const Tokenize = ({ tokenize, setTokenize, openDetails, updateList }) => {
   const [step, setStep] = React.useState('intro');
   const [error, setError] = React.useState(null);
-  const [platforms, setPlatforms] = React.useState([]);
-  const [platform, setPlatform] = React.useState(null);
-  const [loading, setLoading] = React.useState(false);
   const t = useTranslate('TokenizeScreen');
   const dispatch = useDispatch();
   const classes = useStyles();
 
-  const handleClose = () => {
+  const handleClose = React.useCallback(() => {
     setTokenize(false);
+    updateList({
+      updating: true
+    });
     setTimeout(() => setStep('intro'), 250);
-  };
+  }, [updateList]);
 
-  const handleSuccess = () => {
+  const handleRedirect = React.useCallback(() => {
     handleClose();
-    onSuccess(tokenize.id);
-  };
+    openDetails(tokenize.id);
+  }, [tokenize, handleClose, handleClose])
 
-  const handleGetPlatforms = async () => {
-    setLoading(true);
-
-    const platforms = await getPlatforms()(dispatch);
-
-    setPlatforms(platforms);
-
-    setPlatform(platforms[0].address);
-
-    setLoading(false);
-
-    setStep('selectPlatform');
-  };
-
-  const handleTokenize = async () => {
+  const handleTokenize = React.useCallback(async () => {
     try {
       setStep('processing');
 
-      const result = await deployContract({
+      await deployContract({
         data: {
           name_contract: 'name_contract 3',
           symbol: 'symbol 3',
@@ -199,27 +180,14 @@ const Tokenize = ({ tokenize, setTokenize, onSuccess }) => {
         }
       })(dispatch);
   
-      const { contract } = result;
-  
-      const abi = (await getAbi()(dispatch)).data;
-
-      const tx = await tokenizeAction({
-        contract,
-        abi,
-        platform
-      });
-
-      console.log('tx', tx);
-
-      await saveP2PSelectedState(`${tokenize.id}?state=true`)(dispatch);
+      await getAbi()(dispatch);
 
       setStep('success');
-      
     } catch (error) {
       setError(error?.message);
       setStep('intro');
     }
-  };
+  }, [dispatch, tokenize?.id_real_estate]);
 
   return (
     <Dialog open={!!tokenize}>
@@ -259,80 +227,10 @@ const Tokenize = ({ tokenize, setTokenize, onSuccess }) => {
               root: classes.dialogActions
             }}
           >
-            <Button variant="contained" onClick={handleGetPlatforms}>
-              {
-                loading ? (
-                  <CircularProgress
-                    size={16}
-                    className={classes.circularProgress}
-                  />
-                ) : null
-              }
+            <Button variant="contained" onClick={handleTokenize}>
               {t('Tokenize')}
             </Button>
 
-            <Button onClick={handleClose}>{t('Cancel')}</Button>
-          </DialogActions>
-        </>
-      ) : null}
-
-      {step === 'selectPlatform' ? (
-        <>
-          <DialogTitle
-            classes={{
-              root: classes.dialogTitle
-            }}
-          >
-            {t('SelectPlatformTitle')}
-            <IconButton onClick={handleClose}>
-              <CloseIcon />
-            </IconButton>
-          </DialogTitle>
-          <DialogContent
-            classes={{
-              root: classes.dialogContent
-            }}
-          >
-            <DialogContentText
-              classes={{
-                root: classNames({
-                  [classes.dialogContentText]: true,
-                  [classes.removeMargin]: true
-                })
-              }}
-            >
-              {t('SelectPlatformText')}
-            </DialogContentText>
-
-            <FormControl component="fieldset">
-              <RadioGroup
-                aria-label="platform"
-                name="platform"
-                value={platform}
-                onChange={(e) => setPlatform(e.target.value)}
-              >
-                {platforms.map(({ name, address }) => (
-                  <FormControlLabel
-                    key={name}
-                    value={address}
-                    control={<Radio />}
-                    label={name}
-                  />
-                ))}
-              </RadioGroup>
-            </FormControl>
-          </DialogContent>
-
-          <div className={classes.divider} />
-
-          <DialogActions
-            classes={{
-              root: classes.dialogActions
-            }}
-          >
-            <Button variant="contained" onClick={handleTokenize}>
-              {t('Continue')}
-            </Button>
             <Button onClick={handleClose}>{t('Cancel')}</Button>
           </DialogActions>
         </>
@@ -383,7 +281,7 @@ const Tokenize = ({ tokenize, setTokenize, onSuccess }) => {
             <Button
               variant="contained"
               className={classes.dialogProcessingButton}
-              onClick={handleSuccess}
+              onClick={handleRedirect}
             >
               {t('EditObject')}
             </Button>

@@ -32,3 +32,20 @@ export const tokenizeAction = async ({
 
   return result;
 };
+
+export const denyP2Platform = async ({
+  contract: contractAddress,
+  abi
+}) => {
+  const web3 = createAlchemyWeb3(API_URL);
+
+  const address = store.getState().profile.userInfo.wallet;
+
+  const contract = new web3.eth.Contract(abi, contractAddress);
+
+  const result = await contract.methods.DenyP2Pplatform().send({
+    from: address
+  });
+
+  return result;
+};

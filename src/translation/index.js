@@ -50,7 +50,13 @@ const translation = {
     Tokenized: 'Токенізовано',
     ToP2P: 'Розмістити на P2P платформі',
     Selling: 'виставлено на продаж',
-    Archived: 'продано'
+    Archived: 'продано',
+    SelectPlatformTitle: 'Вибір платформи',
+    SelectPlatformText: 'Виберіть платформу для токенізації вашого обʼєкта',
+    Continue: 'Продовжити',
+    Cancel: 'Скасувати',
+    AddPlatformSuccess: 'Успішно додано до платформи',
+    RemovePlatformSuccess: 'Успішно видалено від платформи та переміщено в моє майно',
   },
   TokenizeScreen: {
     Title: 'Токенізація обʼєкта',
@@ -66,8 +72,6 @@ const translation = {
     SuccessTitle: 'Обʼєкт успішно токенізовано',
     SuccessDescription:
       'Обʼєкт отримав відповідну позначку і ви можете його переглянути в загальному списку. Тепер його можна відредагувати і виставити на продаж в P2P платформі.',
-    SelectPlatformTitle: 'Вибір платформи',
-    SelectPlatformText: 'Виберіть платформу для токенізації вашого обʼєкта',
     Continue: 'Продовжити'
   },
   SignForm: {
@@ -166,7 +170,8 @@ const translation = {
     photo: 'Фото {{index}} з {{total}}',
     ShowMore: 'Повний опис',
     Hide: 'Приховати',
-    DeletePhoto: 'Видалити фото'
+    DeletePhoto: 'Видалити фото',
+    DescriptionSaved: 'Опис успішно збережено'
   },
   MarketScreen: {
     BuildType: 'Тип нерухомості: {{value}}',

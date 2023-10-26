@@ -19,7 +19,8 @@ const ObjectsStep = ({
   setPage,
   setCreatingOffer,
   objects,
-  loading
+  loading,
+  onSuccess
 }) => {
   const renderStep = React.useMemo(
     () => (
@@ -66,13 +67,14 @@ const ObjectsStep = ({
                     .map((item, index) => (
                       <ListCard
                         item={item}
-                        key={index}
+                        key={item.id + index}
                         finished={item?.finished}
                         openDetails={toDetailsObject}
                         mainAction={(number) => {
                           setCreatingOffer(number);
                           setPage('Selling');
                         }}
+                        onSuccess={onSuccess}
                         secondaryActionText={t('MoveToMyObjects')}
                         mainActionText={t('CreateOrder')}
                         detailsLink={`/market/${item.number}`}
@@ -102,7 +104,8 @@ const ObjectsStep = ({
       setPage,
       setCreatingOffer,
       loading,
-      objects
+      objects,
+      onSuccess
     ]
   );
 

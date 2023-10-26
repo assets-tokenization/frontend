@@ -47,6 +47,7 @@ const SnackBarWrapper = ({
       classes={{
         root: classes.wrapper
       }}
+      autoHideDuration={severity === 'error' ? null : 3000}
     >
       <Alert
         severity={severity}

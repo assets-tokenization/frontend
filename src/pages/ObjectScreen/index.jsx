@@ -526,6 +526,7 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
   const [mainSlider, setMainSlider] = React.useState(null);
   const [secondarySlider, setSecondarySlider] = React.useState(null);
   const [dialogSlider, setDialogSlider] = React.useState(null);
+  const [success, setSuccess] = React.useState(false);
   const dispatch = useDispatch();
   const classes = useStyles();
   const t = useTranslate('ObjectScreen');
@@ -592,11 +593,11 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
   const handleBack = handleClickBack || (() => history.push('/'));
 
   const handleSaveDescription = React.useCallback(
-    () => {
+    async () => {
       try {
         setOpenTextEditor(false);
 
-        const result = saveDetails(idFromUrl, {
+        const result = await saveDetails(idFromUrl, {
           data: {
             ...objectData,
             id_user: 1,
@@ -608,6 +609,8 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
           setUpdateError(result.message);
           return;
         }
+
+        setSuccess(t('DescriptionSaved'));
       } catch (e) {
         setUpdateError(e.message);
       }
@@ -1129,6 +1132,12 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
       <SnackBarWrapper
         onClose={() => setError(false)} 
         error={updateError}
+      />
+
+      <SnackBarWrapper
+        onClose={() => setSuccess(false)} 
+        error={success}
+        severity="success"
       />
     </>
   );

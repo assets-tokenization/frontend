@@ -11,6 +11,8 @@ import SidebarMenu from 'components/SidebarMenu';
 import ObjectScreen from 'pages/ObjectScreen';
 import Preloader from 'components/Preloader';
 import EmptyState from 'components/EmptyState';
+import SnackBarWrapper from 'components/Snackbar';
+import ProgressLine from 'components/Preloader/ProgressLine';
 import ObjectsStep from './components/ObjectsStep';
 import SellingStep from './components/SellingStep';
 import MessagesStep from './components/MessagesStep';
@@ -401,6 +403,9 @@ const MarketScreen = ({
   const [activeBuyStep, setActiveBuyStep] = React.useState(0);
   const [tab, setTab] = React.useState(0);
   const [errorMessage, setErrorMessage] = React.useState(null);
+  const [success, setSuccess] = React.useState(false);
+  const [updating, setUpdating] = React.useState(false);
+
   const dispatch = useDispatch();
   const userId = 1;
 
@@ -408,33 +413,50 @@ const MarketScreen = ({
   const classes = useStyles();
   const isSM = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
+  const updateList = React.useCallback(async ({ updating } = {}) => {
+    try {
+      if (updating) {
+        setUpdating(true)
+      } else {
+        setLoading(true);
+      }
+
+      const result = await getObjects(userId)(dispatch);
+      const resultMessages = await getMessages()(dispatch);
+
+      if (result instanceof Error || resultMessages instanceof Error) {
+        setLoading(false);
+        setErrorMessage(result?.message || resultMessages?.message);
+        return;
+      }
+
+      setMessages(resultMessages.data);
+
+      const onlyWithPlatform = result.data.filter((item) => item.is_selected_p2p);
+
+      setData(onlyWithPlatform);
+
+      setLoading(false);
+      setUpdating(false);
+    } catch (e) {
+      setErrorMessage(e?.message);
+      setLoading(false);
+      setUpdating(false);
+    }
+  }, [dispatch]);
+
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
-
-        const result = await getObjects(userId)(dispatch);
-        const resultMessages = await getMessages()(dispatch);
-
-        if (result instanceof Error || resultMessages instanceof Error) {
-          setLoading(false);
-          setErrorMessage(result?.message || resultMessages?.message);
-          return;
-        }
-
-        setMessages(resultMessages.data);
-
-        setData(result.data);
-
-        setLoading(false);
+        updateList()
       } catch (e) {
-        setErrorMessage(e?.message);
+        setError(e.message);
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [dispatch]);
+  }, [dispatch, updateList]);
 
   const objectsList = React.useMemo(() => {
     if (!objects.length) return [];
@@ -474,18 +496,24 @@ const MarketScreen = ({
     return '';
   }, []);
 
-  React.useEffect(() => {
-    setLoading(true);
-    setTimeout(() => setLoading(false), 2000);
-  }, []);
+  const onSuccess = React.useCallback((successMessage) => {
+    setSuccess(successMessage);
+    updateList({
+      updating: true
+    });
+  });
 
-  if (loading) {
-    if (isSM) return <Preloader />;
+  const RenderSuccessMessage = React.useMemo(() => {
+    return (
+      <SnackBarWrapper
+        onClose={() => setSuccess(false)} 
+        error={success}
+        severity="success"
+      />
+    )
+  }, [success]);
 
-    return <img src={LazyLoad} alt="lazy load table preview" className={classes.lazyLoad} />;
-  }
-
-  const handleChangePage = (data) => {
+  const handleChangePage = React.useCallback((data) => {
     if (objectId) {
       history.push('/market');
     }
@@ -496,7 +524,13 @@ const MarketScreen = ({
     setActiveBuyStep(0);
 
     window.scrollTo(0, 0);
-  };
+  }, [history, objectId]);
+
+  if (loading) {
+    if (isSM) return <Preloader />;
+
+    return <img src={LazyLoad} alt="lazy load table preview" className={classes.lazyLoad} />;
+  }
 
   return (
     <div className={classes.layout}>
@@ -533,9 +567,12 @@ const MarketScreen = ({
                 readOnly={true}
                 history={history}
                 handleClickBack={() => history.push('/market')}
+                onSuccess={onSuccess}
               />
             ) : (
               <>
+                <ProgressLine loading={updating} />
+
                 {page === 'Objects' ? (
                   <ObjectsStep
                     tab={tab}
@@ -548,6 +585,7 @@ const MarketScreen = ({
                     setCreatingOffer={setCreatingOffer}
                     objects={objectsList}
                     loading={loading}
+                    onSuccess={onSuccess}
                   />
                 ) : null}
 
@@ -572,6 +610,7 @@ const MarketScreen = ({
                     activeStep={activeSellingStep}
                     setActiveStep={setActiveSellingStep}
                     objects={sellingList}
+                    onSuccess={onSuccess}
                   />
                 ) : null}
 
@@ -587,6 +626,7 @@ const MarketScreen = ({
                     activeStep={activeBuyStep}
                     setActiveStep={setActiveBuyStep}
                     objects={purchaseList}
+                    onSuccess={onSuccess}
                   />
                 ) : null}
 
@@ -596,12 +636,15 @@ const MarketScreen = ({
                     classes={classes}
                     toPurchase={toPurchase}
                     messages={messages}
+                    onSuccess={onSuccess}
                   />
                 ) : null}
               </>
             )}
           </div>
         )}
+
+        {RenderSuccessMessage}
       </div>
     </div>
   );

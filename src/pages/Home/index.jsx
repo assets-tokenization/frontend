@@ -12,6 +12,8 @@ import ListCard from 'components/ListCard';
 import Tokenize from 'components/Tokenize';
 import LazyLoad from 'assets/images/lazy_load.png';
 import Preloader from 'components/Preloader';
+import SnackBarWrapper from 'components/Snackbar';
+import ProgressLine from 'components/Preloader/ProgressLine';
 import { getRealEstate } from 'actions';
 
 const styles = (theme) => ({
@@ -84,29 +86,49 @@ const HomeScreen = ({ history }) => {
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(false);
   const [tokenize, setTokenize] = React.useState(false);
+  const [success, setSuccess] = React.useState(false);
+  const [updating, setUpdating] = React.useState(false);
 
   const t = useTranslate('HomeScreen');
   const classes = useStyles();
   const dispatch = useDispatch();
 
+  const isSM = useMediaQuery((theme) => theme.breakpoints.down('sm'));
+
   const tokenizeProcess = (objectData) => setTokenize(objectData);
+
+  const updateList = React.useCallback(async ({ updating } = {}) => {
+    try {
+      if (updating) {
+        setUpdating(true)
+      } else {
+        setLoading(true);
+      }
+
+      const result = await getRealEstate()(dispatch);
+
+      if (result instanceof Error) {
+        setError(true);
+        setLoading(false);
+        return;
+      }
+
+      const onlyWithoutPlatform = result.data.filter((item) => !item.is_selected_p2p);
+
+      setData(onlyWithoutPlatform);
+      setLoading(false);
+      setUpdating(false);
+    } catch (e) {
+      setError(e.message);
+      setLoading(false);
+      setUpdating(false);
+    }
+  }, [dispatch]);
 
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
-
-        const result = await getRealEstate()(dispatch);
-
-        if (result instanceof Error) {
-          setError(true);
-          setLoading(false);
-          return;
-        }
-
-        setData(result.data.filter(({ is_selected_p2p }) => !is_selected_p2p));
-
-        setLoading(false);
+        updateList()
       } catch (e) {
         setError(e.message);
         setLoading(false);
@@ -114,15 +136,28 @@ const HomeScreen = ({ history }) => {
     };
 
     fetchData();
-  }, [dispatch]);
+  }, [dispatch, updateList]);
 
-  const isSM = useMediaQuery((theme) => theme.breakpoints.down('sm'));
+  const onSuccess = React.useCallback((successMessage) => {
+    setSuccess(successMessage);
+    updateList({
+      updating: true
+    });
+  });
 
-  const toDetailsObject = (id) => {
-    history.push(`/details/${id}`);
-  };
+  const toDetailsObject = React.useCallback((id) => history.push(`/details/${id}`), [history]);
 
-  const toMarket = () => history.push('/market');
+  const toMarket = React.useCallback(() => history.push('/market'), [history]);
+
+  const RenderSuccessMessage = React.useMemo(() => {
+    return (
+      <SnackBarWrapper
+        onClose={() => setSuccess(false)} 
+        error={success}
+        severity="success"
+      />
+    )
+  }, [success]);
 
   if (loading) {
     if (isSM) return <Preloader />;
@@ -148,6 +183,8 @@ const HomeScreen = ({ history }) => {
               </Typography>
             </div>
 
+            <ProgressLine loading={updating} />
+
             {data.length ? (
               <>
                 <Typography className={classes.searchResult}>
@@ -161,6 +198,7 @@ const HomeScreen = ({ history }) => {
                     key={index}
                     tokenizeProcess={tokenizeProcess}
                     openDetails={toDetailsObject}
+                    onSuccess={onSuccess}
                   />
                 ))}
               </>
@@ -173,8 +211,11 @@ const HomeScreen = ({ history }) => {
             <Tokenize
               tokenize={tokenize}
               setTokenize={setTokenize}
-              onSuccess={toDetailsObject}
+              openDetails={toDetailsObject}
+              updateList={updateList}
             />
+
+            {RenderSuccessMessage}
           </>
         )}
       </div>

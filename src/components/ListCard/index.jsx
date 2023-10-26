@@ -1,13 +1,29 @@
 import React from 'react';
 import { useTranslate } from 'react-translate';
 import { useDispatch } from 'react-redux';
+import classNames from 'classnames';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
-import { Typography, Button, CircularProgress } from '@mui/material';
-import { ReactComponent as ArrowForwardIcon } from 'assets/images/arrowForwardBlue.svg';
+import {
+  Typography,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
+  IconButton,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormControl,
+  CircularProgress
+} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import StatusLabel from 'components/StatusLabel';
 import SnackBarWrapper from 'components/Snackbar';
-import { deployContract, getAbi, tokenizeAction, getPlatforms, saveP2PSelectedState } from 'actions/contracts';
+import { ReactComponent as ArrowForwardIcon } from 'assets/images/arrowForwardBlue.svg';
+import { deployContract, getAbi, tokenizeAction, getPlatforms, saveP2PSelectedState, denyP2Platform } from 'actions/contracts';
 
 const styles = (theme) => ({
   card: {
@@ -161,9 +177,135 @@ const styles = (theme) => ({
     lineHeight: '30px',
     marginBottom: 8
   },
+  divider: {
+    height: 1,
+    backgroundColor: 'rgba(233, 235, 241, 1)'
+  },
+  dialogTitle: {
+    padding: '7px 16px',
+    fontSize: 18,
+    fontWeight: 600,
+    lineHeight: '27px',
+    letterSpacing: '0em',
+    backgroundColor: 'rgba(244, 243, 246, 1)',
+    border: '1px solid rgba(233, 235, 241, 1)',
+    marginBottom: 10,
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: 16,
+      lineHeight: '24px',
+      fontWeight: 600,
+      paddingRight: 0
+    }
+  },
+  dialogContent: {
+    padding: 16,
+    fontSize: 16,
+    fontWeight: 400,
+    lineHeight: '24px',
+    marginBottom: 10,
+    color: 'rgba(0, 0, 0, 1)',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: 14,
+      lineHeight: '21px',
+      fontWeight: 600
+    }
+  },
+  dialogContentCenter: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center'
+  },
+  dialogActions: {
+    justifyContent: 'flex-start',
+    padding: 16,
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+      '& button': {
+        width: '100%',
+        marginLeft: '0!important',
+        marginBottom: 10
+      }
+    }
+  },
+  dialogContentTitle: {
+    fontSize: 18,
+    fontWeight: 600,
+    lineHeight: '27px',
+    color: 'rgba(0, 0, 0, 1)',
+    marginBottom: 10,
+    [theme.breakpoints.down('sm')]: {
+      fontSize: 16,
+      lineHeight: '24px'
+    }
+  },
+  dialogContentText: {
+    fontSize: 16,
+    fontWeight: 400,
+    lineHeight: '24px',
+    color: 'rgba(89, 89, 89, 1)',
+    marginBottom: 30,
+    marginLeft: 60,
+    marginRight: 60,
+    maxWidth: 550,
+    [theme.breakpoints.down('sm')]: {
+      fontSize: 14,
+      lineHeight: '21px',
+      marginBottom: 15,
+      marginLeft: 0,
+      marginRight: 0
+    }
+  },
+  removeMargin: {
+    margin: 0
+  },
+  dialogProcessingButton: {
+    marginBottom: 40,
+    [theme.breakpoints.down('sm')]: {
+      marginBottom: 0,
+      marginTop: 5
+    }
+  },
+  successLogo: {
+    width: 80,
+    height: 80,
+    margin: '0 auto',
+    marginBottom: 10,
+    [theme.breakpoints.down('sm')]: {
+      marginBottom: 0,
+      width: 56,
+      height: 56
+    }
+  },
+  dialogTitleSuccess: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    padding: 8,
+    [theme.breakpoints.down('sm')]: {
+      padding: 0
+    }
+  },
+  closeIcon: {
+    width: 40,
+    height: 40,
+    [theme.breakpoints.down('sm')]: {
+      width: 24,
+      height: 24
+    }
+  },
   circularProgress: {
     color: '#fff',
     marginRight: 8
+  },
+  circularProgressBlue: {
+    marginRight: 8
+  },
+  mb10: {
+    marginBottom: 10
   }
 });
 
@@ -171,7 +313,7 @@ const useStyles = makeStyles(styles);
 
 const ListCard = ({
   item,
-  item: { title, number, tokenized, type, totalArea, livingArea, id },
+  item: { title, number, tokenized, type, totalArea, livingArea, id, id_real_estate },
   tokenizeProcess,
   sellingStatus,
   openDetails,
@@ -181,38 +323,115 @@ const ListCard = ({
   hideSecondaryAction,
   finished,
   price,
-  detailsLink
+  detailsLink,
+  onSuccess
 }) => {
   const t = useTranslate('HomeScreen');
+  const [platforms, setPlatforms] = React.useState(null);
+  const [platform, setPlatform] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
+  const [loadingRemoving, setLoadingRemoving] = React.useState(false);
+
   const [error, setError] = React.useState(false);
   const classes = useStyles();
   const dispatch = useDispatch();
 
   const isSM = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
-  const handleTokenize = (event) => {
+  const handleTokenize = React.useCallback((event) => {
     if (mainAction) {
       mainAction(event);
     } else {
       tokenizeProcess(event);
     }
-  };
+  }, [tokenizeProcess, mainAction]);
 
-  const addToP2PPlatform = async () => {
+  const handleClose = React.useCallback(() => {
+    setPlatforms(null);
+  });
+
+  const handleGetPlatforms = React.useCallback(async () => {
+    setLoading(true);
+
+    const platforms = await getPlatforms()(dispatch);
+
+    setPlatforms(platforms);
+
+    setPlatform(platforms[0].address);
+
+    setLoading(false);
+  }, [dispatch]);
+
+  const getContractData = React.useCallback(async () => {
+    const result = await deployContract({
+      data: {
+        name_contract: 'name_contract 3',
+        symbol: 'symbol 3',
+        id_real_estate: id_real_estate,
+        description: 'description 3'
+      }
+    })(dispatch);
+
+    const { contract } = result;
+
+    const abi = (await getAbi()(dispatch)).data;
+
+    return {
+      contract,
+      abi
+    };
+  }, [dispatch, id_real_estate]);
+
+  const addToP2PPlatform = React.useCallback(async () => {
     if (loading) return;
 
     try {
       setLoading(true);
 
+      const { contract, abi } = await getContractData();
+
+      await tokenizeAction({
+        contract,
+        abi,
+        platform
+      });
+  
       await saveP2PSelectedState(`${id}?state=true`)(dispatch);
 
+      handleClose();
+
       setLoading(false);
+      
+      onSuccess(t('AddPlatformSuccess'));
     } catch (error) {
       setError(error.message);
       setLoading(false);
     }
-  };
+  }, [loading, id, dispatch, platform, handleClose, onSuccess]);
+
+  const removeP2PPlatform = React.useCallback(async () => {
+    if (loadingRemoving) return;
+
+    try {
+      setLoadingRemoving(true);
+
+      const { contract, abi } = await getContractData();
+
+      await denyP2Platform({
+        contract,
+        abi
+      });
+
+      await saveP2PSelectedState(`${id}?state=false`)(dispatch);
+
+      setLoadingRemoving(false);
+
+      onSuccess(t('RemovePlatformSuccess'));
+    } catch (error) {
+      setError(error.message);
+      setLoadingRemoving(false);
+    }
+  }, [loadingRemoving, dispatch, id, onSuccess]);
 
   return (
     <div className={classes.card}>
@@ -269,13 +488,22 @@ const ListCard = ({
                 <Button
                   color={!secondaryActionText ? 'error' : 'primary'}
                   className={classes.deTokenButton}
+                  onClick={secondaryActionText ? removeP2PPlatform : null}
                 >
+                  {
+                    loadingRemoving ? (
+                      <CircularProgress
+                        size={16}
+                        className={classes.circularProgressBlue}
+                      />
+                    ) : null
+                  }
                   {secondaryActionText || t('DeToken')}
                 </Button>
                 <Button
                   variant="contained"
                   className={classes.toTokenButton} 
-                  onClick={addToP2PPlatform}
+                  onClick={mainActionText ? null : handleGetPlatforms}
                   >
                   {
                     loading ? (
@@ -300,6 +528,75 @@ const ListCard = ({
           </>
         ) : null}
       </div>
+
+      <Dialog open={!!platforms}>
+        <DialogTitle
+          classes={{
+            root: classes.dialogTitle
+          }}
+        >
+          {t('SelectPlatformTitle')}
+          <IconButton onClick={handleClose}>
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent
+          classes={{
+            root: classes.dialogContent
+          }}
+        >
+          <DialogContentText
+            classes={{
+              root: classNames({
+                [classes.dialogContentText]: true,
+                [classes.removeMargin]: true,
+                [classes.mb10]: true
+              })
+            }}
+          >
+            {t('SelectPlatformText')}
+          </DialogContentText>
+
+          <FormControl component="fieldset">
+            <RadioGroup
+              aria-label="platform"
+              name="platform"
+              value={platform}
+              onChange={(e) => setPlatform(e.target.value)}
+            >
+              {(platforms || []).map(({ name, address }) => (
+                <FormControlLabel
+                  key={name}
+                  value={address}
+                  control={<Radio />}
+                  label={name}
+                />
+              ))}
+            </RadioGroup>
+          </FormControl>
+        </DialogContent>
+
+        <div className={classes.divider} />
+
+        <DialogActions
+          classes={{
+            root: classes.dialogActions
+          }}
+        >
+          <Button variant="contained" onClick={addToP2PPlatform}>
+            {
+              loading ? (
+                <CircularProgress
+                  size={16}
+                  className={classes.circularProgress}
+                />
+              ) : null
+            }
+            {t('Continue')}
+          </Button>
+          <Button onClick={handleClose}>{t('Cancel')}</Button>
+        </DialogActions>
+      </Dialog>
 
       <SnackBarWrapper
         onClose={() => setError(false)} 
