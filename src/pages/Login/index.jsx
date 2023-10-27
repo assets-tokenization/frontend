@@ -49,30 +49,14 @@ const styles = (theme) => ({
     fontSize: 32,
     lineHeight: '40px',
     fontWeight: 700,
-    marginBottom: 20,
+    marginBottom: 30,
     color: 'rgba(0, 0, 0, 1)',
     [theme.breakpoints.down('sm')]: {
       fontSize: 16,
       lineHeight: '24px',
       textAlign: 'center',
-      marginBottom: 10,
+      marginBottom: 20,
       maxWidth: 300
-    }
-  },
-  subtitle: {
-    fontSize: 18,
-    lineHeight: '27px',
-    fontWeight: 400,
-    textAlign: 'center',
-    marginBottom: 40,
-    maxWidth: 545,
-    color: 'rgba(0, 0, 0, 1)',
-    [theme.breakpoints.down('sm')]: {
-      fontSize: 11,
-      lineHeight: '16px',
-      textAlign: 'center',
-      maxWidth: 300,
-      marginBottom: 20
     }
   },
   cards: {
@@ -283,9 +267,6 @@ const LoginScreen = ({ onSuccess }) => {
 
         <Typography className={classes.title}>{t('Title')}</Typography>
 
-        {method === null ? null : (
-          <Typography className={classes.subtitle}>{t('Subtitle')}</Typography>
-        )}
       </div>
 
       {method === null ? (
