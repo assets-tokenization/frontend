@@ -29,6 +29,12 @@ export const checkMetaMaskState = async () => {
   const isAuthorized = (await window.ethereum.request({ method: 'eth_accounts' })).length > 0;
 
   if (!isAuthorized) {
+    const accountInfo = await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+    if (accountInfo.length > 0) {
+      return 'connected';
+    }
+
     return 'noAccount';
   }
 
