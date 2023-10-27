@@ -179,12 +179,12 @@ const Tokenize = ({ tokenize, setTokenize, openDetails, updateList }) => {
         return;
       }
 
-      const { title, number, id_real_estate, description } = tokenize;
+      const { title, id_real_estate, description } = tokenize;
 
       const result = await deployContract({
         data: {
           name_contract: title,
-          symbol: number,
+          symbol: 'ETH',
           id_real_estate: id_real_estate,
           description: description
         }

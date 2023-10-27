@@ -386,7 +386,7 @@ const ListCard = ({
     const result = await deployContract({
       data: {
         name_contract: title,
-        symbol: number,
+        symbol: 'ETH',
         id_real_estate: id_real_estate,
         description: description
       }
