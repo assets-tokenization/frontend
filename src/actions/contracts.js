@@ -46,7 +46,6 @@ export const tokenizeAction = async ({
   abi,
   platform
 }) => {
-
   await window.ethereum.request({ method: 'eth_accounts' });
 
   const web3 = createAlchemyWeb3(API_URL);

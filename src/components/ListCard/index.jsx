@@ -381,7 +381,7 @@ const ListCard = ({
         contract,
         abi
       };
-    }
+    };
 
     const result = await deployContract({
       data: {
