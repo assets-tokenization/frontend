@@ -315,7 +315,6 @@ const ListCard = ({
   item,
   item: {
     title,
-    number,
     tokenized,
     type,
     totalArea,
@@ -438,7 +437,7 @@ const ListCard = ({
       
       onSuccess(t('AddPlatformSuccess'));
     } catch (error) {
-      setError(error.message);
+      setError(t(error.message));
       setLoading(false);
     }
   }, [loading, id, dispatch, platform, handleClose, onSuccess]);
@@ -470,7 +469,7 @@ const ListCard = ({
 
       onSuccess(t('RemovePlatformSuccess'));
     } catch (error) {
-      setError(error.message);
+      setError(t(error.message));
       setLoadingRemoving(false);
     }
   }, [loadingRemoving, dispatch, id, onSuccess]);
@@ -478,7 +477,9 @@ const ListCard = ({
   return (
     <div className={classes.card}>
       <div className={classes.header}>
-        <Typography className={classes.cardNumber}>{t('Number', { number })}</Typography>
+        <Typography className={classes.cardNumber}>
+          {t('Number', { number: id_real_estate })}
+        </Typography>
 
         <div>
           {tokenized && ![sellingStatus, finished].includes(true) ? (

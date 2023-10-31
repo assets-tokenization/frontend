@@ -77,7 +77,7 @@ const ObjectsStep = ({
                         onSuccess={onSuccess}
                         secondaryActionText={t('MoveToMyObjects')}
                         mainActionText={t('CreateOrder')}
-                        detailsLink={`/market/${item.number}`}
+                        detailsLink={`/market/${item.id}`}
                       />
                     ))}
                 </>

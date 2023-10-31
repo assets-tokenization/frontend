@@ -207,7 +207,7 @@ const PurchasesStep = ({
                         }}
                         hideSecondaryAction={true}
                         mainActionText={t('StartPurchase')}
-                        detailsLink={`/market/${item.number}`}
+                        detailsLink={`/market/${item.id}`}
                       />
                     ))}
                   </>

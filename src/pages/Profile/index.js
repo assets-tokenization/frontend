@@ -3,13 +3,21 @@ import { useTranslate } from 'react-translate';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { Button, Typography, TextField } from '@mui/material';
+import {
+  Typography,
+  Button,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormControl
+} from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import ProgressLine from 'components/Preloader/ProgressLine';
 import SnackBarWrapper from 'components/Snackbar';
 import headline_logo from 'assets/images/headline_logo.svg';
 import classNames from 'classnames';
 import { updateProfileData } from 'actions/profile';
+import { checkMetaMaskState } from 'actions/contracts';
 
 const styles = (theme) => ({
   wrapper: {
@@ -89,6 +97,7 @@ const ProfileScreen = () => {
   const [wallet, setWallet] = React.useState(
     useSelector((state) => state?.profile?.userInfo?.wallet)
   );
+  const [wallets, setWallets] = React.useState([]);
   const [error, setError] = React.useState(false);
   const [validationError, setValidationError] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
@@ -104,6 +113,36 @@ const ProfileScreen = () => {
   const handleCancel = useCallback(() => {
     handleRedirectBack();
   }, [handleRedirectBack]);
+
+  React.useState(() => {
+    const getWallets = async () => {
+      const metamaskState = await checkMetaMaskState();
+
+      if (metamaskState !== 'connected') {
+        setError(t(metamaskState));
+        return;
+      }
+
+      setLoading(true);
+
+      await window.ethereum
+        .request({ method: 'eth_requestAccounts' })
+        .then(async (metaWallets) => {
+          setWallets(metaWallets);
+          setLoading(false);
+        })
+        .catch((err) => {
+          if (err.code === 4001) {
+            setError(t('Please connect to MetaMask.'));
+          } else {
+            setError(err.message);
+          }
+          setLoading(false);
+        });
+    };
+
+    getWallets();
+  }, []);
 
   const handleSave = useCallback(async () => {
     if (loading) {
@@ -153,7 +192,6 @@ const ProfileScreen = () => {
     <div className={classes.wrapper}>
       <div className={classes.headline}>
         <img src={headline_logo} alt="headline logo" className={classes.logo} />
-
         <Typography className={classes.title}>{t('Title')}</Typography>
       </div>
 
@@ -163,18 +201,23 @@ const ProfileScreen = () => {
           [classes.choseMethod]: true
         })}
       >
-        <TextField
-          value={wallet}
-          variant="outlined"
-          margin="normal"
-          label={t('WalletAddress')}
-          onChange={handleChangeWallet}
-          error={!!validationError}
-          className={classNames({
-            [classes.textfield]: true,
-            [classes.error]: !!validationError
-          })}
-        />
+          <FormControl component="fieldset">
+            <RadioGroup
+              aria-label="platform"
+              name="platform"
+              value={wallet}
+              onChange={handleChangeWallet}
+            >
+              {(wallets || []).map((value) => (
+                <FormControlLabel
+                  key={value}
+                  value={value}
+                  control={<Radio />}
+                  label={value}
+                />
+              ))}
+            </RadioGroup>
+          </FormControl>
 
         {!!validationError && (
           <Typography color="error" variant="caption">

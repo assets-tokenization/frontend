@@ -202,7 +202,7 @@ const Tokenize = ({ tokenize, setTokenize, openDetails, updateList }) => {
 
       setStep('success');
     } catch (error) {
-      setError(error?.message);
+      setError(t(error.message));
       setStep('intro');
     }
   }, [dispatch, tokenize]);

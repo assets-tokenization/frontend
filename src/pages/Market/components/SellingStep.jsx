@@ -293,7 +293,7 @@ const SellingStep = ({
                       hideSecondaryAction={true}
                       mainActionText={t('CancelSelling')}
                       sellingStatus={item?.selling}
-                      detailsLink={`/market/${item.number}`}
+                      detailsLink={`/market/${item.id}`}
                     />
                   ))}
                 </>

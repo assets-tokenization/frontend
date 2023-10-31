@@ -67,7 +67,8 @@ const styles = (theme) => ({
     lineHeight: '24px',
     [theme.breakpoints.down('sm')]: {
       fontSize: 14,
-      lineHeight: '21px'
+      lineHeight: '21px',
+      marginLeft: 8
     }
   },
   briefInfoTitle: {
