@@ -252,6 +252,7 @@
     "WalletAddressRequired": "Обовʼязково введіть адресу гаманця",
     "Please connect to MetaMask with the same wallet address.": "Підключіться до MetaMask з тією ж адресою гаманця.",
     "data not valid": "Перевірте введені дані",
-    "Please connect to MetaMask.": "Підключіться до MetaMask."
+    "Please connect to MetaMask.": "Підключіться до MetaMask.",
+    "noMetaMask": "Для подовження необхідно встановити MetaMask"
   }
 }

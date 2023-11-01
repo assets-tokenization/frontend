@@ -252,6 +252,7 @@
     "WalletAddressRequired": "Be sure to enter the wallet address",
     "Please connect to MetaMask with the same wallet address.": "Connect to MetaMask with the same wallet address.",
     "data not valid": "Check the entered data",
-    "Please connect to MetaMask.": "Connect to MetaMask."
+    "Please connect to MetaMask.": "Connect to MetaMask.",
+    "noMetaMask": "To extend, you need to install MetaMask"
   }
 }

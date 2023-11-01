@@ -46,8 +46,6 @@ export const tokenizeAction = async ({
   abi,
   platform
 }) => {
-  await window.ethereum.request({ method: 'eth_accounts' });
-
   const web3 = createAlchemyWeb3(API_URL);
 
   const address = store.getState().profile.userInfo.wallet;
@@ -65,8 +63,6 @@ export const denyP2Platform = async ({
   contract: contractAddress,
   abi
 }) => {
-  await window.ethereum.request({ method: 'eth_accounts' });
-
   const web3 = createAlchemyWeb3(API_URL);
 
   const address = store.getState().profile.userInfo.wallet;
