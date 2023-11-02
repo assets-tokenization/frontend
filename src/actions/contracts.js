@@ -41,17 +41,29 @@ export const checkMetaMaskState = async () => {
   return 'connected';
 };
 
+const web3 = createAlchemyWeb3(API_URL);
+
 export const tokenizeAction = async ({
   contract: contractAddress,
   abi,
   platform
 }) => {
-  const web3 = createAlchemyWeb3(API_URL);
+  if (!contractAddress || !abi || !platform) {
+    throw new Error('Invalid input parameters');
+  }
 
   const address = store.getState().profile.userInfo.wallet;
 
+  if (!web3.utils.isAddress(address)) {
+    throw new Error('The provided wallet address is invalid');
+  }
+
   const contract = new web3.eth.Contract(abi, contractAddress);
 
+  if (!contract.methods.AllowP2Pplatform) {
+    throw new Error('Method does not exist in contract ABI');
+  }
+  
   const result = await contract.methods.AllowP2Pplatform(platform).send({
     from: address
   });
@@ -63,12 +75,22 @@ export const denyP2Platform = async ({
   contract: contractAddress,
   abi
 }) => {
-  const web3 = createAlchemyWeb3(API_URL);
+  if (!contractAddress || !abi) {
+    throw new Error('Invalid input parameters');
+  }
 
   const address = store.getState().profile.userInfo.wallet;
 
+  if (!web3.utils.isAddress(address)) {
+    throw new Error('The provided wallet address is invalid');
+  }
+
   const contract = new web3.eth.Contract(abi, contractAddress);
 
+  if (!contract.methods.DenyP2Pplatform) {
+    throw new Error('Method does not exist in contract ABI');
+  }
+  
   const result = await contract.methods.DenyP2Pplatform().send({
     from: address
   });
