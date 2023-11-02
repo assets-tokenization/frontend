@@ -254,5 +254,10 @@
     "data not valid": "Check the entered data",
     "Please connect to MetaMask.": "Connect to MetaMask.",
     "noMetaMask": "To extend, you need to install MetaMask"
+  },
+  "Auth": {
+    "DialogTitle": "Redirect to Metamask",
+    "DialogDescription": "Please open the Metamask app to continue.",
+    "OpenApp": "Open Metamask"
   }
 }

@@ -254,5 +254,10 @@
     "data not valid": "Перевірте введені дані",
     "Please connect to MetaMask.": "Підключіться до MetaMask.",
     "noMetaMask": "Для подовження необхідно встановити MetaMask"
+  },
+  "Auth": {
+    "DialogTitle": "Перенаправлення в MetaMask",
+    "DialogDescription": "Для продовження ви будете перенаправлені в MetaMask",
+    "OpenApp": "Відкрити MetaMask"
   }
 }
