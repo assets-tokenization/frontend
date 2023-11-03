@@ -2,6 +2,7 @@ import { createAlchemyWeb3 } from '@alch/alchemy-web3';
 import * as api from 'services/api';
 import { ganacheApiUrl as API_URL } from 'config';
 import store from 'store';
+import { isDesktop } from 'react-device-detect';
 
 export const getPlatforms = () => (dispatch) =>
   api.get('p2p_platforms', 'contract/GET_PLATFORMS', dispatch);
@@ -23,6 +24,9 @@ export const saveContractData = (data) => (dispatch) =>
 
 export const checkMetaMaskState = async () => {
   if (typeof window.ethereum === 'undefined') {
+    if (isDesktop) {
+      window.open('https://metamask.io/download.html', '_blank');
+    }
     return 'noMetaMask';
   }
 
