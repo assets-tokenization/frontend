@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { useSelector } from 'react-redux';
+import { NumericFormat } from 'react-number-format';
 import { Typography, TextField, Button, FormControl, FormHelperText } from '@mui/material';
 import Fade from '@mui/material/Fade';
 import PageTitle from 'components/PageTitle';
@@ -13,6 +14,22 @@ import SuccessRegistration from 'components/SuccessRegistration';
 import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { createOffer, checkMetaMaskState } from 'actions/contracts';
+
+const NumberFormatCustom = ({ ref, onChange, format, ...props }) => (
+  <NumericFormat
+    {...props}
+    getInputRef={ref}
+    format={format}
+    onValueChange={(values) => {
+      onChange({
+        target: {
+          value: values.value
+        }
+      });
+    }}
+    thousandSeparator={' '}
+  />
+);
 
 const SellingStep = ({
   buyerData,
@@ -242,6 +259,9 @@ const SellingStep = ({
                         margin="normal"
                         placeholder={t('PricePlaceHolder')}
                         className={classes.textfield}
+                        InputProps={{
+                          inputComponent: NumberFormatCustom
+                        }}
                       />
 
                       {error ? (
