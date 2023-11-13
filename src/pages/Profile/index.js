@@ -191,7 +191,7 @@ const ProfileScreen = () => {
   return (
     <div className={classes.wrapper}>
       <div className={classes.headline}>
-        <img src={headline_logo} alt="headline logo" className={classes.logo} />
+        <img width={24} height={40} src={headline_logo} alt="headline logo" className={classes.logo} />
         <Typography className={classes.title}>{t('Title')}</Typography>
       </div>
 
