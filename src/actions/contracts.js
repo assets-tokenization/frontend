@@ -5,6 +5,9 @@ import store from 'store';
 import { isDesktop } from 'react-device-detect';
 import platformAbi from 'variables/platformAbi';
 
+const web3 = createAlchemyWeb3(API_URL);
+const gas = 1000000;
+
 export const getPlatforms = () => (dispatch) =>
   api.get('p2p_platforms', 'contract/GET_PLATFORMS', dispatch);
 
@@ -47,9 +50,6 @@ export const checkMetaMaskState = async () => {
 
   return 'connected';
 };
-
-const web3 = createAlchemyWeb3(API_URL);
-const gas = 1000000;
 
 const getContract = async (contractAddress, abi, method) => {
   const address = store.getState().profile.userInfo.wallet;
@@ -121,12 +121,8 @@ export const createOffer = async ({
   return result;
 };
 
-export const getOffers = async (platform) => {
-  if (!platform) {
-    throw new Error('Invalid input parameters');
-  }
-
-  const { contract, address } = await getContract(platform, platformAbi, 'myDeals');
+export const getOffers = async () => {
+  const { contract, address } = await getContract(defaultPlatform, platformAbi, 'myDeals');
 
   const result = await contract.methods.myDeals().call({
     from: address

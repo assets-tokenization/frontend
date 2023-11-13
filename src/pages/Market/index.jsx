@@ -18,8 +18,6 @@ import MessagesStep from './components/MessagesStep';
 import PurchasesStep from './components/PurchasesStep';
 import { getObjects } from 'actions';
 import { getOffers, getObjectInfoByContract, getDeal } from 'actions/contracts';
-import { defaultPlatform } from 'config';
-
 
 const styles = (theme) => ({
   wrapper: {
@@ -402,7 +400,7 @@ const MarketScreen = ({
 
   const getOffersAction = React.useCallback(async () => {
     try {
-      const result = await getOffers(defaultPlatform);
+      const result = await getOffers();
 
       if (!result || !result.length) return;
 
