@@ -2,7 +2,7 @@
   "name": "frontend",
   "version": "0.1.9",
   "private": true,
-  "proxy": "https://ber.kitsoft.ua",
+  "proxy": "https://95.216.140.202",
   "scripts": {
     "build": "sh -ac '. ./.env; react-scripts --openssl-legacy-provider build'",
     "eject": "sh -ac '. ./.env; react-scripts --openssl-legacy-provider eject'",
