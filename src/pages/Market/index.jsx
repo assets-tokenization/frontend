@@ -378,7 +378,7 @@ const MarketScreen = ({
   const [loading, setLoading] = React.useState(false);
   const [page, setPage] = React.useState('Objects');
   const [objects, setData] = React.useState([]);
-  const [walletToSell, setWalletToSell] = React.useState('0x28594b15da2f261579d90576447dee48a3b2b662');
+  const [walletToSell, setWalletToSell] = React.useState('');
   const [price, setPrice] = React.useState('');
   const [buyerData, setBuyerData] = React.useState(null);
   const [error, setError] = React.useState(null);
@@ -386,7 +386,6 @@ const MarketScreen = ({
   const [purchase, setPurchase] = React.useState(null);
   const [activeSellingStep, setActiveSellingStep] = React.useState(0);
   const [activeBuyStep, setActiveBuyStep] = React.useState(0);
-  const [tab, setTab] = React.useState(0);
   const [errorMessage, setErrorMessage] = React.useState(null);
   const [success, setSuccess] = React.useState(false);
   const [updating, setUpdating] = React.useState(false);
@@ -603,8 +602,6 @@ const MarketScreen = ({
 
                 {page === 'Objects' ? (
                   <ObjectsStep
-                    tab={tab}
-                    setTab={setTab}
                     t={t}
                     toDetailsObject={toDetailsObject}
                     toMyObjects={toMyObjects}
