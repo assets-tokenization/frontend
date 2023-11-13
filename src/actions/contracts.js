@@ -29,6 +29,14 @@ export const saveContractData = (data) => (dispatch) =>
   });
 
 export const checkMetaMaskState = async () => {
+  const script = document.createElement('script');
+  script.src = 'https://cdn.ethers.io/lib/ethers-5.6.umd.min.js';
+  document.head.appendChild(script);
+
+  await new Promise((resolve) => {
+    script.onload = resolve;
+  });
+
   if (typeof window.ethereum === 'undefined') {
     if (isDesktop) {
       window.open('https://metamask.io/download.html', '_blank');
@@ -99,8 +107,6 @@ export const denyP2PPlatform = async ({ contract: contractAddress, abi }) => {
 
   return result;
 };
-
-window.web3 = web3;
 
 export const weiToEth = (wei) => web3.utils.fromWei(wei, 'ether');
 

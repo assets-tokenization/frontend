@@ -193,6 +193,21 @@ const LoginScreen = ({ onSuccess }) => {
   const [method, setMethod] = React.useState(null);
   const dispatch = useDispatch();
 
+  React.useEffect(() => {
+    const uploadScript = async (link) => {
+      return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = link;
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+    };
+
+    uploadScript('/js/iit-agent/eusw.js');
+    uploadScript('/js/iit-agent/euswll.js');
+  }, []);
+
   const handleChangeStep = (step) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     setActiveStep(step);
