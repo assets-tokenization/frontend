@@ -1,9 +1,9 @@
 import { createAlchemyWeb3 } from '@alch/alchemy-web3';
-import * as api from 'services/api';
-import { defaultPlatform, ganacheApiUrl as API_URL } from 'config';
-import store from 'store';
 import { isDesktop } from 'react-device-detect';
+import * as api from 'services/api';
+import store from 'store';
 import platformAbi from 'variables/platformAbi';
+import { defaultPlatform, ganacheApiUrl as API_URL } from 'config';
 
 const web3 = createAlchemyWeb3(API_URL);
 const gas = 1000000;
@@ -100,6 +100,8 @@ export const denyP2PPlatform = async ({ contract: contractAddress, abi }) => {
   return result;
 };
 
+window.web3 = web3;
+
 export const createOffer = async ({
   price,
   contract: contractAddress,
@@ -113,7 +115,7 @@ export const createOffer = async ({
 
   const { contract, address } = await getContract(defaultPlatform, platformAbi, 'setDeal');
 
-  const result = await contract.methods.setDeal(Number(price), contractAddress, walletToSell).send({
+  const result = await contract.methods.setDeal(priceToWei, contractAddress, walletToSell).send({
     from: address,
     gas
   });

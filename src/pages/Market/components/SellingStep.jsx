@@ -283,7 +283,7 @@ const SellingStep = ({
                       description={
                         <>
                           {t('SellingSuccessDescription')}
-                          <span className={classes.price}>{formatPrice(price)} грн. </span>
+                          <span className={classes.price}>{formatPrice(price)}</span>
                           {t('SellingSuccessDescription2')}
                         </>
                       }
