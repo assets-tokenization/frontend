@@ -9,6 +9,7 @@ body {
 body * {
   font-family: 'Inter', sans-serif;
   box-sizing: border-box;
+  word-break: break-word;
 }
 
 .eds-form-dropzone span {

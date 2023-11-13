@@ -2,7 +2,6 @@ import React from 'react';
 import { useTranslate } from 'react-translate';
 import classNames from 'classnames';
 import { useDispatch } from 'react-redux';
-import { NumericFormat } from 'react-number-format';
 import makeStyles from '@mui/styles/makeStyles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Header from 'components/Header';
@@ -17,7 +16,10 @@ import ObjectsStep from './components/ObjectsStep';
 import SellingStep from './components/SellingStep';
 import MessagesStep from './components/MessagesStep';
 import PurchasesStep from './components/PurchasesStep';
-import { getObjects, getMessages } from 'actions';
+import { getObjects } from 'actions';
+import { getOffers, getObjectInfoByContract, getDeal } from 'actions/contracts';
+import { defaultPlatform } from 'config';
+
 
 const styles = (theme) => ({
   wrapper: {
@@ -369,21 +371,6 @@ const styles = (theme) => ({
 
 const useStyles = makeStyles(styles);
 
-const NumberFormatCustom = ({ ref, onChange, format, ...props }) => (
-  <NumericFormat
-    {...props}
-    getInputRef={ref}
-    format={format}
-    onValueChange={(values) => {
-      onChange({
-        target: {
-          value: values.value
-        }
-      });
-    }}
-    thousandSeparator={' '}
-  />
-);
 const MarketScreen = ({
   history,
   match: {
@@ -393,10 +380,9 @@ const MarketScreen = ({
   const [loading, setLoading] = React.useState(false);
   const [page, setPage] = React.useState('Objects');
   const [objects, setData] = React.useState([]);
-  const [messages, setMessages] = React.useState([]);
-  const [rnokpp, setRnokpp] = React.useState('');
-  const [buyerData, setBuyerData] = React.useState(null);
+  const [walletToSell, setWalletToSell] = React.useState('0x28594b15da2f261579d90576447dee48a3b2b662');
   const [price, setPrice] = React.useState('');
+  const [buyerData, setBuyerData] = React.useState(null);
   const [error, setError] = React.useState(null);
   const [creatingOffer, setCreatingOffer] = React.useState(false);
   const [purchase, setPurchase] = React.useState(null);
@@ -406,12 +392,42 @@ const MarketScreen = ({
   const [errorMessage, setErrorMessage] = React.useState(null);
   const [success, setSuccess] = React.useState(false);
   const [updating, setUpdating] = React.useState(false);
+  const [myOffers, setMyOffers] = React.useState([]);
 
   const dispatch = useDispatch();
 
   const t = useTranslate('MarketScreen');
   const classes = useStyles();
   const isSM = useMediaQuery((theme) => theme.breakpoints.down('sm'));
+
+  const getOffersAction = React.useCallback(async () => {
+    try {
+      const result = await getOffers(defaultPlatform);
+
+      if (!result || !result.length) return;
+
+      const offersArray = [];
+
+      for (let i = 0; i < result.length; i++) {
+        const item = result[i];
+
+        const objectInfo = await getObjectInfoByContract(item)(dispatch);
+
+        const dealInfo = await getDeal(item);
+
+        offersArray.push({
+          ...objectInfo?.data,
+          dealAddress: item,
+          dealInfo
+        });
+      }
+
+      setMyOffers(offersArray);
+    }
+    catch (e) {
+      console.log(e);
+    }
+  }, [dispatch]);
 
   const updateList = React.useCallback(async ({ updating } = {}) => {
     try {
@@ -422,15 +438,14 @@ const MarketScreen = ({
       }
 
       const result = await getObjects()(dispatch);
-      const resultMessages = await getMessages()(dispatch);
 
-      if (result instanceof Error || resultMessages instanceof Error) {
+      await getOffersAction();
+
+      if (result instanceof Error) {
         setLoading(false);
-        setErrorMessage(result?.message || resultMessages?.message);
+        setErrorMessage(result?.message);
         return;
       }
-
-      setMessages(resultMessages.data);
 
       const onlyWithPlatform = result.data.filter((item) => item.is_selected_p2p);
 
@@ -445,10 +460,12 @@ const MarketScreen = ({
     }
   }, [dispatch]);
 
+  React.useEffect(() => getOffersAction(), [getOffersAction]);
+
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        updateList()
+        updateList();
       } catch (e) {
         setError(e.message);
         setLoading(false);
@@ -469,9 +486,9 @@ const MarketScreen = ({
   }, [objects]);
 
   const purchaseList = React.useMemo(() => {
-    if (!objects.length) return [];
-    return objects.filter((item) => item?.purchase);
-  }, [objects]);
+    if (!myOffers.length) return [];
+    return myOffers;
+  }, [myOffers]);
 
   const toDetailsObject = React.useCallback(
     (number) => {
@@ -497,7 +514,9 @@ const MarketScreen = ({
   }, []);
 
   const onSuccess = React.useCallback((successMessage) => {
-    setSuccess(successMessage);
+    if (successMessage) {
+      setSuccess(successMessage);
+    }
     updateList({
       updating: true
     });
@@ -534,7 +553,12 @@ const MarketScreen = ({
 
   return (
     <div className={classes.layout}>
-      <SidebarMenu onChange={handleChangePage} page={page} history={history} messages={messages} />
+      <SidebarMenu
+        onChange={handleChangePage}
+        page={page}
+        history={history}
+        messages={purchaseList}
+      />
 
       <div className={classes.rightSide}>
         <Header
@@ -594,16 +618,15 @@ const MarketScreen = ({
                     buyerData={buyerData}
                     classes={classes}
                     isSM={isSM}
-                    rnokpp={rnokpp}
+                    walletToSell={walletToSell}
                     error={error}
                     price={price}
                     formatPrice={formatPrice}
                     creatingOffer={creatingOffer}
                     toDetailsObject={toDetailsObject}
                     setBuyerData={setBuyerData}
-                    setRnokpp={setRnokpp}
+                    setWalletToSell={setWalletToSell}
                     setPrice={setPrice}
-                    NumberFormatCustom={NumberFormatCustom}
                     setError={setError}
                     setCreatingOffer={setCreatingOffer}
                     t={t}
@@ -622,7 +645,6 @@ const MarketScreen = ({
                     purchase={purchase}
                     setPurchase={setPurchase}
                     isSM={isSM}
-                    NumberFormatCustom={NumberFormatCustom}
                     activeStep={activeBuyStep}
                     setActiveStep={setActiveBuyStep}
                     objects={purchaseList}
@@ -635,7 +657,7 @@ const MarketScreen = ({
                     t={t}
                     classes={classes}
                     toPurchase={toPurchase}
-                    messages={messages}
+                    messages={purchaseList}
                     onSuccess={onSuccess}
                   />
                 ) : null}

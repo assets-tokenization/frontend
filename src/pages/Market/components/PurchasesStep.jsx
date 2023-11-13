@@ -1,15 +1,16 @@
 import React from 'react';
 import classNames from 'classnames';
-import { useSelector } from 'react-redux';
 import Fade from '@mui/material/Fade';
 import { Typography, TextField, Button } from '@mui/material';
 import PageTitle from 'components/PageTitle';
 import ListCard from 'components/ListCard';
 import Card from 'components/Card';
 import Stepper from 'components/Stepper';
+import SnackBarWrapper from 'components/Snackbar';
 import SuccessRegistration from 'components/SuccessRegistration';
 import { ReactComponent as ArrowForwardIcon } from 'assets/images/arrowForwardWhite.svg';
 import { ReactComponent as LockIcon } from 'assets/images/lock_icon.svg';
+import { acceptDeal, checkMetaMaskState } from 'actions/contracts';
 
 const PurchasesStep = ({
   t,
@@ -18,12 +19,40 @@ const PurchasesStep = ({
   purchase,
   setPurchase,
   isSM,
-  NumberFormatCustom,
   activeStep,
   setActiveStep,
-  objects
+  objects,
+  onSuccess
 }) => {
-  const wallet = useSelector((state) => state?.profile?.userInfo?.wallet);
+  const [offerError, setOfferError] = React.useState(null);
+
+  const { dealInfo } = purchase || {}
+
+  const handleAcceptOffer = React.useCallback(async () => {
+    try {
+      const metamaskState = await checkMetaMaskState();
+
+      if (metamaskState !== 'connected') {
+        setLoading(false);
+        setOfferError(t(metamaskState));
+        return;
+      }
+
+      const tx = await acceptDeal(purchase?.dealAddress, purchase?.dealInfo?.Price);
+
+      if (!tx) return;
+
+      setActiveStep(2);
+    } catch (error) {
+      setOfferError(t(error.message));
+    }
+  }, [setOfferError, t, purchase]);
+
+  const redirectToHomeScreen = React.useCallback(() => {
+    setPurchase(false);
+    setActiveStep(0);
+    onSuccess();
+  }, [setPurchase, setActiveStep, onSuccess]);
 
   const renderStep = React.useMemo(
     () => (
@@ -35,20 +64,20 @@ const PurchasesStep = ({
 
               <Card fullWidth={true}>
                 <Typography className={classes.briefInfoTitle}>
-                  {'Івано-Франківська обл., м. Івано-Франківськ, вул. Вʼячеслава Чорновола, 15'}
+                  {purchase?.address}
                 </Typography>
 
                 <div className={classes.cardDetails}>
                   <Typography className={classes.cardDetailsTitle}>
-                    {t('BuildType', { value: 'Будинок' })}
+                    {t('BuildType', { value: purchase?.type })}
                     {!isSM ? <span className={classes.dot} /> : null}
                   </Typography>
                   <Typography className={classes.cardDetailsTitle}>
-                    {t('BuildArea', { value: '6 сот' })}
+                    {t('BuildArea', { value: purchase?.totalArea })}
                     <span className={classes.dot} />
                   </Typography>
                   <Typography className={classes.cardDetailsTitle}>
-                    {t('LivingArea', { value: '140 м2' })}
+                    {t('LivingArea', { value: purchase?.livingArea })}
                   </Typography>
                 </div>
               </Card>
@@ -93,7 +122,7 @@ const PurchasesStep = ({
                         })}
                       >
                         <TextField
-                          value={wallet}
+                          value={dealInfo?.Shopper}
                           variant="outlined"
                           margin="normal"
                           placeholder={t('PricePlaceHolder')}
@@ -108,7 +137,9 @@ const PurchasesStep = ({
                         <LockIcon className={classes.lockIcon} />
                       </div>
 
-                      <Typography className={classes.fieldHeadline}>{t('SumToPay')}</Typography>
+                      <Typography className={classes.fieldHeadline}>
+                        {t('SumToPay')}
+                      </Typography>
 
                       <div
                         className={classNames({
@@ -117,7 +148,7 @@ const PurchasesStep = ({
                         })}
                       >
                         <TextField
-                          value={'2 000 345,00'}
+                          value={dealInfo?.Price}
                           variant="outlined"
                           margin="normal"
                           placeholder={t('PricePlaceHolder')}
@@ -126,9 +157,6 @@ const PurchasesStep = ({
                             [classes.textfield]: true,
                             [classes.disabledTextField]: true
                           })}
-                          InputProps={{
-                            inputComponent: NumberFormatCustom
-                          }}
                         />
 
                         <LockIcon className={classes.lockIcon} />
@@ -165,9 +193,7 @@ const PurchasesStep = ({
                         <Button
                           variant="contained"
                           color="primary"
-                          onClick={() => {
-                            setActiveStep(2);
-                          }}
+                          onClick={handleAcceptOffer}
                         >
                           {t('ToPayment')}
                           <ArrowForwardIcon className={classes.actionIcon} />
@@ -175,15 +201,13 @@ const PurchasesStep = ({
                       </div>
                     </>
                   ) : null}
+
                   {activeStep === 2 ? (
                     <SuccessRegistration
                       title={t('PurchasesSuccessTitle')}
                       description={t('PurchasesSuccessDescription')}
                       actionText={t('PurchasesSuccess')}
-                      redirectToHomeScreen={() => {
-                        setPurchase(false);
-                        setActiveStep(0);
-                      }}
+                      redirectToHomeScreen={redirectToHomeScreen}
                     />
                   ) : null}
                 </Card>
@@ -227,15 +251,21 @@ const PurchasesStep = ({
       purchase,
       setPurchase,
       isSM,
-      NumberFormatCustom,
       activeStep,
       setActiveStep,
       objects,
-      wallet
+      handleAcceptOffer,
+      dealInfo,
+      redirectToHomeScreen
     ]
   );
 
-  return renderStep;
+  return (
+    <>
+      {renderStep}
+      <SnackBarWrapper onClose={() => setOfferError(false)} error={offerError} />
+    </>
+  );
 };
 
 export default PurchasesStep;

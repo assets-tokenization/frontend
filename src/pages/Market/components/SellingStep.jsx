@@ -1,5 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
+import { useSelector } from 'react-redux';
 import { Typography, TextField, Button, FormControl, FormHelperText } from '@mui/material';
 import Fade from '@mui/material/Fade';
 import PageTitle from 'components/PageTitle';
@@ -7,24 +8,25 @@ import ListCard from 'components/ListCard';
 import Stepper from 'components/Stepper';
 import Card from 'components/Card';
 import LoadingStep from 'components/LoadingStep';
+import SnackBarWrapper from 'components/Snackbar';
 import SuccessRegistration from 'components/SuccessRegistration';
 import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { createOffer, checkMetaMaskState } from 'actions/contracts';
 
 const SellingStep = ({
   buyerData,
   classes,
   isSM,
-  rnokpp,
+  walletToSell,
   error,
   price,
   formatPrice,
   creatingOffer,
   toDetailsObject,
   setBuyerData,
-  setRnokpp,
+  setWalletToSell,
   setPrice,
-  NumberFormatCustom,
   setError,
   setCreatingOffer,
   t,
@@ -32,6 +34,47 @@ const SellingStep = ({
   setActiveStep,
   objects
 }) => {
+  const [offerError, setOfferError] = React.useState(null);
+  const walletPlaceholder = useSelector((state) => state?.profile?.userInfo?.wallet);
+
+  const handleCreateOffer = React.useCallback(async () => {
+    try {
+      const metamaskState = await checkMetaMaskState();
+
+      if (metamaskState !== 'connected') {
+        setLoading(false);
+        setOfferError(t(metamaskState));
+        return;
+      }
+
+      const tx = await createOffer({
+        price,
+        contract: creatingOffer.address_contract,
+        walletToSell
+      });
+
+      return tx;
+    } catch (error) {
+      setActiveStep(1);
+      setOfferError(t(error.message));
+    }
+  }, [setOfferError, t, creatingOffer, price, walletToSell, setActiveStep]);
+
+  const handleCreateOfferActions = React.useCallback(async () => {
+    if (!price.length) {
+      setError(true);
+      return;
+    }
+
+    setError(false);
+
+    const tx = handleCreateOffer();
+
+    if (!tx) return;
+
+    setActiveStep(2);
+  }, [setActiveStep, setError, price, handleCreateOffer]);
+
   const renderStep = React.useMemo(
     () => (
       <Fade in={true}>
@@ -40,21 +83,19 @@ const SellingStep = ({
           {creatingOffer ? (
             <>
               <Card fullWidth={true}>
-                <Typography className={classes.briefInfoTitle}>
-                  {'Івано-Франківська обл., м. Івано-Франківськ, вул. Вʼячеслава Чорновола, 15'}
-                </Typography>
+                <Typography className={classes.briefInfoTitle}>{creatingOffer?.address}</Typography>
 
                 <div className={classes.cardDetails}>
                   <Typography className={classes.cardDetailsTitle}>
-                    {t('BuildType', { value: 'Будинок' })}
+                    {t('BuildType', { value: creatingOffer?.type })}
                     {!isSM ? <span className={classes.dot} /> : null}
                   </Typography>
                   <Typography className={classes.cardDetailsTitle}>
-                    {t('BuildArea', { value: '6 сот' })}
+                    {t('BuildArea', { value: creatingOffer?.totalArea })}
                     <span className={classes.dot} />
                   </Typography>
                   <Typography className={classes.cardDetailsTitle}>
-                    {t('LivingArea', { value: '140 м2' })}
+                    {t('LivingArea', { value: creatingOffer?.livingArea })}
                   </Typography>
                 </div>
               </Card>
@@ -92,7 +133,7 @@ const SellingStep = ({
                       {buyerData ? (
                         <>
                           <Typography className={classes.userNameHeadline}>
-                            {buyerData.name}
+                            {t('buyerDataHeadLine')}
                           </Typography>
 
                           <Typography className={classes.rnokppShort}>
@@ -103,9 +144,8 @@ const SellingStep = ({
                             className={classNames({
                               [classes.fieldHeadline]: true,
                               [classes.fieldHeadlineSM]: true
-                            })}
-                          >
-                            {buyerData.rkokpp}
+                            })}>
+                            {buyerData}
                           </Typography>
 
                           <div className={classes.actions}>
@@ -113,8 +153,7 @@ const SellingStep = ({
                               variant="outlined"
                               onClick={() => {
                                 setBuyerData(null);
-                              }}
-                            >
+                              }}>
                               <ArrowBackOutlinedIcon />
                               {t('Back')}
                             </Button>
@@ -122,8 +161,7 @@ const SellingStep = ({
                               variant="contained"
                               color="primary"
                               className={classes.button}
-                              onClick={() => setActiveStep(1)}
-                            >
+                              onClick={() => setActiveStep(1)}>
                               {t('Continue')}
                               <ArrowForwardIcon />
                             </Button>
@@ -134,16 +172,18 @@ const SellingStep = ({
                           <Typography className={classes.fieldHeadline}>{t('UserIpn')}</Typography>
 
                           <TextField
-                            value={rnokpp}
-                            onChange={(e) => setRnokpp(e.target.value)}
-                            error={error}
+                            value={walletToSell}
+                            onChange={(e) => setWalletToSell(e.target.value)}
+                            error={!!error}
                             maxLength={10}
                             variant="outlined"
                             margin="normal"
-                            placeholder={t('UserIpnPlaceHolder')}
+                            placeholder={t('UserIpnPlaceHolder', {
+                              value: walletPlaceholder
+                            })}
                             className={classes.textfield}
                             inputProps={{
-                              maxLength: 10
+                              maxLength: 42
                             }}
                           />
 
@@ -151,19 +191,14 @@ const SellingStep = ({
                             <FormControl variant="standard" error={true}>
                               <FormHelperText>{t('RequiredError')}</FormHelperText>
                             </FormControl>
-                          ) : (
-                            <Typography className={classes.fieldSample}>
-                              {t('UserIpnSample')}
-                            </Typography>
-                          )}
+                          ) : null}
 
                           <div className={classes.actions}>
                             <Button
                               variant="outlined"
                               onClick={() => {
                                 setCreatingOffer(false);
-                              }}
-                            >
+                              }}>
                               {t('CancelProcessing')}
                             </Button>
                             <Button
@@ -171,19 +206,15 @@ const SellingStep = ({
                               color="primary"
                               className={classes.button}
                               onClick={() => {
-                                if (rnokpp.length !== 10) {
+                                if (walletToSell.length !== 42) {
                                   setError(true);
                                   return;
                                 }
 
                                 setError(false);
 
-                                setBuyerData({
-                                  name: 'Франко Іван Якович',
-                                  rkokpp: '1234567890'
-                                });
-                              }}
-                            >
+                                setBuyerData(walletToSell);
+                              }}>
                               {t('Continue')}
                               <ArrowForwardIcon />
                             </Button>
@@ -194,62 +225,47 @@ const SellingStep = ({
                   ) : null}
 
                   {activeStep === 1 ? (
-                    <>
-                      <div className={classes.cardContent}>
-                        <Typography className={classes.headline}>{t('InsertSumTitle')}</Typography>
+                    <div className={classes.cardContent}>
+                      <Typography className={classes.headline}>{t('InsertSumTitle')}</Typography>
 
-                        <Typography className={classes.subHeadline}>
-                          {t('InsertSumDescription')}
-                        </Typography>
+                      <Typography className={classes.subHeadline}>
+                        {t('InsertSumDescription')}
+                      </Typography>
 
-                        <Typography className={classes.fieldHeadline}>{t('Price')}</Typography>
+                      <Typography className={classes.fieldHeadline}>{t('Price')}</Typography>
 
-                        <TextField
-                          value={price}
-                          onChange={(e) => setPrice(e.target.value)}
-                          error={error}
-                          variant="outlined"
-                          margin="normal"
-                          placeholder={t('PricePlaceHolder')}
-                          className={classes.textfield}
-                          InputProps={{
-                            inputComponent: NumberFormatCustom
-                          }}
-                        />
+                      <TextField
+                        value={price}
+                        onChange={(e) => setPrice(e.target.value)}
+                        error={error}
+                        variant="outlined"
+                        margin="normal"
+                        placeholder={t('PricePlaceHolder')}
+                        className={classes.textfield}
+                      />
 
-                        {error ? (
-                          <FormControl variant="standard" error={true}>
-                            <FormHelperText>{t('RequiredError')}</FormHelperText>
-                          </FormControl>
-                        ) : null}
+                      {error ? (
+                        <FormControl variant="standard" error={true}>
+                          <FormHelperText>{t('RequiredError')}</FormHelperText>
+                        </FormControl>
+                      ) : null}
 
-                        <div
-                          className={classNames({
-                            [classes.actions]: true,
-                            [classes.alignLeft]: true
-                          })}
+                      <div
+                        className={classNames({
+                          [classes.actions]: true,
+                          [classes.alignLeft]: true
+                        })}>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          className={classes.button}
+                          onClick={handleCreateOfferActions}
                         >
-                          <Button
-                            variant="contained"
-                            color="primary"
-                            className={classes.button}
-                            onClick={() => {
-                              if (!price.length) {
-                                setError(true);
-                                return;
-                              }
-
-                              setError(false);
-
-                              setActiveStep(2);
-                            }}
-                          >
-                            {t('Continue')}
-                            <ArrowForwardIcon />
-                          </Button>
-                        </div>
+                          {t('Continue')}
+                          <ArrowForwardIcon />
+                        </Button>
                       </div>
-                    </>
+                    </div>
                   ) : null}
 
                   {activeStep === 2 ? (
@@ -257,7 +273,7 @@ const SellingStep = ({
                       title={t('SellingProcessingTitle')}
                       description={t('SellingProcessingDescription')}
                       actionText={t('CancelProcessing')}
-                      onClick={() => setActiveStep(3)}
+                      onClick={() => setActiveStep(1)}
                     />
                   ) : null}
 
@@ -310,7 +326,7 @@ const SellingStep = ({
       buyerData,
       classes,
       isSM,
-      rnokpp,
+      walletToSell,
       t,
       error,
       price,
@@ -319,16 +335,22 @@ const SellingStep = ({
       toDetailsObject,
       setActiveStep,
       setBuyerData,
-      setRnokpp,
+      setWalletToSell,
       setPrice,
       setCreatingOffer,
-      NumberFormatCustom,
       setError,
-      objects
+      objects,
+      handleCreateOffer,
+      handleCreateOfferActions
     ]
   );
 
-  return renderStep;
+  return (
+    <>
+      {renderStep}
+      <SnackBarWrapper onClose={() => setOfferError(false)} error={offerError} />
+    </>
+  );
 };
 
 export default SellingStep;

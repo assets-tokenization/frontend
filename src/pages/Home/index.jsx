@@ -115,7 +115,13 @@ const HomeScreen = ({ history }) => {
 
       const onlyWithoutPlatform = result.data.filter((item) => !item.is_selected_p2p);
 
-      setData(onlyWithoutPlatform);
+      const sortedByID = onlyWithoutPlatform.sort((a, b) => {
+        if (a.id > b.id) return -1;
+        if (a.id < b.id) return 1;
+        return 0;
+      });
+
+      setData(sortedByID);
       setLoading(false);
       setUpdating(false);
     } catch (e) {

@@ -1,29 +1,22 @@
 import React from 'react';
 import { useTranslate } from 'react-translate';
 import { useDispatch, useSelector } from 'react-redux';
-import classNames from 'classnames';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
-import {
-  Typography,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  Button,
-  IconButton,
-  Radio,
-  RadioGroup,
-  FormControlLabel,
-  FormControl,
-  CircularProgress
-} from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
+import { Typography, Button, CircularProgress } from '@mui/material';
 import StatusLabel from 'components/StatusLabel';
 import SnackBarWrapper from 'components/Snackbar';
 import { ReactComponent as ArrowForwardIcon } from 'assets/images/arrowForwardBlue.svg';
-import { deployContract, getAbi, tokenizeAction, getPlatforms, saveP2PSelectedState, denyP2Platform, saveContractData, checkMetaMaskState } from 'actions/contracts';
+import {
+  deployContract,
+  getAbi,
+  allowP2PPlatform,
+  saveP2PSelectedState,
+  denyP2PPlatform,
+  saveContractData,
+  checkMetaMaskState
+} from 'actions/contracts';
+import { defaultPlatform } from 'config';
 
 const styles = (theme) => ({
   card: {
@@ -313,16 +306,7 @@ const useStyles = makeStyles(styles);
 
 const ListCard = ({
   item,
-  item: {
-    title,
-    tokenized,
-    type,
-    totalArea,
-    livingArea,
-    id,
-    id_real_estate,
-    description
-  },
+  item: { title, tokenized, type, totalArea, livingArea, id, id_real_estate, description },
   tokenizeProcess,
   sellingStatus,
   openDetails,
@@ -336,8 +320,6 @@ const ListCard = ({
   onSuccess
 }) => {
   const t = useTranslate('HomeScreen');
-  const [platforms, setPlatforms] = React.useState(null);
-  const [platform, setPlatform] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
   const [loadingRemoving, setLoadingRemoving] = React.useState(false);
 
@@ -348,29 +330,23 @@ const ListCard = ({
   const isSM = useMediaQuery((theme) => theme.breakpoints.down('sm'));
   const savedContracts = useSelector((state) => state?.contract?.contracts);
 
-  const handleTokenize = React.useCallback((event) => {
-    if (mainAction) {
-      mainAction(event);
-    } else {
-      tokenizeProcess(event);
-    }
-  }, [tokenizeProcess, mainAction]);
+  const handleMainAction = React.useCallback(
+    (item) => {
+      mainAction(item);
+    },
+    [mainAction]
+  );
 
-  const handleClose = React.useCallback(() => {
-    setPlatforms(null);
-  });
-
-  const handleGetPlatforms = React.useCallback(async () => {
-    setLoading(true);
-
-    const platforms = await getPlatforms()(dispatch);
-
-    setPlatforms(platforms);
-
-    setPlatform(platforms[0].address);
-
-    setLoading(false);
-  }, [dispatch]);
+  const handleTokenize = React.useCallback(
+    (item) => {
+      if (mainAction) {
+        handleMainAction(item);
+        return;
+      }
+      tokenizeProcess(item);
+    },
+    [tokenizeProcess, mainAction]
+  );
 
   const getContractData = React.useCallback(async () => {
     if (savedContracts[id_real_estate]) {
@@ -380,7 +356,7 @@ const ListCard = ({
         contract,
         abi
       };
-    };
+    }
 
     const result = await deployContract({
       data: {
@@ -400,7 +376,7 @@ const ListCard = ({
       abi,
       id_real_estate
     })(dispatch);
-  
+
     return {
       contract,
       abi
@@ -423,24 +399,22 @@ const ListCard = ({
 
       const { contract, abi } = await getContractData();
 
-      await tokenizeAction({
+      await allowP2PPlatform({
         contract,
         abi,
-        platform
+        platform: defaultPlatform
       });
-  
+
       await saveP2PSelectedState(`${id}?state=true`)(dispatch);
 
-      handleClose();
-
       setLoading(false);
-      
+
       onSuccess(t('AddPlatformSuccess'));
     } catch (error) {
       setError(t(error.message));
       setLoading(false);
     }
-  }, [loading, id, dispatch, platform, handleClose, onSuccess]);
+  }, [loading, id, dispatch, onSuccess]);
 
   const removeP2PPlatform = React.useCallback(async () => {
     if (loadingRemoving) return;
@@ -458,7 +432,7 @@ const ListCard = ({
 
       const { contract, abi } = await getContractData();
 
-      await denyP2Platform({
+      await denyP2PPlatform({
         contract,
         abi
       });
@@ -494,7 +468,7 @@ const ListCard = ({
 
       {isSM ? (
         <Typography className={classes.cardTitle}>
-          <a href={`${detailsLink || 'details'}/${id}`}>{title}</a>
+          <a href={detailsLink || `/details/${id}`}>{title}</a>
         </Typography>
       ) : (
         <Typography className={classes.cardTitle}>{title}</Typography>
@@ -531,31 +505,19 @@ const ListCard = ({
                 <Button
                   color={!secondaryActionText ? 'error' : 'primary'}
                   className={classes.deTokenButton}
-                  onClick={secondaryActionText ? removeP2PPlatform : null}
-                >
-                  {
-                    loadingRemoving ? (
-                      <CircularProgress
-                        size={16}
-                        className={classes.circularProgressBlue}
-                      />
-                    ) : null
-                  }
+                  onClick={secondaryActionText ? removeP2PPlatform : null}>
+                  {loadingRemoving ? (
+                    <CircularProgress size={16} className={classes.circularProgressBlue} />
+                  ) : null}
                   {secondaryActionText || t('DeToken')}
                 </Button>
                 <Button
                   variant="contained"
-                  className={classes.toTokenButton} 
-                  onClick={mainActionText ? null : handleGetPlatforms}
-                  >
-                  {
-                    loading ? (
-                      <CircularProgress
-                        size={16}
-                        className={classes.circularProgress}
-                      />
-                    ) : null
-                  }
+                  className={classes.toTokenButton}
+                  onClick={mainActionText ? () => handleMainAction(item) : addToP2PPlatform}>
+                  {loading ? (
+                    <CircularProgress size={16} className={classes.circularProgress} />
+                  ) : null}
                   {mainActionText || t('ToP2P')}
                 </Button>
               </div>
@@ -563,8 +525,7 @@ const ListCard = ({
               <Button
                 variant="contained"
                 className={classes.toTokenButton}
-                onClick={() => handleTokenize(item)}
-              >
+                onClick={() => handleTokenize(item)}>
                 {mainActionText || t('ToToken')}
               </Button>
             )}
@@ -572,79 +533,7 @@ const ListCard = ({
         ) : null}
       </div>
 
-      <Dialog open={!!platforms}>
-        <DialogTitle
-          classes={{
-            root: classes.dialogTitle
-          }}
-        >
-          {t('SelectPlatformTitle')}
-          <IconButton onClick={handleClose}>
-            <CloseIcon />
-          </IconButton>
-        </DialogTitle>
-        <DialogContent
-          classes={{
-            root: classes.dialogContent
-          }}
-        >
-          <DialogContentText
-            classes={{
-              root: classNames({
-                [classes.dialogContentText]: true,
-                [classes.removeMargin]: true,
-                [classes.mb10]: true
-              })
-            }}
-          >
-            {t('SelectPlatformText')}
-          </DialogContentText>
-
-          <FormControl component="fieldset">
-            <RadioGroup
-              aria-label="platform"
-              name="platform"
-              value={platform}
-              onChange={(e) => setPlatform(e.target.value)}
-            >
-              {(platforms || []).map(({ name, address }) => (
-                <FormControlLabel
-                  key={name}
-                  value={address}
-                  control={<Radio />}
-                  label={name}
-                />
-              ))}
-            </RadioGroup>
-          </FormControl>
-        </DialogContent>
-
-        <div className={classes.divider} />
-
-        <DialogActions
-          classes={{
-            root: classes.dialogActions
-          }}
-        >
-          <Button variant="contained" onClick={addToP2PPlatform}>
-            {
-              loading ? (
-                <CircularProgress
-                  size={16}
-                  className={classes.circularProgress}
-                />
-              ) : null
-            }
-            {t('Continue')}
-          </Button>
-          <Button onClick={handleClose}>{t('Cancel')}</Button>
-        </DialogActions>
-      </Dialog>
-
-      <SnackBarWrapper
-        onClose={() => setError(false)} 
-        error={error}
-      />
+      <SnackBarWrapper onClose={() => setError(false)} error={error} />
     </div>
   );
 };

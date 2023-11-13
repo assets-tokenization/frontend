@@ -22,6 +22,11 @@ const ObjectsStep = ({
   loading,
   onSuccess
 }) => {
+  const mainAction = React.useCallback((item) => {
+    setCreatingOffer(item);
+    setPage('Selling');
+  }, [setCreatingOffer, setPage]);
+
   const renderStep = React.useMemo(
     () => (
       <Fade in={true}>
@@ -70,10 +75,7 @@ const ObjectsStep = ({
                         key={item.id + index}
                         finished={item?.finished}
                         openDetails={toDetailsObject}
-                        mainAction={(number) => {
-                          setCreatingOffer(number);
-                          setPage('Selling');
-                        }}
+                        mainAction={mainAction}
                         onSuccess={onSuccess}
                         secondaryActionText={t('MoveToMyObjects')}
                         mainActionText={t('CreateOrder')}

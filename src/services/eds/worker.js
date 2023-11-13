@@ -285,15 +285,12 @@ const onMessage = async function (e) {
     return setTimeout(() => onMessage(e), 100);
   }
 
-  console.log('cmd', cmd, commandData);
-
   try {
     let data;
     if (cmd in actions) {
       data = await actions[cmd](...(commandData || []));
     } else {
       data = await signer.signer[cmd](...(commandData || []));
-      console.log('data', data);
     }
     return send({ commandId, data });
   } catch (actionError) {

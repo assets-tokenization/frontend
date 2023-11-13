@@ -1,5 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
+import moment from 'moment';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Fade from '@mui/material/Fade';
@@ -8,6 +9,11 @@ import Card from 'components/Card';
 import ProgressLine from 'components/Preloader/ProgressLine';
 
 const MessagesStep = ({ t, classes, toPurchase, messages, loading }) => {
+  const formatDate = React.useCallback((dateOrigin) => {
+    if (!dateOrigin) return null;
+    return moment(Number(dateOrigin)).format('DD.MM.YYYY');
+  }, []);
+
   const renderStep = React.useMemo(
     () => (
       <Fade in={true}>
@@ -22,9 +28,9 @@ const MessagesStep = ({ t, classes, toPurchase, messages, loading }) => {
                 <>
                   {messages.map((message, index) => (
                     <Card key={message.title + index} className={classes.messagesCard}>
-                      <Typography className={classes.messagesDate}>{message?.date}</Typography>
-                      <Typography className={classes.messagesTitle}>{message?.title}</Typography>
-                      <Typography className={classes.messagesText}>{message?.text}</Typography>
+                      <Typography className={classes.messagesDate}>{formatDate(message?.dealInfo?.DateDeal)}</Typography>
+                      <Typography className={classes.messagesTitle}>{t('ListItemTitle')}</Typography>
+                      <Typography className={classes.messagesText}>{t('ListItemTitleDescription', { address: message?.address })}</Typography>
                       <div
                         className={classNames({
                           [classes.actions]: true,
@@ -34,7 +40,9 @@ const MessagesStep = ({ t, classes, toPurchase, messages, loading }) => {
                         <Button
                           variant="contained"
                           color="primary"
-                          onClick={() => toPurchase(message?.number)}
+                          onClick={() =>{
+                            toPurchase(message);
+                          }}
                         >
                           {t('GoToPayment')}
                         </Button>
@@ -50,7 +58,7 @@ const MessagesStep = ({ t, classes, toPurchase, messages, loading }) => {
         </div>
       </Fade>
     ),
-    [t, classes, toPurchase, messages, loading]
+    [t, classes, toPurchase, messages, loading, formatDate]
   );
 
   return renderStep;

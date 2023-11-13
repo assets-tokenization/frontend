@@ -2,7 +2,7 @@
   "name": "frontend",
   "version": "0.1.8",
   "private": true,
-  "proxy": "https://95.216.140.202",
+  "proxy": "https://ber.kitsoft.ua",
   "scripts": {
     "build": "sh -ac '. ./.env; react-scripts build'",
     "eject": "sh -ac '. ./.env; react-scripts eject'",
@@ -55,7 +55,6 @@
     "react-dropzone": "14.2.3",
     "react-leaflet": "4.2.1",
     "react-leaflet-fullscreen": "4.1.0",
-    "react-number-format": "5.2.2",
     "react-redux": "7.1.0",
     "react-render-html": "0.6.0",
     "react-router": "5.1.2",

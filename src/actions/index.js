@@ -10,5 +10,3 @@ export const getDetails = (id) => (dispatch) => api.get(`details/${id}`, 'GET_DE
 
 export const saveDetails = (id, data) => (dispatch) =>
   api.put(`object/${id}`, data, 'GET_DETAILS', dispatch);
-
-export const getMessages = () => (dispatch) => api.get('messages', 'GET_MESSAGES', dispatch);

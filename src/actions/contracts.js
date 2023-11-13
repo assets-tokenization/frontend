@@ -1,17 +1,20 @@
 import { createAlchemyWeb3 } from '@alch/alchemy-web3';
 import * as api from 'services/api';
-import { ganacheApiUrl as API_URL } from 'config';
+import { defaultPlatform, ganacheApiUrl as API_URL } from 'config';
 import store from 'store';
 import { isDesktop } from 'react-device-detect';
+import platformAbi from 'variables/platformAbi';
 
 export const getPlatforms = () => (dispatch) =>
   api.get('p2p_platforms', 'contract/GET_PLATFORMS', dispatch);
 
+export const getObjectInfoByContract = (contract) => (dispatch) =>
+  api.get(`object_tokenized?contract=${contract}`, 'contract/GET_OBJECT_BY_CONTRACT', dispatch);
+  
 export const deployContract = (body) => (dispatch) =>
   api.post('deploycontract', body, 'contract/DEPLOY_CONTRACT', dispatch);
 
-export const getAbi = () => (dispatch) =>
-  api.get('abi', 'contract/GET_ABI', dispatch);
+export const getAbi = () => (dispatch) => api.get('abi', 'contract/GET_ABI', dispatch);
 
 export const saveP2PSelectedState = (id) => (dispatch) =>
   api.post(`p2p_selected/${id}`, {}, 'contract/SAVE_P2P_STATE', dispatch);
@@ -46,16 +49,9 @@ export const checkMetaMaskState = async () => {
 };
 
 const web3 = createAlchemyWeb3(API_URL);
+const gas = 1000000;
 
-export const tokenizeAction = async ({
-  contract: contractAddress,
-  abi,
-  platform
-}) => {
-  if (!contractAddress || !abi || !platform) {
-    throw new Error('Invalid input parameters');
-  }
-
+const getContract = async (contractAddress, abi, method) => {
   const address = store.getState().profile.userInfo.wallet;
 
   if (!web3.utils.isAddress(address)) {
@@ -64,39 +60,106 @@ export const tokenizeAction = async ({
 
   const contract = new web3.eth.Contract(abi, contractAddress);
 
-  if (!contract.methods.AllowP2Pplatform) {
+  if (!contract.methods[method]) {
     throw new Error('Method does not exist in contract ABI');
   }
-  
+
+  return {
+    contract,
+    address
+  };
+};
+
+export const allowP2PPlatform = async ({ contract: contractAddress, abi, platform }) => {
+  if (!contractAddress || !abi || !platform) {
+    throw new Error('Invalid input parameters');
+  }
+
+  const { contract, address } = await getContract(contractAddress, abi, 'AllowP2Pplatform');
+
   const result = await contract.methods.AllowP2Pplatform(platform).send({
+    from: address,
+    gas
+  });
+
+  return result;
+};
+
+export const denyP2PPlatform = async ({ contract: contractAddress, abi }) => {
+  if (!contractAddress || !abi) {
+    throw new Error('Invalid input parameters');
+  }
+
+  const { contract, address } = await getContract(contractAddress, abi, 'DenyP2Pplatform');
+
+  const result = await contract.methods.DenyP2Pplatform().send({
+    from: address,
+    gas
+  });
+
+  return result;
+};
+
+export const createOffer = async ({
+  price,
+  contract: contractAddress,
+  walletToSell
+}) => {
+  if (!price || !contractAddress || !walletToSell) {
+    throw new Error('Invalid input parameters');
+  }
+
+  const priceToWei = web3.utils.toWei(price, 'ether');
+
+  const { contract, address } = await getContract(defaultPlatform, platformAbi, 'setDeal');
+
+  const result = await contract.methods.setDeal(Number(price), contractAddress, walletToSell).send({
+    from: address,
+    gas
+  });
+
+  return result;
+};
+
+export const getOffers = async (platform) => {
+  if (!platform) {
+    throw new Error('Invalid input parameters');
+  }
+
+  const { contract, address } = await getContract(platform, platformAbi, 'myDeals');
+
+  const result = await contract.methods.myDeals().call({
     from: address
   });
 
   return result;
 };
 
-export const denyP2Platform = async ({
-  contract: contractAddress,
-  abi
-}) => {
-  if (!contractAddress || !abi) {
+export const getDeal = async (dealAddress) => {
+  if (!dealAddress) {
     throw new Error('Invalid input parameters');
   }
 
-  const address = store.getState().profile.userInfo.wallet;
+  const { contract, address } = await getContract(defaultPlatform, platformAbi, 'getDeal');
 
-  if (!web3.utils.isAddress(address)) {
-    throw new Error('The provided wallet address is invalid');
-  }
-
-  const contract = new web3.eth.Contract(abi, contractAddress);
-
-  if (!contract.methods.DenyP2Pplatform) {
-    throw new Error('Method does not exist in contract ABI');
-  }
-  
-  const result = await contract.methods.DenyP2Pplatform().send({
+  const result = await contract.methods.getDeal(dealAddress).call({
     from: address
+  });
+
+  return result;
+}
+
+export const acceptDeal = async (dealAddress, price) => {
+  if (!dealAddress) {
+    throw new Error('Invalid input parameters');
+  }
+
+  const { contract, address } = await getContract(defaultPlatform, platformAbi, 'acceptDeal');
+
+  const result = await contract.methods.acceptDeal(dealAddress).send({
+    from: address,
+    value: Number(price),
+    gas
   });
 
   return result;
