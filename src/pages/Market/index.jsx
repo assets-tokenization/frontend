@@ -417,6 +417,8 @@ const MarketScreen = ({
 
         const dealInfo = await getDeal(item);
 
+        if (dealInfo.Status === true) continue;
+
         offersArray.push({
           ...objectInfo?.data,
           dealAddress: item,
