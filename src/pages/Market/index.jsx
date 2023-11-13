@@ -413,6 +413,10 @@ const MarketScreen = ({
 
         const objectInfo = await getObjectInfoByContract(item)(dispatch);
 
+        if (!objectInfo) return;
+
+        if (!Object.keys(objectInfo?.data).length) continue;
+
         const dealInfo = await getDeal(item);
 
         offersArray.push({
@@ -432,14 +436,14 @@ const MarketScreen = ({
   const updateList = React.useCallback(async ({ updating } = {}) => {
     try {
       if (updating) {
-        setUpdating(true)
+        setUpdating(true);
+        await getOffersAction();
+
       } else {
         setLoading(true);
       }
 
       const result = await getObjects()(dispatch);
-
-      await getOffersAction();
 
       if (result instanceof Error) {
         setLoading(false);
