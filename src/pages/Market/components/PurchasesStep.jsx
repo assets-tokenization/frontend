@@ -10,7 +10,7 @@ import SnackBarWrapper from 'components/Snackbar';
 import SuccessRegistration from 'components/SuccessRegistration';
 import { ReactComponent as ArrowForwardIcon } from 'assets/images/arrowForwardWhite.svg';
 import { ReactComponent as LockIcon } from 'assets/images/lock_icon.svg';
-import { acceptDeal, checkMetaMaskState } from 'actions/contracts';
+import { acceptDeal, checkMetaMaskState, weiToEth } from 'actions/contracts';
 
 const PurchasesStep = ({
   t,
@@ -148,7 +148,7 @@ const PurchasesStep = ({
                         })}
                       >
                         <TextField
-                          value={dealInfo?.Price}
+                          value={weiToEth(dealInfo?.Price)}
                           variant="outlined"
                           margin="normal"
                           placeholder={t('PricePlaceHolder')}

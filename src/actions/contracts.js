@@ -102,6 +102,8 @@ export const denyP2PPlatform = async ({ contract: contractAddress, abi }) => {
 
 window.web3 = web3;
 
+export const weiToEth = (wei) => web3.utils.fromWei(wei, 'ether');
+
 export const createOffer = async ({
   price,
   contract: contractAddress,
