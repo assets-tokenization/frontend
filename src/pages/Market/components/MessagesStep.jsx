@@ -11,7 +11,7 @@ import ProgressLine from 'components/Preloader/ProgressLine';
 const MessagesStep = ({ t, classes, toPurchase, messages, loading }) => {
   const formatDate = React.useCallback((dateOrigin) => {
     if (!dateOrigin) return null;
-    return moment(Number(dateOrigin)).format('DD.MM.YYYY');
+    return moment(Number(dateOrigin) * 1000).format('DD.MM.YYYY, HH:mm');
   }, []);
 
   const renderStep = React.useMemo(
