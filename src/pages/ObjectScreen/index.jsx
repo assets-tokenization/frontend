@@ -29,18 +29,20 @@ import Preloader from 'components/Preloader';
 import EmptyState from 'components/EmptyState';
 import SnackBarWrapper from 'components/Snackbar';
 import { getDetails, saveDetails } from 'actions';
-import SliderArrow from 'assets/images/sliderArrow.svg';
-import FullscreenIcon from 'assets/images/fullscreen_icon.svg';
-import CloseIcon from 'assets/images/closeIcon.svg';
-import arrowRight from 'assets/images/arrowRight.svg';
-import arrowLeft from 'assets/images/arrowLeft.svg';
-import LockIcon from 'assets/images/lock_icon.svg';
-import deleteIcon from 'assets/images/deleteIcon.svg';
+import { ReactComponent as SliderArrow } from 'assets/images/sliderArrow.svg';
+import { ReactComponent as FullscreenIcon } from 'assets/images/fullscreen_icon.svg';
+import { ReactComponent as CloseIcon } from 'assets/images/closeIcon.svg';
+import { ReactComponent as LockIcon } from 'assets/images/lock_icon.svg';
+import { ReactComponent as DeleteIcon } from 'assets/images/deleteIcon.svg';
+import { ReactComponent as ArrowRight } from 'assets/images/arrowRight.svg';
+import { ReactComponent as ArrowLeft } from 'assets/images/arrowLeft.svg';
 import LocationOnIcon from 'assets/images/pin.svg';
 import 'leaflet/dist/leaflet.css';
 import 'react-leaflet-fullscreen/styles.css';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+
+import { history } from 'store';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -326,8 +328,6 @@ const styles = (theme) => ({
     bottom: 16,
     right: 16,
     zIndex: 1,
-    width: 42,
-    height: 42,
     [theme.breakpoints.down('sm')]: {
       bottom: 12,
       right: 8,
@@ -340,8 +340,6 @@ const styles = (theme) => ({
     position: 'absolute',
     top: '45%',
     right: '45%',
-    width: 32,
-    height: 32,
     zIndex: 1,
     cursor: 'pointer'
   },
@@ -510,7 +508,7 @@ const styles = (theme) => ({
 
 const useStyles = makeStyles(styles);
 
-const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
+const ObjectScreen = ({ hideHeader, handleClickBack, readOnly }) => {
   const [loadingData, setLoading] = React.useState(false);
   const [objectData, setData] = React.useState(null);
   const [openTextEditor, setOpenTextEditor] = React.useState(false);
@@ -630,7 +628,7 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
           })}
           onClick={onClick}
         >
-          <img src={SliderArrow} alt={'slider prev arrow'} />
+          <SliderArrow />
         </div>
       );
     },
@@ -650,7 +648,7 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
           })}
           onClick={onClick}
         >
-          <img src={SliderArrow} alt={'slider next arrow'} />
+          <SliderArrow />
         </div>
       );
     },
@@ -670,7 +668,7 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
           })}
           onClick={onClick}
         >
-          <img src={arrowRight} alt={'slider next arrow'} />
+          <ArrowRight />
         </div>
       );
     },
@@ -691,7 +689,7 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
           })}
           onClick={onClick}
         >
-          <img src={arrowLeft} alt={'slider next arrow'} />
+          <ArrowLeft />
         </div>
       );
     },
@@ -782,10 +780,7 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
                     }}
                     className={classes.fullscreenIconWrapper}
                   >
-                    <img
-                      src={FullscreenIcon}
-                      alt={'fullscreen icon'}
-                      className={classes.fullscreenIcon}
+                    <FullscreenIcon
                     />
                   </IconButton>
                   {!readOnly && !isMobile && hoveredPhotoIndex === index && (
@@ -794,7 +789,7 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
                       onMouseEnter={() => setHoveredPhotoIndex(index)}
                       onClick={() => handleDeletePhoto(index)}
                     >
-                      <img src={deleteIcon} alt={'delete icon'} />
+                      <DeleteIcon />
                     </IconButton>
                   )}
                 </div>
@@ -854,11 +849,9 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
               }}
             >
               <div className={classes.sliderDialogWrapper}>
-                <img
+                <CloseIcon
                   onClick={handleCloseSlider}
                   className={classes.closeIcon}
-                  src={CloseIcon}
-                  alt={'close icon'}
                 />
 
                 <Slider
@@ -992,7 +985,7 @@ const ObjectScreen = ({ history, hideHeader, handleClickBack, readOnly }) => {
                             })}
                             placeholder={t('DescriptionPlaceHolder')}
                           />
-                          <img className={classes.lockIcon} src={LockIcon} alt="arrow lock icon" />
+                          <LockIcon className={classes.lockIcon} />
                         </div>
 
                         <div className={classes.textFieldEditActions}>

@@ -3,8 +3,7 @@ import { useTranslate } from 'react-translate';
 import makeStyles from '@mui/styles/makeStyles';
 import { Button, Typography } from '@mui/material';
 import { ReactComponent as ArrowForwardIcon } from 'assets/images/arrowForwardWhite.svg';
-
-import CheckIcon from 'assets/images/Check_icon.svg';
+import { ReactComponent as CheckIcon } from 'assets/images/Check_icon.svg';
 
 const styles = (theme) => ({
   wrapper: {
@@ -68,7 +67,7 @@ const SuccessRegistration = ({ redirectToHomeScreen, title, description, actionT
 
   return (
     <div className={classes.wrapper}>
-      <img src={CheckIcon} alt="headline_logo" className={classes.logo} />
+      <CheckIcon className={classes.logo} />
 
       <Typography className={classes.title}>{title || t('SuccessTitle')}</Typography>
 

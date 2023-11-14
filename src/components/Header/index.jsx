@@ -10,7 +10,7 @@ import Paper from '@mui/material/Paper';
 import Popper from '@mui/material/Popper';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
-import headline_logo from 'assets/images/headline_logo.svg';
+import { ReactComponent as HeaderLogo } from 'assets/images/headline_logo.svg';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import storage from 'helpers/storage';
 import getUserShortName from 'helpers/getUserShortName';
@@ -167,7 +167,7 @@ const Header = ({ navigateClick, navigateText, title, hideLogo, hideSMbutton }) 
       ) : (
         <a href="/" className={classes.link}>
           <Typography className={classes.headline}>
-            <img src={headline_logo} alt="headline_logo" className={classes.logo} />
+            <HeaderLogo className={classes.logo} />
             {title || t('Title')}
           </Typography>
         </a>

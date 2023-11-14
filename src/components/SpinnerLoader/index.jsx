@@ -1,6 +1,6 @@
 import React from 'react';
 import makeStyles from '@mui/styles/makeStyles';
-import Spinner from 'assets/images/Spinner-Gradient-7.svg';
+import { ReactComponent as Spinner } from 'assets/images/Spinner-Gradient-7.svg';
 
 const styles = (theme) => ({
   spinner: {
@@ -26,7 +26,7 @@ const useStyles = makeStyles(styles);
 const SpinnerLoader = () => {
   const classes = useStyles();
 
-  return <img src={Spinner} alt="spinner icon" className={classes.spinner} />;
+  return <Spinner className={classes.spinner} />;
 };
 
 export default SpinnerLoader;

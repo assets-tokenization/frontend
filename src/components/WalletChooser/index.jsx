@@ -8,9 +8,9 @@ import SnackBarWrapper from 'components/Snackbar';
 import { ReactComponent as ArrowForwardIcon } from 'assets/images/arrowForwardWhite.svg';
 import ArrowBackIcon from 'assets/images/arrowBackBlueIcon.svg';
 import classNames from 'classnames';
-import MetaMaskIcon from 'assets/images/logos_metamask-icon.svg';
-import WalletConnectIcon from 'assets/images/simple-icons_walletconnect.svg';
-import CoinbaseWalletIcon from 'assets/images/coinbase.svg';
+import { ReactComponent as MetaMaskIcon } from 'assets/images/logos_metamask-icon.svg';
+import { ReactComponent as WalletConnectIcon } from 'assets/images/simple-icons_walletconnect.svg';
+import { ReactComponent as CoinbaseWalletIcon } from 'assets/images/coinbase.svg';
 import { updateProfileData } from 'actions/profile';
 import { checkMetaMaskState } from 'actions/contracts';
 
@@ -110,15 +110,15 @@ const useStyles = makeStyles(styles);
 const WALLETS = [
   {
     name: 'MetaMask',
-    icon: MetaMaskIcon
+    Icon: MetaMaskIcon
   },
   {
     name: 'walletConnect',
-    icon: WalletConnectIcon
+    Icon: WalletConnectIcon
   },
   {
     name: 'Coinbase Wallet',
-    icon: CoinbaseWalletIcon
+    Icon: CoinbaseWalletIcon
   }
 ];
 
@@ -192,7 +192,7 @@ const WalletChooser = ({ setActiveStep }) => {
               onChange={handleChange}
               className={classes.radioGroup}
             >
-              {WALLETS.map(({ name, icon }) => {
+              {WALLETS.map(({ name, Icon }) => {
                 const disabled = name !== DEFAULT_WALLET;
 
                 return (
@@ -212,7 +212,7 @@ const WalletChooser = ({ setActiveStep }) => {
                       <>
                         <span>{name}</span>
 
-                        <img src={icon} alt="headline_logo" className={classes.logo} />
+                        <Icon className={classes.logo} />
                       </>
                     }
                   />

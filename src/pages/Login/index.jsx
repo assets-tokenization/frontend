@@ -4,13 +4,13 @@ import { useDispatch } from 'react-redux';
 import { Button, Typography } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import Fade from '@mui/material/Fade';
-import headline_logo from 'assets/images/headline_logo.svg';
+import LoginIcon from '@mui/icons-material/Login';
 import classNames from 'classnames';
 import Stepper from 'components/Stepper';
 import EDSForm from 'components/EDSForm';
 import WalletChooser from 'components/WalletChooser';
 import SuccessRegistration from 'components/SuccessRegistration';
-import LoginIcon from '@mui/icons-material/Login';
+import { ReactComponent as HeaderLogo } from 'assets/images/headline_logo.svg';
 import { requestSignData, checkSignDataUniq } from 'actions/eds';
 import storage from 'helpers/storage';
 import { history } from 'store';
@@ -278,10 +278,8 @@ const LoginScreen = ({ onSuccess }) => {
   return (
     <div className={classes.wrapper}>
       <div className={classes.headline}>
-        <img src={headline_logo} alt="headline_logo" className={classes.logo} />
-
+        <HeaderLogo className={classes.logo} />
         <Typography className={classes.title}>{t('Title')}</Typography>
-
       </div>
 
       {method === null ? (

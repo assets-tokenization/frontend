@@ -592,7 +592,6 @@ const MarketScreen = ({
               <ObjectScreen
                 hideHeader={true}
                 readOnly={true}
-                history={history}
                 handleClickBack={() => history.push('/market')}
                 onSuccess={onSuccess}
               />

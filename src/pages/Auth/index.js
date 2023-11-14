@@ -1,17 +1,19 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import Preloader from 'components/Preloader';
 import { useDispatch } from 'react-redux';
 import { getProfileData } from 'actions/profile';
 import { isMobile } from 'react-device-detect';
 import { useTranslate } from 'react-translate';
-import ServiceMessage from 'components/ServiceMessage';
-import Login from 'pages/Login';
+import { ErrorBoundary } from 'react-error-boundary';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+
+const Login = lazy(() => import('pages/Login'));
+const ServiceMessage = lazy(() => import('components/ServiceMessage'));
 
 const Auth = ({ children }) => {
   const t = useTranslate('Auth');
@@ -70,9 +72,22 @@ const Auth = ({ children }) => {
 
   if (error) {
     if (['401 unauthorized'].includes(error)) {
-      return <Login onSuccess={setError} />;
+      return (
+        <ErrorBoundary fallback={<div>Error</div>}>
+          <Suspense fallback={<Preloader />}>
+            <Login onSuccess={setError} />
+          </Suspense>
+        </ErrorBoundary>
+      );
     }
-    return <ServiceMessage error={new Error(error)} />;
+
+    return (
+      <ErrorBoundary fallback={<div>Error</div>}>
+        <Suspense fallback={<Preloader />}>
+          <ServiceMessage error={new Error(error)} />
+        </Suspense>
+      </ErrorBoundary>
+    );
   }
 
   if (loading) {

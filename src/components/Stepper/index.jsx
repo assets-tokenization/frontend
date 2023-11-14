@@ -11,8 +11,8 @@ import StepContent from '@mui/material/StepContent';
 import Typography from '@mui/material/Typography';
 import classNames from 'classnames';
 import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
-import CheckIcon from 'assets/images/Tick.svg';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+import { ReactComponent as CheckIcon } from 'assets/images/Tick.svg';
 import 'react-circular-progressbar/dist/styles.css';
 
 const styles = (theme) => ({
@@ -145,7 +145,7 @@ const StepIcon = (props) => {
   if (completed) {
     return (
       <div className={classes.completed}>
-        <img src={CheckIcon} alt="check icon" className={classes.logo} />
+        <CheckIcon className={classes.logo} />
       </div>
     );
   }

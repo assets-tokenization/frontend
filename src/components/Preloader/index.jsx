@@ -1,7 +1,7 @@
 import React from 'react';
-import withStyles from '@mui/styles/withStyles';
 import classNames from 'classnames';
-import svgIcon from 'assets/img/emblem-loader.svg';
+import withStyles from '@mui/styles/withStyles';
+import { ReactComponent as Loader } from 'assets/img/emblem-loader.svg';
 
 const styles = () => ({
   '@keyframes rotate': {
@@ -93,7 +93,7 @@ const Preloader = ({ size, nopadding = false, classes, className, background }) 
         }}
         className={classes.content}
       >
-        <img src={svgIcon} alt="Loading..." width={size} />
+        <Loader width={size} />
       </div>
       <div className={classes.blackUnderlay}>
         <div className={classes.rotator}>

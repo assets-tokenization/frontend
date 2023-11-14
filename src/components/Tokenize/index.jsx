@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import classNames from 'classnames';
-import CheckIcon from 'assets/images/Check_icon.svg';
+import { ReactComponent as CheckIcon } from 'assets/images/Check_icon.svg';
 import LoadingStep from 'components/LoadingStep';
 import SnackBarWrapper from 'components/Snackbar';
 import { deployContract, getAbi, saveContractData, checkMetaMaskState } from 'actions/contracts';
@@ -275,7 +275,7 @@ const Tokenize = ({ tokenize, setTokenize, openDetails, updateList }) => {
             </IconButton>
           </DialogTitle>
 
-          <img src={CheckIcon} alt="headline_logo" className={classes.successLogo} />
+          <CheckIcon className={classes.successLogo} />
 
           <DialogContent
             classes={{

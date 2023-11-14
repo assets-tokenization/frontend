@@ -10,19 +10,20 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
-import headline_logo from 'assets/images/headline_logo.svg';
+import { ReactComponent as HeaderLogo } from 'assets/images/headline_logo.svg';
+
 import HomeWorkOutlinedIcon from '@mui/icons-material/HomeWorkOutlined';
 import Badge from '@mui/material/Badge';
 
-import HomeIcon from 'assets/images/home.svg';
-import SellingIcon from 'assets/images/selling.svg';
-import PurchasesIcon from 'assets/images/purchases.svg';
-import MessagesIcon from 'assets/images/messages.svg';
+import { ReactComponent as HomeIcon } from 'assets/images/home.svg';
+import { ReactComponent as SellingIcon } from 'assets/images/selling.svg';
+import { ReactComponent as PurchasesIcon } from 'assets/images/purchases.svg';
+import { ReactComponent as MessagesIcon } from 'assets/images/messages.svg';
 
-import HomeIcon_b from 'assets/images/home_b.svg';
-import SellingIcon_b from 'assets/images/selling_b.svg';
-import PurchasesIcon_b from 'assets/images/purchases_b.svg';
-import MessagesIcon_b from 'assets/images/messages_b.svg';
+import { ReactComponent as HomeIcon_b } from 'assets/images/home_b.svg';
+import { ReactComponent as SellingIcon_b } from 'assets/images/selling_b.svg';
+import { ReactComponent as PurchasesIcon_b } from 'assets/images/purchases_b.svg';
+import { ReactComponent as MessagesIcon_b } from 'assets/images/messages_b.svg';
 
 const styles = (theme) => ({
   headline: {
@@ -87,14 +88,14 @@ const styles = (theme) => ({
   itemButton: {
     borderRadius: 40,
     padding: '8px 12px 8px 16px',
-    '& > div img:last-child': {
+    '& > div svg:last-child': {
       display: 'none'
     },
     '&:hover': {
-      '& > div img:first-child': {
+      '& > div svg:first-child': {
         display: 'none'
       },
-      '& > div img:last-child': {
+      '& > div svg:last-child': {
         display: 'block'
       }
     },
@@ -110,10 +111,10 @@ const styles = (theme) => ({
   active: {
     backgroundColor: '#3F6FE814',
     fill: '#2259E4',
-    '& > div img:first-child': {
+    '& > div svg:first-child': {
       display: 'none'
     },
-    '& > div img:last-child': {
+    '& > div svg:last-child': {
       display: 'block'
     },
     [theme.breakpoints.down('sm')]: {
@@ -169,23 +170,23 @@ const styles = (theme) => ({
 const MENU_ITEMS = [
   {
     label: 'Objects',
-    icon: <img src={HomeIcon} alt="home icon" />,
-    iconActive: <img src={HomeIcon_b} alt="home icon" />
+    icon: <HomeIcon />,
+    iconActive: <HomeIcon_b />
   },
   {
     label: 'Selling',
-    icon: <img src={SellingIcon} alt="Selling icon" />,
-    iconActive: <img src={SellingIcon_b} alt="Selling icon" />
+    icon: <SellingIcon />,
+    iconActive: <SellingIcon_b />
   },
   {
     label: 'Purchases',
-    icon: <img src={PurchasesIcon} alt="Purchases icon" />,
-    iconActive: <img src={PurchasesIcon_b} alt="Purchases icon" />
+    icon: <PurchasesIcon />,
+    iconActive: <PurchasesIcon_b />
   },
   {
     label: 'Messages',
-    icon: <img src={MessagesIcon} alt="Messages icon" />,
-    iconActive: <img src={MessagesIcon_b} alt="Messages icon" />
+    icon: <MessagesIcon />,
+    iconActive: <MessagesIcon_b />
   }
 ];
 
@@ -204,7 +205,7 @@ const SidebarMenu = ({ onChange, page, history, messages }) => {
   return (
     <div className={classes.sidebar}>
       <Typography className={classes.headline}>
-        <img src={headline_logo} alt="headline_logo" className={classes.logo} />
+        <HeaderLogo className={classes.logo} />
         {t('Title')}
       </Typography>
 
