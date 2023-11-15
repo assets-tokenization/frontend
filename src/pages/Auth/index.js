@@ -38,9 +38,7 @@ const Auth = ({ children }) => {
 
     fetchData();
 
-    if (isMobile) {
-      setOpen(true);
-    }
+    setOpen(isMobile && typeof window.ethereum === 'undefined');
   }, [dispatch]);
 
   const handleRedirect = () => {
@@ -48,8 +46,8 @@ const Auth = ({ children }) => {
     window.open(`https://metamask.app.link/dapp/${currentUrl}`, '_blank');
   };
 
-  if (isMobile && typeof window.ethereum === 'undefined') {
-    return (
+  const RenderDialog = React.useCallback(() => (
+    <>
       <Dialog open={open}>
         <DialogTitle>{t('DialogTitle')}</DialogTitle>
         <DialogContent>
@@ -67,8 +65,8 @@ const Auth = ({ children }) => {
           </Button>
         </DialogActions>
       </Dialog>
-    );
-  }
+    </>
+  ), [open, t]);
 
   if (error) {
     if (['401 unauthorized'].includes(error)) {
@@ -76,6 +74,7 @@ const Auth = ({ children }) => {
         <ErrorBoundary fallback={<div>Error</div>}>
           <Suspense fallback={<Preloader />}>
             <Login onSuccess={setError} />
+            <RenderDialog />
           </Suspense>
         </ErrorBoundary>
       );
@@ -94,7 +93,12 @@ const Auth = ({ children }) => {
     return <Preloader />;
   }
 
-  return children;
+  return (
+    <>
+      {children}
+      <RenderDialog />
+    </>
+  );
 };
 
 export default Auth;
