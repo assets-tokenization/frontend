@@ -38,7 +38,7 @@ const Auth = ({ children }) => {
 
     fetchData();
 
-    // setOpen(isMobile && typeof window.ethereum === 'undefined');
+    setOpen(isMobile && typeof window.ethereum === 'undefined');
   }, [dispatch]);
 
   const handleRedirect = () => {
