@@ -38,7 +38,7 @@ const Auth = ({ children }) => {
 
     fetchData();
 
-    setOpen(isMobile && typeof window.ethereum === 'undefined');
+    // setOpen(isMobile && typeof window.ethereum === 'undefined');
   }, [dispatch]);
 
   const handleRedirect = () => {
@@ -47,25 +47,23 @@ const Auth = ({ children }) => {
   };
 
   const RenderDialog = React.useCallback(() => (
-    <>
-      <Dialog open={open}>
-        <DialogTitle>{t('DialogTitle')}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            {t('DialogDescription')}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={handleRedirect}
-            color="primary"
-            variant="contained"
-          >
-            {t('OpenApp')}
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </>
+    <Dialog open={open}>
+      <DialogTitle>{t('DialogTitle')}</DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          {t('DialogDescription')}
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button
+          onClick={handleRedirect}
+          color="primary"
+          variant="contained"
+        >
+          {t('OpenApp')}
+        </Button>
+      </DialogActions>
+    </Dialog>
   ), [open, t]);
 
   if (error) {

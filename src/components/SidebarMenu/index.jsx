@@ -68,6 +68,7 @@ const styles = (theme) => ({
   },
   icon: {
     width: 24,
+    height: 24,
     minWidth: 'unset',
     marginRight: 16,
     [theme.breakpoints.down('sm')]: {
@@ -141,7 +142,7 @@ const styles = (theme) => ({
     padding: '6px 12px',
     [theme.breakpoints.down('sm')]: {
       padding: 0,
-      width: 64
+      width: 70
     }
   },
   list: {
@@ -163,6 +164,11 @@ const styles = (theme) => ({
       position: 'absolute',
       top: -8,
       left: 0
+    }
+  },
+  display: {
+    '& > svg:last-child': {
+      display: 'block!important'
     }
   }
 });
@@ -289,7 +295,10 @@ const SidebarMenu = ({ onChange, page, history, messages }) => {
             >
               <ListItemIcon
                 classes={{
-                  root: classes.icon
+                  root: classNames({
+                    [classes.icon]: true,
+                    [classes.display]: true
+                  })
                 }}
               >
                 <HomeWorkOutlinedIcon />
