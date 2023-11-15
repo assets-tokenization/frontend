@@ -48,7 +48,7 @@ const Auth = ({ children }) => {
     window.open(`https://metamask.app.link/dapp/${currentUrl}`, '_blank');
   };
 
-  if (isMobile) {
+  if (isMobile && typeof window.ethereum === 'undefined') {
     return (
       <Dialog open={open}>
         <DialogTitle>{t('DialogTitle')}</DialogTitle>
