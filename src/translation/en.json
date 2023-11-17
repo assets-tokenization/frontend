@@ -17,7 +17,7 @@
     "GoToRegister": "Go to the register",
     "SuccessTitle": "Authorization was successful",
     "SuccessDescription": "Your authorization to access the registry was successful. ",
-    "StepperText": "Step  {{step}} with {{total}}",
+    "StepperText": "Step  {{step}} / {{total}}",
     "ChoseMethod": "Log in to the register or register if you are here for the first time",
     "AuthAction": "Log in",
     "RegisterAction": "Register",
@@ -245,7 +245,7 @@
     "Selling": "Selling",
     "Purchases": "Purchase",
     "Messages": "Message",
-    "ToHome": "my property"
+    "ToHome": "My property"
   },
   "Profile": {
     "Title": "Profile",

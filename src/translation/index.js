@@ -1,6 +1,6 @@
 import qs from 'qs';
 import enGB from './en';
-import ukUA from './ua';
+// import ukUA from './ua';
 
 const DEFAULT_TRANSLATION = 'uk-UA';
 
@@ -23,7 +23,7 @@ export const getQueryLangParam = () => {
 };
 
 const translations = {
-    'uk-UA': ukUA,
+    'uk-UA': enGB,
     'eng': enGB
 };
 
