@@ -22,6 +22,9 @@ export const getAbi = () => (dispatch) => api.get('abi', 'contract/GET_ABI', dis
 export const saveP2PSelectedState = (id) => (dispatch) =>
   api.post(`p2p_selected/${id}`, {}, 'contract/SAVE_P2P_STATE', dispatch);
 
+export const changeOwner = (id, wallet) => (dispatch) =>
+  api.post(`new_owner/${id}?wallet_new_owner=${wallet}`, {}, 'contract/CHANGE_OWNER', dispatch);
+
 export const saveContractData = (data) => (dispatch) =>
   dispatch({
     type: 'contract/SAVE_CONTRACT_DATA',
@@ -170,3 +173,19 @@ export const acceptDeal = async (dealAddress, price) => {
 
   return result;
 };
+
+export const removeDeal = async (dealAddress) => {
+  if (!dealAddress) {
+    throw new Error('Invalid input parameters');
+  }
+
+  const { contract, address } = await getContract(defaultPlatform, platformAbi, 'removeDeal');
+
+  const result = await contract.methods.removeDeal(dealAddress).send({
+    from: address,
+    gas
+  });
+
+  return result;
+};
+

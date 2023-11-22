@@ -108,6 +108,19 @@ const abi = [
   {
     inputs: [
       {
+        internalType: 'address',
+        name: 'object',
+        type: 'address'
+      }
+    ],
+    name: 'removeDeal',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    inputs: [
+      {
         internalType: 'uint256',
         name: 'price',
         type: 'uint256'

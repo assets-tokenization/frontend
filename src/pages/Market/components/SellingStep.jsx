@@ -13,7 +13,7 @@ import SnackBarWrapper from 'components/Snackbar';
 import SuccessRegistration from 'components/SuccessRegistration';
 import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { createOffer, checkMetaMaskState } from 'actions/contracts';
+import { createOffer, checkMetaMaskState, removeDeal } from 'actions/contracts';
 
 const NumberFormatCustom = ({ ref, onChange, format, ...props }) => (
   <NumericFormat
@@ -76,6 +76,29 @@ const SellingStep = ({
       setOfferError(t(error.message));
     }
   }, [setOfferError, t, creatingOffer, price, walletToSell, setActiveStep]);
+
+  const handleCancelOffer = React.useCallback(async () => {
+    try {
+      const metamaskState = await checkMetaMaskState();
+
+      if (metamaskState !== 'connected') {
+        setLoading(false);
+        setOfferError(t(metamaskState));
+        return;
+      }
+
+      const tx = await removeDeal(creatingOffer.address_contract);
+
+      if (!tx) return;
+
+      setActiveStep(1);
+
+      return tx;
+    } catch (error) {
+      setActiveStep(1);
+      setOfferError(t(error.message));
+    }
+  }, [setOfferError, t, creatingOffer, setActiveStep]);
 
   const handleCreateOfferActions = React.useCallback(async () => {
     if (!price.length) {
@@ -293,7 +316,7 @@ const SellingStep = ({
                       title={t('SellingProcessingTitle')}
                       description={t('SellingProcessingDescription')}
                       actionText={t('CancelProcessing')}
-                      onClick={() => setActiveStep(1)}
+                      onClick={handleCancelOffer}
                     />
                   ) : null}
 

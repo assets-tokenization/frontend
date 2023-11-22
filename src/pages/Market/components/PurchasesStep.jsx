@@ -1,5 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
+import { useDispatch, useSelector } from 'react-redux';
 import Fade from '@mui/material/Fade';
 import { Typography, TextField, Button } from '@mui/material';
 import PageTitle from 'components/PageTitle';
@@ -10,7 +11,8 @@ import SnackBarWrapper from 'components/Snackbar';
 import SuccessRegistration from 'components/SuccessRegistration';
 import { ReactComponent as ArrowForwardIcon } from 'assets/images/arrowForwardWhite.svg';
 import { ReactComponent as LockIcon } from 'assets/images/lock_icon.svg';
-import { acceptDeal, checkMetaMaskState, weiToEth } from 'actions/contracts';
+import { acceptDeal, checkMetaMaskState, weiToEth, changeOwner } from 'actions/contracts';
+import store from 'store';
 
 const PurchasesStep = ({
   t,
@@ -25,6 +27,8 @@ const PurchasesStep = ({
   onSuccess
 }) => {
   const [offerError, setOfferError] = React.useState(null);
+  const wallet = useSelector((state) => state?.profile?.userInfo?.wallet);
+  const dispatch = useDispatch();
 
   const { dealInfo } = purchase || {}
 
@@ -42,11 +46,13 @@ const PurchasesStep = ({
 
       if (!tx) return;
 
+      await changeOwner(purchase?.id, wallet)(dispatch);
+
       setActiveStep(2);
     } catch (error) {
       setOfferError(t(error.message));
     }
-  }, [setOfferError, t, purchase]);
+  }, [setOfferError, t, purchase, setActiveStep, dispatch]);
 
   const redirectToHomeScreen = React.useCallback(() => {
     setPurchase(false);
