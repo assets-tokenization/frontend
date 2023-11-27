@@ -1,6 +1,6 @@
 {
   "name": "frontend",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "private": true,
   "proxy": "https://95.216.140.202",
   "scripts": {
